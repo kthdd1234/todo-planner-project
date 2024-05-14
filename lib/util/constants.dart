@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:project/util/class.dart';
 
 /// pagePadding
-const pagePadding = EdgeInsets.all(20);
+const pagePadding = EdgeInsets.all(15);
 
 /// themeColor
 const themeColor = Color(0xFF404763);

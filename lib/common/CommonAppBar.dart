@@ -21,6 +21,7 @@ class CommonAppBar extends StatelessWidget {
         AppBarTitle(onTapDateTime: onTapDateTime),
         CommonSpace(height: 15),
         AppBarCalendar(),
+        CommonSpace(height: 15),
       ],
     );
   }
@@ -77,6 +78,7 @@ class AppBarCalendar extends StatelessWidget {
     DateTime now = DateTime.now();
 
     return TableCalendar(
+      calendarStyle: const CalendarStyle(cellMargin: EdgeInsets.all(10)),
       headerVisible: false,
       firstDay: DateTime.utc(2000, 1, 1),
       lastDay: now,
