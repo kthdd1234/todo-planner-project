@@ -1,0 +1,1 @@
+enum SvgDirection { left, right }

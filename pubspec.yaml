@@ -37,6 +37,8 @@ dependencies:
   table_calendar: ^3.1.1
   flutter_svg: ^2.0.10+1
   provider: ^6.1.2
+  intl: ^0.19.0
+  easy_localization: ^3.0.7
 
 dev_dependencies:
   flutter_test:
@@ -70,6 +72,7 @@ flutter:
     - assets/svg/todo-grey.svg
     - assets/svg/tracker-grey.svg
     - assets/svg/tracker-indigo.svg
+    - assets/svg/dir-down.svg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
@@ -82,17 +85,46 @@ flutter:
   # "family" key with the font family name, and a "fonts" key with a
   # list giving the asset and other descriptors for the font. For
   # example:
-  # fonts:
-  #   - family: Schyler
-  #     fonts:
-  #       - asset: fonts/Schyler-Regular.ttf
-  #       - asset: fonts/Schyler-Italic.ttf
-  #         style: italic
-  #   - family: Trajan Pro
-  #     fonts:
-  #       - asset: fonts/TrajanPro.ttf
-  #       - asset: fonts/TrajanPro_Bold.ttf
-  #         weight: 700
+  fonts:
+    - family: Cafe24Dongdong
+      fonts:
+        - asset: assets/font/Cafe24Dongdong.ttf
+          weight: 400
+
+    - family: Cafe24Ohsquareair
+      fonts:
+        - asset: assets/font/Cafe24Ohsquareair.ttf
+          weight: 400
+
+    - family: Cafe24Ssukssuk
+      fonts:
+        - asset: assets/font/Cafe24Ssukssuk.ttf
+          weight: 400
+
+    - family: Cafe24Syongsyong
+      fonts:
+        - asset: assets/font/Cafe24Syongsyong.ttf
+          weight: 400
+
+    - family: IM_Hyemin
+      fonts:
+        - asset: assets/font/IM_Hyemin.ttf
+          weight: 400
+
+    - family: KyoboHandwriting2019
+      fonts:
+        - asset: assets/font/KyoboHandwriting2019.ttf
+          weight: 400
+
+    - family: SingleDay
+      fonts:
+        - asset: assets/font/SingleDay.ttf
+          weight: 400
+
+    - family: TDTDTadakTadak
+      fonts:
+        - asset: assets/font/TDTDTadakTadak.ttf
+          weight: 400
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages

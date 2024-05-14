@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:intl/date_symbol_data_local.dart';
 import 'package:project/page/homePage.dart';
 import 'package:project/provider/bottomTabIndexProvider.dart';
+import 'package:project/util/constants.dart';
 import 'package:provider/provider.dart';
 
-void main() {
-  runApp(const MyApp());
-
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  await initializeDateFormatting();
+
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -14,7 +18,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    String initialRoute = 'home-page';
+    ThemeData theme = ThemeData(fontFamily: initFontFamily);
 
     return MultiProvider(
       providers: [
@@ -22,6 +26,7 @@ class MyApp extends StatelessWidget {
       ],
       child: MaterialApp(
         title: 'Todo Planner',
+        theme: theme,
         debugShowCheckedModeBanner: false,
         initialRoute: initialRoute,
         routes: {

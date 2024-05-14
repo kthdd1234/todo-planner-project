@@ -10,6 +10,7 @@ class CommonText extends StatelessWidget {
     this.isNotTr,
     this.isBold,
     this.nameArgs,
+    this.onTap,
   });
 
   String text;
@@ -17,15 +18,19 @@ class CommonText extends StatelessWidget {
   double? fontSize;
   bool? isNotTr, isBold;
   Map<String, String>? nameArgs;
+  Function()? onTap;
 
   @override
   Widget build(BuildContext context) {
-    return Text(
-      text,
-      style: TextStyle(
-        color: color ?? themeColor,
-        fontSize: fontSize,
-        fontWeight: isBold == true ? FontWeight.bold : FontWeight.w400,
+    return GestureDetector(
+      onTap: onTap,
+      child: Text(
+        text,
+        style: TextStyle(
+          color: color ?? themeColor,
+          fontSize: fontSize,
+          fontWeight: isBold == true ? FontWeight.bold : FontWeight.w400,
+        ),
       ),
     );
   }

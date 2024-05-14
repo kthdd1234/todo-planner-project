@@ -24,3 +24,8 @@ class BottomNavigationBarClass {
   int index;
   Widget body;
 }
+
+class TagColorClass {
+  TagColorClass({required this.bgColor, required this.textColor});
+  Color bgColor, textColor;
+}

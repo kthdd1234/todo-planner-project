@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:project/common/CommonText.dart';
 import 'package:project/util/class.dart';
+import 'package:project/util/constants.dart';
 
 class CommonScaffold extends StatelessWidget {
   CommonScaffold({
@@ -27,7 +28,7 @@ class CommonScaffold extends StatelessWidget {
           : null,
       body: SafeArea(
           child: Padding(
-        padding: const EdgeInsets.all(20),
+        padding: EdgeInsets.all(10),
         child: body,
       )),
       bottomNavigationBar: bottomNavigationBar,
