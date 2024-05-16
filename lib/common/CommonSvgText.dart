@@ -13,22 +13,31 @@ class CommonSvgText extends StatelessWidget {
     required this.svgName,
     required this.svgWidth,
     required this.svgDirection,
+    this.textColor,
+    this.svgColor,
   });
 
   String text, svgName;
+  Color? textColor, svgColor;
   double svgWidth, fontSize;
   SvgDirection svgDirection;
 
   @override
   Widget build(BuildContext context) {
-    List<Widget> children = [CommonText(text: text, fontSize: fontSize)];
-    SvgPicture widget = svgAsset(name: svgName, width: svgWidth);
+    List<Widget> children = [
+      CommonText(text: text, fontSize: fontSize, color: textColor)
+    ];
+    SvgPicture widget = svgAsset(
+      name: svgName,
+      width: svgWidth,
+      color: svgColor,
+    );
 
     svgDirection == SvgDirection.left
         ? children.insert(
             0,
             Padding(
-              padding: const EdgeInsets.only(right: 5),
+              padding: const EdgeInsets.only(right: 7),
               child: widget,
             ))
         : children.add(Padding(

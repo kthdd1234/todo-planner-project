@@ -78,6 +78,21 @@ flutter:
     - assets/svg/tracker-indigo.svg
     - assets/svg/dir-down.svg
     - assets/svg/dir-right.svg
+    - assets/svg/calendar-check.svg
+    - assets/svg/edit-pencil.svg
+    - assets/svg/calendar-check.svg
+    - assets/svg/timeline.svg
+    - assets/svg/pencil-square.svg
+    - assets/svg/square.svg
+    - assets/svg/check-mark.svg
+    - assets/svg/delete-mark.svg
+    - assets/svg/next-mark.svg
+    - assets/svg/tri-mark.svg
+    - assets/svg/select-square-1.svg
+    - assets/svg/select-square-2.svg
+    - assets/svg/memo-mark.svg
+    - assets/svg/note.svg
+    - assets/svg/circle-mark.svg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

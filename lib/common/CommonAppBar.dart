@@ -60,6 +60,7 @@ class AppBarTitle extends StatelessWidget {
           ),
           Row(
             children: [
+              wCommonTag(text: '퍼센트'),
               wCommonTag(text: '1주일'),
               wCommonTag(text: '그룹 4'),
             ],
