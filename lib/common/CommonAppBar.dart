@@ -61,7 +61,7 @@ class AppBarTitle extends StatelessWidget {
           ),
           Row(
             children: [
-              wCommonTag(text: '스티커'),
+              wCommonTag(text: '비율'),
               wCommonTag(text: '1주일'),
               wCommonTag(text: '그룹 4'),
             ],
@@ -90,17 +90,12 @@ class AppBarCalendar extends StatelessWidget {
 
     dayBuilder(context, day, events) {
       return Container(
+        width: 35,
+        height: 8,
         padding: const EdgeInsets.symmetric(vertical: 1, horizontal: 8),
         decoration: BoxDecoration(
-          color: Colors.indigo.shade100,
+          color: const Color(0xffF3F4F9),
           borderRadius: BorderRadius.circular(3),
-        ),
-        child: CommonText(
-          text: 'D-12',
-          fontSize: 8,
-          color: Colors.white,
-          isNotTr: true,
-          isBold: true,
         ),
       );
     }
