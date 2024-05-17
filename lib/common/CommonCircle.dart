@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 
 class CommonCircle extends StatelessWidget {
-  const CommonCircle({super.key});
+  CommonCircle({super.key, required this.color});
+
+  Color color;
 
   @override
   Widget build(BuildContext context) {
@@ -11,7 +13,7 @@ class CommonCircle extends StatelessWidget {
         width: 15,
         height: 15,
         decoration: BoxDecoration(
-          color: Colors.indigo.shade100,
+          color: color,
           borderRadius: BorderRadius.circular(100),
         ),
       ),

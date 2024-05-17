@@ -29,3 +29,22 @@ class TagColorClass {
   TagColorClass({required this.bgColor, required this.textColor});
   Color bgColor, textColor;
 }
+
+class TodoGroupBtnClass {
+  TodoGroupBtnClass({required this.assetName, required this.onTap});
+
+  String assetName;
+  Function() onTap;
+}
+
+class ItemMarkClass {
+  ItemMarkClass({
+    required this.E,
+    required this.O,
+    required this.X,
+    required this.M,
+    required this.T,
+  });
+
+  String E, O, X, M, T;
+}

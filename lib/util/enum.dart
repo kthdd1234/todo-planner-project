@@ -1,1 +1,1 @@
-enum SvgDirection { left, right }
+enum SvgDirectionEnum { left, right }

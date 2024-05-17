@@ -10,30 +10,35 @@ class CommonButton extends StatelessWidget {
     required this.buttonColor,
     required this.verticalPadding,
     required this.borderRadius,
+    required this.onTap,
   });
 
   Color textColor, buttonColor;
   double verticalPadding, borderRadius;
   String text;
+  Function() onTap;
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Expanded(
-          child: Container(
-              padding: EdgeInsets.symmetric(vertical: verticalPadding),
-              decoration: BoxDecoration(
-                color: buttonColor,
-                borderRadius: BorderRadius.circular(borderRadius),
-              ),
-              child: CommonText(
-                text: text,
-                color: textColor,
-                isBold: true,
-              )),
-        ),
-      ],
+    return GestureDetector(
+      onTap: onTap,
+      child: Row(
+        children: [
+          Expanded(
+            child: Container(
+                padding: EdgeInsets.symmetric(vertical: verticalPadding),
+                decoration: BoxDecoration(
+                  color: buttonColor,
+                  borderRadius: BorderRadius.circular(borderRadius),
+                ),
+                child: CommonText(
+                  text: text,
+                  color: textColor,
+                  isBold: true,
+                )),
+          ),
+        ],
+      ),
     );
   }
 }

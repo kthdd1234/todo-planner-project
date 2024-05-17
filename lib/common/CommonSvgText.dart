@@ -20,7 +20,7 @@ class CommonSvgText extends StatelessWidget {
   String text, svgName;
   Color? textColor, svgColor;
   double svgWidth, fontSize;
-  SvgDirection svgDirection;
+  SvgDirectionEnum svgDirection;
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +33,7 @@ class CommonSvgText extends StatelessWidget {
       color: svgColor,
     );
 
-    svgDirection == SvgDirection.left
+    svgDirection == SvgDirectionEnum.left
         ? children.insert(
             0,
             Padding(

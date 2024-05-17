@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:project/util/class.dart';
-import 'package:project/widget/body/TrackerBody.dart';
-import 'package:project/widget/body/settingBody.dart';
-import 'package:project/widget/body/timeTableBody.dart';
-import 'package:project/widget/body/todoBody.dart';
+import 'package:project/util/enum.dart';
+import 'package:project/body/tracker/trackerBody.dart';
+import 'package:project/body/setting/settingBody.dart';
+import 'package:project/body/todo/todoBody.dart';
 
 final bottomNavigationBarItemList = [
   BottomNavigationBarClass(
@@ -105,4 +105,12 @@ final tagWhitePink = TagColorClass(
 final tagWhitePurple = TagColorClass(
   bgColor: Colors.purple.shade300,
   textColor: Colors.white,
+);
+
+final itemMark = ItemMarkClass(
+  E: 'E',
+  O: 'O',
+  X: 'X',
+  M: 'M',
+  T: 'T',
 );

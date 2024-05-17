@@ -1,6 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/date_symbol_data_local.dart';
+import 'package:project/page/groupSettingPage.dart';
 import 'package:project/page/homePage.dart';
 import 'package:project/provider/bottomTabIndexProvider.dart';
 import 'package:project/util/constants.dart';
@@ -27,15 +28,13 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    ThemeData theme = ThemeData(fontFamily: initFontFamily);
-
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => BottomTabIndexProvider())
       ],
       child: MaterialApp(
         title: 'Todo Planner',
-        theme: theme,
+        theme: ThemeData(fontFamily: initFontFamily),
         localizationsDelegates: context.localizationDelegates,
         supportedLocales: context.supportedLocales,
         locale: context.locale,
@@ -43,6 +42,7 @@ class MyApp extends StatelessWidget {
         initialRoute: initialRoute,
         routes: {
           'home-page': (context) => const HomePage(),
+          'group-setting-page': (context) => const GroupSettingPage()
         },
       ),
     );

@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:project/common/CommonSpace.dart';
 import 'package:project/common/CommonSvgText.dart';
@@ -56,11 +57,11 @@ class AppBarTitle extends StatelessWidget {
             fontSize: 20,
             svgName: 'dir-down',
             svgWidth: 16,
-            svgDirection: SvgDirection.right,
+            svgDirection: SvgDirectionEnum.right,
           ),
           Row(
             children: [
-              wCommonTag(text: '퍼센트'),
+              wCommonTag(text: '스티커'),
               wCommonTag(text: '1주일'),
               wCommonTag(text: '그룹 4'),
             ],
@@ -77,14 +78,65 @@ class AppBarCalendar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     DateTime now = DateTime.now();
+    String locale = context.locale.toString();
+
+    stickerBuilder(context, day, events) {
+      //
+    }
+
+    percentBuilder(context, day, events) {
+      //
+    }
+
+    dayBuilder(context, day, events) {
+      return Container(
+        padding: const EdgeInsets.symmetric(vertical: 1, horizontal: 8),
+        decoration: BoxDecoration(
+          color: Colors.indigo.shade100,
+          borderRadius: BorderRadius.circular(3),
+        ),
+        child: CommonText(
+          text: 'D-12',
+          fontSize: 8,
+          color: Colors.white,
+          isNotTr: true,
+          isBold: true,
+        ),
+      );
+    }
 
     return TableCalendar(
-      calendarStyle: const CalendarStyle(cellMargin: EdgeInsets.all(10)),
+      locale: locale,
+      calendarStyle: CalendarStyle(
+        cellMargin: const EdgeInsets.all(10),
+        todayDecoration: BoxDecoration(
+          color: Colors.indigo.shade300,
+          shape: BoxShape.circle,
+        ),
+        todayTextStyle: const TextStyle(
+          color: Colors.white,
+          fontWeight: FontWeight.bold,
+          fontSize: 13,
+        ),
+      ),
+      calendarBuilders: CalendarBuilders(
+        markerBuilder: dayBuilder,
+      ),
+      daysOfWeekStyle: const DaysOfWeekStyle(
+        weekdayStyle: TextStyle(color: Colors.grey, fontSize: 13),
+        weekendStyle: TextStyle(color: Colors.grey, fontSize: 13),
+      ),
       headerVisible: false,
       firstDay: DateTime.utc(2000, 1, 1),
-      lastDay: now,
+      lastDay: DateTime.utc(3000, 1, 1),
       focusedDay: now,
       calendarFormat: CalendarFormat.week,
     );
   }
 }
+
+
+ // 캘린터 마커 타입
+ // 스티커(Default)
+ // D-day(Premium)
+ // 퍼센트(Premium)

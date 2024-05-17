@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:project/common/CommonBackground.dart';
-import 'package:project/common/CommonContainer.dart';
 import 'package:project/common/CommonScaffold.dart';
 import 'package:project/provider/bottomTabIndexProvider.dart';
 import 'package:project/util/final.dart';
@@ -33,6 +32,10 @@ class HomePage extends StatelessWidget {
           .changeSeletedIdx(newIndex: newIndex);
     }
 
+    onGroupSetting() {
+      Navigator.pushNamed(context, 'group-setting-page');
+    }
+
     return CommonBackground(
       child: CommonScaffold(
         body: bottomNavigationBarItemList[seletedIdx].body,
@@ -48,6 +51,7 @@ class HomePage extends StatelessWidget {
             onTap: onBottomNavigation,
           ),
         ),
+        onFloatingActionButton: seletedIdx == 0 ? onGroupSetting : null,
       ),
     );
   }

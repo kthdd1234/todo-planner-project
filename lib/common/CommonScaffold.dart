@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:project/common/CommonText.dart';
 import 'package:project/util/class.dart';
 import 'package:project/util/constants.dart';
+import 'package:project/util/func.dart';
 
 class CommonScaffold extends StatelessWidget {
   CommonScaffold({
@@ -9,11 +10,13 @@ class CommonScaffold extends StatelessWidget {
     required this.body,
     this.appBarInfo,
     this.bottomNavigationBar,
+    this.onFloatingActionButton,
   });
 
   Widget? bottomNavigationBar;
   Widget body;
   AppBarInfoClass? appBarInfo;
+  Function()? onFloatingActionButton;
 
   @override
   Widget build(BuildContext context) {
@@ -21,17 +24,34 @@ class CommonScaffold extends StatelessWidget {
       backgroundColor: Colors.transparent,
       appBar: appBarInfo != null
           ? AppBar(
-              title: CommonText(text: appBarInfo!.title),
+              iconTheme: const IconThemeData(
+                color: themeColor,
+              ),
+              title: CommonText(text: appBarInfo!.title, fontSize: 20),
               centerTitle: appBarInfo!.centerTitle,
               actions: appBarInfo!.actions,
+              backgroundColor: Colors.transparent,
             )
           : null,
       body: SafeArea(
-          child: Padding(
-        padding: EdgeInsets.all(10),
-        child: body,
-      )),
+        child: Padding(
+          padding: const EdgeInsets.all(10),
+          child: body,
+        ),
+      ),
       bottomNavigationBar: bottomNavigationBar,
+      floatingActionButton: onFloatingActionButton != null
+          ? FloatingActionButton(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(100),
+              ),
+              elevation: 0,
+              backgroundColor: Colors.indigo.shade200,
+              mini: true,
+              onPressed: onFloatingActionButton,
+              child: const Icon(Icons.add, color: Colors.white),
+            )
+          : null,
     );
   }
 }
