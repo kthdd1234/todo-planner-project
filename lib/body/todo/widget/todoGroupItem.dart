@@ -12,16 +12,17 @@ class TodoGroupItem extends StatelessWidget {
     super.key,
     required this.text,
     required this.materialColor,
-    required this.markType,
+    this.markType,
     this.isContinue,
     this.isHighlight,
     this.isShade50,
     this.memo,
+    this.isShowMark,
   });
 
-  String text, markType;
-  String? memo;
-  bool? isHighlight, isContinue, isShade50;
+  String text;
+  String? memo, markType;
+  bool? isHighlight, isContinue, isShade50, isShowMark;
   MaterialColor materialColor;
 
   @override
@@ -75,20 +76,22 @@ class TodoGroupItem extends StatelessWidget {
                         : const CommonNull()
                   ],
                 )),
-            Expanded(
-              flex: 0,
-              child: Padding(
-                padding: const EdgeInsets.only(right: 5),
-                child: CommonSvgButton(
-                  name: 'mark-$markType',
-                  color: isShade50 == true
-                      ? materialColor.shade50
-                      : materialColor.shade100,
-                  width: 28,
-                  onTap: onMark,
-                ),
-              ),
-            ),
+            isShowMark != false
+                ? Expanded(
+                    flex: 0,
+                    child: Padding(
+                      padding: const EdgeInsets.only(right: 5),
+                      child: CommonSvgButton(
+                        name: 'mark-$markType',
+                        color: isShade50 == true
+                            ? materialColor.shade50
+                            : materialColor.shade100,
+                        width: 28,
+                        onTap: onMark,
+                      ),
+                    ),
+                  )
+                : const CommonNull(),
           ],
         ),
       ],

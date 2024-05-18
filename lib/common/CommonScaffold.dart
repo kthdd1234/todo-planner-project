@@ -28,7 +28,7 @@ class CommonScaffold extends StatelessWidget {
                 color: themeColor,
               ),
               title: CommonText(text: appBarInfo!.title, fontSize: 20),
-              centerTitle: appBarInfo!.centerTitle,
+              centerTitle: appBarInfo!.isCenter,
               actions: appBarInfo!.actions,
               backgroundColor: Colors.transparent,
             )

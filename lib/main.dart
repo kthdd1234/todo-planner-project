@@ -1,8 +1,11 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/date_symbol_data_local.dart';
-import 'package:project/page/groupItemPage.dart';
+import 'package:project/page/ItemSettingPage.dart';
+import 'package:project/page/groupCalendarPage.dart';
+import 'package:project/page/groupItemListPage.dart';
 import 'package:project/page/groupSettingPage.dart';
+import 'package:project/page/groupTimelinePage.dart';
 import 'package:project/page/homePage.dart';
 import 'package:project/provider/bottomTabIndexProvider.dart';
 import 'package:project/util/constants.dart';
@@ -44,7 +47,10 @@ class MyApp extends StatelessWidget {
         routes: {
           'home-page': (context) => const HomePage(),
           'group-setting-page': (context) => const GroupSettingPage(),
-          'group-item-page': (context) => const GroupItemPage(),
+          'group-item-list-page': (context) => const GroupItemListPage(),
+          'group-calendar-page': (context) => const GroupCalendarPage(),
+          'group-timeline-page': (context) => const GroupTimelinePage(),
+          'item-setting-page': (context) => const ItemSettingPage()
         },
       ),
     );

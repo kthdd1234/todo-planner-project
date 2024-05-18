@@ -10,20 +10,35 @@ import 'package:project/common/CommonTextFormField.dart';
 import 'package:project/util/class.dart';
 import 'package:project/util/constants.dart';
 
-class GroupSettingPage extends StatelessWidget {
+class GroupSettingPage extends StatefulWidget {
   const GroupSettingPage({super.key});
+
+  @override
+  State<GroupSettingPage> createState() => _GroupSettingPageState();
+}
+
+class _GroupSettingPageState extends State<GroupSettingPage> {
+  TextEditingController nameController = TextEditingController();
+  TextEditingController descController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     onNext() {
-      Navigator.pushNamed(context, 'group-item-page');
+      Navigator.pushNamed(context, 'group-item-list-page');
+    }
+
+    onName() {
+      //
+    }
+
+    onDesc() {
+      //
     }
 
     return CommonBackground(
       child: CommonScaffold(
         appBarInfo: AppBarInfoClass(
           title: '1. 그룹 설정',
-          centerTitle: true,
           actions: [],
         ),
         body: Column(
@@ -39,16 +54,21 @@ class GroupSettingPage extends StatelessWidget {
                         CommonText(
                           text: '그룹 이름',
                           fontSize: 14,
-                          color: themeColor,
                           isBold: true,
                         ),
-                        CommonText(text: ' *', color: Colors.red, isNotTr: true)
+                        CommonText(
+                          text: ' *',
+                          color: Colors.red,
+                          isNotTr: true,
+                        )
                       ],
                     ),
                     CommonTextFormField(
+                      controller: nameController,
                       hintText: '이름을 입력해주세요',
                       maxLength: 20,
                       textInputAction: TextInputAction.next,
+                      onEditingComplete: onName,
                     ),
                     CommonSpace(height: 20),
                     CommonText(
@@ -58,9 +78,11 @@ class GroupSettingPage extends StatelessWidget {
                       isBold: true,
                     ),
                     CommonTextFormField(
+                      controller: descController,
                       maxLength: 25,
                       hintText: '목표, 다짐, 명언 등 자유롭게 입력해주세요',
                       textInputAction: TextInputAction.next,
+                      onEditingComplete: onDesc,
                     ),
                   ],
                 ),
@@ -82,3 +104,11 @@ class GroupSettingPage extends StatelessWidget {
     );
   }
 }
+
+    // CommonTextFormField(
+    //                         controller: todoController,
+    //                         autofocus: true,
+    //                         hintText: '할 일을 입력해주세요',
+    //                         maxLength: 20,
+    //                         onEditingComplete: onTodo,
+    //                       )

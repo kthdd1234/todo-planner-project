@@ -3,12 +3,12 @@ import 'package:flutter/material.dart';
 class AppBarInfoClass {
   AppBarInfoClass({
     required this.title,
-    required this.centerTitle,
+    this.isCenter,
     this.actions,
   });
 
   String title;
-  bool centerTitle;
+  bool? isCenter;
   List<Widget>? actions;
 }
 

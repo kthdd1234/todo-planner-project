@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:project/body/todo/widget/todoGroupBtnList.dart';
 import 'package:project/body/todo/widget/todoGroupItem.dart';
 import 'package:project/body/todo/widget/todoGroupTitle.dart';
 import 'package:project/common/CommonAppBar.dart';
@@ -24,14 +23,7 @@ class TodoBody extends StatelessWidget {
               CommonContainer(
                 child: Column(
                   children: [
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        // TodoGroupImage(),
-                        TodoGroupTitle(title: '📚국어', desc: '매일 저녁 10분씩 읽기!'),
-                        const TodoGroupBtnList(),
-                      ],
-                    ),
+                    TodoGroupTitle(title: '📚국어', desc: '매일 저녁 10분씩 읽기!'),
                     TodoGroupItem(
                       text: '김동욱 연필통 모의고사 오답노트',
                       markType: itemMark.O,
