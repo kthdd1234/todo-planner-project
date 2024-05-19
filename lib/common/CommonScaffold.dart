@@ -11,17 +11,20 @@ class CommonScaffold extends StatelessWidget {
     this.appBarInfo,
     this.bottomNavigationBar,
     this.onFloatingActionButton,
+    this.resizeToAvoidBottomInset,
   });
 
   Widget? bottomNavigationBar;
   Widget body;
   AppBarInfoClass? appBarInfo;
+  bool? resizeToAvoidBottomInset;
   Function()? onFloatingActionButton;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.transparent,
+      resizeToAvoidBottomInset: resizeToAvoidBottomInset,
       appBar: appBarInfo != null
           ? AppBar(
               iconTheme: const IconThemeData(

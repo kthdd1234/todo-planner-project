@@ -54,7 +54,6 @@ class _GroupSettingPageState extends State<GroupSettingPage> {
                         CommonText(
                           text: '그룹 이름',
                           fontSize: 14,
-                          isBold: true,
                         ),
                         CommonText(
                           text: ' *',
@@ -75,7 +74,6 @@ class _GroupSettingPageState extends State<GroupSettingPage> {
                       text: '한줄 코멘트',
                       fontSize: 14,
                       color: themeColor,
-                      isBold: true,
                     ),
                     CommonTextFormField(
                       controller: descController,

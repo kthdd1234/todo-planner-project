@@ -12,3 +12,17 @@ SvgPicture svgAsset(
         color != null ? ColorFilter.mode(color, BlendMode.srcIn) : null,
   );
 }
+
+Color itemMarkColor(
+    {required MaterialColor groupColor, required String markType}) {
+  if (markType == 'E') {
+    return groupColor.shade50;
+  }
+
+  return {
+    'O': Colors.green.shade100,
+    'X': Colors.red.shade100,
+    'M': Colors.orange.shade100,
+    'T': Colors.purple.shade100,
+  }[markType]!;
+}

@@ -26,7 +26,13 @@ class BottomNavigationBarClass {
 }
 
 class TagColorClass {
-  TagColorClass({required this.bgColor, required this.textColor});
+  TagColorClass({
+    required this.bgColor,
+    required this.textColor,
+    this.todoColor,
+  });
+
+  Color? todoColor;
   Color bgColor, textColor;
 }
 

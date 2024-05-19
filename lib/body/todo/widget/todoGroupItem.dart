@@ -37,9 +37,12 @@ class TodoGroupItem extends StatelessWidget {
         Row(
           children: [
             isContinue == true
-                ? Expanded(
-                    flex: 0,
-                    child: CommonCircle(color: materialColor.shade200),
+                ? Padding(
+                    padding: const EdgeInsets.only(right: 10),
+                    child: CommonCircle(
+                      color: materialColor.shade100,
+                      size: 15,
+                    ),
                   )
                 : const CommonNull(),
             Expanded(
@@ -83,9 +86,10 @@ class TodoGroupItem extends StatelessWidget {
                       padding: const EdgeInsets.only(right: 5),
                       child: CommonSvgButton(
                         name: 'mark-$markType',
-                        color: isShade50 == true
-                            ? materialColor.shade50
-                            : materialColor.shade100,
+                        color: itemMarkColor(
+                          groupColor: materialColor,
+                          markType: markType!,
+                        ),
                         width: 28,
                         onTap: onMark,
                       ),

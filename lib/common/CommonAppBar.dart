@@ -61,7 +61,7 @@ class AppBarTitle extends StatelessWidget {
           ),
           Row(
             children: [
-              wCommonTag(text: '비율'),
+              wCommonTag(text: '스티커'),
               wCommonTag(text: '1주일'),
               wCommonTag(text: '그룹 4'),
             ],
@@ -84,18 +84,18 @@ class AppBarCalendar extends StatelessWidget {
       //
     }
 
-    percentBuilder(context, day, events) {
-      //
-    }
-
     dayBuilder(context, day, events) {
       return Container(
-        width: 35,
-        height: 8,
-        padding: const EdgeInsets.symmetric(vertical: 1, horizontal: 8),
+        padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 8),
         decoration: BoxDecoration(
-          color: const Color(0xffF3F4F9),
+          color: Colors.indigo.shade100, // const Color(0xffF3F4F9)
           borderRadius: BorderRadius.circular(3),
+        ),
+        child: CommonText(
+          text: 'D-12',
+          fontSize: 9,
+          color: Colors.white,
+          isBold: true,
         ),
       );
     }
@@ -103,7 +103,7 @@ class AppBarCalendar extends StatelessWidget {
     return TableCalendar(
       locale: locale,
       calendarStyle: CalendarStyle(
-        cellMargin: const EdgeInsets.all(10),
+        cellMargin: const EdgeInsets.all(15),
         todayDecoration: BoxDecoration(
           color: Colors.indigo.shade300,
           shape: BoxShape.circle,

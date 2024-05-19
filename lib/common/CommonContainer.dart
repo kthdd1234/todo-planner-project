@@ -6,10 +6,15 @@ class CommonContainer extends StatelessWidget {
     required this.child,
     this.innerPadding,
     this.outerPadding,
+    this.color,
+    this.radius,
+    this.onTap,
   });
 
   Widget child;
-  double? innerPadding, outerPadding;
+  Color? color;
+  double? radius, innerPadding, outerPadding;
+  Function()? onTap;
 
   @override
   Widget build(BuildContext context) {
@@ -17,22 +22,25 @@ class CommonContainer extends StatelessWidget {
       padding: outerPadding != null
           ? EdgeInsets.fromLTRB(outerPadding!, 0, outerPadding!, outerPadding!)
           : const EdgeInsets.all(0.0),
-      child: Container(
-        width: MediaQuery.of(context).size.width,
-        height: null,
-        padding: EdgeInsets.all(innerPadding != null ? innerPadding! : 20),
-        decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(10),
-            boxShadow: [
-              BoxShadow(
-                color:
-                    const Color.fromARGB(255, 206, 206, 206).withOpacity(0.1),
-                blurRadius: 10,
-                offset: const Offset(2, 4),
-              )
-            ]),
-        child: child,
+      child: GestureDetector(
+        onTap: onTap,
+        child: Container(
+          width: MediaQuery.of(context).size.width,
+          height: null,
+          padding: EdgeInsets.all(innerPadding != null ? innerPadding! : 20),
+          decoration: BoxDecoration(
+              color: color ?? Colors.white,
+              borderRadius: BorderRadius.circular(radius ?? 10),
+              boxShadow: [
+                BoxShadow(
+                  color:
+                      const Color.fromARGB(255, 206, 206, 206).withOpacity(0.1),
+                  blurRadius: 10,
+                  offset: const Offset(2, 4),
+                )
+              ]),
+          child: child,
+        ),
       ),
     );
   }
