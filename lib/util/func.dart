@@ -1,10 +1,16 @@
 import 'dart:ui';
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:project/util/class.dart';
+import 'package:project/util/final.dart';
 
-SvgPicture svgAsset(
-    {required String name, required double width, Color? color}) {
+SvgPicture svgAsset({
+  required String name,
+  required double width,
+  Color? color,
+}) {
   return SvgPicture.asset(
     'assets/svg/$name.svg',
     width: width,
@@ -25,4 +31,12 @@ Color itemMarkColor(
     'M': Colors.orange.shade100,
     'T': Colors.purple.shade100,
   }[markType]!;
+}
+
+mdeFormatter({required String locale, required DateTime dateTime}) {
+  return DateFormat.MMMEd(locale).format(dateTime);
+}
+
+TagColorClass getTagColor(String name) {
+  return tagColorList.firstWhere((tag) => tag.colorName == name);
 }

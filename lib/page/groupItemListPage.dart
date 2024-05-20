@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:project/body/todo/widget/todoGroupItem.dart';
 import 'package:project/body/todo/widget/todoGroupTitle.dart';
 import 'package:project/common/CommonBackground.dart';
 import 'package:project/common/CommonButton.dart';
@@ -6,20 +7,22 @@ import 'package:project/common/CommonContainer.dart';
 import 'package:project/common/CommonDivider.dart';
 import 'package:project/common/CommonScaffold.dart';
 import 'package:project/common/CommonSpace.dart';
+import 'package:project/common/CommonText.dart';
 import 'package:project/page/ItemSettingPage.dart';
+import 'package:project/provider/initGroupProvider.dart';
 import 'package:project/util/class.dart';
 import 'package:project/util/constants.dart';
+import 'package:project/util/func.dart';
+import 'package:provider/provider.dart';
 
-class GroupItemListPage extends StatefulWidget {
+class GroupItemListPage extends StatelessWidget {
   const GroupItemListPage({super.key});
 
   @override
-  State<GroupItemListPage> createState() => _GroupItemListPageState();
-}
-
-class _GroupItemListPageState extends State<GroupItemListPage> {
-  @override
   Widget build(BuildContext context) {
+    InitGroupProvider group = context.watch<InitGroupProvider>();
+    TagColorClass tagColor = getTagColor(group.colorName);
+
     onAdd() {
       Navigator.of(context).push(
         MaterialPageRoute(
@@ -44,26 +47,56 @@ class _GroupItemListPageState extends State<GroupItemListPage> {
               child: CommonContainer(
                 outerPadding: 5,
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     TodoGroupTitle(
-                      title: '📚독서',
-                      desc: '하루라도 책을 읽지 않으면 입안에 가시가 돋는다',
+                      title: group.name,
+                      desc: group.desc,
                       isShowAction: false,
                     ),
-                    CommonDivider(color: Colors.indigo.shade50),
-                    // TodoGroupItem(
-                    //   text: '매일 밤 20분 책 읽기',
-                    //   materialColor: Colors.green,
-                    //   isShowMark: false,
-                    // ),
+                    group.todoList.isNotEmpty
+                        ? Column(
+                            children: group.todoList
+                                .map((todo) => TodoGroupItem(
+                                      text: todo.name,
+                                      materialColor: tagColor.baseColor,
+                                      isHighlight: todo.isHighlighter,
+                                      memo: todo.memo,
+                                      isShowMark: false,
+                                    ))
+                                .toList(),
+                          )
+                        : Column(
+                            children: [
+                              CommonDivider(color: tagColor.baseColor.shade50),
+                              CommonSpace(height: 10),
+                              Column(
+                                children: [
+                                  CommonText(
+                                    text: '추가된 할 일이 없어요',
+                                    color: Colors.grey,
+                                  ),
+                                  CommonText(
+                                    text: '아래의 버튼을 눌러 할 일을 추가해보세요',
+                                    color: Colors.grey,
+                                  ),
+                                  CommonSpace(height: 10),
+                                  svgAsset(
+                                    name: 'arrow-down',
+                                    width: 15,
+                                    color: Colors.grey.shade300,
+                                  )
+                                ],
+                              ),
+                            ],
+                          ),
+                    CommonSpace(height: 10),
                     CommonButton(
-                      text: '+ 할 일을 추가하세요',
+                      text: '+ 할 일 추가',
                       outerPadding: const EdgeInsets.only(top: 0),
                       verticalPadding: 15,
                       borderRadius: 7,
                       textColor: Colors.white,
-                      buttonColor: Colors.indigo.shade200,
+                      buttonColor: tagColor.baseColor.shade200,
                       onTap: onAdd,
                     ),
                   ],

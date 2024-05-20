@@ -10,27 +10,32 @@ class CommonTextFormField extends StatelessWidget {
     required this.controller,
     this.autofocus,
     this.textInputAction,
+    this.focusNode,
+    this.textBgColor,
   });
 
+  FocusNode? focusNode;
   TextEditingController controller;
   String hintText;
   int maxLength;
   bool? autofocus;
   TextInputAction? textInputAction;
+  Color? textBgColor;
   Function() onEditingComplete;
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      focusNode: focusNode,
       controller: controller,
       textInputAction: textInputAction,
       autofocus: autofocus == true,
       maxLength: maxLength,
+      style:
+          textBgColor != null ? TextStyle(backgroundColor: textBgColor) : null,
       decoration: InputDecoration(
         focusedBorder: const UnderlineInputBorder(
-          borderSide: BorderSide(
-            color: themeColor,
-          ),
+          borderSide: BorderSide(color: themeColor),
         ),
         enabledBorder: UnderlineInputBorder(
           borderSide: BorderSide(

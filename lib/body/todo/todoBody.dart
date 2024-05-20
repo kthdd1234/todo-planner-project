@@ -57,7 +57,7 @@ class TodoBody extends StatelessWidget {
                       materialColor: Colors.indigo,
                     ),
                     CommonButton(
-                      text: '+ 할 일을 추가하세요',
+                      text: '+ 할 일 추가',
                       outerPadding: const EdgeInsets.only(top: 20),
                       verticalPadding: 15,
                       borderRadius: 7,

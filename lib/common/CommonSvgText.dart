@@ -15,11 +15,13 @@ class CommonSvgText extends StatelessWidget {
     required this.svgDirection,
     this.textColor,
     this.svgColor,
+    this.svgRight,
   });
 
   String text, svgName;
   Color? textColor, svgColor;
   double svgWidth, fontSize;
+  double? svgRight;
   SvgDirectionEnum svgDirection;
 
   @override
@@ -37,7 +39,7 @@ class CommonSvgText extends StatelessWidget {
         ? children.insert(
             0,
             Padding(
-              padding: const EdgeInsets.only(right: 7),
+              padding: EdgeInsets.only(right: svgRight ?? 5),
               child: widget,
             ))
         : children.add(Padding(

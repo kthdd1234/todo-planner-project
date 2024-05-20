@@ -115,7 +115,7 @@ class AppBarCalendar extends StatelessWidget {
         ),
       ),
       calendarBuilders: CalendarBuilders(
-        markerBuilder: dayBuilder,
+        markerBuilder: stickerBuilder,
       ),
       daysOfWeekStyle: const DaysOfWeekStyle(
         weekdayStyle: TextStyle(color: Colors.grey, fontSize: 13),

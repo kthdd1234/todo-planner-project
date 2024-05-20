@@ -1,5 +1,8 @@
+import 'dart:developer';
+
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
+import 'package:keyboard_actions/keyboard_actions.dart';
 import 'package:project/common/CommonBackground.dart';
 import 'package:project/common/CommonButton.dart';
 import 'package:project/common/CommonCircle.dart';
@@ -7,13 +10,15 @@ import 'package:project/common/CommonContainer.dart';
 import 'package:project/common/CommonNull.dart';
 import 'package:project/common/CommonScaffold.dart';
 import 'package:project/common/CommonSpace.dart';
-import 'package:project/common/CommonSvgTag.dart';
+import 'package:project/common/CommonSvgText.dart';
 import 'package:project/common/CommonText.dart';
 import 'package:project/common/CommonTextFormField.dart';
+import 'package:project/provider/highlighterProvider.dart';
 import 'package:project/util/class.dart';
 import 'package:project/util/constants.dart';
+import 'package:project/util/enum.dart';
 import 'package:project/util/final.dart';
-import 'package:project/util/func.dart';
+import 'package:provider/provider.dart';
 
 class ItemSettingPage extends StatefulWidget {
   const ItemSettingPage({super.key});
@@ -23,13 +28,32 @@ class ItemSettingPage extends StatefulWidget {
 }
 
 class _ItemSettingPageState extends State<ItemSettingPage> {
+  FocusNode todoNode = FocusNode();
+  FocusNode memoNode = FocusNode();
+
+  String seletedType = eOneday;
   TextEditingController todoController = TextEditingController();
   TextEditingController memoController = TextEditingController();
-  String seletedType = eOneday;
-  Color selectedColor = Colors.indigo.shade200;
+
+  @override
+  void initState() {
+    if (mounted) {
+      WidgetsBinding.instance.addPostFrameCallback(
+        (timeStamp) {
+          context
+              .read<HighlighterProvider>()
+              .changeHighlighter(newValue: false);
+        },
+      );
+    }
+
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
+    bool isHighlighter = context.watch<HighlighterProvider>().isHighlighter;
+
     onType(String type) {
       setState(() => seletedType = type);
     }
@@ -38,42 +62,105 @@ class _ItemSettingPageState extends State<ItemSettingPage> {
       //
     }
 
-    return CommonBackground(
-      child: CommonScaffold(
-        resizeToAvoidBottomInset: false,
-        appBarInfo: AppBarInfoClass(title: '할 일 추가'),
-        body: Column(
-          children: [
-            Expanded(
-              child: CommonContainer(
-                outerPadding: 5,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    TodoType(
-                      seletedType: seletedType,
-                      onTap: onType,
+    KeyboardActionsConfig buildConfig(BuildContext context) {
+      return KeyboardActionsConfig(
+        keyboardActionsPlatform: KeyboardActionsPlatform.ALL,
+        keyboardBarColor: const Color(0xffF3F4F9),
+        nextFocus: true,
+        actions: [
+          KeyboardActionsItem(
+            focusNode: todoNode,
+            enabled: false,
+            displayArrows: false,
+            displayDoneButton: false,
+            toolbarButtons: [
+              (node) => HighlighterActionBar(isHighlighter: isHighlighter),
+            ],
+          ),
+        ],
+      );
+    }
+
+    return SizedBox(
+      height: MediaQuery.of(context).size.height,
+      child: KeyboardActions(
+        config: buildConfig(context),
+        child: CommonBackground(
+          child: CommonScaffold(
+            resizeToAvoidBottomInset: false,
+            appBarInfo: AppBarInfoClass(title: '할 일 추가'),
+            body: Column(
+              children: [
+                Expanded(
+                  child: CommonContainer(
+                    outerPadding: 5,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        TodoType(
+                          seletedType: seletedType,
+                          onTap: onType,
+                        ),
+                        TodoName(
+                          todoNode: todoNode,
+                          controller: todoController,
+                          seletedType: seletedType,
+                          selectedColor: Colors.indigo.shade200,
+                        ),
+                        TodoMemo(controller: memoController)
+                      ],
                     ),
-                    TodoName(
-                      controller: todoController,
-                      seletedType: seletedType,
-                      selectedColor: selectedColor,
-                    ),
-                    TodoColor(),
-                    TodoHighlight(),
-                    TodoMemo()
-                  ],
+                  ),
                 ),
-              ),
+                CommonButton(
+                  text: '추가하기',
+                  outerPadding: const EdgeInsets.symmetric(vertical: 10),
+                  textColor: Colors.white,
+                  buttonColor: themeColor,
+                  verticalPadding: 15,
+                  borderRadius: 100,
+                  onTap: onSave,
+                ),
+              ],
             ),
-            CommonButton(
-              text: '추가하기',
-              outerPadding: const EdgeInsets.symmetric(vertical: 10),
-              textColor: Colors.white,
-              buttonColor: themeColor,
-              verticalPadding: 15,
-              borderRadius: 100,
-              onTap: onSave,
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class HighlighterActionBar extends StatelessWidget {
+  const HighlighterActionBar({super.key, required this.isHighlighter});
+
+  final bool isHighlighter;
+
+  @override
+  Widget build(BuildContext context) {
+    bool isHighlighter = context.watch<HighlighterProvider>().isHighlighter;
+
+    return Expanded(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 15),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            CommonSvgText(
+              svgRight: 7,
+              text: '할 일에 형광펜 표시 할까요?',
+              fontSize: 13,
+              svgName: 'highlighter',
+              svgWidth: 12,
+              svgDirection: SvgDirectionEnum.left,
+            ),
+            CupertinoSwitch(
+              activeColor: Colors.indigo.shade200,
+              value: isHighlighter,
+              onChanged: (bool newValue) {
+                context
+                    .read<HighlighterProvider>()
+                    .changeHighlighter(newValue: newValue);
+              },
             ),
           ],
         ),
@@ -137,16 +224,9 @@ class TodoType extends StatelessWidget {
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 3),
-                  child: CommonCircle(
-                    color: Colors.indigo.shade200,
-                    size: 9,
-                  ),
+                  child: CommonCircle(color: Colors.indigo.shade200, size: 9),
                 ),
-                CommonText(
-                  text: '을 표시해요.',
-                  fontSize: 10,
-                  color: Colors.grey,
-                ),
+                CommonText(text: '을 표시해요.', fontSize: 10, color: Colors.grey),
               ],
             ),
           ),
@@ -178,19 +258,36 @@ class TodoName extends StatelessWidget {
     required this.controller,
     required this.seletedType,
     required this.selectedColor,
+    required this.todoNode,
   });
 
   TextEditingController controller;
   String seletedType;
   Color selectedColor;
+  FocusNode todoNode;
 
   @override
   Widget build(BuildContext context) {
+    bool isHighlighter = context.watch<HighlighterProvider>().isHighlighter;
+
     return Padding(
       padding: const EdgeInsets.only(bottom: 20),
       child: Column(
         children: [
-          TodoTitle(title: '이름'),
+          TodoTitle(
+            title: '할 일',
+            additionalWidget: CommonSvgText(
+              text: '형광펜',
+              fontSize: 11,
+              svgName: 'highlighter',
+              svgWidth: 11,
+              svgColor:
+                  isHighlighter ? Colors.indigo.shade300 : Colors.grey.shade400,
+              textColor:
+                  isHighlighter ? Colors.indigo.shade300 : Colors.grey.shade400,
+              svgDirection: SvgDirectionEnum.left,
+            ),
+          ),
           Row(
             children: [
               seletedType == eRoutin
@@ -201,8 +298,10 @@ class TodoName extends StatelessWidget {
                   : const CommonNull(),
               Expanded(
                 child: CommonTextFormField(
+                  textBgColor: isHighlighter ? Colors.indigo.shade50 : null,
+                  focusNode: todoNode,
                   controller: controller,
-                  hintText: '이름을 입력해주세요.',
+                  hintText: '할 일을 입력해주세요.',
                   maxLength: 20,
                   onEditingComplete: () => FocusScope.of(context).unfocus(),
                 ),
@@ -215,73 +314,22 @@ class TodoName extends StatelessWidget {
   }
 }
 
-class TodoColor extends StatelessWidget {
-  const TodoColor({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 30),
-      child: Column(
-        children: [
-          TodoTitle(title: '컬러'),
-          CommonSpace(height: 15),
-          GridView(
-            shrinkWrap: true,
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 6,
-              mainAxisSpacing: 15,
-              crossAxisSpacing: 15,
-            ),
-            children: tagColorList
-                .map(
-                  (tagColor) => Stack(
-                    alignment: AlignmentDirectional.center,
-                    children: [
-                      CommonCircle(
-                        color: tagColor.todoColor!,
-                        size: 40,
-                      ),
-                      svgAsset(
-                        name: 'mark-V',
-                        width: 20,
-                        color: Colors.white,
-                      ),
-                    ],
-                  ),
-                )
-                .toList(),
-          )
-        ],
-      ),
-    );
-  }
-}
-
-class TodoHighlight extends StatelessWidget {
-  const TodoHighlight({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 30),
-      child: Column(
-        children: [
-          TodoTitle(title: '형광펜'),
-        ],
-      ),
-    );
-  }
-}
-
 class TodoMemo extends StatelessWidget {
-  const TodoMemo({super.key});
+  TodoMemo({super.key, required this.controller});
+
+  TextEditingController controller;
 
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
         TodoTitle(title: '한 줄 메모'),
+        CommonTextFormField(
+          controller: controller,
+          hintText: '메모 할 부분이 있다면 입력해주세요. (선택)',
+          maxLength: 20,
+          onEditingComplete: () => FocusScope.of(context).unfocus(),
+        )
       ],
     );
   }

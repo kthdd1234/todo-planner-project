@@ -1,9 +1,13 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:project/common/CommonNull.dart';
 import 'package:project/common/CommonSpace.dart';
 import 'package:project/common/CommonSvgButton.dart';
 import 'package:project/common/CommonText.dart';
+import 'package:project/provider/selectedDateTimeProvider.dart';
 import 'package:project/util/class.dart';
+import 'package:project/util/func.dart';
+import 'package:provider/provider.dart';
 
 class TodoGroupTitle extends StatelessWidget {
   TodoGroupTitle({
@@ -18,6 +22,10 @@ class TodoGroupTitle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    String locale = context.locale.toString();
+    DateTime selectedDateTime =
+        context.watch<SelectedDateTimeProvider>().seletedDateTime;
+
     onEdit() {
       Navigator.pushNamed(context, 'group-setting-page');
     }
@@ -61,7 +69,7 @@ class TodoGroupTitle extends StatelessWidget {
         isShowAction != false
             ? Row(children: children)
             : CommonText(
-                text: '5월 18일 (수)',
+                text: mdeFormatter(locale: locale, dateTime: selectedDateTime),
                 color: Colors.grey,
                 fontSize: 11,
               )

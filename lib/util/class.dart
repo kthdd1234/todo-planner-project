@@ -27,13 +27,17 @@ class BottomNavigationBarClass {
 
 class TagColorClass {
   TagColorClass({
+    required this.baseColor,
     required this.bgColor,
     required this.textColor,
-    this.todoColor,
+    this.colorName,
+    this.groupColor,
   });
 
-  Color? todoColor;
+  String? colorName;
   Color bgColor, textColor;
+  Color? groupColor;
+  MaterialColor baseColor;
 }
 
 class TodoGroupBtnClass {
@@ -53,4 +57,17 @@ class ItemMarkClass {
   });
 
   String E, O, X, M, T;
+}
+
+class TodoClass {
+  TodoClass({
+    required this.id,
+    required this.type,
+    required this.name,
+    required this.isHighlighter,
+    required this.memo,
+  });
+
+  String id, type, name, memo;
+  bool isHighlighter;
 }
