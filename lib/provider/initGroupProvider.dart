@@ -21,7 +21,12 @@ class InitGroupProvider extends ChangeNotifier {
 
   void addTodo({required TodoClass todo}) {
     todoList.add(todo);
+    notifyListeners();
+  }
 
+  void editTodo({required TodoClass todo}) {
+    todoList =
+        todoList.map((info) => info.id == todo.id ? todo : info).toList();
     notifyListeners();
   }
 }

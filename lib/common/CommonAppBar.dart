@@ -40,7 +40,8 @@ class AppBarTitle extends StatelessWidget {
         padding: const EdgeInsets.only(left: 5),
         child: CommonTag(
           text: text,
-          tagColor: tagWhiteIndigo,
+          textColor: Colors.white,
+          bgColor: indigo.s300,
           isBold: true,
           fontSize: 11,
         ),

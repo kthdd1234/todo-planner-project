@@ -25,19 +25,19 @@ class BottomNavigationBarClass {
   Widget body;
 }
 
-class TagColorClass {
-  TagColorClass({
-    required this.baseColor,
-    required this.bgColor,
-    required this.textColor,
-    this.colorName,
-    this.groupColor,
+class ColorClass {
+  ColorClass({
+    required this.s50,
+    required this.s100,
+    required this.s200,
+    required this.s300,
+    required this.s400,
+    required this.original,
+    required this.colorName,
   });
 
-  String? colorName;
-  Color bgColor, textColor;
-  Color? groupColor;
-  MaterialColor baseColor;
+  String colorName;
+  Color s50, s100, s200, s300, s400, original;
 }
 
 class TodoGroupBtnClass {
@@ -65,9 +65,10 @@ class TodoClass {
     required this.type,
     required this.name,
     required this.isHighlighter,
-    required this.memo,
+    this.memo,
   });
 
-  String id, type, name, memo;
+  String id, type, name;
+  String? memo;
   bool isHighlighter;
 }

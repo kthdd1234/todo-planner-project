@@ -27,9 +27,6 @@ class CommonScaffold extends StatelessWidget {
       resizeToAvoidBottomInset: resizeToAvoidBottomInset,
       appBar: appBarInfo != null
           ? AppBar(
-              iconTheme: const IconThemeData(
-                color: themeColor,
-              ),
               title: CommonText(text: appBarInfo!.title, fontSize: 20),
               centerTitle: appBarInfo!.isCenter,
               actions: appBarInfo!.actions,

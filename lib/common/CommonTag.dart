@@ -6,13 +6,14 @@ class CommonTag extends StatelessWidget {
   CommonTag({
     super.key,
     required this.text,
-    required this.tagColor,
+    required this.textColor,
+    required this.bgColor,
     this.isBold,
     this.fontSize,
   });
 
   String text;
-  TagColorClass tagColor;
+  Color textColor, bgColor;
   bool? isBold;
   double? fontSize;
 
@@ -22,12 +23,12 @@ class CommonTag extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 7),
         decoration: BoxDecoration(
-          color: tagColor.bgColor,
+          color: bgColor,
           borderRadius: BorderRadius.circular(5),
         ),
         child: CommonText(
           text: text,
-          color: tagColor.textColor,
+          color: textColor,
           isBold: isBold,
           fontSize: fontSize,
         ),

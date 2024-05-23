@@ -35,7 +35,7 @@ class CommonTextFormField extends StatelessWidget {
           textBgColor != null ? TextStyle(backgroundColor: textBgColor) : null,
       decoration: InputDecoration(
         focusedBorder: const UnderlineInputBorder(
-          borderSide: BorderSide(color: themeColor),
+          borderSide: BorderSide(color: textColor),
         ),
         enabledBorder: UnderlineInputBorder(
           borderSide: BorderSide(

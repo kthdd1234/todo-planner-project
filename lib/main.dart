@@ -62,7 +62,6 @@ class MyApp extends StatelessWidget {
           'group-item-list-page': (context) => const GroupItemListPage(),
           'group-calendar-page': (context) => const GroupCalendarPage(),
           'group-timeline-page': (context) => const GroupTimelinePage(),
-          'item-setting-page': (context) => const ItemSettingPage()
         },
       ),
     );

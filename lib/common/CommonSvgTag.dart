@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:project/util/class.dart';
 import 'package:project/util/func.dart';
 
 class CommonSvgTag extends StatelessWidget {
@@ -7,12 +6,13 @@ class CommonSvgTag extends StatelessWidget {
     super.key,
     required this.svgName,
     required this.svgWidth,
-    required this.tagColor,
+    required this.svgColor,
+    required this.bgColor,
   });
 
   String svgName;
   double svgWidth;
-  TagColorClass tagColor;
+  Color svgColor, bgColor;
 
   @override
   Widget build(BuildContext context) {
@@ -20,13 +20,13 @@ class CommonSvgTag extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 7),
         decoration: BoxDecoration(
-          color: tagColor.bgColor,
+          color: bgColor,
           borderRadius: BorderRadius.circular(5),
         ),
         child: svgAsset(
           name: svgName,
           width: svgWidth,
-          color: tagColor.textColor,
+          color: svgColor,
         ),
       ),
     );

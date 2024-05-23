@@ -1,29 +1,84 @@
 import 'package:flutter/material.dart';
 import 'package:project/common/CommonCircle.dart';
+import 'package:project/common/CommonContainer.dart';
 import 'package:project/common/CommonDivider.dart';
+import 'package:project/common/CommonModalSheet.dart';
 import 'package:project/common/CommonNull.dart';
 import 'package:project/common/CommonSpace.dart';
 import 'package:project/common/CommonSvgButton.dart';
 import 'package:project/common/CommonText.dart';
+import 'package:project/page/ItemSettingPage.dart';
+import 'package:project/util/class.dart';
+import 'package:project/util/constants.dart';
+import 'package:project/util/final.dart';
 import 'package:project/util/func.dart';
 
 class TodoGroupItem extends StatelessWidget {
   TodoGroupItem({
     super.key,
-    required this.text,
-    required this.materialColor,
+    required this.id,
+    required this.name,
+    required this.color,
+    required this.actionType,
+    required this.todoType,
     this.markType,
-    this.isContinue,
     this.isHighlight,
     this.isShade50,
     this.memo,
-    this.isShowMark,
   });
 
-  String text;
+  String id, name, todoType;
   String? memo, markType;
-  bool? isHighlight, isContinue, isShade50, isShowMark;
-  MaterialColor materialColor;
+  bool? isHighlight, isShade50;
+
+  String actionType;
+  ColorClass color;
+
+  wAction({
+    required String svgName,
+    required Color actionColor,
+    required double width,
+    required Function() onTap,
+    double? right,
+  }) {
+    return Expanded(
+      flex: 0,
+      child: Padding(
+        padding: EdgeInsets.only(right: right ?? 5),
+        child: CommonSvgButton(
+          width: width,
+          name: svgName,
+          color: actionColor,
+          onTap: onTap,
+        ),
+      ),
+    );
+  }
+
+  wContainer({
+    required String svgName,
+    required String actionText,
+    required Color color,
+    required Function() onTap,
+  }) {
+    return Expanded(
+      child: CommonContainer(
+        onTap: onTap,
+        radius: 7,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            svgAsset(name: svgName, width: 25, color: color),
+            CommonSpace(height: 10),
+            CommonText(
+              text: actionText,
+              color: color,
+            )
+          ],
+        ),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -31,74 +86,129 @@ class TodoGroupItem extends StatelessWidget {
       //
     }
 
-    return Column(
-      children: [
-        CommonDivider(color: Colors.indigo.shade50),
-        Row(
-          children: [
-            isContinue == true
-                ? Padding(
-                    padding: const EdgeInsets.only(right: 10),
-                    child: CommonCircle(
-                      color: materialColor.shade100,
-                      size: 15,
-                    ),
-                  )
-                : const CommonNull(),
-            Expanded(
-                flex: 1,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    CommonText(
-                      text: text,
-                      highlightColor:
-                          isHighlight == true ? materialColor.shade50 : null,
-                    ), //
-                    CommonSpace(height: 2),
-                    memo != null
-                        ? Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              CommonSpace(width: 3),
-                              svgAsset(
-                                name: 'memo',
-                                width: 10,
-                                color: Colors.grey.shade400,
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.only(left: 5),
-                                child: CommonText(
-                                  text: memo!,
-                                  color: Colors.grey,
-                                  fontSize: 11,
-                                ),
-                              ),
-                            ],
-                          )
-                        : const CommonNull()
-                  ],
-                )),
-            isShowMark != false
-                ? Expanded(
-                    flex: 0,
-                    child: Padding(
-                      padding: const EdgeInsets.only(right: 5),
-                      child: CommonSvgButton(
-                        name: 'mark-$markType',
-                        color: itemMarkColor(
-                          groupColor: materialColor,
+    onEdit() {
+      navigatorPop(context);
+      Navigator.of(context).push(
+        MaterialPageRoute(
+          fullscreenDialog: true,
+          builder: (context) => ItemSettingPage(
+            isEdit: true,
+            editTodo: TodoClass(
+              id: id,
+              isHighlighter: isHighlight == true,
+              type: todoType,
+              name: name,
+              memo: memo,
+            ),
+          ),
+        ),
+      );
+    }
+
+    onRemove() {
+      //
+    }
+
+    onMore() {
+      showModalBottomSheet(
+        isScrollControlled: true,
+        context: context,
+        builder: (context) => CommonModalSheet(
+          title: name,
+          height: 200,
+          child: Row(
+            children: [
+              wContainer(
+                svgName: 'edit-pencil',
+                actionText: '수정하기',
+                color: textColor,
+                onTap: onEdit,
+              ),
+              CommonSpace(width: 5),
+              wContainer(
+                svgName: 'remove',
+                actionText: '삭제하기',
+                color: Colors.red.shade200,
+                onTap: onRemove,
+              ),
+            ],
+          ),
+        ),
+      );
+    }
+
+    return InkWell(
+      onTap: onMore,
+      child: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 15),
+            child: Row(
+              children: [
+                todoType == eRoutin
+                    ? Padding(
+                        padding: const EdgeInsets.only(right: 10),
+                        child: CommonCircle(
+                          color: color.s100,
+                          size: 15,
+                        ),
+                      )
+                    : const CommonNull(),
+                Expanded(
+                    flex: 1,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        CommonText(
+                          text: name,
+                          highlightColor:
+                              isHighlight == true ? color.s50 : null,
+                        ), //
+                        CommonSpace(height: 2),
+                        memo != null
+                            ? Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  CommonSpace(width: 3),
+                                  svgAsset(
+                                    name: 'memo',
+                                    width: 10,
+                                    color: grey.s400,
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.only(left: 5),
+                                    child: CommonText(
+                                      text: memo!,
+                                      color: grey.original,
+                                      fontSize: 11,
+                                    ),
+                                  ),
+                                ],
+                              )
+                            : const CommonNull()
+                      ],
+                    )),
+                actionType == eItemActionMark
+                    ? wAction(
+                        svgName: 'mark-$markType',
+                        width: 28,
+                        actionColor: itemMarkColor(
+                          groupColor: color.s50,
                           markType: markType!,
                         ),
-                        width: 28,
                         onTap: onMark,
-                      ),
-                    ),
-                  )
-                : const CommonNull(),
-          ],
-        ),
-      ],
+                      )
+                    : Padding(
+                        padding: const EdgeInsets.only(right: 5),
+                        child: Icon(Icons.more_horiz,
+                            size: 18, color: Colors.grey.shade400),
+                      )
+              ],
+            ),
+          ),
+          CommonDivider(color: Colors.indigo.shade50),
+        ],
+      ),
     );
   }
 }

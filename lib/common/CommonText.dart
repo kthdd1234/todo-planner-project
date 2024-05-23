@@ -9,6 +9,7 @@ class CommonText extends StatelessWidget {
     this.fontSize,
     this.isNotTr,
     this.isBold,
+    this.isRequired,
     this.highlightColor,
     this.nameArgs,
     this.onTap,
@@ -17,13 +18,23 @@ class CommonText extends StatelessWidget {
   String text;
   Color? color;
   double? fontSize;
-  bool? isNotTr, isBold;
+  bool? isNotTr, isBold, isRequired;
   Color? highlightColor;
   Map<String, String>? nameArgs;
   Function()? onTap;
 
   @override
   Widget build(BuildContext context) {
+    final basicText = Text(
+      text,
+      textAlign: TextAlign.center,
+      style: TextStyle(
+        color: color ?? textColor,
+        fontSize: fontSize,
+        fontWeight: isBold == true ? FontWeight.bold : FontWeight.w400,
+      ),
+    );
+
     return GestureDetector(
       onTap: onTap,
       child: Container(
@@ -32,15 +43,12 @@ class CommonText extends StatelessWidget {
           borderRadius: BorderRadius.circular(3),
           color: highlightColor,
         ),
-        child: Text(
-          text,
-          textAlign: TextAlign.center,
-          style: TextStyle(
-            color: color ?? themeColor,
-            fontSize: fontSize,
-            fontWeight: isBold == true ? FontWeight.bold : FontWeight.w400,
-          ),
-        ),
+        child: isRequired != true
+            ? basicText
+            : Row(children: [
+                basicText,
+                const Text(' *', style: TextStyle(color: Colors.red))
+              ]),
       ),
     );
   }

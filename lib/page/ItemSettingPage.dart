@@ -14,14 +14,20 @@ import 'package:project/common/CommonSvgText.dart';
 import 'package:project/common/CommonText.dart';
 import 'package:project/common/CommonTextFormField.dart';
 import 'package:project/provider/highlighterProvider.dart';
+import 'package:project/provider/initGroupProvider.dart';
 import 'package:project/util/class.dart';
 import 'package:project/util/constants.dart';
 import 'package:project/util/enum.dart';
 import 'package:project/util/final.dart';
+import 'package:project/util/func.dart';
 import 'package:provider/provider.dart';
+import 'package:uuid/uuid.dart';
 
 class ItemSettingPage extends StatefulWidget {
-  const ItemSettingPage({super.key});
+  ItemSettingPage({super.key, this.isEdit, this.editTodo});
+
+  bool? isEdit;
+  TodoClass? editTodo;
 
   @override
   State<ItemSettingPage> createState() => _ItemSettingPageState();
@@ -40,11 +46,20 @@ class _ItemSettingPageState extends State<ItemSettingPage> {
     if (mounted) {
       WidgetsBinding.instance.addPostFrameCallback(
         (timeStamp) {
-          context
-              .read<HighlighterProvider>()
-              .changeHighlighter(newValue: false);
+          context.read<HighlighterProvider>().changeHighlighter(
+              newValue: widget.isEdit == true
+                  ? widget.editTodo!.isHighlighter
+                  : false);
         },
       );
+    }
+
+    if (widget.isEdit == true) {
+      TodoClass todo = widget.editTodo!;
+
+      seletedType = todo.type;
+      todoController.text = todo.name;
+      memoController.text = todo.memo ?? '';
     }
 
     super.initState();
@@ -52,20 +67,38 @@ class _ItemSettingPageState extends State<ItemSettingPage> {
 
   @override
   Widget build(BuildContext context) {
+    InitGroupProvider group = context.watch<InitGroupProvider>();
+    ColorClass color = getColor(group.colorName);
     bool isHighlighter = context.watch<HighlighterProvider>().isHighlighter;
+    bool isNotEmpty = todoController.text != '';
 
     onType(String type) {
       setState(() => seletedType = type);
     }
 
     onSave() {
-      //
+      if (isNotEmpty) {
+        TodoClass todo = TodoClass(
+          id: widget.isEdit == false ? const Uuid().v4() : widget.editTodo!.id,
+          type: seletedType,
+          name: todoController.text,
+          isHighlighter: isHighlighter,
+          memo: memoController.text != '' ? memoController.text : null,
+        );
+
+        InitGroupProvider provider = context.read<InitGroupProvider>();
+        widget.isEdit == false
+            ? provider.addTodo(todo: todo)
+            : provider.editTodo(todo: todo);
+
+        Navigator.pop(context);
+      }
     }
 
     KeyboardActionsConfig buildConfig(BuildContext context) {
       return KeyboardActionsConfig(
         keyboardActionsPlatform: KeyboardActionsPlatform.ALL,
-        keyboardBarColor: const Color(0xffF3F4F9),
+        keyboardBarColor: Colors.grey.shade50,
         nextFocus: true,
         actions: [
           KeyboardActionsItem(
@@ -74,7 +107,7 @@ class _ItemSettingPageState extends State<ItemSettingPage> {
             displayArrows: false,
             displayDoneButton: false,
             toolbarButtons: [
-              (node) => HighlighterActionBar(isHighlighter: isHighlighter),
+              (node) => HighlighterActionBar(color: color),
             ],
           ),
         ],
@@ -98,6 +131,7 @@ class _ItemSettingPageState extends State<ItemSettingPage> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         TodoType(
+                          selectedColor: color,
                           seletedType: seletedType,
                           onTap: onType,
                         ),
@@ -105,7 +139,7 @@ class _ItemSettingPageState extends State<ItemSettingPage> {
                           todoNode: todoNode,
                           controller: todoController,
                           seletedType: seletedType,
-                          selectedColor: Colors.indigo.shade200,
+                          selectedColor: color,
                         ),
                         TodoMemo(controller: memoController)
                       ],
@@ -114,9 +148,10 @@ class _ItemSettingPageState extends State<ItemSettingPage> {
                 ),
                 CommonButton(
                   text: '추가하기',
-                  outerPadding: const EdgeInsets.symmetric(vertical: 10),
-                  textColor: Colors.white,
-                  buttonColor: themeColor,
+                  outerPadding:
+                      const EdgeInsets.symmetric(vertical: 10, horizontal: 5),
+                  textColor: isNotEmpty ? Colors.white : Colors.grey,
+                  buttonColor: isNotEmpty ? buttonColor : Colors.grey.shade300,
                   verticalPadding: 15,
                   borderRadius: 100,
                   onTap: onSave,
@@ -131,9 +166,9 @@ class _ItemSettingPageState extends State<ItemSettingPage> {
 }
 
 class HighlighterActionBar extends StatelessWidget {
-  const HighlighterActionBar({super.key, required this.isHighlighter});
+  const HighlighterActionBar({super.key, required this.color});
 
-  final bool isHighlighter;
+  final ColorClass color;
 
   @override
   Widget build(BuildContext context) {
@@ -147,14 +182,16 @@ class HighlighterActionBar extends StatelessWidget {
           children: [
             CommonSvgText(
               svgRight: 7,
-              text: '할 일에 형광펜 표시 할까요?',
+              text: '할 일에 형광색 표시 할까요?',
               fontSize: 13,
               svgName: 'highlighter',
               svgWidth: 12,
+              textColor: Colors.grey,
+              svgColor: Colors.grey,
               svgDirection: SvgDirectionEnum.left,
             ),
             CupertinoSwitch(
-              activeColor: Colors.indigo.shade200,
+              activeColor: color.s200,
               value: isHighlighter,
               onChanged: (bool newValue) {
                 context
@@ -170,9 +207,15 @@ class HighlighterActionBar extends StatelessWidget {
 }
 
 class TodoType extends StatelessWidget {
-  TodoType({super.key, required this.seletedType, required this.onTap});
+  TodoType({
+    super.key,
+    required this.seletedType,
+    required this.selectedColor,
+    required this.onTap,
+  });
 
   String seletedType;
+  ColorClass selectedColor;
   Function(String type) onTap;
 
   @override
@@ -188,20 +231,22 @@ class TodoType extends StatelessWidget {
         child: CommonContainer(
           onTap: () => onTap(type),
           radius: 7,
-          color: isSelected ? Colors.indigo.shade200 : Colors.grey.shade100,
+          color: isSelected ? selectedColor.s50 : Colors.grey.shade100,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               CommonText(
                 text: title,
-                isBold: true,
-                color: isSelected ? Colors.white : Colors.grey.shade400,
+                color:
+                    isSelected ? selectedColor.original : Colors.grey.shade400,
+                fontSize: 15,
               ),
               CommonSpace(height: 5),
               CommonText(
                 text: subTitle,
                 fontSize: 12,
-                color: isSelected ? Colors.white : Colors.grey.shade400,
+                color:
+                    isSelected ? selectedColor.original : Colors.grey.shade400,
               ),
             ],
           ),
@@ -215,6 +260,7 @@ class TodoType extends StatelessWidget {
         children: [
           TodoTitle(
             title: '유형',
+            isRequired: true,
             additionalWidget: Row(
               children: [
                 CommonText(
@@ -224,7 +270,7 @@ class TodoType extends StatelessWidget {
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 3),
-                  child: CommonCircle(color: Colors.indigo.shade200, size: 9),
+                  child: CommonCircle(color: selectedColor.s100, size: 9),
                 ),
                 CommonText(text: '을 표시해요.', fontSize: 10, color: Colors.grey),
               ],
@@ -263,7 +309,7 @@ class TodoName extends StatelessWidget {
 
   TextEditingController controller;
   String seletedType;
-  Color selectedColor;
+  ColorClass selectedColor;
   FocusNode todoNode;
 
   @override
@@ -276,15 +322,16 @@ class TodoName extends StatelessWidget {
         children: [
           TodoTitle(
             title: '할 일',
+            isRequired: true,
             additionalWidget: CommonSvgText(
-              text: '형광펜',
+              text: '형광색',
               fontSize: 11,
               svgName: 'highlighter',
               svgWidth: 11,
               svgColor:
-                  isHighlighter ? Colors.indigo.shade300 : Colors.grey.shade400,
+                  isHighlighter ? selectedColor.s300 : Colors.grey.shade400,
               textColor:
-                  isHighlighter ? Colors.indigo.shade300 : Colors.grey.shade400,
+                  isHighlighter ? selectedColor.s300 : Colors.grey.shade400,
               svgDirection: SvgDirectionEnum.left,
             ),
           ),
@@ -293,17 +340,19 @@ class TodoName extends StatelessWidget {
               seletedType == eRoutin
                   ? Padding(
                       padding: const EdgeInsets.only(bottom: 20, right: 10),
-                      child: CommonCircle(color: selectedColor, size: 15),
+                      child: CommonCircle(color: selectedColor.s100, size: 15),
                     )
                   : const CommonNull(),
               Expanded(
                 child: CommonTextFormField(
-                  textBgColor: isHighlighter ? Colors.indigo.shade50 : null,
-                  focusNode: todoNode,
+                  autofocus: true,
                   controller: controller,
+                  textInputAction: TextInputAction.next,
+                  textBgColor: isHighlighter ? selectedColor.s50 : null,
+                  focusNode: todoNode,
                   hintText: '할 일을 입력해주세요.',
-                  maxLength: 20,
-                  onEditingComplete: () => FocusScope.of(context).unfocus(),
+                  maxLength: 30,
+                  onEditingComplete: () => FocusScope.of(context).nextFocus(),
                 ),
               ),
             ],
@@ -325,9 +374,10 @@ class TodoMemo extends StatelessWidget {
       children: [
         TodoTitle(title: '한 줄 메모'),
         CommonTextFormField(
+          textInputAction: TextInputAction.next,
           controller: controller,
           hintText: '메모 할 부분이 있다면 입력해주세요. (선택)',
-          maxLength: 20,
+          maxLength: 30,
           onEditingComplete: () => FocusScope.of(context).unfocus(),
         )
       ],
@@ -336,9 +386,15 @@ class TodoMemo extends StatelessWidget {
 }
 
 class TodoTitle extends StatelessWidget {
-  TodoTitle({super.key, required this.title, this.additionalWidget});
+  TodoTitle({
+    super.key,
+    required this.title,
+    this.additionalWidget,
+    this.isRequired,
+  });
 
   String title;
+  bool? isRequired;
   Widget? additionalWidget;
 
   @override
@@ -346,7 +402,7 @@ class TodoTitle extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        CommonText(text: title, fontSize: 14),
+        CommonText(text: title, fontSize: 14, isRequired: isRequired),
         additionalWidget != null ? additionalWidget! : const CommonNull(),
       ],
     );

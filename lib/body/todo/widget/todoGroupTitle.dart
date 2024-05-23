@@ -1,8 +1,11 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:project/common/CommonCircle.dart';
+import 'package:project/common/CommonDivider.dart';
 import 'package:project/common/CommonNull.dart';
 import 'package:project/common/CommonSpace.dart';
 import 'package:project/common/CommonSvgButton.dart';
+import 'package:project/common/CommonTag.dart';
 import 'package:project/common/CommonText.dart';
 import 'package:project/provider/selectedDateTimeProvider.dart';
 import 'package:project/util/class.dart';
@@ -14,17 +17,19 @@ class TodoGroupTitle extends StatelessWidget {
     super.key,
     required this.title,
     required this.desc,
+    required this.color,
     this.isShowAction,
   });
 
   String title, desc;
+  ColorClass color;
   bool? isShowAction;
 
   @override
   Widget build(BuildContext context) {
-    String locale = context.locale.toString();
-    DateTime selectedDateTime =
-        context.watch<SelectedDateTimeProvider>().seletedDateTime;
+    // String locale = context.locale.toString();
+    // DateTime selectedDateTime =
+    //     context.watch<SelectedDateTimeProvider>().seletedDateTime;
 
     onEdit() {
       Navigator.pushNamed(context, 'group-setting-page');
@@ -54,25 +59,33 @@ class TodoGroupTitle extends StatelessWidget {
             ))
         .toList();
 
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      crossAxisAlignment: CrossAxisAlignment.start,
+    return Column(
       children: [
-        Column(
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            CommonText(text: title, fontSize: 16),
-            CommonSpace(height: 2),
-            CommonText(text: desc, fontSize: 11, color: Colors.grey),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                CommonText(text: title, fontSize: 16),
+                CommonSpace(height: 2),
+                CommonText(text: desc, fontSize: 11, color: Colors.grey),
+              ],
+            ),
+            isShowAction != false
+                ? Row(children: children)
+                : CommonTag(
+                    text: color.colorName,
+                    isBold: true,
+                    textColor: color.s200,
+                    bgColor: color.s50,
+                    fontSize: 11,
+                  ),
           ],
         ),
-        isShowAction != false
-            ? Row(children: children)
-            : CommonText(
-                text: mdeFormatter(locale: locale, dateTime: selectedDateTime),
-                color: Colors.grey,
-                fontSize: 11,
-              )
+        CommonSpace(height: 15),
+        CommonDivider(),
       ],
     );
   }

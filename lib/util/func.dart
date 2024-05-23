@@ -19,10 +19,9 @@ SvgPicture svgAsset({
   );
 }
 
-Color itemMarkColor(
-    {required MaterialColor groupColor, required String markType}) {
+Color itemMarkColor({required Color groupColor, required String markType}) {
   if (markType == 'E') {
-    return groupColor.shade50;
+    return groupColor;
   }
 
   return {
@@ -37,6 +36,10 @@ mdeFormatter({required String locale, required DateTime dateTime}) {
   return DateFormat.MMMEd(locale).format(dateTime);
 }
 
-TagColorClass getTagColor(String name) {
-  return tagColorList.firstWhere((tag) => tag.colorName == name);
+ColorClass getColor(String name) {
+  return colorList.firstWhere((info) => info.colorName == name);
+}
+
+navigatorPop(context) {
+  Navigator.of(context, rootNavigator: true).pop('dialog');
 }

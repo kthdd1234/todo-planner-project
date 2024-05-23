@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:project/common/CommonBackground.dart';
 import 'package:project/common/CommonButton.dart';
@@ -28,14 +30,14 @@ class _GroupSettingPageState extends State<GroupSettingPage> {
   TextEditingController nameController = TextEditingController();
   TextEditingController descController = TextEditingController();
 
-  String selectedColorName = tagIndigo.colorName!;
+  String selectedColorName = red.colorName;
 
   @override
   Widget build(BuildContext context) {
-    bool isEmptyGroupName = nameController.text == '';
+    bool isNotEmpty = nameController.text != '';
 
     onNextPage() {
-      if (!isEmptyGroupName) {
+      if (isNotEmpty) {
         context.read<InitGroupProvider>().changeGroupInfo(
               newId: const Uuid().v4(),
               newName: nameController.text,
@@ -73,12 +75,7 @@ class _GroupSettingPageState extends State<GroupSettingPage> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Row(
-                      children: [
-                        CommonText(text: '그룹 이름', fontSize: 14),
-                        CommonText(text: ' *', color: Colors.red, isNotTr: true)
-                      ],
-                    ),
+                    CommonText(text: '그룹 이름', fontSize: 14, isRequired: true),
                     CommonTextFormField(
                       autofocus: true,
                       controller: nameController,
@@ -88,11 +85,11 @@ class _GroupSettingPageState extends State<GroupSettingPage> {
                       onEditingComplete: onGroupName,
                     ),
                     CommonSpace(height: 20),
-                    CommonText(text: '한줄 코멘트', fontSize: 14, color: themeColor),
+                    CommonText(text: '한줄 코멘트', fontSize: 14),
                     CommonTextFormField(
                       controller: descController,
                       maxLength: 30,
-                      hintText: '목표, 다짐, 명언 등 자유롭게 입력해주세요',
+                      hintText: '목표, 다짐 등 자유롭게 입력해주세요 (선택)',
                       textInputAction: TextInputAction.next,
                       onEditingComplete: onGroupDesc,
                     ),
@@ -109,8 +106,8 @@ class _GroupSettingPageState extends State<GroupSettingPage> {
             CommonButton(
               text: '다음',
               outerPadding: const EdgeInsets.symmetric(horizontal: 5),
-              textColor: isEmptyGroupName ? Colors.grey : Colors.white,
-              buttonColor: isEmptyGroupName ? Colors.grey.shade300 : themeColor,
+              textColor: isNotEmpty ? Colors.white : Colors.grey,
+              buttonColor: isNotEmpty ? buttonColor : Colors.grey.shade300,
               verticalPadding: 15,
               borderRadius: 100,
               onTap: onNextPage,
@@ -141,23 +138,37 @@ class GroupColor extends StatelessWidget {
             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 6,
               mainAxisSpacing: 15,
-              crossAxisSpacing: 15,
+              crossAxisSpacing: 0,
             ),
-            children: tagColorList
+            children: colorList
                 .map(
-                  (tagColor) => GestureDetector(
-                    onTap: () => onTap(tagColor.colorName!),
-                    child: Stack(
-                      alignment: AlignmentDirectional.center,
+                  (color) => GestureDetector(
+                    onTap: () => onTap(color.colorName),
+                    child: Column(
                       children: [
-                        CommonCircle(color: tagColor.groupColor!, size: 40),
-                        selectedColorName == tagColor.colorName
-                            ? svgAsset(
-                                name: 'mark-V',
-                                width: 20,
-                                color: Colors.white,
+                        Stack(
+                          alignment: AlignmentDirectional.center,
+                          children: [
+                            CommonCircle(color: color.s100, size: 40),
+                            selectedColorName == color.colorName
+                                ? svgAsset(
+                                    name: 'mark-V',
+                                    width: 20,
+                                    color: Colors.white,
+                                  )
+                                : const CommonNull(),
+                          ],
+                        ),
+                        selectedColorName == color.colorName
+                            ? Padding(
+                                padding: const EdgeInsets.only(top: 3),
+                                child: CommonText(
+                                  text: selectedColorName,
+                                  fontSize: 12,
+                                  color: getColor(selectedColorName).s200,
+                                ),
                               )
-                            : const CommonNull(),
+                            : const CommonNull()
                       ],
                     ),
                   ),
