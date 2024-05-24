@@ -13,6 +13,8 @@ class CommonText extends StatelessWidget {
     this.highlightColor,
     this.nameArgs,
     this.onTap,
+    this.textAlign,
+    this.overflow,
   });
 
   String text;
@@ -21,17 +23,20 @@ class CommonText extends StatelessWidget {
   bool? isNotTr, isBold, isRequired;
   Color? highlightColor;
   Map<String, String>? nameArgs;
+  TextAlign? textAlign;
+  TextOverflow? overflow;
   Function()? onTap;
 
   @override
   Widget build(BuildContext context) {
     final basicText = Text(
       text,
-      textAlign: TextAlign.center,
+      textAlign: textAlign ?? TextAlign.center,
       style: TextStyle(
         color: color ?? textColor,
         fontSize: fontSize,
         fontWeight: isBold == true ? FontWeight.bold : FontWeight.w400,
+        overflow: overflow,
       ),
     );
 

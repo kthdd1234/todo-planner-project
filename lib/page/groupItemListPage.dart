@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:project/body/todo/widget/todoGroupItem.dart';
 import 'package:project/body/todo/widget/todoGroupTitle.dart';
 import 'package:project/common/CommonBackground.dart';
@@ -38,6 +39,70 @@ class GroupItemListPage extends StatelessWidget {
       //
     }
 
+    onReorder(int oldIdx, int newIdx) {
+      context.read<InitGroupProvider>().changeOrderTodo(oldIdx, newIdx);
+    }
+
+    confirmDismiss({
+      required DismissDirection direction,
+      required TodoClass todo,
+    }) async {
+      if (direction == DismissDirection.endToStart) {
+        bool dismiss = false;
+
+        await showDialog(
+            context: context,
+            builder: (context) {
+              wContainer({
+                required String text,
+                required Color color,
+                required Function() onTap,
+              }) {
+                return Expanded(
+                  child: CommonContainer(
+                    radius: 7,
+                    innerPadding: 15,
+                    color: color,
+                    onTap: onTap,
+                    child: CommonText(
+                      text: text,
+                      color: Colors.white,
+                      isBold: true,
+                    ),
+                  ),
+                );
+              }
+
+              onRemove() {
+                context.read<InitGroupProvider>().removeTodo(todo: todo);
+                navigatorPop(context);
+              }
+
+              onClose() {
+                navigatorPop(context);
+              }
+
+              return AlertDialog(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                title: Row(
+                  children: [CommonText(text: '할 일을 삭제할까요?', fontSize: 18)],
+                ),
+                content: Row(
+                  children: [
+                    wContainer(text: '취소하기', onTap: onClose, color: blue.s200),
+                    CommonSpace(width: 5),
+                    wContainer(text: '삭제하기', onTap: onRemove, color: red.s200),
+                  ],
+                ),
+              );
+            });
+
+        return dismiss;
+      }
+    }
+
     return CommonBackground(
       child: CommonScaffold(
         appBarInfo: AppBarInfoClass(
@@ -57,65 +122,101 @@ class GroupItemListPage extends StatelessWidget {
                       isShowAction: false,
                     ),
                     group.todoList.isNotEmpty
-                        ? Column(
-                            children: group.todoList
-                                .map((todo) => TodoGroupItem(
-                                      id: todo.id,
-                                      name: todo.name,
-                                      todoType: todo.type,
-                                      color: color,
-                                      isHighlight: todo.isHighlighter,
-                                      memo: todo.memo,
+                        ? Expanded(
+                            child: ListView(
+                              shrinkWrap: true,
+                              children: [
+                                ReorderableListView.builder(
+                                  shrinkWrap: true,
+                                  physics: const ClampingScrollPhysics(),
+                                  itemBuilder: (context, idx) => Dismissible(
+                                    direction: DismissDirection.endToStart,
+                                    dismissThresholds: const {
+                                      DismissDirection.endToStart: 0.1
+                                    },
+                                    confirmDismiss:
+                                        (DismissDirection direction) =>
+                                            confirmDismiss(
+                                      direction: direction,
+                                      todo: group.todoList[idx],
+                                    ),
+                                    key: Key(group.todoList[idx].id),
+                                    background: Container(
+                                      color: Colors.red,
+                                      padding: const EdgeInsets.symmetric(
+                                        horizontal: 20,
+                                      ),
+                                      alignment: Alignment.centerRight,
+                                      child: const Icon(
+                                        Icons.delete,
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                    child: TodoGroupItem(
+                                      id: group.todoList[idx].id,
+                                      name: group.todoList[idx].name,
+                                      todoType: group.todoList[idx].type,
+                                      isHighlight:
+                                          group.todoList[idx].isHighlighter,
+                                      memo: group.todoList[idx].memo,
                                       actionType: eItemActionEdit,
-                                    ))
-                                .toList(),
+                                      color: color,
+                                    ),
+                                  ),
+                                  itemCount: group.todoList.length,
+                                  onReorder: onReorder,
+                                ),
+                              ],
+                            ),
                           )
-                        : Column(
-                            children: [
-                              CommonSpace(height: 20),
-                              Column(
-                                children: [
-                                  CommonText(
-                                    text: '추가된 할 일이 없어요',
-                                    color: Colors.grey,
-                                  ),
-                                  CommonText(
-                                    text: '아래의 버튼을 눌러 할 일을 추가해보세요',
-                                    color: Colors.grey,
-                                  ),
-                                  CommonSpace(height: 10),
-                                  svgAsset(
-                                    name: 'arrow-down',
-                                    width: 15,
-                                    color: Colors.grey.shade300,
-                                  )
-                                ],
-                              ),
-                              CommonSpace(height: 20),
-                            ],
+                        : Expanded(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                CommonText(
+                                  text: '추가된 할 일이 없어요',
+                                  color: Colors.grey,
+                                ),
+                                CommonText(
+                                  text: '아래의 버튼을 눌러 할 일을 추가해보세요',
+                                  color: Colors.grey,
+                                ),
+                                CommonSpace(height: 10),
+                                svgAsset(
+                                  name: 'arrow-down',
+                                  width: 15,
+                                  color: Colors.grey.shade300,
+                                )
+                              ],
+                            ),
                           ),
-                    CommonButton(
-                      text: '+ 할 일 추가',
-                      outerPadding: const EdgeInsets.only(top: 0),
-                      verticalPadding: 15,
-                      borderRadius: 7,
-                      textColor: Colors.white,
-                      buttonColor: buttonColor,
-                      onTap: onAdd,
-                    ),
                   ],
                 ),
               ),
             ),
             CommonSpace(height: 10),
-            CommonButton(
-              text: '완료',
-              outerPadding: const EdgeInsets.symmetric(horizontal: 5),
-              textColor: Colors.white,
-              buttonColor: buttonColor,
-              verticalPadding: 15,
-              borderRadius: 100,
-              onTap: onSave,
+            Column(
+              children: [
+                CommonButton(
+                  text: '할 일 추가',
+                  outerPadding: const EdgeInsets.symmetric(horizontal: 5),
+                  verticalPadding: 15,
+                  borderRadius: 100,
+                  textColor: Colors.white,
+                  buttonColor: buttonColor,
+                  onTap: onAdd,
+                ),
+                CommonSpace(height: 10),
+                CommonButton(
+                  text: '완료',
+                  outerPadding: const EdgeInsets.symmetric(horizontal: 5),
+                  verticalPadding: 15,
+                  borderRadius: 100,
+                  textColor: Colors.white,
+                  buttonColor: buttonColor,
+                  onTap: onSave,
+                ),
+              ],
             )
           ],
         ),

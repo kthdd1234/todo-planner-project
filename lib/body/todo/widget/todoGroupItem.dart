@@ -8,10 +8,12 @@ import 'package:project/common/CommonSpace.dart';
 import 'package:project/common/CommonSvgButton.dart';
 import 'package:project/common/CommonText.dart';
 import 'package:project/page/ItemSettingPage.dart';
+import 'package:project/provider/initGroupProvider.dart';
 import 'package:project/util/class.dart';
 import 'package:project/util/constants.dart';
 import 'package:project/util/final.dart';
 import 'package:project/util/func.dart';
+import 'package:provider/provider.dart';
 
 class TodoGroupItem extends StatelessWidget {
   TodoGroupItem({
@@ -70,10 +72,7 @@ class TodoGroupItem extends StatelessWidget {
           children: [
             svgAsset(name: svgName, width: 25, color: color),
             CommonSpace(height: 10),
-            CommonText(
-              text: actionText,
-              color: color,
-            )
+            CommonText(text: actionText, color: color)
           ],
         ),
       ),
@@ -82,6 +81,14 @@ class TodoGroupItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    TodoClass todo = TodoClass(
+      id: id,
+      isHighlighter: isHighlight == true,
+      type: todoType,
+      name: name,
+      memo: memo,
+    );
+
     onMark() {
       //
     }
@@ -93,20 +100,15 @@ class TodoGroupItem extends StatelessWidget {
           fullscreenDialog: true,
           builder: (context) => ItemSettingPage(
             isEdit: true,
-            editTodo: TodoClass(
-              id: id,
-              isHighlighter: isHighlight == true,
-              type: todoType,
-              name: name,
-              memo: memo,
-            ),
+            editTodo: todo,
           ),
         ),
       );
     }
 
     onRemove() {
-      //
+      context.read<InitGroupProvider>().removeTodo(todo: todo);
+      navigatorPop(context);
     }
 
     onMore() {
@@ -161,6 +163,7 @@ class TodoGroupItem extends StatelessWidget {
                       children: [
                         CommonText(
                           text: name,
+                          textAlign: TextAlign.start,
                           highlightColor:
                               isHighlight == true ? color.s50 : null,
                         ), //
@@ -177,10 +180,15 @@ class TodoGroupItem extends StatelessWidget {
                                   ),
                                   Padding(
                                     padding: const EdgeInsets.only(left: 5),
-                                    child: CommonText(
-                                      text: memo!,
-                                      color: grey.original,
-                                      fontSize: 11,
+                                    child: SizedBox(
+                                      width: 200,
+                                      child: CommonText(
+                                        text: memo!,
+                                        color: grey.original,
+                                        fontSize: 11,
+                                        overflow: TextOverflow.ellipsis,
+                                        textAlign: TextAlign.start,
+                                      ),
                                     ),
                                   ),
                                 ],
@@ -188,6 +196,7 @@ class TodoGroupItem extends StatelessWidget {
                             : const CommonNull()
                       ],
                     )),
+                CommonSpace(width: 30),
                 actionType == eItemActionMark
                     ? wAction(
                         svgName: 'mark-$markType',

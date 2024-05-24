@@ -31,6 +31,7 @@ class CommonScaffold extends StatelessWidget {
               centerTitle: appBarInfo!.isCenter,
               actions: appBarInfo!.actions,
               backgroundColor: Colors.transparent,
+              scrolledUnderElevation: 0,
             )
           : null,
       body: SafeArea(

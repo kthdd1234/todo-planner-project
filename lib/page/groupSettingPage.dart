@@ -33,6 +33,16 @@ class _GroupSettingPageState extends State<GroupSettingPage> {
   String selectedColorName = red.colorName;
 
   @override
+  void initState() {
+    if (mounted) {
+      WidgetsBinding.instance.addPostFrameCallback(
+          (timeStamp) => context.read<InitGroupProvider>().initGroupInfo());
+    }
+
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     bool isNotEmpty = nameController.text != '';
 

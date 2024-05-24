@@ -126,7 +126,7 @@ class AppBarCalendar extends StatelessWidget {
       firstDay: DateTime.utc(2000, 1, 1),
       lastDay: DateTime.utc(3000, 1, 1),
       focusedDay: now,
-      calendarFormat: CalendarFormat.week,
+      calendarFormat: CalendarFormat.week, // 하루, 1주일, 2주일, 1개월
     );
   }
 }
