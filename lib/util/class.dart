@@ -64,11 +64,11 @@ class TodoClass {
     required this.id,
     required this.type,
     required this.name,
-    required this.isHighlighter,
+    this.isHighlighter,
     this.memo,
   });
 
   String id, type, name;
   String? memo;
-  bool isHighlighter;
+  bool? isHighlighter;
 }

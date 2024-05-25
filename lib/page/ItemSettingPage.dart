@@ -48,7 +48,7 @@ class _ItemSettingPageState extends State<ItemSettingPage> {
         (timeStamp) {
           context.read<HighlighterProvider>().changeHighlighter(
               newValue: widget.isEdit == true
-                  ? widget.editTodo!.isHighlighter
+                  ? widget.editTodo!.isHighlighter == true
                   : false);
         },
       );

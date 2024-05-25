@@ -12,6 +12,7 @@ import 'package:project/provider/bottomTabIndexProvider.dart';
 import 'package:project/provider/highlighterProvider.dart';
 import 'package:project/provider/initGroupProvider.dart';
 import 'package:project/provider/selectedDateTimeProvider.dart';
+import 'package:project/repositories/init_hive.dart';
 import 'package:project/util/constants.dart';
 import 'package:provider/provider.dart';
 
@@ -20,6 +21,7 @@ void main() async {
 
   await initializeDateFormatting();
   await EasyLocalization.ensureInitialized();
+  await InitHive().initializeHive();
 
   runApp(
     EasyLocalization(

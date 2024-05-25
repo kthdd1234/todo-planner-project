@@ -200,7 +200,7 @@ class TodoGroupItem extends StatelessWidget {
                 actionType == eItemActionMark
                     ? wAction(
                         svgName: 'mark-$markType',
-                        width: 28,
+                        width: 20,
                         actionColor: itemMarkColor(
                           groupColor: color.s50,
                           markType: markType!,

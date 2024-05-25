@@ -48,13 +48,16 @@ class TodoGroupTitle extends StatelessWidget {
       TodoGroupBtnClass(assetName: 'calendar-check', onTap: onCalendar),
       TodoGroupBtnClass(assetName: 'timeline', onTap: onTimeLine),
     ]
-        .map((item) => Padding(
-              padding: const EdgeInsets.only(left: 10),
-              child: CommonSvgButton(
-                name: item.assetName,
-                width: item.assetName == 'edit-pencil' ? 18 : 20,
-                color: Colors.grey.shade400,
-                onTap: item.onTap,
+        .map((item) => InkWell(
+              onTap: item.onTap,
+              child: Padding(
+                padding: const EdgeInsets.only(left: 13),
+                child: CommonSvgButton(
+                  name: item.assetName,
+                  width: item.assetName == 'edit-pencil' ? 18 : 20,
+                  color: Colors.grey.shade400,
+                  onTap: item.onTap,
+                ),
               ),
             ))
         .toList();
