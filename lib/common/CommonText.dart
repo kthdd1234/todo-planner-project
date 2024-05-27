@@ -33,7 +33,7 @@ class CommonText extends StatelessWidget {
       text,
       textAlign: textAlign ?? TextAlign.center,
       style: TextStyle(
-        color: color ?? textColor,
+        color: color ?? Colors.black,
         fontSize: fontSize,
         fontWeight: isBold == true ? FontWeight.bold : FontWeight.w400,
         overflow: overflow,

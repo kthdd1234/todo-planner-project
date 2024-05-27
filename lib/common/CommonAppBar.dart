@@ -22,7 +22,7 @@ class CommonAppBar extends StatelessWidget {
         AppBarTitle(onTapDateTime: onTapDateTime),
         CommonSpace(height: 15),
         AppBarCalendar(),
-        CommonSpace(height: 15),
+        CommonSpace(height: 5),
       ],
     );
   }
@@ -55,18 +55,12 @@ class AppBarTitle extends StatelessWidget {
         children: [
           CommonSvgText(
             text: '2024년 5월',
-            fontSize: 20,
+            fontSize: 18,
             svgName: 'dir-down',
-            svgWidth: 16,
+            svgWidth: 14,
             svgDirection: SvgDirectionEnum.right,
           ),
-          Row(
-            children: [
-              wCommonTag(text: '스티커'),
-              wCommonTag(text: '1주일'),
-              wCommonTag(text: '그룹 4'),
-            ],
-          )
+          Row(children: [])
         ],
       ),
     );
@@ -131,8 +125,7 @@ class AppBarCalendar extends StatelessWidget {
   }
 }
 
-
- // 캘린터 마커 타입
- // 스티커(Default)
- // D-day(Premium)
- // 퍼센트(Premium)
+// 캘린터 마커 타입
+// 스티커(Default)
+// D-day(Premium)
+// 퍼센트(Premium)

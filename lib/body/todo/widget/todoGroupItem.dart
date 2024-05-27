@@ -46,7 +46,7 @@ class TodoGroupItem extends StatelessWidget {
     return Expanded(
       flex: 0,
       child: Padding(
-        padding: EdgeInsets.only(right: right ?? 5),
+        padding: EdgeInsets.only(right: right ?? 0),
         child: CommonSvgButton(
           width: width,
           name: svgName,
@@ -144,18 +144,19 @@ class TodoGroupItem extends StatelessWidget {
       child: Column(
         children: [
           Padding(
-            padding: const EdgeInsets.symmetric(vertical: 15),
+            padding: const EdgeInsets.fromLTRB(20, 20, 20, 20),
             child: Row(
               children: [
                 todoType == eRoutin
                     ? Padding(
                         padding: const EdgeInsets.only(right: 10),
-                        child: CommonCircle(
-                          color: color.s100,
-                          size: 15,
-                        ),
+                        child: CommonCircle(color: color.s100, size: 15),
                       )
                     : const CommonNull(),
+                // Padding(
+                //   padding: const EdgeInsets.only(right: 10),
+                //   child: CommonCircle(color: color.s100, size: 15),
+                // ),
                 Expanded(
                     flex: 1,
                     child: Column(
@@ -166,7 +167,7 @@ class TodoGroupItem extends StatelessWidget {
                           textAlign: TextAlign.start,
                           highlightColor:
                               isHighlight == true ? color.s50 : null,
-                        ), //
+                        ),
                         CommonSpace(height: 2),
                         memo != null
                             ? Row(
@@ -179,13 +180,14 @@ class TodoGroupItem extends StatelessWidget {
                                     color: grey.s400,
                                   ),
                                   Padding(
-                                    padding: const EdgeInsets.only(left: 5),
+                                    padding:
+                                        const EdgeInsets.only(left: 5, top: 3),
                                     child: SizedBox(
                                       width: 200,
                                       child: CommonText(
                                         text: memo!,
                                         color: grey.original,
-                                        fontSize: 11,
+                                        fontSize: 12,
                                         overflow: TextOverflow.ellipsis,
                                         textAlign: TextAlign.start,
                                       ),
@@ -200,11 +202,8 @@ class TodoGroupItem extends StatelessWidget {
                 actionType == eItemActionMark
                     ? wAction(
                         svgName: 'mark-$markType',
-                        width: 20,
-                        actionColor: itemMarkColor(
-                          groupColor: color.s50,
-                          markType: markType!,
-                        ),
+                        width: 25,
+                        actionColor: color.s100,
                         onTap: onMark,
                       )
                     : Padding(
@@ -215,7 +214,7 @@ class TodoGroupItem extends StatelessWidget {
               ],
             ),
           ),
-          CommonDivider(color: Colors.indigo.shade50),
+          CommonDivider(color: grey.s300),
         ],
       ),
     );

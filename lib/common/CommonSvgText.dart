@@ -39,7 +39,7 @@ class CommonSvgText extends StatelessWidget {
         ? children.insert(
             0,
             Padding(
-              padding: EdgeInsets.only(right: svgRight ?? 5),
+              padding: EdgeInsets.only(right: svgRight ?? 7),
               child: widget,
             ))
         : children.add(Padding(
@@ -47,6 +47,9 @@ class CommonSvgText extends StatelessWidget {
             child: widget,
           ));
 
-    return Row(children: children);
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: children,
+    );
   }
 }

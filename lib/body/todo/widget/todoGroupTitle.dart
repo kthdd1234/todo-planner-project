@@ -9,6 +9,8 @@ import 'package:project/common/CommonTag.dart';
 import 'package:project/common/CommonText.dart';
 import 'package:project/provider/selectedDateTimeProvider.dart';
 import 'package:project/util/class.dart';
+import 'package:project/util/constants.dart';
+import 'package:project/util/final.dart';
 import 'package:project/util/func.dart';
 import 'package:provider/provider.dart';
 
@@ -31,85 +33,55 @@ class TodoGroupTitle extends StatelessWidget {
     // DateTime selectedDateTime =
     //     context.watch<SelectedDateTimeProvider>().seletedDateTime;
 
-    onEdit() {
-      Navigator.pushNamed(context, 'group-setting-page');
-    }
+    // onEdit() {
+    //   Navigator.pushNamed(context, 'group-setting-page');
+    // }
 
-    onCalendar() {
-      Navigator.pushNamed(context, 'group-calendar-page');
-    }
+    // onCalendar() {
+    //   Navigator.pushNamed(context, 'group-calendar-page');
+    // }
 
-    onTimeLine() {
-      Navigator.pushNamed(context, 'group-timeline-page');
-    }
+    // onTimeLine() {
+    //   Navigator.pushNamed(context, 'group-timeline-page');
+    // }
 
-    List<Widget> children = [
-      TodoGroupBtnClass(assetName: 'edit-pencil', onTap: onEdit),
-      TodoGroupBtnClass(assetName: 'calendar-check', onTap: onCalendar),
-      TodoGroupBtnClass(assetName: 'timeline', onTap: onTimeLine),
-    ]
-        .map((item) => InkWell(
-              onTap: item.onTap,
-              child: Padding(
-                padding: const EdgeInsets.only(left: 13),
-                child: CommonSvgButton(
-                  name: item.assetName,
-                  width: item.assetName == 'edit-pencil' ? 18 : 20,
-                  color: Colors.grey.shade400,
-                  onTap: item.onTap,
-                ),
-              ),
-            ))
-        .toList();
+    // List<Widget> children = [
+    //   TodoGroupBtnClass(assetName: 'edit-pencil', onTap: onEdit),
+    //   TodoGroupBtnClass(assetName: 'calendar-check', onTap: onCalendar),
+    //   TodoGroupBtnClass(assetName: 'timeline', onTap: onTimeLine),
+    // ]
+    //     .map((item) => InkWell(
+    //           onTap: item.onTap,
+    //           child: Padding(
+    //             padding: const EdgeInsets.only(left: 13),
+    //             child: CommonSvgButton(
+    //               name: item.assetName,
+    //               width: 18,
+    //               color: grey.s400,
+    //               onTap: item.onTap,
+    //             ),
+    //           ),
+    //         ))
+    //     .toList();
 
     return Column(
       children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                CommonText(text: title, fontSize: 16),
-                CommonSpace(height: 2),
-                CommonText(text: desc, fontSize: 11, color: Colors.grey),
-              ],
-            ),
-            isShowAction != false
-                ? Row(children: children)
-                : CommonTag(
-                    text: color.colorName,
-                    isBold: true,
-                    textColor: color.s200,
-                    bgColor: color.s50,
-                    fontSize: 11,
-                  ),
-          ],
+        Padding(
+          padding: const EdgeInsets.fromLTRB(20, 20, 15, 0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              CommonTag(
+                text: title,
+                textColor: indigo.s300,
+                bgColor: whiteBgBtnColor,
+              ),
+              Icon(Icons.more_vert_rounded, size: 18, color: grey.s400)
+            ],
+          ),
         ),
-        CommonSpace(height: 15),
-        CommonDivider(),
       ],
     );
   }
 }
-
-// class TodoGroupImage extends StatelessWidget {
-//   const TodoGroupImage({super.key});
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Padding(
-//       padding: const EdgeInsets.only(right: 15),
-//       child: ClipRRect(
-//         borderRadius: BorderRadius.circular(6),
-//         child: Image.asset(
-//           'assets/image/test.png',
-//           width: 40,
-//           height: 40,
-//           fit: BoxFit.cover,
-//         ),
-//       ),
-//     );
-//   }
-// }

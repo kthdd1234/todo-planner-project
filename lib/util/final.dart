@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:project/body/timeTable/timeTableBody.dart';
 import 'package:project/util/class.dart';
 import 'package:project/util/enum.dart';
 import 'package:project/body/tracker/trackerBody.dart';
@@ -12,17 +13,11 @@ final bottomNavigationBarItemList = [
     label: '할 일',
     body: const TodoBody(),
   ),
-  // BottomNavigationBarClass(
-  //   svgAsset: 'time',
-  //   index: 1,
-  //   label: '시간표',
-  //   body: const TimeTableBody(),
-  // ),
   BottomNavigationBarClass(
-    svgAsset: 'tracker',
+    svgAsset: 'time',
     index: 1,
-    label: '트래커',
-    body: const TrackerBody(),
+    label: '달력',
+    body: const TimeTableBody(),
   ),
   BottomNavigationBarClass(
     svgAsset: 'setting',

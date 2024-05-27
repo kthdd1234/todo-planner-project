@@ -45,6 +45,8 @@ dependencies:
   hive_flutter: ^1.1.0
   hive_generator: ^2.0.1
   build_runner: ^2.4.9
+  carousel_slider: ^4.2.1
+  shimmer: ^3.0.0
 
 dev_dependencies:
   flutter_test:
@@ -88,7 +90,6 @@ flutter:
     - assets/svg/edit-pencil.svg
     - assets/svg/timeline.svg
     - assets/svg/pencil-square.svg
-    - assets/svg/square.svg
     - assets/svg/mark-O.svg
     - assets/svg/mark-X.svg
     - assets/svg/mark-T.svg

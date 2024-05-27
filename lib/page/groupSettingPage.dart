@@ -146,7 +146,7 @@ class GroupColor extends StatelessWidget {
           GridView(
             shrinkWrap: true,
             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 6,
+              crossAxisCount: 5,
               mainAxisSpacing: 15,
               crossAxisSpacing: 0,
             ),

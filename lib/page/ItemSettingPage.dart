@@ -292,6 +292,7 @@ class TodoType extends StatelessWidget {
               ),
             ],
           ),
+          CommonText(text: '루틴 유형 -> 매일/매주/매월?'),
         ],
       ),
     );
