@@ -1,14 +1,13 @@
 import 'dart:typed_data';
 import 'package:hive/hive.dart';
 
-part 'group_box.g.dart';
+part 'category_box.g.dart';
 
 @HiveType(typeId: 3)
-class GroupBox extends HiveObject {
-  GroupBox({
+class CategoryBox extends HiveObject {
+  CategoryBox({
     required this.id,
     required this.name,
-    required this.desc,
     required this.colorName,
   });
 
@@ -19,8 +18,5 @@ class GroupBox extends HiveObject {
   String name;
 
   @HiveField(2)
-  String desc;
-
-  @HiveField(3)
   String colorName;
 }

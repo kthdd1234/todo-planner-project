@@ -7,7 +7,7 @@ import 'package:project/common/CommonNull.dart';
 import 'package:project/common/CommonSpace.dart';
 import 'package:project/common/CommonSvgButton.dart';
 import 'package:project/common/CommonText.dart';
-import 'package:project/page/ItemSettingPage.dart';
+import 'package:project/page/TodoAddPage.dart';
 import 'package:project/provider/initGroupProvider.dart';
 import 'package:project/util/class.dart';
 import 'package:project/util/constants.dart';
@@ -95,10 +95,11 @@ class TodoGroupItem extends StatelessWidget {
 
     onEdit() {
       navigatorPop(context);
+
       Navigator.of(context).push(
         MaterialPageRoute(
           fullscreenDialog: true,
-          builder: (context) => ItemSettingPage(
+          builder: (context) => TodoAddPage(
             isEdit: true,
             editTodo: todo,
           ),
@@ -121,7 +122,7 @@ class TodoGroupItem extends StatelessWidget {
           child: Row(
             children: [
               wContainer(
-                svgName: 'edit-pencil',
+                svgName: 'highlighter',
                 actionText: '수정하기',
                 color: textColor,
                 onTap: onEdit,
@@ -141,81 +142,70 @@ class TodoGroupItem extends StatelessWidget {
 
     return InkWell(
       onTap: onMore,
-      child: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.fromLTRB(20, 20, 20, 20),
-            child: Row(
-              children: [
-                todoType == eRoutin
-                    ? Padding(
-                        padding: const EdgeInsets.only(right: 10),
-                        child: CommonCircle(color: color.s100, size: 15),
-                      )
-                    : const CommonNull(),
-                // Padding(
-                //   padding: const EdgeInsets.only(right: 10),
-                //   child: CommonCircle(color: color.s100, size: 15),
-                // ),
-                Expanded(
-                    flex: 1,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        CommonText(
-                          text: name,
-                          textAlign: TextAlign.start,
-                          highlightColor:
-                              isHighlight == true ? color.s50 : null,
-                        ),
-                        CommonSpace(height: 2),
-                        memo != null
-                            ? Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  CommonSpace(width: 3),
-                                  svgAsset(
-                                    name: 'memo',
-                                    width: 10,
-                                    color: grey.s400,
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(20, 20, 20, 5),
+        child: Row(
+          children: [
+            Expanded(
+                flex: 1,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    CommonText(
+                      text: name,
+                      textAlign: TextAlign.start,
+                      highlightColor: isHighlight == true ? color.s50 : null,
+                    ),
+                    CommonSpace(height: 2),
+                    memo != null
+                        ? Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              CommonSpace(width: 3),
+                              svgAsset(
+                                name: 'memo',
+                                width: 10,
+                                color: grey.s400,
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.only(left: 5, top: 3),
+                                child: SizedBox(
+                                  width: 200,
+                                  child: CommonText(
+                                    text: memo!,
+                                    color: grey.original,
+                                    fontSize: 12,
+                                    overflow: TextOverflow.ellipsis,
+                                    textAlign: TextAlign.start,
                                   ),
-                                  Padding(
-                                    padding:
-                                        const EdgeInsets.only(left: 5, top: 3),
-                                    child: SizedBox(
-                                      width: 200,
-                                      child: CommonText(
-                                        text: memo!,
-                                        color: grey.original,
-                                        fontSize: 12,
-                                        overflow: TextOverflow.ellipsis,
-                                        textAlign: TextAlign.start,
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              )
-                            : const CommonNull()
-                      ],
-                    )),
-                CommonSpace(width: 30),
-                actionType == eItemActionMark
-                    ? wAction(
-                        svgName: 'mark-$markType',
-                        width: 25,
-                        actionColor: color.s100,
-                        onTap: onMark,
-                      )
-                    : Padding(
-                        padding: const EdgeInsets.only(right: 5),
-                        child: Icon(Icons.more_horiz,
-                            size: 18, color: Colors.grey.shade400),
-                      )
-              ],
-            ),
-          ),
-          CommonDivider(color: grey.s300),
-        ],
+                                ),
+                              ),
+                            ],
+                          )
+                        : const CommonNull()
+                  ],
+                )),
+            CommonSpace(width: 30),
+            actionType == eItemActionMark
+                ? wAction(
+                    svgName: 'mark-$markType',
+                    width: 25,
+                    actionColor: itemMarkColor(
+                      groupColor: color.s200,
+                      markType: markType!,
+                    ),
+                    onTap: onMark,
+                  )
+                : Padding(
+                    padding: const EdgeInsets.only(right: 5),
+                    child: Icon(
+                      Icons.more_horiz,
+                      size: 18,
+                      color: Colors.grey.shade400,
+                    ),
+                  )
+          ],
+        ),
       ),
     );
   }

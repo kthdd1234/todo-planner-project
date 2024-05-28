@@ -23,21 +23,28 @@ class TodoBody extends StatelessWidget {
 
     return Column(
       children: [
-        CommonAppBar(),
         Expanded(
-          child: CarouselSlider(
-            items: [
+          child: ListView(
+            shrinkWrap: true,
+            children: [
+              CommonAppBar(),
+              CommonContainer(
+                outerPadding: 7,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    CommonText(
+                      text: '📚1초를 소홀히 하는 사람은 하루를 잃고 일생을 잃는다.',
+                      textAlign: TextAlign.start,
+                    ),
+                  ],
+                ),
+              ),
               TodoContainer(),
               TodoContainer(),
               TodoContainer(),
               TodoContainer(),
             ],
-            options: CarouselOptions(
-              height: double.infinity,
-              viewportFraction: 1,
-              enableInfiniteScroll: false,
-              enlargeCenterPage: true,
-            ),
           ),
         ),
       ],
@@ -50,115 +57,66 @@ class TodoContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        CommonContainer(
-          outerPadding: 7,
-          child: Column(
-            children: [
-              // CommonSvgText(
+    return CommonContainer(
+      outerPadding: 7,
+      innerPadding: 0,
+      child: Column(
+        children: [
+          TodoGroupTitle(
+            title: '📚독서',
+            desc: '매일 저녁 10분씩 읽기!',
+            color: blue,
+          ),
+          TodoGroupItem(
+            id: '1',
+            name: '김동욱 연필통 모의고사 오답노트',
+            markType: itemMark.E,
+            memo: '오답노트 3번씩 반복해서 쓰기!',
+            color: blue,
+            actionType: eItemActionMark,
+            todoType: eOneday,
+          ),
+          TodoGroupItem(
+            id: '2',
+            name: '비문학 독해 205P 문풀 채/오',
+            markType: itemMark.E,
+            color: blue,
+            actionType: eItemActionMark,
+            isHighlight: true,
+            todoType: eRoutin,
+          ),
+          TodoGroupItem(
+            id: '3',
+            name: '문법 49P 문풀 채/오',
+            markType: itemMark.E,
+            actionType: eItemActionMark,
+            isHighlight: true,
+            color: blue,
+            todoType: eOneday,
+          ),
+          TodoGroupItem(
+            id: '4',
+            name: '영단어 50개 외우기 + 복습',
+            markType: itemMark.E,
+            actionType: eItemActionMark,
+            memo: '1H 20M',
+            color: blue,
+            todoType: eOneday,
+          ),
+          CommonSpace(height: 15)
+        ],
+      ),
+    );
+  }
+}
+
+  // CommonSvgText(
               //   text: '메모가 없어요',
               //   fontSize: 14,
-              //   svgName: 'edit-pencil',
+              //   svgName: 'pencil',
               //   svgWidth: 12,
               //   svgDirection: SvgDirectionEnum.left,
               //   textColor: grey.original,
               //   svgColor: grey.s400,
               // )
-              CommonImage(unit8List: unit8List, height: height),
-            ],
-          ),
-        ),
-        Expanded(
-          child: CommonContainer(
-            outerPadding: 7,
-            innerPadding: 0,
-            child: ListView(
-              shrinkWrap: true,
-              children: [
-                // TodoGroupTitle(
-                //   title: '할 일 리스트',
-                //   desc: '매일 저녁 10분씩 읽기!',
-                //   color: indigo,
-                // ),
-                TodoGroupItem(
-                  id: '1',
-                  name: '김동욱 연필통 모의고사 오답노트',
-                  markType: itemMark.M,
-                  memo: '오답노트 3번씩 반복해서 쓰기!',
-                  color: green,
-                  actionType: eItemActionMark,
-                  todoType: eOneday,
-                ),
-                TodoGroupItem(
-                  id: '2',
-                  name: '비문학 독해 205P 문풀 채/오',
-                  markType: itemMark.T,
-                  color: red,
-                  actionType: eItemActionMark,
-                  isHighlight: true,
-                  todoType: eRoutin,
-                ),
-                TodoGroupItem(
-                  id: '3',
-                  name: '문법 49P 문풀 채/오',
-                  markType: itemMark.X,
-                  actionType: eItemActionMark,
-                  isHighlight: true,
-                  color: blue,
-                  todoType: eOneday,
-                ),
-                TodoGroupItem(
-                  id: '4',
-                  name: '영단어 50개 외우기 + 복습',
-                  markType: itemMark.E,
-                  actionType: eItemActionMark,
-                  memo: '1H 20M',
-                  color: purple,
-                  todoType: eOneday,
-                ),
-                TodoGroupItem(
-                  id: '5',
-                  name: '영어독해 연습 27강 복습',
-                  markType: itemMark.E,
-                  actionType: eItemActionMark,
-                  isShade50: true,
-                  color: orange,
-                  todoType: eOneday,
-                ),
-                TodoGroupItem(
-                  id: '5',
-                  name: '영어독해 연습 27강 복습',
-                  markType: itemMark.E,
-                  actionType: eItemActionMark,
-                  isShade50: true,
-                  color: orange,
-                  todoType: eOneday,
-                ),
-                TodoGroupItem(
-                  id: '5',
-                  name: '영어독해 연습 27강 복습',
-                  markType: itemMark.E,
-                  actionType: eItemActionMark,
-                  isShade50: true,
-                  color: orange,
-                  todoType: eOneday,
-                ),
-                TodoGroupItem(
-                  id: '5',
-                  name: '영어독해 연습 27강 복습',
-                  markType: itemMark.E,
-                  actionType: eItemActionMark,
-                  isShade50: true,
-                  color: orange,
-                  todoType: eOneday,
-                ),
-                CommonSpace(height: 100)
-              ],
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-}
+              // CommonImage(unit8List: , height: 280),

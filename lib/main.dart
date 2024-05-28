@@ -2,10 +2,10 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/date_symbol_data_local.dart';
-import 'package:project/page/ItemSettingPage.dart';
+import 'package:project/page/TodoAddPage.dart';
 import 'package:project/page/groupCalendarPage.dart';
 import 'package:project/page/groupItemListPage.dart';
-import 'package:project/page/groupSettingPage.dart';
+import 'package:project/page/categoryAddPage.dart';
 import 'package:project/page/groupTimelinePage.dart';
 import 'package:project/page/homePage.dart';
 import 'package:project/provider/bottomTabIndexProvider.dart';
@@ -60,10 +60,11 @@ class MyApp extends StatelessWidget {
         initialRoute: initialRoute,
         routes: {
           'home-page': (context) => const HomePage(),
-          'group-setting-page': (context) => const GroupSettingPage(),
-          'group-item-list-page': (context) => const GroupItemListPage(),
-          'group-calendar-page': (context) => const GroupCalendarPage(),
-          'group-timeline-page': (context) => const GroupTimelinePage(),
+          'todo-add-page': (context) => TodoAddPage(),
+          // 'group-setting-page': (context) => const GroupSettingPage(),
+          // 'group-item-list-page': (context) => const GroupItemListPage(),
+          // 'group-calendar-page': (context) => const GroupCalendarPage(),
+          // 'group-timeline-page': (context) => const GroupTimelinePage(),
         },
       ),
     );

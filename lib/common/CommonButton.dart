@@ -11,12 +11,14 @@ class CommonButton extends StatelessWidget {
       required this.verticalPadding,
       required this.borderRadius,
       required this.onTap,
+      this.isBold,
       this.outerPadding});
 
   Color textColor, buttonColor;
   double verticalPadding, borderRadius;
   String text;
   EdgeInsetsGeometry? outerPadding;
+  bool? isBold;
   Function() onTap;
 
   @override
@@ -37,7 +39,7 @@ class CommonButton extends StatelessWidget {
                   child: CommonText(
                     text: text,
                     color: textColor,
-                    isBold: true,
+                    isBold: isBold ?? true,
                   )),
             ),
           ],

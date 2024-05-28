@@ -23,19 +23,18 @@ import 'package:project/util/func.dart';
 import 'package:provider/provider.dart';
 import 'package:uuid/uuid.dart';
 
-class ItemSettingPage extends StatefulWidget {
-  ItemSettingPage({super.key, this.isEdit, this.editTodo});
+class TodoAddPage extends StatefulWidget {
+  TodoAddPage({super.key, this.isEdit, this.editTodo});
 
   bool? isEdit;
   TodoClass? editTodo;
 
   @override
-  State<ItemSettingPage> createState() => _ItemSettingPageState();
+  State<TodoAddPage> createState() => _TodoAddPageState();
 }
 
-class _ItemSettingPageState extends State<ItemSettingPage> {
+class _TodoAddPageState extends State<TodoAddPage> {
   FocusNode todoNode = FocusNode();
-  FocusNode memoNode = FocusNode();
 
   String seletedType = eOneday;
   TextEditingController todoController = TextEditingController();
@@ -68,13 +67,9 @@ class _ItemSettingPageState extends State<ItemSettingPage> {
   @override
   Widget build(BuildContext context) {
     InitGroupProvider group = context.watch<InitGroupProvider>();
-    ColorClass color = getColor(group.colorName);
+    ColorClass color = getColor('빨간색');
     bool isHighlighter = context.watch<HighlighterProvider>().isHighlighter;
     bool isNotEmpty = todoController.text != '';
-
-    onType(String type) {
-      setState(() => seletedType = type);
-    }
 
     onSave() {
       if (isNotEmpty) {
@@ -124,32 +119,25 @@ class _ItemSettingPageState extends State<ItemSettingPage> {
             appBarInfo: AppBarInfoClass(title: '할 일 추가'),
             body: Column(
               children: [
-                Expanded(
-                  child: CommonContainer(
-                    outerPadding: 5,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        TodoType(
-                          selectedColor: color,
-                          seletedType: seletedType,
-                          onTap: onType,
-                        ),
-                        TodoName(
-                          todoNode: todoNode,
-                          controller: todoController,
-                          seletedType: seletedType,
-                          selectedColor: color,
-                        ),
-                        TodoMemo(controller: memoController)
-                      ],
-                    ),
+                CommonContainer(
+                  outerPadding: 5,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      TodoCategory(),
+                      TodoName(
+                        todoNode: todoNode,
+                        controller: todoController,
+                        seletedType: seletedType,
+                        selectedColor: color,
+                      ),
+                    ],
                   ),
                 ),
                 CommonButton(
                   text: '추가하기',
                   outerPadding:
-                      const EdgeInsets.symmetric(vertical: 10, horizontal: 5),
+                      const EdgeInsets.symmetric(vertical: 5, horizontal: 5),
                   textColor: isNotEmpty ? Colors.white : Colors.grey,
                   buttonColor: isNotEmpty ? buttonColor : Colors.grey.shade300,
                   verticalPadding: 15,
@@ -206,98 +194,97 @@ class HighlighterActionBar extends StatelessWidget {
   }
 }
 
-class TodoType extends StatelessWidget {
-  TodoType({
-    super.key,
-    required this.seletedType,
-    required this.selectedColor,
-    required this.onTap,
-  });
+// class TodoType extends StatelessWidget {
+//   TodoType({
+//     super.key,
+//     required this.seletedType,
+//     required this.selectedColor,
+//     required this.onTap,
+//   });
 
-  String seletedType;
-  ColorClass selectedColor;
-  Function(String type) onTap;
+//   String seletedType;
+//   ColorClass selectedColor;
+//   Function(String type) onTap;
 
-  @override
-  Widget build(BuildContext context) {
-    wSelectContainer({
-      required String type,
-      required String title,
-      required String subTitle,
-    }) {
-      bool isSelected = type == seletedType;
+//   @override
+//   Widget build(BuildContext context) {
+//     wSelectContainer({
+//       required String type,
+//       required String title,
+//       required String subTitle,
+//     }) {
+//       bool isSelected = type == seletedType;
 
-      return Expanded(
-        child: CommonContainer(
-          onTap: () => onTap(type),
-          radius: 7,
-          color: isSelected ? selectedColor.s50 : Colors.grey.shade100,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              CommonText(
-                text: title,
-                color:
-                    isSelected ? selectedColor.original : Colors.grey.shade400,
-                fontSize: 15,
-              ),
-              CommonSpace(height: 5),
-              CommonText(
-                text: subTitle,
-                fontSize: 12,
-                color:
-                    isSelected ? selectedColor.original : Colors.grey.shade400,
-              ),
-            ],
-          ),
-        ),
-      );
-    }
+//       return Expanded(
+//         child: CommonContainer(
+//           onTap: () => onTap(type),
+//           radius: 7,
+//           color: isSelected ? selectedColor.s50 : Colors.grey.shade100,
+//           child: Column(
+//             crossAxisAlignment: CrossAxisAlignment.start,
+//             children: [
+//               CommonText(
+//                 text: title,
+//                 color:
+//                     isSelected ? selectedColor.original : Colors.grey.shade400,
+//                 fontSize: 15,
+//               ),
+//               CommonSpace(height: 5),
+//               CommonText(
+//                 text: subTitle,
+//                 fontSize: 12,
+//                 color:
+//                     isSelected ? selectedColor.original : Colors.grey.shade400,
+//               ),
+//             ],
+//           ),
+//         ),
+//       );
+//     }
 
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 30),
-      child: Column(
-        children: [
-          TodoTitle(
-            title: '유형',
-            isRequired: true,
-            additionalWidget: Row(
-              children: [
-                CommonText(
-                  text: '루틴 유형은 할 일 앞에',
-                  fontSize: 10,
-                  color: Colors.grey,
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 3),
-                  child: CommonCircle(color: selectedColor.s100, size: 9),
-                ),
-                CommonText(text: '을 표시해요.', fontSize: 10, color: Colors.grey),
-              ],
-            ),
-          ),
-          CommonSpace(height: 10),
-          Row(
-            children: [
-              wSelectContainer(
-                type: eOneday,
-                title: '기본 유형',
-                subTitle: '딱 하루만 실천해요',
-              ),
-              CommonSpace(width: 5),
-              wSelectContainer(
-                type: eRoutin,
-                title: '루틴 유형',
-                subTitle: '꾸준히 실천해요',
-              ),
-            ],
-          ),
-          CommonText(text: '루틴 유형 -> 매일/매주/매월?'),
-        ],
-      ),
-    );
-  }
-}
+//     return Padding(
+//       padding: const EdgeInsets.only(bottom: 30),
+//       child: Column(
+//         children: [
+//           TodoTitle(
+//             title: '유형',
+//             isRequired: true,
+//             additionalWidget: Row(
+//               children: [
+//                 CommonText(
+//                   text: '루틴 유형은 할 일 앞에',
+//                   fontSize: 10,
+//                   color: Colors.grey,
+//                 ),
+//                 Padding(
+//                   padding: const EdgeInsets.symmetric(horizontal: 3),
+//                   child: CommonCircle(color: selectedColor.s100, size: 10),
+//                 ),
+//                 CommonText(text: '을 표시해요.', fontSize: 10, color: Colors.grey),
+//               ],
+//             ),
+//           ),
+//           CommonSpace(height: 10),
+//           Row(
+//             children: [
+//               wSelectContainer(
+//                 type: eOneday,
+//                 title: '기본 유형',
+//                 subTitle: '딱 하루만 실천해요',
+//               ),
+//               CommonSpace(width: 5),
+//               wSelectContainer(
+//                 type: eRoutin,
+//                 title: '루틴 유형',
+//                 subTitle: '꾸준히 실천해요',
+//               ),
+//             ],
+//           ),
+//         ],
+//       ),
+//     );
+//   }
+// }
 
 class TodoName extends StatelessWidget {
   TodoName({
@@ -386,6 +373,22 @@ class TodoMemo extends StatelessWidget {
   }
 }
 
+class TodoCategory extends StatelessWidget {
+  const TodoCategory({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 20),
+      child: Column(
+        children: [
+          TodoTitle(title: '카테고리', isRequired: true),
+        ],
+      ),
+    );
+  }
+}
+
 class TodoTitle extends StatelessWidget {
   TodoTitle({
     super.key,
@@ -402,6 +405,7 @@ class TodoTitle extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      crossAxisAlignment: CrossAxisAlignment.end,
       children: [
         CommonText(text: title, fontSize: 14, isRequired: isRequired),
         additionalWidget != null ? additionalWidget! : const CommonNull(),

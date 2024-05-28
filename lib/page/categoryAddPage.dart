@@ -10,7 +10,7 @@ import 'package:project/common/CommonScaffold.dart';
 import 'package:project/common/CommonSpace.dart';
 import 'package:project/common/CommonText.dart';
 import 'package:project/common/CommonTextFormField.dart';
-import 'package:project/page/ItemSettingPage.dart';
+import 'package:project/page/TodoAddPage.dart';
 import 'package:project/provider/initGroupProvider.dart';
 import 'package:project/util/class.dart';
 import 'package:project/util/constants.dart';
@@ -19,17 +19,15 @@ import 'package:project/util/func.dart';
 import 'package:provider/provider.dart';
 import 'package:uuid/uuid.dart';
 
-class GroupSettingPage extends StatefulWidget {
-  const GroupSettingPage({super.key});
+class CategoryAddPage extends StatefulWidget {
+  const CategoryAddPage({super.key});
 
   @override
-  State<GroupSettingPage> createState() => _GroupSettingPageState();
+  State<CategoryAddPage> createState() => _CategoryAddPageState();
 }
 
-class _GroupSettingPageState extends State<GroupSettingPage> {
+class _CategoryAddPageState extends State<CategoryAddPage> {
   TextEditingController nameController = TextEditingController();
-  TextEditingController descController = TextEditingController();
-
   String selectedColorName = red.colorName;
 
   @override
@@ -51,7 +49,6 @@ class _GroupSettingPageState extends State<GroupSettingPage> {
         context.read<InitGroupProvider>().changeGroupInfo(
               newId: const Uuid().v4(),
               newName: nameController.text,
-              newDesc: descController.text,
               newColorName: selectedColorName,
             );
         Navigator.pushNamed(context, 'group-item-list-page');
@@ -93,15 +90,6 @@ class _GroupSettingPageState extends State<GroupSettingPage> {
                       maxLength: 20,
                       textInputAction: TextInputAction.next,
                       onEditingComplete: onGroupName,
-                    ),
-                    CommonSpace(height: 20),
-                    CommonText(text: '한줄 코멘트', fontSize: 14),
-                    CommonTextFormField(
-                      controller: descController,
-                      maxLength: 30,
-                      hintText: '목표, 다짐 등 자유롭게 입력해주세요 (선택)',
-                      textInputAction: TextInputAction.next,
-                      onEditingComplete: onGroupDesc,
                     ),
                     CommonSpace(height: 20),
                     GroupColor(

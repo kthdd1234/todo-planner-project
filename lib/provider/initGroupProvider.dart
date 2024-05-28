@@ -18,12 +18,10 @@ class InitGroupProvider extends ChangeNotifier {
   void changeGroupInfo({
     required String newId,
     required String newName,
-    required String newDesc,
     required String newColorName,
   }) {
     id = newId;
     name = newName;
-    desc = newDesc;
     colorName = newColorName;
 
     notifyListeners();

@@ -194,12 +194,12 @@ final eItemActionMark = ItemActionTypeEnum.mark.toString();
 final eItemActionEdit = ItemActionTypeEnum.edit.toString();
 
 final colorList = [
+  indigo,
   red,
   pink,
   green,
   teal,
   cyan,
-  lime,
   blue,
   brown,
   orange,

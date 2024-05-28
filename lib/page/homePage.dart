@@ -33,10 +33,6 @@ class HomePage extends StatelessWidget {
           .changeSeletedIdx(newIndex: newIndex);
     }
 
-    onGroupSetting() {
-      Navigator.pushNamed(context, 'group-setting-page');
-    }
-
     return CommonBackground(
       child: CommonScaffold(
         body: bottomNavigationBarItemList[seletedIdx].body,
@@ -52,7 +48,7 @@ class HomePage extends StatelessWidget {
             onTap: onBottomNavigation,
           ),
         ),
-        onFloatingActionButton: seletedIdx == 0 ? onGroupSetting : null,
+        isFab: seletedIdx == 0,
       ),
     );
   }

@@ -7,7 +7,7 @@ import 'package:project/common/CommonContainer.dart';
 import 'package:project/common/CommonScaffold.dart';
 import 'package:project/common/CommonSpace.dart';
 import 'package:project/common/CommonText.dart';
-import 'package:project/page/ItemSettingPage.dart';
+import 'package:project/page/TodoAddPage.dart';
 import 'package:project/provider/initGroupProvider.dart';
 import 'package:project/util/class.dart';
 import 'package:project/util/constants.dart';
@@ -27,7 +27,7 @@ class GroupItemListPage extends StatelessWidget {
       Navigator.of(context).push(
         MaterialPageRoute(
           fullscreenDialog: true,
-          builder: (context) => ItemSettingPage(isEdit: false),
+          builder: (context) => TodoAddPage(isEdit: false),
         ),
       );
     }

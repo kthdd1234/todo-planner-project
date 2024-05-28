@@ -46,7 +46,7 @@ class TodoGroupTitle extends StatelessWidget {
     // }
 
     // List<Widget> children = [
-    //   TodoGroupBtnClass(assetName: 'edit-pencil', onTap: onEdit),
+    //   TodoGroupBtnClass(assetName: 'pencil', onTap: onEdit),
     //   TodoGroupBtnClass(assetName: 'calendar-check', onTap: onCalendar),
     //   TodoGroupBtnClass(assetName: 'timeline', onTap: onTimeLine),
     // ]
@@ -70,17 +70,24 @@ class TodoGroupTitle extends StatelessWidget {
           padding: const EdgeInsets.fromLTRB(20, 20, 15, 0),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               CommonTag(
                 text: title,
-                textColor: indigo.s300,
-                bgColor: whiteBgBtnColor,
+                textColor: blue.original,
+                bgColor: blue.s50,
+                fontSize: 13,
               ),
-              Icon(Icons.more_vert_rounded, size: 18, color: grey.s400)
+              Icon(
+                Icons.keyboard_arrow_down_rounded,
+                size: 30,
+                color: grey.s300,
+              ),
             ],
           ),
         ),
+        CommonSpace(height: 10),
+        CommonDivider(color: grey.s300),
       ],
     );
   }

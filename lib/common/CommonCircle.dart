@@ -9,8 +9,8 @@ class CommonCircle extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 15,
-      height: 15,
+      width: size,
+      height: size,
       decoration: BoxDecoration(
         color: color,
         borderRadius: BorderRadius.circular(100),

@@ -1,40 +1,37 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'group_box.dart';
+part of 'category_box.dart';
 
 // **************************************************************************
 // TypeAdapterGenerator
 // **************************************************************************
 
-class GroupBoxAdapter extends TypeAdapter<GroupBox> {
+class CategoryBoxAdapter extends TypeAdapter<CategoryBox> {
   @override
   final int typeId = 3;
 
   @override
-  GroupBox read(BinaryReader reader) {
+  CategoryBox read(BinaryReader reader) {
     final numOfFields = reader.readByte();
     final fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
-    return GroupBox(
+    return CategoryBox(
       id: fields[0] as String,
       name: fields[1] as String,
-      desc: fields[2] as String,
-      colorName: fields[3] as String,
+      colorName: fields[2] as String,
     );
   }
 
   @override
-  void write(BinaryWriter writer, GroupBox obj) {
+  void write(BinaryWriter writer, CategoryBox obj) {
     writer
-      ..writeByte(4)
+      ..writeByte(3)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
       ..write(obj.name)
       ..writeByte(2)
-      ..write(obj.desc)
-      ..writeByte(3)
       ..write(obj.colorName);
   }
 
@@ -44,7 +41,7 @@ class GroupBoxAdapter extends TypeAdapter<GroupBox> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is GroupBoxAdapter &&
+      other is CategoryBoxAdapter &&
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }

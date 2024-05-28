@@ -47,6 +47,7 @@ dependencies:
   build_runner: ^2.4.9
   carousel_slider: ^4.2.1
   shimmer: ^3.0.0
+  flutter_speed_dial: ^7.0.0
 
 dev_dependencies:
   flutter_test:
@@ -87,7 +88,7 @@ flutter:
     - assets/svg/dir-down.svg
     - assets/svg/dir-right.svg
     - assets/svg/calendar-check.svg
-    - assets/svg/edit-pencil.svg
+    - assets/svg/pencil.svg
     - assets/svg/timeline.svg
     - assets/svg/pencil-square.svg
     - assets/svg/mark-O.svg
@@ -100,6 +101,8 @@ flutter:
     - assets/svg/arrow-down.svg
     - assets/svg/highlighter.svg
     - assets/svg/remove.svg
+    - assets/svg/plus.svg
+    - assets/svg/routin.svg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

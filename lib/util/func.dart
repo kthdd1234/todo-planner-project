@@ -20,18 +20,16 @@ SvgPicture svgAsset({
 }
 
 Color itemMarkColor({required Color groupColor, required String markType}) {
-  // if (markType == 'E') {
-  //   return groupColor;
-  // }
+  if (markType == 'E') {
+    return Colors.grey.shade400;
+  }
 
-  // return {
-  //   'O': Colors.green.shade100,
-  //   'X': Colors.red.shade100,
-  //   'M': Colors.orange.shade100,
-  //   'T': Colors.purple.shade100,
-  // }[markType]!;
-
-  return groupColor;
+  return {
+    'O': Colors.green.shade100,
+    'X': Colors.red.shade100,
+    'M': Colors.orange.shade100,
+    'T': Colors.purple.shade100,
+  }[markType]!;
 }
 
 mdeFormatter({required String locale, required DateTime dateTime}) {

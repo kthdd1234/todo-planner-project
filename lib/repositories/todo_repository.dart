@@ -1,5 +1,4 @@
 import 'package:hive/hive.dart';
-import 'package:project/model/group_box/group_box.dart';
 import 'package:project/model/todo_box/todo_box.dart';
 import 'package:project/repositories/init_hive.dart';
 
