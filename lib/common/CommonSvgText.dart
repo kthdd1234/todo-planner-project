@@ -13,16 +13,19 @@ class CommonSvgText extends StatelessWidget {
     required this.svgName,
     required this.svgWidth,
     required this.svgDirection,
-    this.textColor,
-    this.svgColor,
     this.svgRight,
+    this.svgLeft,
+    this.svgColor,
+    this.textColor,
+    this.onTap,
   });
 
   String text, svgName;
   Color? textColor, svgColor;
   double svgWidth, fontSize;
-  double? svgRight;
+  double? svgLeft, svgRight;
   SvgDirectionEnum svgDirection;
+  Function()? onTap;
 
   @override
   Widget build(BuildContext context) {
@@ -39,17 +42,20 @@ class CommonSvgText extends StatelessWidget {
         ? children.insert(
             0,
             Padding(
-              padding: EdgeInsets.only(right: svgRight ?? 7),
+              padding: EdgeInsets.only(right: svgRight ?? 5),
               child: widget,
             ))
         : children.add(Padding(
-            padding: const EdgeInsets.only(left: 5),
+            padding: EdgeInsets.only(left: svgLeft ?? 5, top: 1.5),
             child: widget,
           ));
 
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: children,
+    return GestureDetector(
+      onTap: onTap,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: children,
+      ),
     );
   }
 }

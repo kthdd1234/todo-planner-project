@@ -14,7 +14,7 @@ import 'package:project/common/CommonSvgText.dart';
 import 'package:project/common/CommonText.dart';
 import 'package:project/common/CommonTextFormField.dart';
 import 'package:project/provider/highlighterProvider.dart';
-import 'package:project/provider/initGroupProvider.dart';
+import 'package:project/provider/CategoryProvider.dart';
 import 'package:project/util/class.dart';
 import 'package:project/util/constants.dart';
 import 'package:project/util/enum.dart';
@@ -23,17 +23,17 @@ import 'package:project/util/func.dart';
 import 'package:provider/provider.dart';
 import 'package:uuid/uuid.dart';
 
-class TodoAddPage extends StatefulWidget {
-  TodoAddPage({super.key, this.isEdit, this.editTodo});
+class TodoSettingPage extends StatefulWidget {
+  TodoSettingPage({super.key, this.isEdit, this.editTodo});
 
   bool? isEdit;
   TodoClass? editTodo;
 
   @override
-  State<TodoAddPage> createState() => _TodoAddPageState();
+  State<TodoSettingPage> createState() => _TodoSettingPageState();
 }
 
-class _TodoAddPageState extends State<TodoAddPage> {
+class _TodoSettingPageState extends State<TodoSettingPage> {
   FocusNode todoNode = FocusNode();
 
   String seletedType = eOneday;
@@ -66,7 +66,7 @@ class _TodoAddPageState extends State<TodoAddPage> {
 
   @override
   Widget build(BuildContext context) {
-    InitGroupProvider group = context.watch<InitGroupProvider>();
+    CategoryProvider category = context.watch<CategoryProvider>();
     ColorClass color = getColor('빨간색');
     bool isHighlighter = context.watch<HighlighterProvider>().isHighlighter;
     bool isNotEmpty = todoController.text != '';
@@ -81,10 +81,7 @@ class _TodoAddPageState extends State<TodoAddPage> {
           memo: memoController.text != '' ? memoController.text : null,
         );
 
-        InitGroupProvider provider = context.read<InitGroupProvider>();
-        widget.isEdit == false
-            ? provider.addTodo(todo: todo)
-            : provider.editTodo(todo: todo);
+        CategoryProvider provider = context.read<CategoryProvider>();
 
         Navigator.pop(context);
       }

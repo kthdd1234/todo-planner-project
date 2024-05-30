@@ -7,13 +7,13 @@ class CommonSvgButton extends StatelessWidget {
     super.key,
     required this.name,
     required this.width,
-    required this.color,
+    this.color,
     required this.onTap,
   });
 
   String name;
   double width;
-  Color color;
+  Color? color;
   Function() onTap;
 
   @override

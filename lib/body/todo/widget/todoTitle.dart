@@ -1,5 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:project/common/CommonButton.dart';
 import 'package:project/common/CommonCircle.dart';
 import 'package:project/common/CommonDivider.dart';
 import 'package:project/common/CommonNull.dart';
@@ -14,8 +16,8 @@ import 'package:project/util/final.dart';
 import 'package:project/util/func.dart';
 import 'package:provider/provider.dart';
 
-class TodoGroupTitle extends StatelessWidget {
-  TodoGroupTitle({
+class TodoTitle extends StatelessWidget {
+  TodoTitle({
     super.key,
     required this.title,
     required this.desc,
@@ -64,31 +66,40 @@ class TodoGroupTitle extends StatelessWidget {
     //         ))
     //     .toList();
 
-    return Column(
-      children: [
-        Padding(
-          padding: const EdgeInsets.fromLTRB(20, 20, 15, 0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              CommonTag(
-                text: title,
-                textColor: blue.original,
-                bgColor: blue.s50,
-                fontSize: 13,
-              ),
-              Icon(
-                Icons.keyboard_arrow_down_rounded,
-                size: 30,
-                color: grey.s300,
-              ),
-            ],
-          ),
-        ),
-        CommonSpace(height: 10),
-        CommonDivider(color: grey.s300),
-      ],
+    onTap() {
+      //
+    }
+
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(20, 20, 15, 0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: [
+          // Expanded(
+          //   child: CommonButton(
+          //     text: '',
+          //     textColor: blue.s300,
+          //     buttonColor: blue.s50,
+          //     verticalPadding: 5,
+          //     borderRadius: 5,
+          //     onTap: onTap,
+          //   ),
+          // )
+          // CommonTag(
+          //   text: title,
+          //   textColor: blue.original,
+          //   bgColor: blue.s50,
+          //   fontSize: 13,
+          //   onTap: onTap,
+          // ),
+          // Icon(
+          //   Icons.keyboard_arrow_down_rounded,
+          //   size: 30,
+          //   color: grey.s300,
+          // ),
+        ],
+      ),
     );
   }
 }

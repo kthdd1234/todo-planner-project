@@ -8,6 +8,7 @@ class CommonTag extends StatelessWidget {
     required this.text,
     required this.textColor,
     required this.bgColor,
+    required this.onTap,
     this.isBold,
     this.fontSize,
   });
@@ -16,10 +17,12 @@ class CommonTag extends StatelessWidget {
   Color textColor, bgColor;
   bool? isBold;
   double? fontSize;
+  Function() onTap;
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
+      onTap: onTap,
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 7),
         decoration: BoxDecoration(

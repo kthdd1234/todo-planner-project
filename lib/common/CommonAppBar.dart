@@ -35,6 +35,8 @@ class AppBarTitle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    onTap() {}
+
     wCommonTag({required String text}) {
       return Padding(
         padding: const EdgeInsets.only(left: 5),
@@ -44,6 +46,7 @@ class AppBarTitle extends StatelessWidget {
           bgColor: indigo.s300,
           isBold: true,
           fontSize: 11,
+          onTap: onTap,
         ),
       );
     }
@@ -60,7 +63,10 @@ class AppBarTitle extends StatelessWidget {
             svgWidth: 14,
             svgDirection: SvgDirectionEnum.right,
           ),
-          Row(children: [])
+          Row(children: [
+            wCommonTag(text: '스티커'),
+            wCommonTag(text: '카테고리'),
+          ])
         ],
       ),
     );

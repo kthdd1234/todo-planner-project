@@ -2,15 +2,12 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/date_symbol_data_local.dart';
-import 'package:project/page/TodoAddPage.dart';
-import 'package:project/page/groupCalendarPage.dart';
-import 'package:project/page/groupItemListPage.dart';
-import 'package:project/page/categoryAddPage.dart';
-import 'package:project/page/groupTimelinePage.dart';
+import 'package:project/page/TodoSettingPage.dart';
+import 'package:project/page/categorySettingPage.dart';
 import 'package:project/page/homePage.dart';
 import 'package:project/provider/bottomTabIndexProvider.dart';
 import 'package:project/provider/highlighterProvider.dart';
-import 'package:project/provider/initGroupProvider.dart';
+import 'package:project/provider/CategoryProvider.dart';
 import 'package:project/provider/selectedDateTimeProvider.dart';
 import 'package:project/repositories/init_hive.dart';
 import 'package:project/util/constants.dart';
@@ -42,7 +39,7 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(create: (context) => BottomTabIndexProvider()),
         ChangeNotifierProvider(create: (context) => HighlighterProvider()),
-        ChangeNotifierProvider(create: (context) => InitGroupProvider()),
+        ChangeNotifierProvider(create: (context) => CategoryProvider()),
         ChangeNotifierProvider(create: (context) => SelectedDateTimeProvider())
       ],
       child: MaterialApp(
@@ -60,11 +57,8 @@ class MyApp extends StatelessWidget {
         initialRoute: initialRoute,
         routes: {
           'home-page': (context) => const HomePage(),
-          'todo-add-page': (context) => TodoAddPage(),
-          // 'group-setting-page': (context) => const GroupSettingPage(),
-          // 'group-item-list-page': (context) => const GroupItemListPage(),
-          // 'group-calendar-page': (context) => const GroupCalendarPage(),
-          // 'group-timeline-page': (context) => const GroupTimelinePage(),
+          'todo-setting-page': (context) => TodoSettingPage(),
+          'category-setting-page': (context) => CategorySettingPage(),
         },
       ),
     );

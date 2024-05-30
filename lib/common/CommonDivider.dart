@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
 
 class CommonDivider extends StatelessWidget {
-  CommonDivider({super.key, this.color, this.horizontal});
+  CommonDivider({super.key, this.color, this.horizontal, this.vertical});
   Color? color;
-  double? horizontal;
+  double? horizontal, vertical;
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: horizontal ?? 20),
+      padding: EdgeInsets.symmetric(
+        horizontal: horizontal ?? 20,
+        vertical: vertical ?? 0,
+      ),
       child: Divider(
         color: color ?? Colors.indigo.shade50,
         height: 0,

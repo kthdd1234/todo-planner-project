@@ -12,6 +12,7 @@ class CommonTextFormField extends StatelessWidget {
     this.textInputAction,
     this.focusNode,
     this.textBgColor,
+    this.onChanged,
   });
 
   FocusNode? focusNode;
@@ -22,6 +23,7 @@ class CommonTextFormField extends StatelessWidget {
   TextInputAction? textInputAction;
   Color? textBgColor;
   Function() onEditingComplete;
+  Function(String)? onChanged;
 
   @override
   Widget build(BuildContext context) {
@@ -46,6 +48,7 @@ class CommonTextFormField extends StatelessWidget {
         hintStyle: const TextStyle(color: Colors.grey),
       ),
       onEditingComplete: onEditingComplete,
+      onChanged: onChanged,
     );
   }
 }

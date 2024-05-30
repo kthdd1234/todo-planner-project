@@ -103,6 +103,7 @@ flutter:
     - assets/svg/remove.svg
     - assets/svg/plus.svg
     - assets/svg/routin.svg
+    - assets/svg/category.svg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

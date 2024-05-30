@@ -72,3 +72,13 @@ class TodoClass {
   String? memo;
   bool? isHighlighter;
 }
+
+class ReapeatClass {
+  ReapeatClass({
+    required this.select,
+    required this.everyWeek,
+    required this.everyMonth,
+  });
+
+  String select, everyWeek, everyMonth;
+}
