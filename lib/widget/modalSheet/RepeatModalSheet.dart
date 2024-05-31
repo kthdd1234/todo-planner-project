@@ -42,7 +42,7 @@ class _RepeatModalSheetState extends State<RepeatModalSheet> {
     return CommonModalSheet(
       title: '반복',
       isBack: true,
-      height: selectedRepeat == repeat.everyWeek ? 350 : 500,
+      height: selectedRepeat == repeat.everyWeek ? 350 : 540,
       child: Column(
         children: [
           Expanded(
@@ -116,16 +116,25 @@ class EveryWeekRepeatDay extends StatefulWidget {
 }
 
 class _EveryWeekRepeatDayState extends State<EveryWeekRepeatDay> {
-  List<WeekDayClass> days = List.generate(
+  List<WeekDayClass> weekDaydays = List.generate(
     weekDays.length,
-    (index) => WeekDayClass(idx: index, name: weekDays[index], isVisible: true),
+    (index) => WeekDayClass(id: index, name: weekDays[index], isVisible: true),
   ).toList();
 
-  onDay(WeekDayClass selectedItem) {
+  onDay(WeekDayClass weekDay) {
+    bool isVisible = !weekDay.isVisible;
+
+    if (isVisible == false) {
+      bool isOverTwice =
+          weekDaydays.where((item) => item.isVisible).toList().length > 1;
+
+      if (isOverTwice == false) return;
+    }
+
     setState(() {
-      days = days.map((item) {
-        if (item.idx == selectedItem.idx) {
-          item.isVisible = !selectedItem.isVisible;
+      weekDaydays = weekDaydays.map((item) {
+        if (item.id == weekDay.id) {
+          item.isVisible = isVisible;
         }
 
         return item;
@@ -136,7 +145,7 @@ class _EveryWeekRepeatDayState extends State<EveryWeekRepeatDay> {
   @override
   Widget build(BuildContext context) {
     return Row(
-      children: days
+      children: weekDaydays
           .map((item) => Expanded(
                 child: CommonButton(
                   text: item.name,
@@ -145,7 +154,8 @@ class _EveryWeekRepeatDayState extends State<EveryWeekRepeatDay> {
                   textColor: item.isVisible ? Colors.white : grey.s400,
                   buttonColor: item.isVisible ? indigo.s200 : whiteBgBtnColor,
                   verticalPadding: 10,
-                  outerPadding: const EdgeInsets.only(right: 5),
+                  outerPadding: EdgeInsets.only(
+                      right: item.id == weekDaydays.last.id ? 0 : 5),
                   borderRadius: 7,
                   onTap: () => onDay(item),
                 ),
@@ -163,12 +173,87 @@ class EveryMonthRepeatDay extends StatefulWidget {
 }
 
 class _EveryMonthRepeatDayState extends State<EveryMonthRepeatDay> {
-  List<MonthDayClass> days = [for (var i = 1; i <= 31; i++) i]
-      .map((id) => MonthDayClass(id: id, isVisible: false))
+  List<MonthDayClass> monthDays = [for (var i = 1; i <= 31; i++) i]
+      .map((id) => MonthDayClass(id: id, isVisible: DateTime.now().day == id))
       .toList();
+
+  onDay(MonthDayClass monthDay) {
+    bool isVisible = !monthDay.isVisible;
+
+    if (isVisible == false) {
+      bool isOverTwice =
+          monthDays.where((item) => item.isVisible).toList().length > 1;
+
+      if (isOverTwice == false) return;
+    }
+
+    setState(() {
+      monthDays = monthDays.map((item) {
+        if (item.id == monthDay.id) {
+          item.isVisible = isVisible;
+        }
+
+        return item;
+      }).toList();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Column(children: []);
+    return Expanded(
+      child: Column(
+        children: [
+          CommonSpace(height: 5),
+          GridView(
+            shrinkWrap: true,
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 7,
+              crossAxisSpacing: 7,
+              mainAxisSpacing: 7,
+            ),
+            children: monthDays
+                .map((monthDay) => CommonButton(
+                      text: monthDay.id.toString(),
+                      isBold: monthDay.isVisible,
+                      textColor: monthDay.isVisible ? Colors.white : grey.s400,
+                      buttonColor:
+                          monthDay.isVisible ? indigo.s200 : whiteBgBtnColor,
+                      verticalPadding: 10,
+                      outerPadding: EdgeInsets.only(left: 0),
+                      borderRadius: 7,
+                      onTap: () => onDay(monthDay),
+                    ))
+                .toList(),
+          ),
+          Spacer(),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(right: 3, top: 1),
+                child: Icon(Icons.info_outline, size: 12, color: grey.s400),
+              ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  CommonText(
+                    text: '30일, 31일을 선택할 경우 해당 일자가 없는 달에는',
+                    color: grey.original,
+                    fontSize: 11,
+                  ),
+                  CommonText(
+                    text: '할 일 화면에 표시되지 않아요.',
+                    color: grey.original,
+                    fontSize: 11,
+                    textAlign: TextAlign.end,
+                  )
+                ],
+              )
+            ],
+          )
+        ],
+      ),
+    );
   }
 }

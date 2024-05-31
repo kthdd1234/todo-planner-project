@@ -85,12 +85,12 @@ class ReapeatClass {
 
 class WeekDayClass {
   WeekDayClass({
-    required this.idx,
+    required this.id,
     required this.name,
     required this.isVisible,
   });
 
-  int idx;
+  int id;
   String name;
   bool isVisible;
 }
