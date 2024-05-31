@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:ui';
 
 import 'package:easy_localization/easy_localization.dart';
@@ -32,6 +33,10 @@ Color itemMarkColor({required Color groupColor, required String markType}) {
   }[markType]!;
 }
 
+ymdFormatter({required String locale, required DateTime dateTime}) {
+  return DateFormat.yMd(locale).format(dateTime);
+}
+
 mdeFormatter({required String locale, required DateTime dateTime}) {
   return DateFormat.MMMEd(locale).format(dateTime);
 }
@@ -42,4 +47,15 @@ ColorClass getColor(String name) {
 
 navigatorPop(context) {
   Navigator.of(context, rootNavigator: true).pop('dialog');
+}
+
+int isContainIdxDateTime({
+  required String locale,
+  required List<DateTime> selectionList,
+  required DateTime targetDateTime,
+}) {
+  String targetYmd = ymdFormatter(dateTime: targetDateTime, locale: locale);
+
+  return selectionList.indexWhere((dateTime) =>
+      ymdFormatter(dateTime: dateTime, locale: locale) == targetYmd);
 }

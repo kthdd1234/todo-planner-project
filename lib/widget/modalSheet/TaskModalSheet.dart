@@ -13,6 +13,7 @@ import 'package:project/util/enum.dart';
 import 'package:project/util/final.dart';
 import 'package:project/widget/modalSheet/CategoryModalSheet.dart';
 import 'package:project/widget/modalSheet/RepeatModalSheet.dart';
+import 'package:project/widget/modalSheet/SelectedDayModalSheet.dart';
 
 class TaskModalSheet extends StatefulWidget {
   TaskModalSheet({super.key, required this.title});
@@ -34,8 +35,25 @@ class _TaskModalSheetState extends State<TaskModalSheet> {
 
   onCategory() {
     showModalBottomSheet(
+      isScrollControlled: true,
       context: context,
       builder: (context) => const CategoryModalSheet(),
+    );
+  }
+
+  onSelectedDay() {
+    showModalBottomSheet(
+      isScrollControlled: true,
+      context: context,
+      builder: (context) => const SelectedDayModalSheet(),
+    );
+  }
+
+  onRepeat() {
+    showModalBottomSheet(
+      isScrollControlled: true,
+      context: context,
+      builder: (context) => const RepeatModalSheet(),
     );
   }
 
@@ -43,22 +61,17 @@ class _TaskModalSheetState extends State<TaskModalSheet> {
     //
   }
 
-  onRepeat() {
-    showModalBottomSheet(
-      context: context,
-      builder: (context) => const RepeatModalSheet(),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
+    bool isTodo = widget.title == '할 일';
+
     return Padding(
       padding: EdgeInsets.only(
         bottom: MediaQuery.of(context).viewInsets.bottom,
       ),
       child: CommonModalSheet(
         title: '${widget.title} 추가',
-        height: widget.title == '루틴' ? 325 : 275,
+        height: 325,
         child: CommonContainer(
           innerPadding: 0,
           child: Column(
@@ -83,23 +96,22 @@ class _TaskModalSheetState extends State<TaskModalSheet> {
                   onTap: onCategory,
                 ),
               ),
-              widget.title == '루틴'
-                  ? TaskSetting(
-                      title: '반복',
-                      onTap: onRepeat,
-                      child: CommonSvgText(
-                        text: '매주 - 월, 수, 금',
-                        fontSize: 14,
-                        textColor: textColor,
-                        svgColor: grey.s400,
-                        svgName: 'dir-right',
-                        svgWidth: 7,
-                        svgLeft: 7,
-                        svgDirection: SvgDirectionEnum.right,
-                        onTap: onRepeat,
-                      ),
-                    )
-                  : const CommonNull(),
+              TaskSetting(
+                title: isTodo ? '날짜' : '반복',
+                onTap: isTodo ? onSelectedDay : onRepeat,
+                child: CommonSvgText(
+                  text:
+                      isTodo ? '2024년 5월 31일 (수)' : '매주 - 일, 월, 화, 수, 목, 금, 토',
+                  fontSize: 14,
+                  textColor: textColor,
+                  svgColor: grey.s400,
+                  svgName: 'dir-right',
+                  svgWidth: 7,
+                  svgLeft: 7,
+                  svgDirection: SvgDirectionEnum.right,
+                  onTap: isTodo ? onSelectedDay : onRepeat,
+                ),
+              ),
               TaskName(
                 controller: controller,
                 onEditingComplete: onEditingComplete,

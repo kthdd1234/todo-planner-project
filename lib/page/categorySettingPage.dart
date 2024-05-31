@@ -8,7 +8,7 @@ import 'package:project/common/CommonScaffold.dart';
 import 'package:project/common/CommonSpace.dart';
 import 'package:project/common/CommonText.dart';
 import 'package:project/common/CommonTextFormField.dart';
-import 'package:project/page/TodoSettingPage.dart';
+import 'package:project/etc/TodoSettingPage.dart';
 import 'package:project/provider/CategoryProvider.dart';
 import 'package:project/util/class.dart';
 import 'package:project/util/constants.dart';

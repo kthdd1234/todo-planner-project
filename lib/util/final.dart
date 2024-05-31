@@ -209,7 +209,7 @@ final colorList = [
 ];
 
 final repeat = ReapeatClass(
-  select: 'select',
   everyWeek: 'everyWeek',
   everyMonth: 'everyMonth',
+  everyYear: 'everyYear',
 );

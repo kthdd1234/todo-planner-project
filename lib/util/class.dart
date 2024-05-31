@@ -75,10 +75,32 @@ class TodoClass {
 
 class ReapeatClass {
   ReapeatClass({
-    required this.select,
     required this.everyWeek,
     required this.everyMonth,
+    required this.everyYear,
   });
 
-  String select, everyWeek, everyMonth;
+  String everyWeek, everyMonth, everyYear;
+}
+
+class WeekDayClass {
+  WeekDayClass({
+    required this.idx,
+    required this.name,
+    required this.isVisible,
+  });
+
+  int idx;
+  String name;
+  bool isVisible;
+}
+
+class MonthDayClass {
+  MonthDayClass({
+    required this.id,
+    required this.isVisible,
+  });
+
+  int id;
+  bool isVisible;
 }
