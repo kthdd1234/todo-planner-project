@@ -95,18 +95,33 @@ class _TaskModalSheetState extends State<TaskModalSheet> {
   }
 
   onRepeatDay() {
+    DateTime now = DateTime.now();
+
     showModalBottomSheet(
       isScrollControlled: true,
       context: context,
       builder: (context) => RepeatModalSheet(
         initRepeatInfo: selectedRepeatInfo,
         onCompletedEveryWeek: (weekDays) {
-          log('weekDays: $weekDays');
+          selectedRepeatInfo.type = repeatType.everyWeek;
+          selectedRepeatInfo.selectedDateTimeList = weekDays
+              .where((weekDay) => weekDay.isVisible)
+              .map((weekday) =>
+                  now.subtract(Duration(days: now.weekday - weekday.id)))
+              .toList();
+
           navigatorPop(context);
+          setState(() {});
         },
         onCompletedEveryMonth: (monthDays) {
-          log('monthDays: $monthDays');
+          selectedRepeatInfo.type = repeatType.everyMonth;
+          selectedRepeatInfo.selectedDateTimeList = monthDays
+              .where((monthDay) => monthDay.isVisible)
+              .map((monthDay) => DateTime(now.year, 1, monthDay.id))
+              .toList();
+
           navigatorPop(context);
+          setState(() {});
         },
       ),
     );
@@ -125,7 +140,23 @@ class _TaskModalSheetState extends State<TaskModalSheet> {
   }
 
   displayRepeatDateTime(String locale) {
-    return '매주 - 일, 월, 화, 수, 목, 금, 토';
+    if (selectedRepeatInfo.type == repeatType.everyWeek) {
+      String join = selectedRepeatInfo.selectedDateTimeList
+          .map((dateTime) => eFormatter(locale: locale, dateTime: dateTime))
+          .join(', ');
+
+      return '매주 - $join';
+    } else if (selectedRepeatInfo.type == repeatType.everyMonth) {
+      List<String> list = selectedRepeatInfo.selectedDateTimeList
+          .map((dateTime) => dFormatter(locale: locale, dateTime: dateTime))
+          .toList();
+      String join = '';
+      join = list.length > 5
+          ? '${list.sublist(0, 5).join(', ')}...'
+          : list.join(', ');
+
+      return '매달 - $join';
+    }
   }
 
   onEditingComplete() {
@@ -227,7 +258,11 @@ class TaskSetting extends StatelessWidget {
               children: [
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [CommonText(text: title), child],
+                  children: [
+                    CommonText(text: title),
+                    CommonSpace(width: 50),
+                    child
+                  ],
                 ),
               ],
             ),

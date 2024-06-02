@@ -45,6 +45,14 @@ ymdeFormatter({required String locale, required DateTime dateTime}) {
   return DateFormat.yMMMEd(locale).format(dateTime);
 }
 
+String dFormatter({required String locale, required DateTime dateTime}) {
+  return DateFormat.d(locale).format(dateTime);
+}
+
+String eFormatter({required String locale, required DateTime dateTime}) {
+  return DateFormat.E(locale).format(dateTime);
+}
+
 ColorClass getColor(String name) {
   return colorList.firstWhere((info) => info.colorName == name);
 }
@@ -73,4 +81,12 @@ int ymdToInt(DateTime? dateTime) {
   String strDateTime = formatter.format(dateTime);
 
   return int.parse(strDateTime);
+}
+
+bool isEmptyWeekDays(List<WeekDayClass> weekDays) {
+  return weekDays.any((weekDay) => weekDay.isVisible) == false;
+}
+
+bool isEmptyMonthDays(List<MonthDayClass> monthDays) {
+  return monthDays.any((monthDay) => monthDay.isVisible) == false;
 }

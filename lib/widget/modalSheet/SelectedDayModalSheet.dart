@@ -134,6 +134,7 @@ class _SelectedDayModalSheetState extends State<SelectedDayModalSheet> {
                 children: [
                   TableCalendar(
                     locale: locale,
+                    startingDayOfWeek: StartingDayOfWeek.monday,
                     headerStyle: HeaderStyle(
                       titleCentered: true,
                       formatButtonVisible: false,

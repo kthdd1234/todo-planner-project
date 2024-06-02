@@ -30,7 +30,12 @@ class CommonSvgText extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     List<Widget> children = [
-      CommonText(text: text, fontSize: fontSize, color: textColor)
+      CommonText(
+        text: text,
+        fontSize: fontSize,
+        color: textColor,
+        overflow: TextOverflow.ellipsis,
+      )
     ];
     SvgPicture widget = svgAsset(
       name: svgName,

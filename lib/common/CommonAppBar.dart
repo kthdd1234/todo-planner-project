@@ -103,6 +103,7 @@ class AppBarCalendar extends StatelessWidget {
 
     return TableCalendar(
       locale: locale,
+      startingDayOfWeek: StartingDayOfWeek.monday,
       calendarStyle: CalendarStyle(
         cellMargin: const EdgeInsets.all(15),
         todayDecoration: BoxDecoration(

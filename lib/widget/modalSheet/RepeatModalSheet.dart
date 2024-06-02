@@ -1,5 +1,7 @@
 // ignore_for_file: avoid_function_literals_in_foreach_calls
 
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:project/common/CommonButton.dart';
 import 'package:project/common/CommonContainer.dart';
@@ -9,6 +11,7 @@ import 'package:project/common/CommonText.dart';
 import 'package:project/util/class.dart';
 import 'package:project/util/constants.dart';
 import 'package:project/util/final.dart';
+import 'package:project/util/func.dart';
 import 'package:project/widget/button/RepeatButton.dart';
 
 class RepeatModalSheet extends StatefulWidget {
@@ -31,23 +34,49 @@ class _RepeatModalSheetState extends State<RepeatModalSheet> {
   String selectedRepeatType = repeatType.everyWeek;
   List<WeekDayClass> weekDays = List.generate(
     dayLabels.length,
-    (index) =>
-        WeekDayClass(id: index, name: dayLabels[index], isVisible: false),
+    (index) => WeekDayClass(
+      id: index + 1,
+      name: dayLabels[index],
+      isVisible: false,
+    ),
   ).toList();
   List<MonthDayClass> monthDays = [for (var i = 1; i <= 31; i++) i]
-      .map((id) => MonthDayClass(id: id, isVisible: DateTime.now().day == id))
+      .map((id) => MonthDayClass(id: id, isVisible: false))
       .toList();
 
   @override
   void initState() {
-    // TODO: implement initState
+    List<DateTime> dateTimeList = widget.initRepeatInfo.selectedDateTimeList;
+
+    selectedRepeatType = widget.initRepeatInfo.type;
+
+    if (selectedRepeatType == repeatType.everyWeek) {
+      dateTimeList.forEach(
+        (dateTime) => weekDays[dateTime.weekday - 1].isVisible = true,
+      );
+    } else if (selectedRepeatType == repeatType.everyMonth) {
+      dateTimeList
+          .forEach((dateTime) => monthDays[dateTime.day - 1].isVisible = true);
+    }
+
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    onRepeatType(String repeatType) {
-      setState(() => selectedRepeatType = repeatType);
+    onRepeatType(String type) {
+      DateTime now = DateTime.now();
+
+      setState(() {
+        if (type == repeatType.everyWeek && isEmptyWeekDays(weekDays)) {
+          weekDays[now.weekday - 1].isVisible = true;
+        } else if (type == repeatType.everyMonth &&
+            isEmptyMonthDays(monthDays)) {
+          monthDays[now.day - 1].isVisible = true;
+        }
+
+        selectedRepeatType = type;
+      });
     }
 
     onWeekDay(WeekDayClass weekDay) {

@@ -22,4 +22,4 @@ const initialRoute = 'home-page';
 const initFontFamily = 'IM_Hyemin';
 
 /// dayLabels
-const dayLabels = ['일', '월', '화', '수', '목', '금', '토'];
+const dayLabels = ['월', '화', '수', '목', '금', '토', '일'];
