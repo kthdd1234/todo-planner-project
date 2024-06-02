@@ -73,8 +73,15 @@ class TodoClass {
   bool? isHighlighter;
 }
 
-class ReapeatClass {
-  ReapeatClass({
+class RepeatInfoClass {
+  RepeatInfoClass({required this.type, required this.selectedDateTimeList});
+
+  String type;
+  List<DateTime> selectedDateTimeList;
+}
+
+class RepeatTypeClass {
+  RepeatTypeClass({
     required this.everyWeek,
     required this.everyMonth,
     required this.everyYear,
@@ -103,4 +110,24 @@ class MonthDayClass {
 
   int id;
   bool isVisible;
+}
+
+class CategoryClass {
+  CategoryClass({
+    required this.id,
+    required this.name,
+    required this.colorName,
+  });
+
+  String id, name, colorName;
+}
+
+class TaskClass {
+  TaskClass({
+    required this.type,
+    required this.name,
+    required this.dateTimeLable,
+  });
+
+  String type, name, dateTimeLable;
 }

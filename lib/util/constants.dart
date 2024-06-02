@@ -21,5 +21,5 @@ const initialRoute = 'home-page';
 /// initFontFamily
 const initFontFamily = 'IM_Hyemin';
 
-///  weekDays
-const weekDays = ['일', '월', '화', '수', '목', '금', '토'];
+/// dayLabels
+const dayLabels = ['일', '월', '화', '수', '목', '금', '토'];

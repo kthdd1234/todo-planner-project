@@ -14,21 +14,37 @@ import 'package:project/util/func.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 class SelectedDayModalSheet extends StatefulWidget {
-  const SelectedDayModalSheet({super.key});
+  SelectedDayModalSheet({
+    super.key,
+    required this.initDateTimeList,
+    required this.onCompleted,
+  });
+
+  List<DateTime> initDateTimeList;
+  Function(List<DateTime>) onCompleted;
 
   @override
   State<SelectedDayModalSheet> createState() => _SelectedDayModalSheetState();
 }
 
 class _SelectedDayModalSheetState extends State<SelectedDayModalSheet> {
-  List<DateTime> selectionList = [DateTime.now()];
+  List<DateTime> dateTimeList = [DateTime.now()];
   DateTime focusedDay = DateTime.now();
   bool isMultiSelection = false;
+
+  @override
+  initState() {
+    dateTimeList = widget.initDateTimeList;
+    focusedDay = widget.initDateTimeList[0];
+    isMultiSelection = dateTimeList.length > 1;
+
+    super.initState();
+  }
 
   onDaySelected(String locale, DateTime dateTime) {
     int idx = isContainIdxDateTime(
       locale: locale,
-      selectionList: selectionList,
+      selectionList: dateTimeList,
       targetDateTime: dateTime,
     );
 
@@ -37,15 +53,15 @@ class _SelectedDayModalSheetState extends State<SelectedDayModalSheet> {
 
       if (isMultiSelection) {
         if (idx != -1) {
-          if (selectionList.length > 1) {
-            selectionList.removeAt(idx);
+          if (dateTimeList.length > 1) {
+            dateTimeList.removeAt(idx);
           }
         } else {
-          selectionList.add(dateTime);
+          dateTimeList.add(dateTime);
         }
       } else {
-        selectionList = [];
-        selectionList.add(dateTime);
+        dateTimeList = [];
+        dateTimeList.add(dateTime);
       }
     });
   }
@@ -55,16 +71,12 @@ class _SelectedDayModalSheetState extends State<SelectedDayModalSheet> {
       if (newValue == false) {
         DateTime now = DateTime.now();
 
-        selectionList = [now];
+        dateTimeList = [now];
         focusedDay = now;
       }
 
       isMultiSelection = newValue;
     });
-  }
-
-  onCompleted() {
-    //
   }
 
   Widget? markerBuilder(
@@ -73,7 +85,7 @@ class _SelectedDayModalSheetState extends State<SelectedDayModalSheet> {
   ) {
     int idx = isContainIdxDateTime(
       locale: locale,
-      selectionList: selectionList,
+      selectionList: dateTimeList,
       targetDateTime: dateTime,
     );
 
@@ -176,7 +188,7 @@ class _SelectedDayModalSheetState extends State<SelectedDayModalSheet> {
             outerPadding: const EdgeInsets.only(top: 15),
             verticalPadding: 15,
             borderRadius: 100,
-            onTap: onCompleted,
+            onTap: () => widget.onCompleted(dateTimeList),
           )
         ],
       ),

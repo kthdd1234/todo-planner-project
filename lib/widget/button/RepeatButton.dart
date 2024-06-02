@@ -8,10 +8,10 @@ class RepeatButton extends StatelessWidget {
       {super.key,
       required this.text,
       required this.type,
-      required this.selectedRepeat,
+      required this.selectedRepeatType,
       required this.onTap});
 
-  String text, type, selectedRepeat;
+  String text, type, selectedRepeatType;
   Function(String) onTap;
 
   @override
@@ -22,9 +22,9 @@ class RepeatButton extends StatelessWidget {
       child: CommonButton(
         text: text,
         fontSize: 13,
-        isBold: selectedRepeat == type,
-        textColor: selectedRepeat == type ? Colors.white : grey.s400,
-        buttonColor: selectedRepeat == type ? indigo.s200 : whiteBgBtnColor,
+        isBold: selectedRepeatType == type,
+        textColor: selectedRepeatType == type ? Colors.white : grey.s400,
+        buttonColor: selectedRepeatType == type ? indigo.s200 : whiteBgBtnColor,
         verticalPadding: 10,
         borderRadius: 5,
         onTap: () => onTap(type),

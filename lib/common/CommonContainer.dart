@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 
 class CommonContainer extends StatelessWidget {
   CommonContainer({
@@ -13,7 +14,8 @@ class CommonContainer extends StatelessWidget {
 
   Widget child;
   Color? color;
-  double? radius, innerPadding, outerPadding;
+  double? radius, outerPadding;
+  EdgeInsets? innerPadding;
   Function()? onTap;
 
   @override
@@ -27,7 +29,7 @@ class CommonContainer extends StatelessWidget {
         child: Container(
           width: MediaQuery.of(context).size.width,
           height: null,
-          padding: EdgeInsets.all(innerPadding != null ? innerPadding! : 20),
+          padding: innerPadding ?? const EdgeInsets.all(15),
           decoration: BoxDecoration(
               color: color ?? Colors.white,
               borderRadius: BorderRadius.circular(radius ?? 10),

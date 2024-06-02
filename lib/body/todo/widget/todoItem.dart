@@ -147,72 +147,69 @@ class TodoItem extends StatelessWidget {
           id == '1' ? CommonDivider(color: blue.s50) : CommonNull(),
           Padding(
             padding: const EdgeInsets.fromLTRB(20, 20, 20, 15),
-            child: Column(
+            child: Row(
               children: [
-                Row(
-                  children: [
-                    Expanded(
-                        flex: 1,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            CommonText(
-                              text: name,
-                              textAlign: TextAlign.start,
-                              highlightColor:
-                                  isHighlight == true ? color.s50 : null,
-                            ),
-                            CommonSpace(height: 2),
-                            memo != null
-                                ? Row(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    children: [
-                                      CommonSpace(width: 3),
-                                      svgAsset(
-                                        name: 'memo',
-                                        width: 10,
-                                        color: grey.s400,
+                Expanded(
+                    flex: 1,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        CommonText(
+                          text: name,
+                          textAlign: TextAlign.start,
+                          highlightColor:
+                              isHighlight == true ? color.s50 : null,
+                        ),
+                        CommonSpace(height: 2),
+                        memo != null
+                            ? Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  CommonSpace(width: 3),
+                                  svgAsset(
+                                    name: 'memo',
+                                    width: 10,
+                                    color: grey.s400,
+                                  ),
+                                  Padding(
+                                    padding:
+                                        const EdgeInsets.only(left: 5, top: 3),
+                                    child: SizedBox(
+                                      width: 200,
+                                      child: CommonText(
+                                        text: memo!,
+                                        color: grey.original,
+                                        fontSize: 12,
+                                        overflow: TextOverflow.ellipsis,
+                                        textAlign: TextAlign.start,
                                       ),
-                                      Padding(
-                                        padding: const EdgeInsets.only(
-                                            left: 5, top: 3),
-                                        child: SizedBox(
-                                          width: 200,
-                                          child: CommonText(
-                                            text: memo!,
-                                            color: grey.original,
-                                            fontSize: 12,
-                                            overflow: TextOverflow.ellipsis,
-                                            textAlign: TextAlign.start,
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  )
-                                : const CommonNull()
-                          ],
-                        )),
-                    CommonSpace(width: 30),
-                    actionType == eItemActionMark
-                        ? wAction(
-                            svgName: 'mark-$markType',
-                            width: 25,
-                            actionColor: itemMarkColor(
-                              groupColor: color.s200,
-                              markType: markType!,
-                            ),
-                            onTap: onMark,
-                          )
-                        : Padding(
-                            padding: const EdgeInsets.only(right: 5),
-                            child: Icon(
-                              Icons.more_horiz,
-                              size: 18,
-                              color: Colors.grey.shade400,
-                            ),
-                          )
-                  ],
-                ),
+                                    ),
+                                  ),
+                                ],
+                              )
+                            : const CommonNull()
+                      ],
+                    )),
+                CommonSpace(width: 30),
+                actionType == eItemActionMark
+                    ? wAction(
+                        svgName: 'mark-$markType',
+                        width: 25,
+                        actionColor: itemMarkColor(
+                          groupColor: color.s200,
+                          markType: markType!,
+                        ),
+                        onTap: onMark,
+                      )
+                    : Padding(
+                        padding: const EdgeInsets.only(right: 5),
+                        child: Icon(
+                          Icons.more_horiz,
+                          size: 18,
+                          color: Colors.grey.shade400,
+                        ),
+                      ),
+                CommonSpace(width: 5),
               ],
             ),
           ),

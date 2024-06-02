@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:project/body/timeTable/timeTableBody.dart';
 import 'package:project/util/class.dart';
 import 'package:project/util/enum.dart';
-import 'package:project/body/tracker/trackerBody.dart';
 import 'package:project/body/setting/settingBody.dart';
 import 'package:project/body/todo/todoBody.dart';
 
@@ -208,8 +207,12 @@ final colorList = [
   blueGrey
 ];
 
-final repeat = ReapeatClass(
+final repeatType = RepeatTypeClass(
   everyWeek: 'everyWeek',
   everyMonth: 'everyMonth',
   everyYear: 'everyYear',
 );
+
+final tTodo = TaskClass(type: 'todo', name: '할 일', dateTimeLable: '날짜');
+
+final tRoutin = TaskClass(type: 'routin', name: '루틴', dateTimeLable: '반복');

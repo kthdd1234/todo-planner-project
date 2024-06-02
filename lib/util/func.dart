@@ -41,6 +41,10 @@ mdeFormatter({required String locale, required DateTime dateTime}) {
   return DateFormat.MMMEd(locale).format(dateTime);
 }
 
+ymdeFormatter({required String locale, required DateTime dateTime}) {
+  return DateFormat.yMMMEd(locale).format(dateTime);
+}
+
 ColorClass getColor(String name) {
   return colorList.firstWhere((info) => info.colorName == name);
 }
@@ -49,7 +53,7 @@ navigatorPop(context) {
   Navigator.of(context, rootNavigator: true).pop('dialog');
 }
 
-int isContainIdxDateTime({
+isContainIdxDateTime({
   required String locale,
   required List<DateTime> selectionList,
   required DateTime targetDateTime,
@@ -58,4 +62,15 @@ int isContainIdxDateTime({
 
   return selectionList.indexWhere((dateTime) =>
       ymdFormatter(dateTime: dateTime, locale: locale) == targetYmd);
+}
+
+int ymdToInt(DateTime? dateTime) {
+  if (dateTime == null) {
+    return 0;
+  }
+
+  DateFormat formatter = DateFormat('yyyyMMdd');
+  String strDateTime = formatter.format(dateTime);
+
+  return int.parse(strDateTime);
 }

@@ -1,11 +1,11 @@
 import 'dart:typed_data';
 import 'package:hive/hive.dart';
 
-part 'todo_box.g.dart';
+part 'task_box.g.dart';
 
 @HiveType(typeId: 4)
-class TodoBox {
-  TodoBox({
+class TaskBox {
+  TaskBox({
     required this.id,
     required this.name,
     required this.type,

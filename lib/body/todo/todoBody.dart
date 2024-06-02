@@ -44,9 +44,7 @@ class TodoBody extends StatelessWidget {
 }
 
 class MemoContainer extends StatelessWidget {
-  const MemoContainer({
-    super.key,
-  });
+  const MemoContainer({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -85,71 +83,100 @@ class TodoContainer extends StatelessWidget {
       padding: const EdgeInsets.only(top: 10),
       child: CommonContainer(
         outerPadding: 7,
-        innerPadding: 0,
-        child: Row(
+        innerPadding: const EdgeInsets.symmetric(vertical: 5),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Padding(
-              padding: const EdgeInsets.only(left: 15),
-              child: Container(
-                width: 10,
-                height: 345,
-                decoration: BoxDecoration(
-                  color: blue.s50,
-                  borderRadius: BorderRadius.circular(10),
+            Row(
+              children: [
+                // Padding(
+                //   padding: const EdgeInsets.only(left: 0),
+                //   child: Container(
+                //     width: 5,
+                //     height: 385,
+                //     decoration: BoxDecoration(
+                //       color: blue.s50,
+                //       borderRadius: BorderRadius.circular(2),
+                //     ),
+                //   ),
+                // ),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(
+                          left: 20,
+                          top: 15,
+                          bottom: 10,
+                          right: 20,
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            CommonTag(
+                              text: '📚독서',
+                              textColor: blue.original,
+                              bgColor: blue.s50,
+                              onTap: () {},
+                            ),
+                            Icon(
+                              Icons.keyboard_arrow_down_rounded,
+                              color: blue.s100,
+                              size: 30,
+                            )
+                          ],
+                        ),
+                      ),
+                      TodoItem(
+                        id: '1',
+                        name: '김동욱 연필통 모의고사 오답노트',
+                        markType: itemMark.O,
+                        memo: '오답노트 3번씩 반복해서 쓰기!',
+                        color: blue,
+                        actionType: eItemActionMark,
+                        todoType: eOneday,
+                      ),
+                      TodoItem(
+                        id: '2',
+                        name: '비문학 독해 205P 문풀 채/오',
+                        markType: itemMark.X,
+                        color: blue,
+                        actionType: eItemActionMark,
+                        isHighlight: true,
+                        todoType: eRoutin,
+                      ),
+                      TodoItem(
+                        id: '3',
+                        name: '문법 49P 문풀 채/오',
+                        markType: itemMark.M,
+                        actionType: eItemActionMark,
+                        isHighlight: true,
+                        color: blue,
+                        todoType: eOneday,
+                      ),
+                      TodoItem(
+                        id: '4',
+                        name: '비문학 독해 88p ~ 99p',
+                        markType: itemMark.T,
+                        actionType: eItemActionMark,
+                        memo: '1H 20M',
+                        color: blue,
+                        todoType: eOneday,
+                      ),
+                      TodoItem(
+                        id: '4',
+                        name: '모의고사 문제풀이',
+                        markType: itemMark.E,
+                        actionType: eItemActionMark,
+                        color: blue,
+                        todoType: eOneday,
+                      ),
+                      CommonSpace(height: 20)
+                    ],
+                  ),
                 ),
-              ),
-            ),
-            Expanded(
-              child: Column(
-                children: [
-                  CommonSpace(height: 20),
-                  TodoItem(
-                    id: '1',
-                    name: '김동욱 연필통 모의고사 오답노트',
-                    markType: itemMark.O,
-                    memo: '오답노트 3번씩 반복해서 쓰기!',
-                    color: blue,
-                    actionType: eItemActionMark,
-                    todoType: eOneday,
-                  ),
-                  TodoItem(
-                    id: '2',
-                    name: '비문학 독해 205P 문풀 채/오',
-                    markType: itemMark.X,
-                    color: blue,
-                    actionType: eItemActionMark,
-                    isHighlight: true,
-                    todoType: eRoutin,
-                  ),
-                  TodoItem(
-                    id: '3',
-                    name: '문법 49P 문풀 채/오',
-                    markType: itemMark.M,
-                    actionType: eItemActionMark,
-                    isHighlight: true,
-                    color: blue,
-                    todoType: eOneday,
-                  ),
-                  TodoItem(
-                    id: '4',
-                    name: '비문학 독해 88p ~ 99p',
-                    markType: itemMark.T,
-                    actionType: eItemActionMark,
-                    memo: '1H 20M',
-                    color: blue,
-                    todoType: eOneday,
-                  ),
-                  TodoItem(
-                    id: '4',
-                    name: '모의고사 문제풀이',
-                    markType: itemMark.E,
-                    actionType: eItemActionMark,
-                    color: blue,
-                    todoType: eOneday,
-                  ),
-                  CommonSpace(height: 20)
-                ],
-              ),
+              ],
             ),
           ],
         ),

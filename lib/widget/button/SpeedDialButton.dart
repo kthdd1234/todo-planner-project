@@ -1,27 +1,31 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:project/common/CommonText.dart';
+import 'package:project/provider/selectedDateTimeProvider.dart';
 import 'package:project/util/class.dart';
 import 'package:project/util/final.dart';
 import 'package:project/util/func.dart';
 import 'package:project/widget/modalSheet/TaskModalSheet.dart';
+import 'package:provider/provider.dart';
 
 class SpeedDialButton extends StatelessWidget {
   const SpeedDialButton({super.key});
 
-  onAddTodo(context) {
+  onAddTodo(context, initDateTime) {
     showModalBottomSheet(
       isScrollControlled: true,
       context: context,
-      builder: (context) => TaskModalSheet(title: '할 일'),
+      builder: (context) =>
+          TaskModalSheet(task: tTodo, initDateTime: initDateTime),
     );
   }
 
-  onAddRoutin(context) {
+  onAddRoutin(context, initDateTime) {
     showModalBottomSheet(
       isScrollControlled: true,
       context: context,
-      builder: (context) => TaskModalSheet(title: '루틴'),
+      builder: (context) =>
+          TaskModalSheet(task: tRoutin, initDateTime: initDateTime),
     );
   }
 
@@ -49,6 +53,9 @@ class SpeedDialButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    DateTime selectedDateTime =
+        context.watch<SelectedDateTimeProvider>().seletedDateTime;
+
     return SpeedDial(
       icon: Icons.add,
       spacing: 3,
@@ -68,19 +75,19 @@ class SpeedDialButton extends StatelessWidget {
           svg: 'plus',
           lable: '할 일 추가',
           color: indigo,
-          onTap: () => onAddTodo(context),
+          onTap: () => onAddTodo(context, selectedDateTime),
         ),
         floatingAction(
           svg: 'routin',
           lable: '루틴 추가',
           color: teal,
-          onTap: () => onAddRoutin(context),
+          onTap: () => onAddRoutin(context, selectedDateTime),
         ),
         floatingAction(
           svg: 'pencil',
           lable: '메모 추가',
           color: orange,
-          onTap: () => onAddTodo(context),
+          onTap: () => onAddTodo(context, selectedDateTime),
         ),
       ],
     );
