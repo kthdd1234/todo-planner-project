@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:project/common/CommonText.dart';
+import 'package:project/page/memoSettingPage.dart';
 import 'package:project/provider/selectedDateTimeProvider.dart';
 import 'package:project/util/class.dart';
 import 'package:project/util/final.dart';
@@ -8,10 +9,15 @@ import 'package:project/util/func.dart';
 import 'package:project/widget/modalSheet/TaskModalSheet.dart';
 import 'package:provider/provider.dart';
 
-class SpeedDialButton extends StatelessWidget {
+class SpeedDialButton extends StatefulWidget {
   const SpeedDialButton({super.key});
 
-  onAddTodo(context, initDateTime) {
+  @override
+  State<SpeedDialButton> createState() => _SpeedDialButtonState();
+}
+
+class _SpeedDialButtonState extends State<SpeedDialButton> {
+  onAddTodo(initDateTime) {
     showModalBottomSheet(
       isScrollControlled: true,
       context: context,
@@ -20,7 +26,7 @@ class SpeedDialButton extends StatelessWidget {
     );
   }
 
-  onAddRoutin(context, initDateTime) {
+  onAddRoutin(initDateTime) {
     showModalBottomSheet(
       isScrollControlled: true,
       context: context,
@@ -29,8 +35,13 @@ class SpeedDialButton extends StatelessWidget {
     );
   }
 
-  onAddMemo(context) {
-    //
+  onAddMemo() {
+    Navigator.push(
+      context,
+      MaterialPageRoute<void>(
+        builder: (BuildContext context) => MemoSettingPage(),
+      ),
+    );
   }
 
   floatingAction({
@@ -75,19 +86,19 @@ class SpeedDialButton extends StatelessWidget {
           svg: 'plus',
           lable: '할 일 추가',
           color: indigo,
-          onTap: () => onAddTodo(context, selectedDateTime),
+          onTap: () => onAddTodo(selectedDateTime),
         ),
         floatingAction(
           svg: 'routin',
           lable: '루틴 추가',
           color: teal,
-          onTap: () => onAddRoutin(context, selectedDateTime),
+          onTap: () => onAddRoutin(selectedDateTime),
         ),
         floatingAction(
           svg: 'pencil',
           lable: '메모 추가',
           color: orange,
-          onTap: () => onAddTodo(context, selectedDateTime),
+          onTap: () => onAddMemo(),
         ),
       ],
     );
