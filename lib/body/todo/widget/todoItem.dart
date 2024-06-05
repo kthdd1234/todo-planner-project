@@ -13,6 +13,7 @@ import 'package:project/util/class.dart';
 import 'package:project/util/constants.dart';
 import 'package:project/util/final.dart';
 import 'package:project/util/func.dart';
+import 'package:project/widget/button/ModalButton.dart';
 import 'package:provider/provider.dart';
 
 class TodoItem extends StatelessWidget {
@@ -52,28 +53,6 @@ class TodoItem extends StatelessWidget {
           name: svgName,
           color: actionColor,
           onTap: onTap,
-        ),
-      ),
-    );
-  }
-
-  wContainer({
-    required String svgName,
-    required String actionText,
-    required Color color,
-    required Function() onTap,
-  }) {
-    return Expanded(
-      child: CommonContainer(
-        onTap: onTap,
-        radius: 7,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            svgAsset(name: svgName, width: 25, color: color),
-            CommonSpace(height: 10),
-            CommonText(text: actionText, color: color)
-          ],
         ),
       ),
     );
@@ -121,14 +100,14 @@ class TodoItem extends StatelessWidget {
           height: 200,
           child: Row(
             children: [
-              wContainer(
+              ModalButton(
                 svgName: 'highlighter',
                 actionText: '수정하기',
                 color: textColor,
                 onTap: onEdit,
               ),
               CommonSpace(width: 5),
-              wContainer(
+              ModalButton(
                 svgName: 'remove',
                 actionText: '삭제하기',
                 color: Colors.red.shade200,

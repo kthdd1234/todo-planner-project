@@ -1,13 +1,11 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
-import 'package:keyboard_actions/keyboard_actions.dart';
 import 'package:project/common/CommonBackground.dart';
 import 'package:project/common/CommonButton.dart';
 import 'package:project/common/CommonContainer.dart';
 import 'package:project/common/CommonScaffold.dart';
 import 'package:project/common/CommonSpace.dart';
 import 'package:project/common/CommonTag.dart';
+import 'package:project/common/CommonText.dart';
 import 'package:project/util/class.dart';
 import 'package:project/util/final.dart';
 import 'package:project/widget/modalSheet/ImageModalSheet.dart';
@@ -68,15 +66,8 @@ class _MemoSettingPageState extends State<MemoSettingPage> {
           title: '메모',
           actions: [
             Padding(
-              padding: const EdgeInsets.only(right: 17),
-              child: CommonTag(
-                text: '2024년 6월 3일 월요일',
-                fontSize: 11,
-                isBold: true,
-                textColor: Colors.white,
-                bgColor: indigo.s300,
-                onTap: onDateTime,
-              ),
+              padding: const EdgeInsets.only(right: 20, top: 5),
+              child: CommonText(text: '2024년 6월 3일 월요일'),
             )
           ],
         ),

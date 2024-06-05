@@ -105,6 +105,8 @@ flutter:
     - assets/svg/plus.svg
     - assets/svg/routin.svg
     - assets/svg/category.svg
+    - assets/svg/camera.svg
+    - assets/svg/gallery.svg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
