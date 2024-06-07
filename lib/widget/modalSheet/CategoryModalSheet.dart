@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:project/common/CommonButton.dart';
 import 'package:project/common/CommonContainer.dart';
 import 'package:project/common/CommonModalSheet.dart';
 import 'package:project/common/CommonNull.dart';
-import 'package:project/common/CommonSpace.dart';
-import 'package:project/page/categorySettingPage.dart';
+import 'package:project/etc/categorySettingPage.dart';
 import 'package:project/util/class.dart';
 import 'package:project/util/constants.dart';
 import 'package:project/util/final.dart';

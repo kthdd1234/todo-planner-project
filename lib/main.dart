@@ -3,7 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:project/etc/TodoSettingPage.dart';
-import 'package:project/page/categorySettingPage.dart';
+import 'package:project/etc/categorySettingPage.dart';
 import 'package:project/page/homePage.dart';
 import 'package:project/provider/bottomTabIndexProvider.dart';
 import 'package:project/provider/highlighterProvider.dart';
@@ -55,11 +55,7 @@ class MyApp extends StatelessWidget {
         locale: context.locale,
         debugShowCheckedModeBanner: false,
         initialRoute: initialRoute,
-        routes: {
-          'home-page': (context) => const HomePage(),
-          'todo-setting-page': (context) => TodoSettingPage(),
-          'category-setting-page': (context) => CategorySettingPage(),
-        },
+        routes: {'home-page': (context) => const HomePage()},
       ),
     );
   }

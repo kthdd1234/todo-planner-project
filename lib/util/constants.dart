@@ -7,8 +7,6 @@ const pagePadding = EdgeInsets.all(15);
 /// textColor
 const textColor = Color(0xFF404763);
 
-/// textColor2
-
 /// whiteBgBtnColor
 const whiteBgBtnColor = Color(0xffF3F4F9);
 
@@ -23,3 +21,7 @@ const initFontFamily = 'IM_Hyemin';
 
 /// dayLabels
 const dayLabels = ['월', '화', '수', '목', '금', '토', '일'];
+
+/// roundedRectangleBorder
+final roundedRectangleBorder =
+    RoundedRectangleBorder(borderRadius: BorderRadius.circular(10));

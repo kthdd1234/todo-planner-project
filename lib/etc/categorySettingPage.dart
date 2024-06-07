@@ -14,6 +14,7 @@ import 'package:project/util/class.dart';
 import 'package:project/util/constants.dart';
 import 'package:project/util/final.dart';
 import 'package:project/util/func.dart';
+import 'package:project/widget/gridView/ColorGridView.dart';
 import 'package:provider/provider.dart';
 
 class CategorySettingPage extends StatefulWidget {
@@ -122,46 +123,9 @@ class CategoryColor extends StatelessWidget {
       children: [
         TodoTitle(title: '색상'),
         CommonSpace(height: 20),
-        GridView(
-          shrinkWrap: true,
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 6,
-            mainAxisSpacing: 10,
-          ),
-          children: colorList
-              .map(
-                (color) => GestureDetector(
-                  onTap: () => onTap(color.colorName),
-                  child: Column(
-                    children: [
-                      Stack(
-                        alignment: AlignmentDirectional.center,
-                        children: [
-                          CommonCircle(color: color.s100, size: 40),
-                          selectedColorName == color.colorName
-                              ? svgAsset(
-                                  name: 'mark-V',
-                                  width: 20,
-                                  color: Colors.white,
-                                )
-                              : const CommonNull(),
-                        ],
-                      ),
-                      // selectedColorName == color.colorName
-                      //     ? Padding(
-                      //         padding: const EdgeInsets.only(top: 3),
-                      //         child: CommonText(
-                      //           text: selectedColorName,
-                      //           fontSize: 12,
-                      //           color: getColor(selectedColorName).s200,
-                      //         ),
-                      //       )
-                      //     : const CommonNull()
-                    ],
-                  ),
-                ),
-              )
-              .toList(),
+        ColorGridView(
+          selectedColorName: selectedColorName,
+          onTap: onTap,
         ),
       ],
     );

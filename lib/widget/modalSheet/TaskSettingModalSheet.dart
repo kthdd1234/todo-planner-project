@@ -5,7 +5,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:project/common/CommonContainer.dart';
 import 'package:project/common/CommonDivider.dart';
+import 'package:project/common/CommonModalItem.dart';
 import 'package:project/common/CommonModalSheet.dart';
+import 'package:project/common/CommonOutlineInputField.dart';
 import 'package:project/common/CommonSpace.dart';
 import 'package:project/common/CommonSvgText.dart';
 import 'package:project/common/CommonTag.dart';
@@ -16,29 +18,30 @@ import 'package:project/util/enum.dart';
 import 'package:project/util/final.dart';
 import 'package:project/util/func.dart';
 import 'package:project/widget/modalSheet/CategoryModalSheet.dart';
+import 'package:project/widget/modalSheet/ColorModalsheet.dart';
 import 'package:project/widget/modalSheet/RepeatModalSheet.dart';
 import 'package:project/widget/modalSheet/SelectedDayModalSheet.dart';
 
-class TaskModalSheet extends StatefulWidget {
-  TaskModalSheet({super.key, required this.task, required this.initDateTime});
+class TaskSettingModalSheet extends StatefulWidget {
+  TaskSettingModalSheet({
+    super.key,
+    required this.task,
+    required this.initDateTime,
+  });
 
   TaskClass task;
   DateTime initDateTime;
 
   @override
-  State<TaskModalSheet> createState() => _TaskModalSheetState();
+  State<TaskSettingModalSheet> createState() => _TaskSettingModalSheetState();
 }
 
-class _TaskModalSheetState extends State<TaskModalSheet> {
+class _TaskSettingModalSheetState extends State<TaskSettingModalSheet> {
   // 형광색
   bool isHighlighter = false;
 
-  // 카테고리
-  CategoryClass category = CategoryClass(
-    id: 'exercise',
-    name: '🏃운동',
-    colorName: getColor('파란색').colorName,
-  );
+  // 색상
+  String selectedColorName = '파란색';
 
   // 날짜
   List<DateTime> selectedDateTimeList = [DateTime.now()];
@@ -68,15 +71,17 @@ class _TaskModalSheetState extends State<TaskModalSheet> {
     setState(() => isHighlighter = newValue);
   }
 
-  onCategory() {
+  onColor() {
     showModalBottomSheet(
       isScrollControlled: true,
       context: context,
-      builder: (context) => CategoryModalSheet(
-          initCategoryId: category.id,
-          onTap: (CategoryClass selectedCategory) {
-            setState(() => category = selectedCategory);
-          }),
+      builder: (context) => ColorModalSheet(
+        selectedColorName: selectedColorName,
+        onTap: (String colorName) {
+          setState(() => selectedColorName = colorName);
+          navigatorPop(context);
+        },
+      ),
     );
   }
 
@@ -185,7 +190,7 @@ class _TaskModalSheetState extends State<TaskModalSheet> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              TaskSetting(
+              CommonModalItem(
                 title: '형광색',
                 onTap: () => onHighlighter(!isHighlighter),
                 child: CupertinoSwitch(
@@ -194,17 +199,17 @@ class _TaskModalSheetState extends State<TaskModalSheet> {
                   onChanged: onHighlighter,
                 ),
               ),
-              TaskSetting(
-                title: '카테고리',
-                onTap: onCategory,
+              CommonModalItem(
+                title: '색상',
+                onTap: onColor,
                 child: CommonTag(
-                  text: category.name,
-                  textColor: getColor(category.colorName).original,
-                  bgColor: getColor(category.colorName).s50,
-                  onTap: onCategory,
+                  text: getColor(selectedColorName).colorName,
+                  textColor: getColor(selectedColorName).original,
+                  bgColor: getColor(selectedColorName).s50,
+                  onTap: onColor,
                 ),
               ),
-              TaskSetting(
+              CommonModalItem(
                 title: widget.task.dateTimeLable,
                 onTap: isTodo ? onSelectedDay : onRepeatDay,
                 child: CommonSvgText(
@@ -222,101 +227,14 @@ class _TaskModalSheetState extends State<TaskModalSheet> {
                 ),
               ),
               CommonSpace(height: 17.5),
-              TaskName(
+              CommonOutlineInputField(
+                hintText: '할 일을 입력해주세요',
                 controller: controller,
                 onEditingComplete: onEditingComplete,
               )
             ],
           ),
         ),
-      ),
-    );
-  }
-}
-
-class TaskSetting extends StatelessWidget {
-  TaskSetting({
-    super.key,
-    required this.title,
-    required this.child,
-    required this.onTap,
-  });
-
-  String title;
-  Widget child;
-  Function() onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    return InkWell(
-      onTap: onTap,
-      child: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 15),
-            child: Column(
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    CommonText(text: title),
-                    CommonSpace(width: 50),
-                    child
-                  ],
-                ),
-              ],
-            ),
-          ),
-          CommonDivider(color: grey.s200, horizontal: 0),
-        ],
-      ),
-    );
-  }
-}
-
-class TaskName extends StatelessWidget {
-  TaskName({
-    super.key,
-    required this.controller,
-    required this.onEditingComplete,
-  });
-
-  TextEditingController controller;
-  Function() onEditingComplete;
-
-  @override
-  Widget build(BuildContext context) {
-    return Expanded(
-      child: TextFormField(
-        controller: controller,
-        autofocus: true,
-        decoration: InputDecoration(
-          contentPadding: const EdgeInsets.only(left: 25),
-          hintText: '할 일을 입력해주세요',
-          hintStyle: TextStyle(color: grey.s400),
-          filled: true,
-          fillColor: whiteBgBtnColor,
-          suffixIcon: UnconstrainedBox(
-            child: Container(
-              width: 30,
-              height: 30,
-              decoration: BoxDecoration(
-                color: indigo.s200,
-                borderRadius: BorderRadius.circular(100),
-              ),
-              child: const Icon(
-                Icons.arrow_upward_rounded,
-                color: Colors.white,
-                size: 20,
-              ),
-            ),
-          ),
-          border: OutlineInputBorder(
-            borderSide: const BorderSide(width: 0, style: BorderStyle.none),
-            borderRadius: BorderRadius.circular(100),
-          ),
-        ),
-        onEditingComplete: onEditingComplete,
       ),
     );
   }

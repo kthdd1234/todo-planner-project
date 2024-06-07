@@ -6,7 +6,7 @@ import 'package:project/provider/selectedDateTimeProvider.dart';
 import 'package:project/util/class.dart';
 import 'package:project/util/final.dart';
 import 'package:project/util/func.dart';
-import 'package:project/widget/modalSheet/TaskModalSheet.dart';
+import 'package:project/widget/modalSheet/TaskSettingModalSheet.dart';
 import 'package:provider/provider.dart';
 
 class SpeedDialButton extends StatefulWidget {
@@ -21,8 +21,10 @@ class _SpeedDialButtonState extends State<SpeedDialButton> {
     showModalBottomSheet(
       isScrollControlled: true,
       context: context,
-      builder: (context) =>
-          TaskModalSheet(task: tTodo, initDateTime: initDateTime),
+      builder: (context) => TaskSettingModalSheet(
+        task: tTodo,
+        initDateTime: initDateTime,
+      ),
     );
   }
 
@@ -30,16 +32,20 @@ class _SpeedDialButtonState extends State<SpeedDialButton> {
     showModalBottomSheet(
       isScrollControlled: true,
       context: context,
-      builder: (context) =>
-          TaskModalSheet(task: tRoutin, initDateTime: initDateTime),
+      builder: (context) => TaskSettingModalSheet(
+        task: tRoutin,
+        initDateTime: initDateTime,
+      ),
     );
   }
 
-  onAddMemo() {
+  onAddMemo(initDateTime) {
     Navigator.push(
       context,
       MaterialPageRoute<void>(
-        builder: (BuildContext context) => MemoSettingPage(),
+        builder: (BuildContext context) => MemoSettingPage(
+          initDateTime: initDateTime,
+        ),
       ),
     );
   }
@@ -98,7 +104,7 @@ class _SpeedDialButtonState extends State<SpeedDialButton> {
           svg: 'pencil',
           lable: '메모 추가',
           color: orange,
-          onTap: () => onAddMemo(),
+          onTap: () => onAddMemo(selectedDateTime),
         ),
       ],
     );

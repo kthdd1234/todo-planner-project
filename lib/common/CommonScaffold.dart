@@ -4,31 +4,32 @@ import 'package:project/util/class.dart';
 import 'package:project/widget/button/SpeedDialButton.dart';
 
 class CommonScaffold extends StatelessWidget {
-  CommonScaffold({
-    super.key,
-    required this.body,
-    this.appBarInfo,
-    this.bottomNavigationBar,
-    this.isFab,
-    this.resizeToAvoidBottomInset,
-  });
+  CommonScaffold(
+      {super.key,
+      required this.body,
+      this.appBarInfo,
+      this.bottomNavigationBar,
+      this.isFab,
+      this.resizeToAvoidBottomInset,
+      this.backgroundColor});
 
   Widget? bottomNavigationBar;
   Widget body;
   AppBarInfoClass? appBarInfo;
   bool? resizeToAvoidBottomInset, isFab;
+  Color? backgroundColor;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.transparent,
+      backgroundColor: backgroundColor ?? Colors.transparent,
       resizeToAvoidBottomInset: resizeToAvoidBottomInset,
       appBar: appBarInfo != null
           ? AppBar(
               title: CommonText(text: appBarInfo!.title, fontSize: 20),
               centerTitle: appBarInfo!.isCenter,
               actions: appBarInfo!.actions,
-              backgroundColor: Colors.transparent,
+              backgroundColor: backgroundColor ?? Colors.transparent,
               scrolledUnderElevation: 0,
             )
           : null,

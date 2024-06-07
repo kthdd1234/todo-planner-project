@@ -65,7 +65,6 @@ class AppBarTitle extends StatelessWidget {
           ),
           Row(children: [
             wCommonTag(text: '스티커'),
-            wCommonTag(text: '카테고리'),
           ])
         ],
       ),

@@ -3,14 +3,14 @@ import 'package:project/body/timeTable/timeTableBody.dart';
 import 'package:project/util/class.dart';
 import 'package:project/util/enum.dart';
 import 'package:project/body/setting/settingBody.dart';
-import 'package:project/body/todo/todoBody.dart';
+import 'package:project/body/task/taskBody.dart';
 
 final bottomNavigationBarItemList = [
   BottomNavigationBarClass(
     svgAsset: 'todo',
     index: 0,
     label: '할 일',
-    body: const TodoBody(),
+    body: const TaskBody(),
   ),
   BottomNavigationBarClass(
     svgAsset: 'time',
@@ -193,6 +193,7 @@ final eItemActionMark = ItemActionTypeEnum.mark.toString();
 final eItemActionEdit = ItemActionTypeEnum.edit.toString();
 
 final colorList = [
+  indigo,
   red,
   pink,
   green,
@@ -203,7 +204,6 @@ final colorList = [
   brown,
   orange,
   purple,
-  ember,
   blueGrey
 ];
 
