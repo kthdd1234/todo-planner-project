@@ -5,7 +5,7 @@ import 'package:project/common/CommonBackground.dart';
 import 'package:project/common/CommonButton.dart';
 import 'package:project/common/CommonContainer.dart';
 import 'package:project/common/CommonImage.dart';
-import 'package:project/common/CommonPopup.dart';
+import 'package:project/widget/popup/AlertPopup.dart';
 import 'package:project/common/CommonScaffold.dart';
 import 'package:project/common/CommonSpace.dart';
 import 'package:project/common/CommonText.dart';
@@ -105,7 +105,7 @@ class _MemoSettingPageState extends State<MemoSettingPage> {
     if (isEmpty) {
       showDialog(
         context: context,
-        builder: (context) => CommonPopup(
+        builder: (context) => AlertPopup(
           title: '메모 추가 알림',
           desc: '한 장 이상의 사진 추가\n또는 한글자 이상의 메모를 입력해주세요',
           buttonText: '확인',

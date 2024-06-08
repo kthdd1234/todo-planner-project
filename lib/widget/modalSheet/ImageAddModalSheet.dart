@@ -4,7 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:project/common/CommonModalSheet.dart';
-import 'package:project/common/CommonPopup.dart';
+import 'package:project/widget/popup/AlertPopup.dart';
 import 'package:project/common/CommonSpace.dart';
 import 'package:project/util/constants.dart';
 import 'package:project/util/func.dart';
@@ -33,7 +33,7 @@ class _ImageAddModalSheetState extends State<ImageAddModalSheet> {
     if (widget.xFileList.length > 2) {
       showDialog(
         context: context,
-        builder: (context) => CommonPopup(
+        builder: (context) => AlertPopup(
           title: '사진 추가 제한',
           desc: '사진은 최대 3장까지\n추가할 수 있어요.',
           buttonText: '확인',

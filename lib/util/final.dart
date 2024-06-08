@@ -184,6 +184,8 @@ final itemMark = ItemMarkClass(
   T: 'T',
 );
 
+// final itemMarkName = ;
+
 final eOneday = TodoTypeEnum.oneday.toString();
 
 final eRoutin = TodoTypeEnum.routin.toString();
@@ -216,3 +218,10 @@ final repeatType = RepeatTypeClass(
 final tTodo = TaskClass(type: 'todo', name: '할 일', dateTimeLable: '날짜');
 
 final tRoutin = TaskClass(type: 'routin', name: '루틴', dateTimeLable: '반복');
+
+List<Map<String, dynamic>> markList = [
+  {'svg': itemMark.O, 'name': itemMark.markName(itemMark.O)},
+  {'svg': itemMark.X, 'name': itemMark.markName(itemMark.X)},
+  {'svg': itemMark.M, 'name': itemMark.markName(itemMark.M)},
+  {'svg': itemMark.T, 'name': itemMark.markName(itemMark.T)},
+];

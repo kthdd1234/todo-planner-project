@@ -12,6 +12,7 @@ import 'package:project/util/final.dart';
 import 'package:project/util/func.dart';
 import 'package:project/widget/button/ModalButton.dart';
 import 'package:project/widget/modalSheet/TaskTitleModalSheet.dart';
+import 'package:project/widget/popup/MarkPopup.dart';
 
 class TaskBody extends StatelessWidget {
   const TaskBody({super.key});
@@ -93,7 +94,7 @@ class _TaskContainerState extends State<TaskContainer> {
           CommonSpace(height: 5),
           TaskItem(
             id: '1',
-            name: '김동욱 연필통 모의고사 오답노트22222222222222',
+            name: '김동욱 연필통 모의고사 오답노트',
             markType: itemMark.O,
             memo: '오답노트 3번씩 반복해서 쓰기!',
             color: blue,
@@ -180,7 +181,10 @@ class _TaskItemState extends State<TaskItem> {
   }
 
   onMark() {
-    //
+    showDialog(
+      context: context,
+      builder: (context) => MarkPopup(taskId: ''),
+    );
   }
 
   onMore() {

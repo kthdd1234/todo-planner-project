@@ -56,6 +56,10 @@ class ItemMarkClass {
     required this.T,
   });
 
+  markName(String mark) {
+    return {'O': '완료 했어요', 'X': '안했어요', 'M': '덜 했어요', 'T': '내일 할래요'}[mark]!;
+  }
+
   String E, O, X, M, T;
 }
 
