@@ -2,11 +2,9 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/date_symbol_data_local.dart';
-import 'package:project/page/homePage.dart';
-import 'package:project/page/introPage.dart';
+import 'package:project/page/HomePage.dart';
+import 'package:project/page/IntroPage.dart';
 import 'package:project/provider/bottomTabIndexProvider.dart';
-import 'package:project/provider/highlighterProvider.dart';
-import 'package:project/provider/CategoryProvider.dart';
 import 'package:project/provider/selectedDateTimeProvider.dart';
 import 'package:project/provider/titleDateTimeProvider.dart';
 import 'package:project/repositories/init_hive.dart';
@@ -42,8 +40,6 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => BottomTabIndexProvider()),
-        ChangeNotifierProvider(create: (context) => HighlighterProvider()),
-        ChangeNotifierProvider(create: (context) => CategoryProvider()),
         ChangeNotifierProvider(create: (context) => SelectedDateTimeProvider()),
         ChangeNotifierProvider(create: (context) => TitleDateTimeProvider())
       ],

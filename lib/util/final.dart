@@ -1,15 +1,13 @@
-import 'package:flutter/foundation.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:project/body/timeTable/timeTableBody.dart';
 import 'package:project/repositories/record_repository.dart';
 import 'package:project/repositories/task_repository.dart';
 import 'package:project/repositories/user_repository.dart';
 import 'package:project/util/class.dart';
 import 'package:project/util/enum.dart';
-import 'package:project/body/setting/settingBody.dart';
-import 'package:project/body/task/taskBody.dart';
+import 'package:project/body/SettingBody.dart';
+import 'package:project/body/TaskBody.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 final bottomNavigationBarItemList = [
@@ -267,3 +265,14 @@ final valueListenables = [
   recordRepository.recordBox.listenable(),
   taskRepository.taskBox.listenable(),
 ];
+
+int recordKey(DateTime? dateTime) {
+  if (dateTime == null) {
+    return 0;
+  }
+
+  DateFormat formatter = DateFormat('yyyyMMdd');
+  String strDateTime = formatter.format(dateTime);
+
+  return int.parse(strDateTime);
+}

@@ -27,6 +27,7 @@ class CommonOutlineInputField extends StatelessWidget {
         hintText: hintText,
         hintStyle: TextStyle(color: grey.s400),
         filled: true,
+        isDense: true,
         fillColor: whiteBgBtnColor,
         suffixIcon: UnconstrainedBox(
           child: Container(

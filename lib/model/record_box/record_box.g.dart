@@ -18,15 +18,17 @@ class RecordBoxAdapter extends TypeAdapter<RecordBox> {
     };
     return RecordBox(
       createDateTime: fields[0] as DateTime,
-      imageList: (fields[3] as List?)?.cast<Uint8List>(),
+      taskOrderList: (fields[4] as List?)?.cast<String>(),
       taskInfo: (fields[1] as Map?)?.cast<String, dynamic>(),
-    )..memo = fields[2] as String?;
+      memo: fields[2] as String?,
+      imageList: (fields[3] as List?)?.cast<Uint8List>(),
+    );
   }
 
   @override
   void write(BinaryWriter writer, RecordBox obj) {
     writer
-      ..writeByte(4)
+      ..writeByte(5)
       ..writeByte(0)
       ..write(obj.createDateTime)
       ..writeByte(1)
@@ -34,7 +36,9 @@ class RecordBoxAdapter extends TypeAdapter<RecordBox> {
       ..writeByte(2)
       ..write(obj.memo)
       ..writeByte(3)
-      ..write(obj.imageList);
+      ..write(obj.imageList)
+      ..writeByte(4)
+      ..write(obj.taskOrderList);
   }
 
   @override

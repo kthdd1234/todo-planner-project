@@ -1,5 +1,4 @@
 import 'dart:typed_data';
-
 import 'package:hive/hive.dart';
 
 part 'record_box.g.dart';
@@ -8,6 +7,7 @@ part 'record_box.g.dart';
 class RecordBox extends HiveObject {
   RecordBox({
     required this.createDateTime,
+    this.taskOrderList,
     this.taskInfo,
     this.memo,
     this.imageList,
@@ -24,4 +24,7 @@ class RecordBox extends HiveObject {
 
   @HiveField(3)
   List<Uint8List>? imageList;
+
+  @HiveField(4)
+  List<String>? taskOrderList;
 }

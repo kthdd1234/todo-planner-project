@@ -1,32 +1,43 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:multi_value_listenable_builder/multi_value_listenable_builder.dart';
 import 'package:project/common/CommonAppBar.dart';
 import 'package:project/common/CommonContainer.dart';
 import 'package:project/common/CommonModalSheet.dart';
+import 'package:project/common/CommonNull.dart';
 import 'package:project/common/CommonSpace.dart';
 import 'package:project/common/CommonSvgButton.dart';
 import 'package:project/common/CommonTag.dart';
 import 'package:project/common/CommonText.dart';
+import 'package:project/model/record_box/record_box.dart';
+import 'package:project/model/user_box/user_box.dart';
+import 'package:project/provider/selectedDateTimeProvider.dart';
 import 'package:project/util/class.dart';
 import 'package:project/util/constants.dart';
 import 'package:project/util/final.dart';
-import 'package:project/util/func.dart';
 import 'package:project/widget/button/ModalButton.dart';
 import 'package:project/widget/modalSheet/TaskTitleModalSheet.dart';
 import 'package:project/widget/popup/MarkPopup.dart';
+import 'package:provider/provider.dart';
 
 class TaskBody extends StatelessWidget {
   const TaskBody({super.key});
 
   @override
   Widget build(BuildContext context) {
+    DateTime selectedDateTime =
+        context.watch<SelectedDateTimeProvider>().seletedDateTime;
+    RecordBox? record =
+        recordRepository.recordBox.get(recordKey(selectedDateTime));
+
     return MultiValueListenableBuilder(
       valueListenables: valueListenables,
       builder: (btx, list, w) => ListView(
         children: [
           CommonAppBar(),
-          MemoContainer(),
-          TaskContainer(),
+          MemoContainer(record: record),
+          TaskContainer(record: record),
         ],
       ),
     );
@@ -34,29 +45,38 @@ class TaskBody extends StatelessWidget {
 }
 
 class MemoContainer extends StatelessWidget {
-  const MemoContainer({super.key});
+  MemoContainer({super.key, required this.record});
+
+  RecordBox? record;
 
   @override
   Widget build(BuildContext context) {
-    return CommonContainer(
-      innerPadding: EdgeInsets.all(20),
-      outerPadding: 7,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          CommonText(
-            text: '큰 목표를 이루고 싶으면 허락을 구하지 마라',
-            fontSize: 15,
-          ),
-          //
-        ],
-      ),
-    );
+    bool isShowMemo =
+        record != null && (record?.memo != null || record?.imageList != null);
+
+    return isShowMemo
+        ? CommonContainer(
+            innerPadding: const EdgeInsets.all(20),
+            outerPadding: 7,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                CommonText(
+                  text: '큰 목표를 이루고 싶으면 허락을 구하지 마라',
+                  fontSize: 15,
+                ),
+                //
+              ],
+            ),
+          )
+        : const CommonNull();
   }
 }
 
 class TaskContainer extends StatefulWidget {
-  const TaskContainer({super.key});
+  TaskContainer({super.key, required this.record});
+
+  RecordBox? record;
 
   @override
   State<TaskContainer> createState() => _TaskContainerState();
@@ -67,12 +87,14 @@ class _TaskContainerState extends State<TaskContainer> {
     showModalBottomSheet(
       isScrollControlled: true,
       context: context,
-      builder: (context) => TaskTitleModalSheet(),
+      builder: (context) => const TaskTitleModalSheet(),
     );
   }
 
   @override
   Widget build(BuildContext context) {
+    //
+
     return CommonContainer(
       outerPadding: 7,
       innerPadding: const EdgeInsets.fromLTRB(20, 25, 20, 15),
@@ -282,41 +304,3 @@ class VerticalBorder extends StatelessWidget {
     );
   }
 }
-
-              // CommonImage(unit8List: , height: 280),
-                  // Padding(
-                //   padding: const EdgeInsets.only(left: 0),
-                //   child: Container(
-                //     width: 5,
-                //     height: 385,
-                //     decoration: BoxDecoration(
-                //       color: blue.s50,
-                //       borderRadius: BorderRadius.circular(2),
-                //     ),
-                //   ),
-                // ),
-
-                    // Padding(
-                  //   padding: const EdgeInsets.only(
-                  //     left: 20,
-                  //     top: 15,
-                  //     bottom: 10,
-                  //     right: 20,
-                  //   ),
-                  //   child: Row(
-                  //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  //     children: [
-                        // CommonTag(
-                        //   text: '📚독서',
-                        //   textColor: blue.original,
-                        //   bgColor: blue.s50,
-                        //   onTap: () {},
-                        // ),
-                  //       Icon(
-                  //         Icons.keyboard_arrow_down_rounded,
-                  //         color: blue.s100,
-                  //         size: 30,
-                  //       )
-                  //     ],
-                  //   ),
-                  // ),

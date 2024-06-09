@@ -1,9 +1,6 @@
-import 'dart:io';
 import 'dart:typed_data';
-
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:project/common/CommonBackground.dart';
 import 'package:project/common/CommonText.dart';
 import 'package:project/util/func.dart';

@@ -17,7 +17,7 @@ import 'package:project/util/constants.dart';
 import 'package:project/util/enum.dart';
 import 'package:project/util/final.dart';
 import 'package:project/util/func.dart';
-import 'package:project/widget/modalSheet/CategoryModalSheet.dart';
+import 'package:project/etc/CategoryModalSheet.dart';
 import 'package:project/widget/modalSheet/ColorModalsheet.dart';
 import 'package:project/widget/modalSheet/RepeatModalSheet.dart';
 import 'package:project/widget/modalSheet/SelectedDayModalSheet.dart';
