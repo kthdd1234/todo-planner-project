@@ -8,6 +8,7 @@ class UserBox extends HiveObject {
   UserBox({
     required this.id,
     required this.createDateTime,
+    required this.todoRoutinTitle,
     this.alarmInfo,
     this.passwords,
     this.calendarFormat,
@@ -44,8 +45,11 @@ class UserBox extends HiveObject {
   @HiveField(8)
   Map<String, dynamic>? googleDriveInfo;
 
+  @HiveField(9)
+  String todoRoutinTitle;
+
   @override
   String toString() {
-    return '{id: $id, createDateTime: $createDateTime, alarmInfo: $alarmInfo, passwords: $passwords, calendarFormat: $calendarFormat, calendarMaker: $calendarMaker, language: $language, fontFamily: $fontFamily, googleDriveInfo: $googleDriveInfo}';
+    return '{id: $id, createDateTime: $createDateTime, alarmInfo: $alarmInfo, passwords: $passwords, calendarFormat: $calendarFormat, calendarMaker: $calendarMaker, language: $language, fontFamily: $fontFamily, googleDriveInfo: $googleDriveInfo, todoRoutinTitle: $todoRoutinTitle}';
   }
 }

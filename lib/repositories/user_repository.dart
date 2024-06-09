@@ -17,6 +17,10 @@ class UserRepository {
     return userBox.get(userKey)!;
   }
 
+  bool get isUser {
+    return userBox.get(userKey) != null;
+  }
+
   void addUser(UserBox user) async {
     int key = await userBox.add(user);
 

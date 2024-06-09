@@ -13,9 +13,6 @@ const whiteBgBtnColor = Color(0xffF3F4F9);
 /// buttonColor
 final buttonColor = indigo.s200;
 
-/// initialRoute
-const initialRoute = 'home-page';
-
 /// initFontFamily
 const initFontFamily = 'IM_Hyemin';
 

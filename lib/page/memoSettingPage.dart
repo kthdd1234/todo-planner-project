@@ -1,6 +1,6 @@
+import 'dart:typed_data';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:project/common/CommonBackground.dart';
 import 'package:project/common/CommonButton.dart';
 import 'package:project/common/CommonContainer.dart';
@@ -26,7 +26,7 @@ class MemoSettingPage extends StatefulWidget {
 }
 
 class _MemoSettingPageState extends State<MemoSettingPage> {
-  List<XFile> xFileList = [];
+  List<Uint8List> uint8ListList = [];
   TextEditingController memoContoller = TextEditingController();
 
   actionButton({
@@ -58,40 +58,40 @@ class _MemoSettingPageState extends State<MemoSettingPage> {
     showModalBottomSheet(
       context: context,
       builder: (context) => ImageAddModalSheet(
-        xFileList: xFileList,
-        onCamera: (XFile xFile) {
-          setState(() => xFileList.add(xFile));
+        uint8ListList: uint8ListList,
+        onCamera: (Uint8List uint8List) {
+          setState(() => uint8ListList.add(uint8List));
           navigatorPop(context);
         },
-        onGallery: (List<XFile> pickedXFileList) {
-          setState(() => xFileList = [...pickedXFileList]);
+        onGallery: (List<Uint8List> uint8ListList_) {
+          setState(() => uint8ListList = [...uint8ListList_]);
           navigatorPop(context);
         },
       ),
     );
   }
 
-  onImage(XFile xFile) {
+  onImage(Uint8List uint8List) {
     showModalBottomSheet(
       isScrollControlled: true,
       context: context,
       builder: (context) => ImageSelectionModalSheet(
-        xFile: xFile,
+        uint8List: uint8List,
         onSlide: () {
           navigatorPop(context);
           Navigator.push(
             context,
             MaterialPageRoute<void>(
               builder: (BuildContext context) => ImageSlidePage(
-                curIndex: xFileList.indexOf(xFile),
-                xFileList: xFileList,
+                curIndex: uint8ListList.indexOf(uint8List),
+                uint8ListList: uint8ListList,
               ),
             ),
           );
         },
         onRemove: () {
           setState(() {
-            xFileList.removeWhere((item) => item.name == xFile.name);
+            uint8ListList.removeWhere((uint8List_) => uint8List_ == uint8List);
           });
           navigatorPop(context);
         },
@@ -100,16 +100,15 @@ class _MemoSettingPageState extends State<MemoSettingPage> {
   }
 
   onCompletedMemo() {
-    bool isEmpty = xFileList.isEmpty && memoContoller.text == '';
+    bool isEmpty = uint8ListList.isEmpty && memoContoller.text == '';
 
     if (isEmpty) {
       showDialog(
         context: context,
         builder: (context) => AlertPopup(
-          title: '메모 추가 알림',
-          desc: '한 장 이상의 사진 추가\n또는 한글자 이상의 메모를 입력해주세요',
+          desc: '한 장 이상의 사진\n또는 한 글자 이상 입력해주세요',
           buttonText: '확인',
-          height: 135,
+          height: 175,
           onTap: () => navigatorPop(context),
         ),
       );
@@ -144,8 +143,14 @@ class _MemoSettingPageState extends State<MemoSettingPage> {
                 outerPadding: 7,
                 child: ListView(
                   children: [
-                    ImageContainer(xFileList: xFileList, onImage: onImage),
-                    MemoField(controller: memoContoller, onChanged: onChanged),
+                    ImageContainer(
+                      uint8ListList: uint8ListList,
+                      onImage: onImage,
+                    ),
+                    MemoField(
+                      controller: memoContoller,
+                      onChanged: onChanged,
+                    ),
                   ],
                 ),
               ),
@@ -178,12 +183,12 @@ class _MemoSettingPageState extends State<MemoSettingPage> {
 class ImageContainer extends StatelessWidget {
   ImageContainer({
     super.key,
-    required this.xFileList,
+    required this.uint8ListList,
     required this.onImage,
   });
 
-  List<XFile> xFileList;
-  Function(XFile) onImage;
+  List<Uint8List> uint8ListList;
+  Function(Uint8List) onImage;
 
   @override
   Widget build(BuildContext context) {
@@ -194,9 +199,13 @@ class ImageContainer extends StatelessWidget {
         crossAxisSpacing: 10,
         mainAxisSpacing: 10,
       ),
-      children: xFileList
+      children: uint8ListList
           .map(
-            (xFile) => CommonImage(xFile: xFile, height: 150, onTap: onImage),
+            (uint8List) => CommonImage(
+              uint8List: uint8List,
+              height: 150,
+              onTap: onImage,
+            ),
           )
           .toList(),
     );

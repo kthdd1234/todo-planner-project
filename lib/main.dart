@@ -2,14 +2,15 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/date_symbol_data_local.dart';
-import 'package:project/etc/TodoSettingPage.dart';
-import 'package:project/etc/categorySettingPage.dart';
 import 'package:project/page/homePage.dart';
+import 'package:project/page/introPage.dart';
 import 'package:project/provider/bottomTabIndexProvider.dart';
 import 'package:project/provider/highlighterProvider.dart';
 import 'package:project/provider/CategoryProvider.dart';
 import 'package:project/provider/selectedDateTimeProvider.dart';
+import 'package:project/provider/titleDateTimeProvider.dart';
 import 'package:project/repositories/init_hive.dart';
+import 'package:project/repositories/user_repository.dart';
 import 'package:project/util/constants.dart';
 import 'package:provider/provider.dart';
 
@@ -35,12 +36,16 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    bool isUser = UserRepository().isUser;
+    String initialRoute = isUser ? 'home-page' : 'intro-page';
+
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => BottomTabIndexProvider()),
         ChangeNotifierProvider(create: (context) => HighlighterProvider()),
         ChangeNotifierProvider(create: (context) => CategoryProvider()),
-        ChangeNotifierProvider(create: (context) => SelectedDateTimeProvider())
+        ChangeNotifierProvider(create: (context) => SelectedDateTimeProvider()),
+        ChangeNotifierProvider(create: (context) => TitleDateTimeProvider())
       ],
       child: MaterialApp(
         title: 'Todo Planner',
@@ -55,7 +60,10 @@ class MyApp extends StatelessWidget {
         locale: context.locale,
         debugShowCheckedModeBanner: false,
         initialRoute: initialRoute,
-        routes: {'home-page': (context) => const HomePage()},
+        routes: {
+          'home-page': (context) => const HomePage(),
+          'intro-page': (context) => const IntroPage()
+        },
       ),
     );
   }

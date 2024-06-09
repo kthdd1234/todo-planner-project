@@ -3,6 +3,7 @@ import 'package:flutter/widgets.dart';
 import 'package:project/common/CommonContainer.dart';
 import 'package:project/common/CommonDivider.dart';
 import 'package:project/common/CommonOutlineInputField.dart';
+import 'package:project/common/CommonPopup.dart';
 import 'package:project/common/CommonSpace.dart';
 import 'package:project/common/CommonText.dart';
 import 'package:project/util/constants.dart';
@@ -21,7 +22,7 @@ class MarkPopup extends StatefulWidget {
 
 class _MarkPopupState extends State<MarkPopup> {
   TextEditingController controller = TextEditingController();
-  bool isShowInput = false;
+  bool isShowInput = true;
   bool isAutoFocus = false;
 
   @override
@@ -64,53 +65,39 @@ class _MarkPopupState extends State<MarkPopup> {
 
   @override
   Widget build(BuildContext context) {
-    return AlertDialog(
-      contentPadding: const EdgeInsets.all(0),
-      insetPadding: const EdgeInsets.symmetric(horizontal: 50),
-      shape: roundedRectangleBorder,
-      content: Container(
-        decoration: const BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage('assets/image/CloudyApple.png'),
-            fit: BoxFit.cover,
-          ),
-          borderRadius: BorderRadius.all(Radius.circular(10)),
-        ),
-        height: 375,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
-          child: CommonContainer(
-            innerPadding: const EdgeInsets.symmetric(horizontal: 20),
-            child: ListView(
-              children: [
-                Column(
-                  children: markList
-                      .map((info) => MarkItem(
-                            isSelected: info['svg'] == 'O',
-                            svg: info['svg'],
-                            name: info['name'],
-                            colorName: '파란색',
-                            onTap: () => onMark(),
-                          ))
-                      .toList(),
-                ),
-                Padding(
-                  padding: EdgeInsets.only(top: isShowInput ? 20 : 10),
-                  child: isShowInput
-                      ? CommonOutlineInputField(
-                          autofocus: isAutoFocus,
-                          hintText: '메모 입력하기',
-                          controller: controller,
-                          onEditingComplete: onEditingComplete,
-                        )
-                      : CommonText(
-                          text: controller.text,
-                          onTap: onMemo,
-                        ),
-                ),
-              ],
+    return CommonPopup(
+      insetPaddingHorizontal: 50,
+      height: 375,
+      child: CommonContainer(
+        innerPadding: const EdgeInsets.symmetric(horizontal: 20),
+        child: ListView(
+          children: [
+            Column(
+              children: markList
+                  .map((info) => MarkItem(
+                        isSelected: info['svg'] == 'O',
+                        svg: info['svg'],
+                        name: info['name'],
+                        colorName: '파란색',
+                        onTap: () => onMark(),
+                      ))
+                  .toList(),
             ),
-          ),
+            Padding(
+              padding: EdgeInsets.only(top: isShowInput ? 20 : 10),
+              child: isShowInput
+                  ? CommonOutlineInputField(
+                      autofocus: isAutoFocus,
+                      hintText: '메모 입력하기',
+                      controller: controller,
+                      onEditingComplete: onEditingComplete,
+                    )
+                  : CommonText(
+                      text: controller.text,
+                      onTap: onMemo,
+                    ),
+            ),
+          ],
         ),
       ),
     );

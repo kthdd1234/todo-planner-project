@@ -49,6 +49,8 @@ dependencies:
   shimmer: ^3.0.0
   flutter_speed_dial: ^7.0.0
   image_picker: ^1.1.2
+  multi_value_listenable_builder: ^0.0.2
+  syncfusion_flutter_datepicker: ^23.2.7
 
 dev_dependencies:
   flutter_test:
@@ -108,6 +110,7 @@ flutter:
     - assets/svg/camera.svg
     - assets/svg/gallery.svg
     - assets/svg/image.svg
+    - assets/svg/up-and-down.svg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

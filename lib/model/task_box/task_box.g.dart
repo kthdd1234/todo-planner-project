@@ -8,7 +8,7 @@ part of 'task_box.dart';
 
 class TaskBoxAdapter extends TypeAdapter<TaskBox> {
   @override
-  final int typeId = 4;
+  final int typeId = 3;
 
   @override
   TaskBox read(BinaryReader reader) {
@@ -19,25 +19,31 @@ class TaskBoxAdapter extends TypeAdapter<TaskBox> {
     return TaskBox(
       id: fields[0] as String,
       name: fields[1] as String,
-      type: fields[2] as String,
-      isHighlighter: fields[3] as bool?,
-      memo: fields[4] as String?,
+      taskType: fields[2] as String,
+      colorName: fields[4] as String,
+      dateTimeInfo: (fields[5] as Map).cast<String, dynamic>(),
+      isHighlighter: fields[6] as bool?,
+      memo: fields[7] as String?,
     );
   }
 
   @override
   void write(BinaryWriter writer, TaskBox obj) {
     writer
-      ..writeByte(5)
+      ..writeByte(7)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
       ..write(obj.name)
       ..writeByte(2)
-      ..write(obj.type)
-      ..writeByte(3)
-      ..write(obj.isHighlighter)
+      ..write(obj.taskType)
       ..writeByte(4)
+      ..write(obj.colorName)
+      ..writeByte(5)
+      ..write(obj.dateTimeInfo)
+      ..writeByte(6)
+      ..write(obj.isHighlighter)
+      ..writeByte(7)
       ..write(obj.memo);
   }
 

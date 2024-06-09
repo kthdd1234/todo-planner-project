@@ -19,6 +19,7 @@ class UserBoxAdapter extends TypeAdapter<UserBox> {
     return UserBox(
       id: fields[0] as String,
       createDateTime: fields[1] as DateTime,
+      todoRoutinTitle: fields[9] as String,
       alarmInfo: (fields[2] as Map?)?.cast<String, dynamic>(),
       passwords: fields[3] as String?,
       calendarFormat: fields[4] as String?,
@@ -32,7 +33,7 @@ class UserBoxAdapter extends TypeAdapter<UserBox> {
   @override
   void write(BinaryWriter writer, UserBox obj) {
     writer
-      ..writeByte(9)
+      ..writeByte(10)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
@@ -50,7 +51,9 @@ class UserBoxAdapter extends TypeAdapter<UserBox> {
       ..writeByte(7)
       ..write(obj.fontFamily)
       ..writeByte(8)
-      ..write(obj.googleDriveInfo);
+      ..write(obj.googleDriveInfo)
+      ..writeByte(9)
+      ..write(obj.todoRoutinTitle);
   }
 
   @override

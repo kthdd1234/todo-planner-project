@@ -1,9 +1,16 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:project/body/timeTable/timeTableBody.dart';
+import 'package:project/repositories/record_repository.dart';
+import 'package:project/repositories/task_repository.dart';
+import 'package:project/repositories/user_repository.dart';
 import 'package:project/util/class.dart';
 import 'package:project/util/enum.dart';
 import 'package:project/body/setting/settingBody.dart';
 import 'package:project/body/task/taskBody.dart';
+import 'package:table_calendar/table_calendar.dart';
 
 final bottomNavigationBarItemList = [
   BottomNavigationBarClass(
@@ -12,12 +19,12 @@ final bottomNavigationBarItemList = [
     label: '할 일',
     body: const TaskBody(),
   ),
-  BottomNavigationBarClass(
-    svgAsset: 'time',
-    index: 1,
-    label: '달력',
-    body: const TimeTableBody(),
-  ),
+  // BottomNavigationBarClass(
+  //   svgAsset: 'time',
+  //   index: 1,
+  //   label: '달력',
+  //   body: const TimeTableBody(),
+  // ),
   BottomNavigationBarClass(
     svgAsset: 'setting',
     index: 2,
@@ -219,9 +226,44 @@ final tTodo = TaskClass(type: 'todo', name: '할 일', dateTimeLable: '날짜');
 
 final tRoutin = TaskClass(type: 'routin', name: '루틴', dateTimeLable: '반복');
 
-List<Map<String, dynamic>> markList = [
+final markList = [
   {'svg': itemMark.O, 'name': itemMark.markName(itemMark.O)},
   {'svg': itemMark.X, 'name': itemMark.markName(itemMark.X)},
   {'svg': itemMark.M, 'name': itemMark.markName(itemMark.M)},
   {'svg': itemMark.T, 'name': itemMark.markName(itemMark.T)},
+];
+
+final dateTimeType = DateTimeTypeClass(
+  oneDay: "oneDay",
+  manyDay: "manyDay",
+  everyWeek: "everyWeek",
+  everyMonth: "everyMonth",
+);
+
+final calendarFormatInfo = {
+  CalendarFormat.week.toString(): CalendarFormat.week,
+  CalendarFormat.twoWeeks.toString(): CalendarFormat.twoWeeks,
+  CalendarFormat.month.toString(): CalendarFormat.month,
+};
+
+final availableCalendarFormats = {
+  CalendarFormat.week: '1주일',
+  CalendarFormat.twoWeeks: '2주일',
+  CalendarFormat.month: '1개월',
+};
+
+const nextCalendarFormats = {
+  CalendarFormat.week: CalendarFormat.twoWeeks,
+  CalendarFormat.twoWeeks: CalendarFormat.month,
+  CalendarFormat.month: CalendarFormat.week
+};
+
+UserRepository userRepository = UserRepository();
+RecordRepository recordRepository = RecordRepository();
+TaskRepository taskRepository = TaskRepository();
+
+final valueListenables = [
+  userRepository.userBox.listenable(),
+  recordRepository.recordBox.listenable(),
+  taskRepository.taskBox.listenable(),
 ];

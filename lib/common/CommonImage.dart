@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 import 'dart:typed_data';
 
@@ -48,23 +49,23 @@ import 'package:shimmer/shimmer.dart';
 class CommonImage extends StatelessWidget {
   CommonImage({
     super.key,
-    required this.xFile,
+    required this.uint8List,
     required this.height,
     required this.onTap,
   });
 
-  XFile xFile;
+  Uint8List uint8List;
   double height;
-  Function(XFile) onTap;
+  Function(Uint8List) onTap;
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () => onTap(xFile),
+      onTap: () => onTap(uint8List),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(5),
-        child: Image.file(
-          File(xFile.path),
+        child: Image.memory(
+          uint8List,
           fit: BoxFit.cover,
           width: double.maxFinite,
           height: height,

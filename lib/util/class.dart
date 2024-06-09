@@ -135,3 +135,31 @@ class TaskClass {
 
   String type, name, dateTimeLable;
 }
+
+class DateTimeTypeClass {
+  DateTimeTypeClass({
+    required this.oneDay,
+    required this.manyDay,
+    required this.everyWeek,
+    required this.everyMonth,
+  });
+
+  String oneDay, manyDay, everyWeek, everyMonth;
+}
+
+class DateTimeInfoClass {
+  DateTimeInfoClass({
+    required this.dateTimeType,
+    required this.dateTimeList,
+  });
+
+  String dateTimeType;
+  List<DateTime> dateTimeList;
+
+  Map<String, dynamic> toMap() {
+    return {
+      'dateTimeType': dateTimeType,
+      'dateTimeList': dateTimeList,
+    };
+  }
+}

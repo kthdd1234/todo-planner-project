@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
@@ -8,9 +9,13 @@ import 'package:project/common/CommonText.dart';
 import 'package:project/util/func.dart';
 
 class ImageSlidePage extends StatefulWidget {
-  ImageSlidePage({super.key, required this.xFileList, required this.curIndex});
+  ImageSlidePage({
+    super.key,
+    required this.uint8ListList,
+    required this.curIndex,
+  });
 
-  List<XFile> xFileList;
+  List<Uint8List> uint8ListList;
   int curIndex;
 
   @override
@@ -36,7 +41,7 @@ class _ImageSlidePageState extends State<ImageSlidePage> {
       child: Scaffold(
           appBar: AppBar(
             title: CommonText(
-              text: '${selectedIndex + 1}/${widget.xFileList.length}',
+              text: '${selectedIndex + 1}/${widget.uint8ListList.length}',
               color: Colors.white,
               fontSize: 14,
               isBold: true,
@@ -49,11 +54,11 @@ class _ImageSlidePageState extends State<ImageSlidePage> {
           ),
           backgroundColor: Colors.black,
           body: CarouselSlider(
-            items: widget.xFileList
+            items: widget.uint8ListList
                 .map(
-                  (xFile) => Padding(
+                  (uint8List) => Padding(
                     padding: const EdgeInsets.all(20),
-                    child: Center(child: Image.file(File(xFile.path))),
+                    child: Center(child: Image.memory(uint8List)),
                   ),
                 )
                 .toList(),

@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:image_picker/image_picker.dart';
@@ -12,12 +14,12 @@ import 'package:project/widget/button/ModalButton.dart';
 class ImageSelectionModalSheet extends StatelessWidget {
   ImageSelectionModalSheet({
     super.key,
-    required this.xFile,
+    required this.uint8List,
     required this.onSlide,
     required this.onRemove,
   });
 
-  XFile xFile;
+  Uint8List uint8List;
   Function() onSlide, onRemove;
 
   @override
@@ -28,7 +30,7 @@ class ImageSelectionModalSheet extends StatelessWidget {
       child: Column(
         children: [
           CommonImage(
-            xFile: xFile,
+            uint8List: uint8List,
             height: 335,
             onTap: (_) => onSlide(),
           ),

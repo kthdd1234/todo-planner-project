@@ -33,16 +33,20 @@ Color itemMarkColor({required Color groupColor, required String markType}) {
   }[markType]!;
 }
 
-ymdFormatter({required String locale, required DateTime dateTime}) {
+String ymdFormatter({required String locale, required DateTime dateTime}) {
   return DateFormat.yMd(locale).format(dateTime);
 }
 
-mdeFormatter({required String locale, required DateTime dateTime}) {
+String mdeFormatter({required String locale, required DateTime dateTime}) {
   return DateFormat.MMMEd(locale).format(dateTime);
 }
 
-ymdeFormatter({required String locale, required DateTime dateTime}) {
+String ymdeFormatter({required String locale, required DateTime dateTime}) {
   return DateFormat.yMMMEd(locale).format(dateTime);
+}
+
+String yMFormatter({required String locale, required DateTime dateTime}) {
+  return DateFormat.yMMM(locale).format(dateTime);
 }
 
 String dFormatter({required String locale, required DateTime dateTime}) {

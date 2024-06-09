@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:multi_value_listenable_builder/multi_value_listenable_builder.dart';
 import 'package:project/common/CommonAppBar.dart';
 import 'package:project/common/CommonContainer.dart';
 import 'package:project/common/CommonModalSheet.dart';
@@ -19,22 +20,15 @@ class TaskBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        CommonAppBar(),
-        Expanded(
-          child: ListView(
-            shrinkWrap: true,
-            children: [
-              MemoContainer(),
-              TaskContainer(),
-              // TaskContainer(),
-              // TaskContainer(),
-              // TaskContainer(),
-            ],
-          ),
-        ),
-      ],
+    return MultiValueListenableBuilder(
+      valueListenables: valueListenables,
+      builder: (btx, list, w) => ListView(
+        children: [
+          CommonAppBar(),
+          MemoContainer(),
+          TaskContainer(),
+        ],
+      ),
     );
   }
 }
