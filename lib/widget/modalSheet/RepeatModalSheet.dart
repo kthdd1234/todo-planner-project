@@ -17,12 +17,12 @@ import 'package:project/widget/button/RepeatButton.dart';
 class RepeatModalSheet extends StatefulWidget {
   RepeatModalSheet({
     super.key,
-    required this.initRepeatInfo,
+    required this.taskDateTimeInfo,
     required this.onCompletedEveryWeek,
     required this.onCompletedEveryMonth,
   });
 
-  RepeatInfoClass initRepeatInfo;
+  TaskDateTimeInfoClass taskDateTimeInfo;
   Function(List<WeekDayClass>) onCompletedEveryWeek;
   Function(List<MonthDayClass>) onCompletedEveryMonth;
 
@@ -31,7 +31,7 @@ class RepeatModalSheet extends StatefulWidget {
 }
 
 class _RepeatModalSheetState extends State<RepeatModalSheet> {
-  String selectedRepeatType = repeatType.everyWeek;
+  String selectedRepeatType = taskDateTimeType.everyWeek;
   List<WeekDayClass> weekDays = List.generate(
     dayLabels.length,
     (index) => WeekDayClass(
@@ -46,15 +46,15 @@ class _RepeatModalSheetState extends State<RepeatModalSheet> {
 
   @override
   void initState() {
-    List<DateTime> dateTimeList = widget.initRepeatInfo.selectedDateTimeList;
+    List<DateTime> dateTimeList = widget.taskDateTimeInfo.dateTimeList;
 
-    selectedRepeatType = widget.initRepeatInfo.type;
+    selectedRepeatType = widget.taskDateTimeInfo.type;
 
-    if (selectedRepeatType == repeatType.everyWeek) {
+    if (selectedRepeatType == taskDateTimeType.everyWeek) {
       dateTimeList.forEach(
         (dateTime) => weekDays[dateTime.weekday - 1].isVisible = true,
       );
-    } else if (selectedRepeatType == repeatType.everyMonth) {
+    } else if (selectedRepeatType == taskDateTimeType.everyMonth) {
       dateTimeList
           .forEach((dateTime) => monthDays[dateTime.day - 1].isVisible = true);
     }
@@ -68,9 +68,9 @@ class _RepeatModalSheetState extends State<RepeatModalSheet> {
       DateTime now = DateTime.now();
 
       setState(() {
-        if (type == repeatType.everyWeek && isEmptyWeekDays(weekDays)) {
+        if (type == taskDateTimeType.everyWeek && isEmptyWeekDays(weekDays)) {
           weekDays[now.weekday - 1].isVisible = true;
-        } else if (type == repeatType.everyMonth &&
+        } else if (type == taskDateTimeType.everyMonth &&
             isEmptyMonthDays(monthDays)) {
           monthDays[now.day - 1].isVisible = true;
         }
@@ -122,11 +122,11 @@ class _RepeatModalSheetState extends State<RepeatModalSheet> {
     }
 
     Widget child = {
-      repeatType.everyWeek: EveryWeekRepeatDay(
+      taskDateTimeType.everyWeek: EveryWeekRepeatDay(
         weekDays: weekDays,
         onWeekDay: onWeekDay,
       ),
-      repeatType.everyMonth: EveryMonthRepeatDay(
+      taskDateTimeType.everyMonth: EveryMonthRepeatDay(
         monthDays: monthDays,
         onMonthDay: onMonthDay,
       ),
@@ -135,7 +135,7 @@ class _RepeatModalSheetState extends State<RepeatModalSheet> {
     return CommonModalSheet(
       title: '반복',
       isBack: true,
-      height: selectedRepeatType == repeatType.everyWeek ? 350 : 560,
+      height: selectedRepeatType == taskDateTimeType.everyWeek ? 350 : 560,
       child: Column(
         children: [
           Expanded(
@@ -158,7 +158,7 @@ class _RepeatModalSheetState extends State<RepeatModalSheet> {
             outerPadding: const EdgeInsets.only(top: 15),
             verticalPadding: 15,
             borderRadius: 100,
-            onTap: () => selectedRepeatType == repeatType.everyWeek
+            onTap: () => selectedRepeatType == taskDateTimeType.everyWeek
                 ? widget.onCompletedEveryWeek(weekDays)
                 : widget.onCompletedEveryMonth(monthDays),
           )
@@ -186,14 +186,14 @@ class RepeatButtonContainer extends StatelessWidget {
         children: [
           RepeatButton(
             text: '매주',
-            type: repeatType.everyWeek,
+            type: taskDateTimeType.everyWeek,
             selectedRepeatType: selectedRepeatType,
             onTap: onTap,
           ),
           CommonSpace(width: 5),
           RepeatButton(
             text: '매달',
-            type: repeatType.everyMonth,
+            type: taskDateTimeType.everyMonth,
             selectedRepeatType: selectedRepeatType,
             onTap: onTap,
           ),

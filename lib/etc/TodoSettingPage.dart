@@ -66,7 +66,7 @@
 //   @override
 //   Widget build(BuildContext context) {
 //     CategoryProvider category = context.watch<CategoryProvider>();
-//     ColorClass color = getColor('빨간색');
+//     ColorClass color = getColorClass('빨간색');
 //     bool isHighlighter = context.watch<HighlighterProvider>().isHighlighter;
 //     bool isNotEmpty = todoController.text != '';
 

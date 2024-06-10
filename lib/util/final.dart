@@ -214,15 +214,27 @@ final colorList = [
   blueGrey
 ];
 
-final repeatType = RepeatTypeClass(
+final taskDateTimeType = TaskDateTimeTypeClass(
+  selection: 'selection',
   everyWeek: 'everyWeek',
   everyMonth: 'everyMonth',
-  everyYear: 'everyYear',
 );
 
-final tTodo = TaskClass(type: 'todo', name: '할 일', dateTimeLable: '날짜');
+final tTodo = TaskClass(
+  type: 'todo',
+  name: '할 일',
+  dateTimeType: taskDateTimeType.selection,
+  dateTimeLabel: '날짜',
+  dateTimeList: [DateTime.now()],
+);
 
-final tRoutin = TaskClass(type: 'routin', name: '루틴', dateTimeLable: '반복');
+final tRoutin = TaskClass(
+  type: 'routin',
+  name: '루틴',
+  dateTimeType: taskDateTimeType.everyWeek,
+  dateTimeLabel: '반복',
+  dateTimeList: [DateTime.now()],
+);
 
 final markList = [
   {'svg': itemMark.O, 'name': itemMark.markName(itemMark.O)},
@@ -265,14 +277,3 @@ final valueListenables = [
   recordRepository.recordBox.listenable(),
   taskRepository.taskBox.listenable(),
 ];
-
-int recordKey(DateTime? dateTime) {
-  if (dateTime == null) {
-    return 0;
-  }
-
-  DateFormat formatter = DateFormat('yyyyMMdd');
-  String strDateTime = formatter.format(dateTime);
-
-  return int.parse(strDateTime);
-}

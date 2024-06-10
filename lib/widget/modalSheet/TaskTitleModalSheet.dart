@@ -67,9 +67,9 @@ class _TaskTitleModalSheetState extends State<TaskTitleModalSheet> {
                 title: '색상',
                 onTap: onColor,
                 child: CommonTag(
-                  text: getColor(selectedColorName).colorName,
-                  textColor: getColor(selectedColorName).original,
-                  bgColor: getColor(selectedColorName).s50,
+                  text: getColorClass(selectedColorName).colorName,
+                  textColor: getColorClass(selectedColorName).original,
+                  bgColor: getColorClass(selectedColorName).s50,
                   onTap: onColor,
                 ),
               ),

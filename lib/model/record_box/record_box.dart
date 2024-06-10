@@ -8,7 +8,7 @@ class RecordBox extends HiveObject {
   RecordBox({
     required this.createDateTime,
     this.taskOrderList,
-    this.taskInfo,
+    this.taskItemList,
     this.memo,
     this.imageList,
   });
@@ -17,7 +17,8 @@ class RecordBox extends HiveObject {
   DateTime createDateTime;
 
   @HiveField(1)
-  Map<String, dynamic>? taskInfo;
+  List<Map<String, dynamic>>? taskItemList;
+  // [{ id: 'id', mark: 'mark', memo: 'memo' }]
 
   @HiveField(2)
   String? memo;

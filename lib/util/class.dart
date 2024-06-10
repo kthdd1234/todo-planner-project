@@ -77,21 +77,21 @@ class TodoClass {
   bool? isHighlighter;
 }
 
-class RepeatInfoClass {
-  RepeatInfoClass({required this.type, required this.selectedDateTimeList});
+class TaskDateTimeInfoClass {
+  TaskDateTimeInfoClass({required this.type, required this.dateTimeList});
 
   String type;
-  List<DateTime> selectedDateTimeList;
+  List<DateTime> dateTimeList;
 }
 
-class RepeatTypeClass {
-  RepeatTypeClass({
+class TaskDateTimeTypeClass {
+  TaskDateTimeTypeClass({
+    required this.selection,
     required this.everyWeek,
     required this.everyMonth,
-    required this.everyYear,
   });
 
-  String everyWeek, everyMonth, everyYear;
+  String selection, everyWeek, everyMonth;
 }
 
 class WeekDayClass {
@@ -130,10 +130,13 @@ class TaskClass {
   TaskClass({
     required this.type,
     required this.name,
-    required this.dateTimeLable,
+    required this.dateTimeType,
+    required this.dateTimeList,
+    required this.dateTimeLabel,
   });
 
-  String type, name, dateTimeLable;
+  String type, name, dateTimeLabel, dateTimeType;
+  List<DateTime> dateTimeList;
 }
 
 class DateTimeTypeClass {
@@ -162,4 +165,22 @@ class DateTimeInfoClass {
       'dateTimeList': dateTimeList,
     };
   }
+}
+
+class TaskItemClass {
+  TaskItemClass({
+    required this.id,
+    required this.name,
+    required this.mark,
+    required this.memo,
+    required this.isHighlight,
+    required this.task,
+    required this.color,
+  });
+
+  String id, name;
+  String? mark, memo;
+  bool? isHighlight;
+  TaskClass task;
+  ColorClass color;
 }

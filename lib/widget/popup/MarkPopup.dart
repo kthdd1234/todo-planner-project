@@ -128,7 +128,7 @@ class MarkItem extends StatelessWidget {
           Container(
             padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 75),
             decoration: BoxDecoration(
-              color: isSelected ? getColor(colorName).s50 : null,
+              color: isSelected ? getColorClass(colorName).s50 : null,
               borderRadius: BorderRadius.circular(7),
             ),
             child: Row(

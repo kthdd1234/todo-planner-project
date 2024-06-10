@@ -19,7 +19,7 @@ class UserBoxAdapter extends TypeAdapter<UserBox> {
     return UserBox(
       id: fields[0] as String,
       createDateTime: fields[1] as DateTime,
-      todoRoutinTitle: fields[9] as String,
+      taskTitle: fields[9] as String,
       alarmInfo: (fields[2] as Map?)?.cast<String, dynamic>(),
       passwords: fields[3] as String?,
       calendarFormat: fields[4] as String?,
@@ -53,7 +53,7 @@ class UserBoxAdapter extends TypeAdapter<UserBox> {
       ..writeByte(8)
       ..write(obj.googleDriveInfo)
       ..writeByte(9)
-      ..write(obj.todoRoutinTitle);
+      ..write(obj.taskTitle);
   }
 
   @override

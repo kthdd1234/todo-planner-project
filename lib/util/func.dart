@@ -57,8 +57,12 @@ String eFormatter({required String locale, required DateTime dateTime}) {
   return DateFormat.E(locale).format(dateTime);
 }
 
-ColorClass getColor(String name) {
+ColorClass getColorClass(String name) {
   return colorList.firstWhere((info) => info.colorName == name);
+}
+
+TaskClass getTaskClass(String type) {
+  return {'todo': tTodo, 'routin': tRoutin}[type]!;
 }
 
 navigatorPop(context) {
@@ -93,4 +97,19 @@ bool isEmptyWeekDays(List<WeekDayClass> weekDays) {
 
 bool isEmptyMonthDays(List<MonthDayClass> monthDays) {
   return monthDays.any((monthDay) => monthDay.isVisible) == false;
+}
+
+int dateTimeKey(DateTime? dateTime) {
+  if (dateTime == null) {
+    return 0;
+  }
+
+  DateFormat formatter = DateFormat('yyyyMMdd');
+  String strDateTime = formatter.format(dateTime);
+
+  return int.parse(strDateTime);
+}
+
+String uuid() {
+  return DateTime.now().microsecondsSinceEpoch.toString();
 }

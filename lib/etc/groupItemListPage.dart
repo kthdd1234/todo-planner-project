@@ -21,7 +21,7 @@
 //   @override
 //   Widget build(BuildContext context) {
 //     CategoryProvider group = context.watch<CategoryProvider>();
-//     ColorClass color = getColor(group.colorName);
+//     ColorClass color = getColorClass(group.colorName);
 
 //     onAdd() {
 //       Navigator.of(context).push(

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:project/common/CommonText.dart';
+import 'package:project/model/record_box/record_box.dart';
 import 'package:project/page/MemoSettingPage.dart';
 import 'package:project/provider/selectedDateTimeProvider.dart';
 import 'package:project/util/class.dart';
@@ -17,29 +18,31 @@ class SpeedDialButton extends StatefulWidget {
 }
 
 class _SpeedDialButtonState extends State<SpeedDialButton> {
-  onAddTodo(initDateTime) {
+  onAddTodo(DateTime initDateTime) {
+    tTodo.dateTimeList = [initDateTime];
+
     showModalBottomSheet(
       isScrollControlled: true,
       context: context,
       builder: (context) => TaskSettingModalSheet(
-        task: tTodo,
-        initDateTime: initDateTime,
+        initTask: tTodo,
       ),
     );
   }
 
-  onAddRoutin(initDateTime) {
+  onAddRoutin(DateTime initDateTime) {
+    tRoutin.dateTimeList = [initDateTime];
+
     showModalBottomSheet(
       isScrollControlled: true,
       context: context,
       builder: (context) => TaskSettingModalSheet(
-        task: tRoutin,
-        initDateTime: initDateTime,
+        initTask: tRoutin,
       ),
     );
   }
 
-  onAddMemo(initDateTime) {
+  onAddMemo(RecordBox? record, initDateTime) {
     Navigator.push(
       context,
       MaterialPageRoute<void>(
@@ -72,6 +75,8 @@ class _SpeedDialButtonState extends State<SpeedDialButton> {
   Widget build(BuildContext context) {
     DateTime selectedDateTime =
         context.watch<SelectedDateTimeProvider>().seletedDateTime;
+    RecordBox? record =
+        recordRepository.recordBox.get(dateTimeKey(selectedDateTime));
 
     return SpeedDial(
       icon: Icons.add,
@@ -104,7 +109,7 @@ class _SpeedDialButtonState extends State<SpeedDialButton> {
           svg: 'pencil',
           lable: '메모 추가',
           color: orange,
-          onTap: () => onAddMemo(selectedDateTime),
+          onTap: () => onAddMemo(record, selectedDateTime),
         ),
       ],
     );

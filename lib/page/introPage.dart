@@ -24,7 +24,7 @@ class _IntroPageState extends State<IntroPage> {
     String userId = UniqueKey().hashCode.toString();
     String fontFamily = 'IM_Hyemin';
     String calendarFormat = CalendarFormat.week.toString();
-    String todoRoutinTitle = '할 일, 루틴 리스트';
+    String taskTitle = '할 일, 루틴 리스트';
 
     UserRepository().updateUser(
       UserBox(
@@ -33,7 +33,7 @@ class _IntroPageState extends State<IntroPage> {
         calendarFormat: calendarFormat,
         language: locale,
         fontFamily: fontFamily,
-        todoRoutinTitle: todoRoutinTitle,
+        taskTitle: taskTitle,
       ),
     );
 

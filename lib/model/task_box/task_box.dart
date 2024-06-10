@@ -9,9 +9,9 @@ class TaskBox extends HiveObject {
     required this.name,
     required this.taskType,
     required this.colorName,
-    required this.dateTimeInfo,
+    required this.dateTimeType,
+    required this.dateTimeList,
     this.isHighlighter,
-    this.memo,
   });
 
   @HiveField(0)
@@ -27,11 +27,11 @@ class TaskBox extends HiveObject {
   String colorName;
 
   @HiveField(5)
-  Map<String, dynamic> dateTimeInfo;
+  String dateTimeType;
 
   @HiveField(6)
-  bool? isHighlighter;
+  List<DateTime> dateTimeList;
 
   @HiveField(7)
-  String? memo;
+  bool? isHighlighter;
 }

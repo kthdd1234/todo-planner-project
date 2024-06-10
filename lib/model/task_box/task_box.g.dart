@@ -21,9 +21,9 @@ class TaskBoxAdapter extends TypeAdapter<TaskBox> {
       name: fields[1] as String,
       taskType: fields[2] as String,
       colorName: fields[4] as String,
-      dateTimeInfo: (fields[5] as Map).cast<String, dynamic>(),
-      isHighlighter: fields[6] as bool?,
-      memo: fields[7] as String?,
+      dateTimeType: fields[5] as String,
+      dateTimeList: (fields[6] as List).cast<DateTime>(),
+      isHighlighter: fields[7] as bool?,
     );
   }
 
@@ -40,11 +40,11 @@ class TaskBoxAdapter extends TypeAdapter<TaskBox> {
       ..writeByte(4)
       ..write(obj.colorName)
       ..writeByte(5)
-      ..write(obj.dateTimeInfo)
+      ..write(obj.dateTimeType)
       ..writeByte(6)
-      ..write(obj.isHighlighter)
+      ..write(obj.dateTimeList)
       ..writeByte(7)
-      ..write(obj.memo);
+      ..write(obj.isHighlighter);
   }
 
   @override

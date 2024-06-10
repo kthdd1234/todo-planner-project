@@ -1,9 +1,12 @@
 import 'dart:developer';
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
 import 'package:multi_value_listenable_builder/multi_value_listenable_builder.dart';
 import 'package:project/common/CommonAppBar.dart';
 import 'package:project/common/CommonContainer.dart';
+import 'package:project/common/CommonEmpty.dart';
 import 'package:project/common/CommonModalSheet.dart';
 import 'package:project/common/CommonNull.dart';
 import 'package:project/common/CommonSpace.dart';
@@ -11,12 +14,15 @@ import 'package:project/common/CommonSvgButton.dart';
 import 'package:project/common/CommonTag.dart';
 import 'package:project/common/CommonText.dart';
 import 'package:project/model/record_box/record_box.dart';
+import 'package:project/model/task_box/task_box.dart';
 import 'package:project/model/user_box/user_box.dart';
 import 'package:project/provider/selectedDateTimeProvider.dart';
 import 'package:project/util/class.dart';
 import 'package:project/util/constants.dart';
 import 'package:project/util/final.dart';
+import 'package:project/util/func.dart';
 import 'package:project/widget/button/ModalButton.dart';
+import 'package:project/widget/modalSheet/TaskSettingModalSheet.dart';
 import 'package:project/widget/modalSheet/TaskTitleModalSheet.dart';
 import 'package:project/widget/popup/MarkPopup.dart';
 import 'package:provider/provider.dart';
@@ -29,7 +35,7 @@ class TaskBody extends StatelessWidget {
     DateTime selectedDateTime =
         context.watch<SelectedDateTimeProvider>().seletedDateTime;
     RecordBox? record =
-        recordRepository.recordBox.get(recordKey(selectedDateTime));
+        recordRepository.recordBox.get(dateTimeKey(selectedDateTime));
 
     return MultiValueListenableBuilder(
       valueListenables: valueListenables,
@@ -37,7 +43,7 @@ class TaskBody extends StatelessWidget {
         children: [
           CommonAppBar(),
           MemoContainer(record: record),
-          TaskContainer(record: record),
+          TaskContainer(selectedDateTime: selectedDateTime, record: record),
         ],
       ),
     );
@@ -74,8 +80,13 @@ class MemoContainer extends StatelessWidget {
 }
 
 class TaskContainer extends StatefulWidget {
-  TaskContainer({super.key, required this.record});
+  TaskContainer({
+    super.key,
+    required this.selectedDateTime,
+    required this.record,
+  });
 
+  DateTime selectedDateTime;
   RecordBox? record;
 
   @override
@@ -83,6 +94,9 @@ class TaskContainer extends StatefulWidget {
 }
 
 class _TaskContainerState extends State<TaskContainer> {
+  UserBox user = userRepository.user;
+  Box<TaskBox> taskBox = taskRepository.taskBox;
+
   onTitle() {
     showModalBottomSheet(
       isScrollControlled: true,
@@ -93,7 +107,54 @@ class _TaskContainerState extends State<TaskContainer> {
 
   @override
   Widget build(BuildContext context) {
-    //
+    String locale = context.locale.toString();
+    List<TaskBox> taskFilterList = taskBox.values.toList().where((task) {
+      List<DateTime> dateTimeList = task.dateTimeList;
+
+      if (task.taskType == tTodo.type) {
+        return dateTimeList.any((dateTime) =>
+            dateTimeKey(dateTime) == dateTimeKey(widget.selectedDateTime));
+      } else if (task.taskType == tRoutin.type) {
+        return dateTimeList.any((dateTime) {
+          if (task.dateTimeType == taskDateTimeType.everyWeek) {
+            return eFormatter(locale: locale, dateTime: dateTime) ==
+                eFormatter(
+                  locale: locale,
+                  dateTime: widget.selectedDateTime,
+                );
+          } else if (task.dateTimeType == taskDateTimeType.everyMonth) {
+            return dateTime.day == widget.selectedDateTime.day;
+          }
+
+          return false;
+        });
+      }
+
+      return false;
+    }).toList();
+
+    List<TaskItem> taskItemList = taskFilterList
+        .map(
+          (taskBox) => TaskItem(
+            taskBox: taskBox,
+            taskItem: TaskItemClass(
+              id: taskBox.id,
+              name: taskBox.name,
+              mark: itemMark.E,
+              memo: null,
+              isHighlight: taskBox.isHighlighter == true,
+              task: TaskClass(
+                type: taskBox.taskType,
+                name: getTaskClass(taskBox.taskType).name,
+                dateTimeType: taskBox.dateTimeType,
+                dateTimeList: taskBox.dateTimeList,
+                dateTimeLabel: getTaskClass(taskBox.taskType).dateTimeLabel,
+              ),
+              color: getColorClass(taskBox.colorName),
+            ),
+          ),
+        )
+        .toList();
 
     return CommonContainer(
       outerPadding: 7,
@@ -102,51 +163,19 @@ class _TaskContainerState extends State<TaskContainer> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           CommonTag(
-            text: '할 일, 루틴 리스트',
+            text: user.taskTitle,
             textColor: indigo.original,
             bgColor: indigo.s50,
+            innerPadding: const EdgeInsets.only(bottom: 5),
             onTap: onTitle,
           ),
-          CommonSpace(height: 5),
-          TaskItem(
-            id: '1',
-            name: '김동욱 연필통 모의고사 오답노트',
-            markType: itemMark.O,
-            memo: '오답노트 3번씩 반복해서 쓰기!',
-            color: blue,
-            task: tRoutin,
-          ),
-          TaskItem(
-            id: '2',
-            name: '비문학 독해 205P 문풀 채/오',
-            markType: itemMark.X,
-            color: red,
-            isHighlight: true,
-            task: tRoutin,
-          ),
-          TaskItem(
-            id: '3',
-            name: '문법 49P 문풀 채/오',
-            markType: itemMark.M,
-            isHighlight: true,
-            color: orange,
-            task: tTodo,
-          ),
-          TaskItem(
-            id: '4',
-            name: '비문학 독해 88p ~ 99p',
-            markType: itemMark.T,
-            memo: '1H 20M',
-            color: purple,
-            task: tTodo,
-          ),
-          TaskItem(
-            id: '4',
-            name: '모의고사 문제풀이',
-            markType: itemMark.E,
-            color: teal,
-            task: tRoutin,
-          ),
+          taskItemList.isNotEmpty
+              ? Column(children: taskItemList)
+              : CommonEmpty(
+                  height: 150,
+                  line_1: '추가된 할 일, 루틴이 없어요.',
+                  line_2: '+ 버튼을 눌러 추가해보세요.',
+                ),
         ],
       ),
     );
@@ -154,22 +183,10 @@ class _TaskContainerState extends State<TaskContainer> {
 }
 
 class TaskItem extends StatefulWidget {
-  TaskItem({
-    super.key,
-    required this.id,
-    required this.name,
-    required this.color,
-    required this.task,
-    this.markType,
-    this.isHighlight,
-    this.memo,
-  });
+  TaskItem({super.key, required this.taskBox, required this.taskItem});
 
-  String id, name;
-  TaskClass task;
-  String? memo, markType;
-  bool? isHighlight;
-  ColorClass color;
+  TaskBox taskBox;
+  TaskItemClass taskItem;
 
   @override
   State<TaskItem> createState() => _TaskItemState();
@@ -208,7 +225,7 @@ class _TaskItemState extends State<TaskItem> {
       isScrollControlled: true,
       context: context,
       builder: (context) => CommonModalSheet(
-        title: widget.name,
+        title: widget.taskItem.name,
         height: 200,
         child: Row(
           children: [
@@ -217,7 +234,15 @@ class _TaskItemState extends State<TaskItem> {
               actionText: '수정하기',
               color: textColor,
               onTap: () {
-                //
+                navigatorPop(context);
+                showModalBottomSheet(
+                  isScrollControlled: true,
+                  context: context,
+                  builder: (context) => TaskSettingModalSheet(
+                    initTask: widget.taskItem.task,
+                    taskBox: widget.taskBox,
+                  ),
+                );
               },
             ),
             CommonSpace(width: 5),
@@ -242,7 +267,7 @@ class _TaskItemState extends State<TaskItem> {
       child: IntrinsicHeight(
         child: Row(
           children: [
-            VerticalBorder(color: widget.color.s50),
+            VerticalBorder(color: widget.taskItem.color.s50),
             Expanded(
               flex: 1,
               child: InkWell(
@@ -251,14 +276,15 @@ class _TaskItemState extends State<TaskItem> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     CommonText(
-                      text: widget.name,
+                      text: widget.taskItem.name,
                       textAlign: TextAlign.start,
-                      highlightColor:
-                          widget.isHighlight == true ? widget.color.s50 : null,
+                      highlightColor: widget.taskItem.isHighlight == true
+                          ? widget.taskItem.color.s50
+                          : null,
                     ),
                     CommonSpace(height: 5),
                     CommonText(
-                      text: widget.task.name,
+                      text: widget.taskItem.task.name,
                       color: grey.original,
                       fontSize: 12,
                       overflow: TextOverflow.ellipsis,
@@ -269,9 +295,9 @@ class _TaskItemState extends State<TaskItem> {
               ),
             ),
             wAction(
-              svgName: 'mark-${widget.markType}',
+              svgName: 'mark-${widget.taskItem.mark}',
               width: 25,
-              actionColor: widget.color.s100,
+              actionColor: widget.taskItem.color.s100,
               onTap: onMark,
             ),
           ],

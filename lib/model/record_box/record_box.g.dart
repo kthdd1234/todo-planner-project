@@ -19,7 +19,9 @@ class RecordBoxAdapter extends TypeAdapter<RecordBox> {
     return RecordBox(
       createDateTime: fields[0] as DateTime,
       taskOrderList: (fields[4] as List?)?.cast<String>(),
-      taskInfo: (fields[1] as Map?)?.cast<String, dynamic>(),
+      taskItemList: (fields[1] as List?)
+          ?.map((dynamic e) => (e as Map).cast<String, dynamic>())
+          ?.toList(),
       memo: fields[2] as String?,
       imageList: (fields[3] as List?)?.cast<Uint8List>(),
     );
@@ -32,7 +34,7 @@ class RecordBoxAdapter extends TypeAdapter<RecordBox> {
       ..writeByte(0)
       ..write(obj.createDateTime)
       ..writeByte(1)
-      ..write(obj.taskInfo)
+      ..write(obj.taskItemList)
       ..writeByte(2)
       ..write(obj.memo)
       ..writeByte(3)
