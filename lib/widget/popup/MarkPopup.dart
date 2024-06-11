@@ -1,85 +1,197 @@
+// ignore_for_file: use_build_context_synchronously
+
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:project/common/CommonContainer.dart';
 import 'package:project/common/CommonDivider.dart';
 import 'package:project/common/CommonOutlineInputField.dart';
 import 'package:project/common/CommonPopup.dart';
 import 'package:project/common/CommonSpace.dart';
 import 'package:project/common/CommonText.dart';
+import 'package:project/model/record_box/record_box.dart';
+import 'package:project/model/task_box/task_box.dart';
+import 'package:project/util/class.dart';
 import 'package:project/util/constants.dart';
 import 'package:project/util/final.dart';
 import 'package:project/util/func.dart';
-import 'package:project/widget/modalSheet/MemoModalSheet.dart';
+import 'package:project/widget/popup/AlertPopup.dart';
 
 class MarkPopup extends StatefulWidget {
-  MarkPopup({super.key, required this.taskId});
+  MarkPopup({
+    super.key,
+    required this.taskBox,
+    required this.recordBox,
+    required this.selectedDateTime,
+  });
 
-  String taskId;
+  TaskBox taskBox;
+  RecordBox? recordBox;
+  DateTime selectedDateTime;
 
   @override
   State<MarkPopup> createState() => _MarkPopupState();
 }
 
 class _MarkPopupState extends State<MarkPopup> {
-  TextEditingController controller = TextEditingController();
+  String selectedMark = '';
   bool isShowInput = true;
   bool isAutoFocus = false;
+  TextEditingController memoController = TextEditingController();
 
   @override
   void initState() {
-    controller.text =
-        '가나다라마바사아차카바아랴하니야미끼끼립쭝123123123아브라카다브라어ㅣ마너아ㅣ머이ㅏㅁ너ㅏㅣ엄나ㅣ어ㅣㅏㅁ임너이ㅏ머엄나ㅣ엄나ㅣ어ㅏㅣㅁ너아ㅣㅁ너아ㅣ머ㅏㅣ어마ㅣ어ㅏㅣ머아ㅣㅁ너아ㅣㅁ너아ㅣ머나ㅣ엄나ㅣ어ㅏㅣㅁ너아ㅣㅁ너아ㅣㅓㅂ젇ㅂ재댜ㅐㅔㅈ뱌대ㅔ뱌재ㅔ댜대ㅔ뱌재ㅔㄷ뱌ㅐㅔㅑㅔ';
+    RecordBox? recordBox = widget.recordBox;
+
+    if (recordBox != null) {
+      if (recordBox.taskMarkList != null) {
+        for (var element in recordBox.taskMarkList!) {
+          if (element['id'] == widget.taskBox.id) {
+            selectedMark = element['mark'] ?? '';
+            memoController.text = element['memo'] ?? '';
+
+            if (element['memo'] != null) isShowInput = false;
+            break;
+          }
+        }
+      }
+    }
 
     super.initState();
   }
 
-  onMark() {
+  onMark(String mark) async {
+    String taskId = widget.taskBox.id;
+    Map<String, dynamic> taskMark =
+        TaskMarkClass(id: taskId, mark: mark).toMap();
+
+    if (memoController.text != '') {
+      taskMark['memo'] = memoController.text;
+    }
+
+    if (widget.recordBox == null) {
+      recordRepository.updateRecord(
+        key: dateTimeKey(widget.selectedDateTime),
+        record: RecordBox(
+          createDateTime: widget.selectedDateTime,
+          taskMarkList: [taskMark],
+        ),
+      );
+    } else if (widget.recordBox!.taskMarkList == null) {
+      widget.recordBox!.taskMarkList = [taskMark];
+    } else {
+      int idx = widget.recordBox!.taskMarkList!.indexWhere(
+        (taksMark) => taksMark['id'] == taskId,
+      );
+
+      idx == -1
+          ? widget.recordBox!.taskMarkList!.add(taskMark)
+          : widget.recordBox!.taskMarkList![idx] = taskMark;
+    }
+
+    await widget.recordBox?.save();
     navigatorPop(context);
   }
 
-  onMemo() {
-    showModalBottomSheet(
-      context: context,
-      builder: (context) => MemoModalSheet(
-        onEdit: () {
-          setState(() {
-            isShowInput = true;
-            isAutoFocus = true;
-          });
-          navigatorPop(context);
-        },
-        onRemove: () {
-          setState(() {
-            isShowInput = true;
-            isAutoFocus = false;
-          });
-          navigatorPop(context);
-        },
+  onEditingComplete() async {
+    String taskId = widget.taskBox.id;
+    Map<String, dynamic> taskMark =
+        TaskMarkClass(id: taskId, memo: memoController.text).toMap();
+
+    if (memoController.text == '') {
+      showDialog(
+        context: context,
+        builder: (context) => AlertPopup(
+          desc: '한 글자 이상 입력해주세요',
+          buttonText: '확인',
+          height: 155,
+          onTap: () => navigatorPop(context),
+        ),
+      );
+    } else {
+      if (widget.recordBox == null) {
+        recordRepository.updateRecord(
+          key: dateTimeKey(widget.selectedDateTime),
+          record: RecordBox(
+            createDateTime: widget.selectedDateTime,
+            taskMarkList: [taskMark],
+          ),
+        );
+      } else if (widget.recordBox!.taskMarkList == null) {
+        widget.recordBox!.taskMarkList = [taskMark];
+      } else {
+        int idx = widget.recordBox!.taskMarkList!.indexWhere(
+          (taksMark) => taksMark['id'] == taskId,
+        );
+
+        if (selectedMark != '') {
+          taskMark['mark'] = selectedMark;
+        }
+
+        idx == -1
+            ? widget.recordBox!.taskMarkList!.add(taskMark)
+            : widget.recordBox!.taskMarkList![idx] = taskMark;
+      }
+    }
+
+    await widget.recordBox?.save();
+    setState(() => isShowInput = false);
+  }
+
+  wText(String text, Function()? onTap) {
+    return InkWell(
+      onTap: onTap,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 2.5),
+        child: CommonText(
+          text: text,
+          color: Colors.grey,
+          fontSize: 11,
+        ),
       ),
     );
   }
 
-  onEditingComplete() {
-    //
+  onEditMemo() {
+    isShowInput = true;
+    isAutoFocus = true;
+
+    setState(() {});
+  }
+
+  onRemoveMemo() async {
+    String taskId = widget.taskBox.id;
+    int idx = widget.recordBox!.taskMarkList!.indexWhere(
+      (element) => element['id'] == taskId,
+    );
+
+    widget.recordBox!.taskMarkList![idx]['memo'] = null;
+    memoController.text = '';
+    await widget.recordBox!.save();
+
+    isShowInput = true;
+    isAutoFocus = false;
+
+    setState(() {});
   }
 
   @override
   Widget build(BuildContext context) {
     return CommonPopup(
-      insetPaddingHorizontal: 50,
-      height: 375,
+      insetPaddingHorizontal: 40,
+      height: 380,
       child: CommonContainer(
-        innerPadding: const EdgeInsets.symmetric(horizontal: 20),
+        innerPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
         child: ListView(
           children: [
             Column(
               children: markList
                   .map((info) => MarkItem(
-                        isSelected: info['svg'] == 'O',
-                        svg: info['svg'],
+                        isSelected: info['mark'] == selectedMark,
+                        mark: info['mark'],
                         name: info['name'],
-                        colorName: '파란색',
-                        onTap: () => onMark(),
+                        colorName: widget.taskBox.colorName,
+                        onTap: onMark,
                       ))
                   .toList(),
             ),
@@ -89,12 +201,28 @@ class _MarkPopupState extends State<MarkPopup> {
                   ? CommonOutlineInputField(
                       autofocus: isAutoFocus,
                       hintText: '메모 입력하기',
-                      controller: controller,
+                      controller: memoController,
                       onEditingComplete: onEditingComplete,
+                      onSuffixIcon: onEditingComplete,
+                      onChanged: (_) => setState(() {}),
                     )
-                  : CommonText(
-                      text: controller.text,
-                      onTap: onMemo,
+                  : Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        CommonText(
+                          text: memoController.text,
+                          textAlign: TextAlign.start,
+                        ),
+                        CommonSpace(height: 5),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            wText('수정', onEditMemo),
+                            wText('|', null),
+                            wText('삭제', onRemoveMemo)
+                          ],
+                        )
+                      ],
                     ),
             ),
           ],
@@ -107,26 +235,26 @@ class _MarkPopupState extends State<MarkPopup> {
 class MarkItem extends StatelessWidget {
   MarkItem({
     super.key,
-    required this.svg,
+    required this.mark,
     required this.name,
     required this.colorName,
     required this.isSelected,
     required this.onTap,
   });
 
-  String svg, name, colorName;
+  String mark, name, colorName;
   bool isSelected;
-  Function() onTap;
+  Function(String) onTap;
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: onTap,
+      onTap: () => onTap(mark),
       child: Column(
         children: [
           CommonSpace(height: 10),
           Container(
-            padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 75),
+            padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 85),
             decoration: BoxDecoration(
               color: isSelected ? getColorClass(colorName).s50 : null,
               borderRadius: BorderRadius.circular(7),
@@ -136,9 +264,9 @@ class MarkItem extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.only(top: 3),
                   child: svgAsset(
-                    name: 'mark-$svg',
+                    name: 'mark-$mark',
                     width: 15,
-                    color: blue.s200,
+                    color: getColorClass(colorName).s200,
                   ),
                 ),
                 CommonSpace(width: 10),

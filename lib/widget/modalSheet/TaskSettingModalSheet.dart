@@ -222,7 +222,7 @@ class _TaskSettingModalSheetState extends State<TaskSettingModalSheet> {
                 title: '형광색',
                 onTap: () => onHighlighter(!isHighlighter),
                 child: CupertinoSwitch(
-                  activeColor: indigo.s300,
+                  activeColor: getColorClass(selectedColorName).s300,
                   value: isHighlighter,
                   onChanged: onHighlighter,
                 ),
@@ -258,7 +258,9 @@ class _TaskSettingModalSheetState extends State<TaskSettingModalSheet> {
               CommonOutlineInputField(
                 hintText: '할 일을 입력해주세요',
                 controller: controller,
+                onSuffixIcon: onEditingComplete,
                 onEditingComplete: onEditingComplete,
+                onChanged: (_) => setState(() {}),
               )
             ],
           ),

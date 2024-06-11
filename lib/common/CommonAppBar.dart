@@ -1,16 +1,19 @@
 // ignore_for_file: use_build_context_synchronously
-
 import 'dart:developer';
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:project/common/CommonCircle.dart';
 import 'package:project/common/CommonNull.dart';
+import 'package:project/common/CommonSpace.dart';
 import 'package:project/common/CommonSvgText.dart';
 import 'package:project/common/CommonTag.dart';
+import 'package:project/model/task_box/task_box.dart';
 import 'package:project/model/user_box/user_box.dart';
 import 'package:project/provider/selectedDateTimeProvider.dart';
 import 'package:project/provider/titleDateTimeProvider.dart';
 import 'package:project/repositories/user_repository.dart';
+import 'package:project/util/class.dart';
 import 'package:project/util/enum.dart';
 import 'package:project/util/final.dart';
 import 'package:project/util/func.dart';
@@ -149,8 +152,46 @@ class _AppBarCalendarState extends State<AppBarCalendar> {
         .changeTitleDateTime(dateTime: dateTime);
   }
 
-  Widget? stickerBuilder(BuildContext ctx, DateTime dt, List<dynamic> _) {
-    return CommonNull();
+  Widget? stickerBuilder(btx, calendarDateTime, _) {
+    List<ColorClass?> colorList = [];
+    List<TaskBox> taskList = getTaskList(
+      locale: context.locale.toString(),
+      taskList: taskRepository.taskBox.values.toList(),
+      targetDateTime: calendarDateTime,
+    );
+
+    for (var taskBox in taskList) {
+      if (colorList.length == 6) break;
+      colorList.add(getColorClass(taskBox.colorName));
+    }
+
+    while (colorList.length < 6) {
+      colorList.add(null);
+    }
+
+    wCircle(ColorClass? color) {
+      return CommonCircle(
+        color: color?.s200 ?? Colors.transparent,
+        size: 5,
+        padding: const EdgeInsets.symmetric(horizontal: 1),
+      );
+    }
+
+    wRow(List<ColorClass?> list) {
+      return Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: list.map((color) => wCircle(color)).toList(),
+      );
+    }
+
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.end,
+      children: [
+        wRow(colorList.sublist(0, 3)),
+        CommonSpace(height: 2),
+        wRow(colorList.sublist(3, 6)),
+      ],
+    );
   }
 
   @override
@@ -159,7 +200,7 @@ class _AppBarCalendarState extends State<AppBarCalendar> {
         context.watch<SelectedDateTimeProvider>().seletedDateTime;
 
     return Padding(
-      padding: const EdgeInsets.only(bottom: 5),
+      padding: const EdgeInsets.only(bottom: 10),
       child: TableCalendar(
         locale: widget.locale,
         startingDayOfWeek: StartingDayOfWeek.monday,

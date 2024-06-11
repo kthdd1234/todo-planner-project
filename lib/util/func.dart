@@ -4,6 +4,8 @@ import 'dart:ui';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:project/model/record_box/record_box.dart';
+import 'package:project/model/task_box/task_box.dart';
 import 'package:project/util/class.dart';
 import 'package:project/util/final.dart';
 
@@ -65,7 +67,54 @@ TaskClass getTaskClass(String type) {
   return {'todo': tTodo, 'routin': tRoutin}[type]!;
 }
 
-navigatorPop(context) {
+String? getTaskInfo({
+  required String key,
+  required RecordBox? recordBox,
+  required String taskId,
+}) {
+  int? idx = recordBox?.taskMarkList?.indexWhere(
+    (element) => element['id'] == taskId,
+  );
+
+  if (idx == null || idx == -1) {
+    return null;
+  }
+
+  return recordBox!.taskMarkList![idx][key];
+}
+
+List<TaskBox> getTaskList({
+  required String locale,
+  required List<TaskBox> taskList,
+  required DateTime targetDateTime,
+}) {
+  return taskList.where((task) {
+    List<DateTime> dateTimeList = task.dateTimeList;
+
+    if (task.taskType == tTodo.type) {
+      return dateTimeList.any(
+          (dateTime) => dateTimeKey(dateTime) == dateTimeKey(targetDateTime));
+    } else if (task.taskType == tRoutin.type) {
+      return dateTimeList.any((dateTime) {
+        if (task.dateTimeType == taskDateTimeType.everyWeek) {
+          return eFormatter(locale: locale, dateTime: dateTime) ==
+              eFormatter(
+                locale: locale,
+                dateTime: targetDateTime,
+              );
+        } else if (task.dateTimeType == taskDateTimeType.everyMonth) {
+          return dateTime.day == targetDateTime.day;
+        }
+
+        return false;
+      });
+    }
+
+    return false;
+  }).toList();
+}
+
+void navigatorPop(context) {
   Navigator.of(context, rootNavigator: true).pop('dialog');
 }
 

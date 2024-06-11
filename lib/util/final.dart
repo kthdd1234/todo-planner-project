@@ -181,15 +181,13 @@ final lightBlue = ColorClass(
   s400: Colors.lightBlue.shade400,
 );
 
-final itemMark = ItemMarkClass(
+final mark = MarkClass(
   E: 'E',
   O: 'O',
   X: 'X',
   M: 'M',
   T: 'T',
 );
-
-// final itemMarkName = ;
 
 final eOneday = TodoTypeEnum.oneday.toString();
 
@@ -237,10 +235,10 @@ final tRoutin = TaskClass(
 );
 
 final markList = [
-  {'svg': itemMark.O, 'name': itemMark.markName(itemMark.O)},
-  {'svg': itemMark.X, 'name': itemMark.markName(itemMark.X)},
-  {'svg': itemMark.M, 'name': itemMark.markName(itemMark.M)},
-  {'svg': itemMark.T, 'name': itemMark.markName(itemMark.T)},
+  {'mark': mark.O, 'name': mark.markName(mark.O)},
+  {'mark': mark.X, 'name': mark.markName(mark.X)},
+  {'mark': mark.M, 'name': mark.markName(mark.M)},
+  {'mark': mark.T, 'name': mark.markName(mark.T)},
 ];
 
 final dateTimeType = DateTimeTypeClass(

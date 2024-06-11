@@ -40,21 +40,18 @@ class CommonText extends StatelessWidget {
       ),
     );
 
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        padding: EdgeInsets.all(highlightColor != null ? 3 : 0),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(3),
-          color: highlightColor,
-        ),
-        child: isRequired != true
-            ? basicText
-            : Row(children: [
-                basicText,
-                const Text(' *', style: TextStyle(color: Colors.red))
-              ]),
+    return Container(
+      padding: EdgeInsets.all(highlightColor != null ? 3 : 0),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(3),
+        color: highlightColor,
       ),
+      child: isRequired != true
+          ? basicText
+          : Row(children: [
+              basicText,
+              const Text(' *', style: TextStyle(color: Colors.red))
+            ]),
     );
   }
 }

@@ -32,8 +32,6 @@ class RecordRepository {
 
   void updateRecord({required dynamic key, required RecordBox record}) async {
     await recordBox.put(key, record);
-
     log('[updateRecord] update (key:$key) $record');
-    log('result ${recordBox.values.toList()}');
   }
 }

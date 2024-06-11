@@ -47,8 +47,8 @@ class TodoGroupBtnClass {
   Function() onTap;
 }
 
-class ItemMarkClass {
-  ItemMarkClass({
+class MarkClass {
+  MarkClass({
     required this.E,
     required this.O,
     required this.X,
@@ -183,4 +183,19 @@ class TaskItemClass {
   bool? isHighlight;
   TaskClass task;
   ColorClass color;
+}
+
+class TaskMarkClass {
+  TaskMarkClass({
+    required this.id,
+    this.mark,
+    this.memo,
+  });
+
+  String id;
+  String? memo, mark;
+
+  Map<String, dynamic> toMap() {
+    return {'id': id, 'mark': mark, 'memo': memo};
+  }
 }

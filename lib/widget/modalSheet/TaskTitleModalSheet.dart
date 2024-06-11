@@ -77,7 +77,9 @@ class _TaskTitleModalSheetState extends State<TaskTitleModalSheet> {
               CommonOutlineInputField(
                 hintText: '제목을 입력해주세요',
                 controller: controller,
+                onSuffixIcon: onEditingComplete,
                 onEditingComplete: onEditingComplete,
+                onChanged: (_) => setState(() {}),
               )
             ],
           ),

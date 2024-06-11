@@ -34,31 +34,37 @@ class TaskBody extends StatelessWidget {
   Widget build(BuildContext context) {
     DateTime selectedDateTime =
         context.watch<SelectedDateTimeProvider>().seletedDateTime;
-    RecordBox? record =
-        recordRepository.recordBox.get(dateTimeKey(selectedDateTime));
 
     return MultiValueListenableBuilder(
       valueListenables: valueListenables,
-      builder: (btx, list, w) => ListView(
-        children: [
-          CommonAppBar(),
-          MemoContainer(record: record),
-          TaskContainer(selectedDateTime: selectedDateTime, record: record),
-        ],
-      ),
+      builder: (btx, list, w) {
+        RecordBox? recordBox =
+            recordRepository.recordBox.get(dateTimeKey(selectedDateTime));
+
+        return ListView(
+          children: [
+            CommonAppBar(),
+            MemoContainer(recordBox: recordBox),
+            TaskContainer(
+              selectedDateTime: selectedDateTime,
+              recordBox: recordBox,
+            ),
+          ],
+        );
+      },
     );
   }
 }
 
 class MemoContainer extends StatelessWidget {
-  MemoContainer({super.key, required this.record});
+  MemoContainer({super.key, required this.recordBox});
 
-  RecordBox? record;
+  RecordBox? recordBox;
 
   @override
   Widget build(BuildContext context) {
-    bool isShowMemo =
-        record != null && (record?.memo != null || record?.imageList != null);
+    bool isShowMemo = recordBox != null &&
+        (recordBox?.memo != null || recordBox?.imageList != null);
 
     return isShowMemo
         ? CommonContainer(
@@ -83,11 +89,11 @@ class TaskContainer extends StatefulWidget {
   TaskContainer({
     super.key,
     required this.selectedDateTime,
-    required this.record,
+    required this.recordBox,
   });
 
   DateTime selectedDateTime;
-  RecordBox? record;
+  RecordBox? recordBox;
 
   @override
   State<TaskContainer> createState() => _TaskContainerState();
@@ -108,40 +114,29 @@ class _TaskContainerState extends State<TaskContainer> {
   @override
   Widget build(BuildContext context) {
     String locale = context.locale.toString();
-    List<TaskBox> taskFilterList = taskBox.values.toList().where((task) {
-      List<DateTime> dateTimeList = task.dateTimeList;
-
-      if (task.taskType == tTodo.type) {
-        return dateTimeList.any((dateTime) =>
-            dateTimeKey(dateTime) == dateTimeKey(widget.selectedDateTime));
-      } else if (task.taskType == tRoutin.type) {
-        return dateTimeList.any((dateTime) {
-          if (task.dateTimeType == taskDateTimeType.everyWeek) {
-            return eFormatter(locale: locale, dateTime: dateTime) ==
-                eFormatter(
-                  locale: locale,
-                  dateTime: widget.selectedDateTime,
-                );
-          } else if (task.dateTimeType == taskDateTimeType.everyMonth) {
-            return dateTime.day == widget.selectedDateTime.day;
-          }
-
-          return false;
-        });
-      }
-
-      return false;
-    }).toList();
-
+    List<TaskBox> taskFilterList = getTaskList(
+      locale: locale,
+      taskList: taskBox.values.toList(),
+      targetDateTime: widget.selectedDateTime,
+    );
     List<TaskItem> taskItemList = taskFilterList
         .map(
           (taskBox) => TaskItem(
+            recordBox: widget.recordBox,
             taskBox: taskBox,
             taskItem: TaskItemClass(
               id: taskBox.id,
               name: taskBox.name,
-              mark: itemMark.E,
-              memo: null,
+              mark: getTaskInfo(
+                key: 'mark',
+                recordBox: widget.recordBox,
+                taskId: taskBox.id,
+              ),
+              memo: getTaskInfo(
+                key: 'memo',
+                recordBox: widget.recordBox,
+                taskId: taskBox.id,
+              ),
               isHighlight: taskBox.isHighlighter == true,
               task: TaskClass(
                 type: taskBox.taskType,
@@ -152,6 +147,7 @@ class _TaskContainerState extends State<TaskContainer> {
               ),
               color: getColorClass(taskBox.colorName),
             ),
+            selectedDateTime: widget.selectedDateTime,
           ),
         )
         .toList();
@@ -183,10 +179,18 @@ class _TaskContainerState extends State<TaskContainer> {
 }
 
 class TaskItem extends StatefulWidget {
-  TaskItem({super.key, required this.taskBox, required this.taskItem});
+  TaskItem({
+    super.key,
+    required this.recordBox,
+    required this.taskBox,
+    required this.taskItem,
+    required this.selectedDateTime,
+  });
 
+  RecordBox? recordBox;
   TaskBox taskBox;
   TaskItemClass taskItem;
+  DateTime selectedDateTime;
 
   @override
   State<TaskItem> createState() => _TaskItemState();
@@ -201,13 +205,16 @@ class _TaskItemState extends State<TaskItem> {
   }) {
     return Expanded(
       flex: 0,
-      child: Padding(
-        padding: const EdgeInsets.only(left: 30, right: 5),
-        child: CommonSvgButton(
-          width: width,
-          name: svgName,
-          color: actionColor,
-          onTap: onTap,
+      child: InkWell(
+        onTap: onTap,
+        child: Padding(
+          padding: const EdgeInsets.only(left: 30, right: 5),
+          child: CommonSvgButton(
+            width: width,
+            name: svgName,
+            color: actionColor,
+            onTap: onTap,
+          ),
         ),
       ),
     );
@@ -216,7 +223,11 @@ class _TaskItemState extends State<TaskItem> {
   onMark() {
     showDialog(
       context: context,
-      builder: (context) => MarkPopup(taskId: ''),
+      builder: (context) => MarkPopup(
+        taskBox: widget.taskBox,
+        recordBox: widget.recordBox,
+        selectedDateTime: widget.selectedDateTime,
+      ),
     );
   }
 
@@ -250,8 +261,14 @@ class _TaskItemState extends State<TaskItem> {
               svgName: 'remove',
               actionText: '삭제하기',
               color: red.s200,
-              onTap: () {
-                //
+              onTap: () async {
+                navigatorPop(context);
+                widget.taskItem.task.dateTimeList.removeWhere(
+                  (dateTime) =>
+                      dateTimeKey(dateTime) ==
+                      dateTimeKey(widget.selectedDateTime),
+                );
+                await widget.taskBox.save();
               },
             ),
           ],
@@ -262,6 +279,8 @@ class _TaskItemState extends State<TaskItem> {
 
   @override
   Widget build(BuildContext context) {
+    log('로딩 테스~! ${widget.taskItem.mark}');
+
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 15),
       child: IntrinsicHeight(
@@ -295,7 +314,7 @@ class _TaskItemState extends State<TaskItem> {
               ),
             ),
             wAction(
-              svgName: 'mark-${widget.taskItem.mark}',
+              svgName: 'mark-${widget.taskItem.mark ?? 'E'}',
               width: 25,
               actionColor: widget.taskItem.color.s100,
               onTap: onMark,
