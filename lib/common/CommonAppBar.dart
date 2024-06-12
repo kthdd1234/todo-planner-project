@@ -154,10 +154,14 @@ class _AppBarCalendarState extends State<AppBarCalendar> {
 
   Widget? stickerBuilder(btx, calendarDateTime, _) {
     List<ColorClass?> colorList = [];
+    List<String>? taskOrderList = recordRepository.recordBox
+        .get(dateTimeKey(calendarDateTime))
+        ?.taskOrderList;
     List<TaskBox> taskList = getTaskList(
       locale: context.locale.toString(),
       taskList: taskRepository.taskBox.values.toList(),
       targetDateTime: calendarDateTime,
+      orderList: taskOrderList,
     );
 
     for (var taskBox in taskList) {

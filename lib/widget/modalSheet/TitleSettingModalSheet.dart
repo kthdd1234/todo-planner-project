@@ -8,20 +8,29 @@ import 'package:project/common/CommonTag.dart';
 import 'package:project/util/func.dart';
 import 'package:project/widget/modalSheet/ColorModalsheet.dart';
 
-class TaskTitleModalSheet extends StatefulWidget {
-  const TaskTitleModalSheet({super.key});
+class TitleSettingModalSheet extends StatefulWidget {
+  TitleSettingModalSheet({
+    super.key,
+    required this.title,
+    required this.colorName,
+    required this.onCompleted,
+  });
+
+  String title, colorName;
+  Function(String title, String colorName) onCompleted;
 
   @override
-  State<TaskTitleModalSheet> createState() => _TaskTitleModalSheetState();
+  State<TitleSettingModalSheet> createState() => _TitleSettingModalSheetState();
 }
 
-class _TaskTitleModalSheetState extends State<TaskTitleModalSheet> {
+class _TitleSettingModalSheetState extends State<TitleSettingModalSheet> {
   String selectedColorName = '남색';
   TextEditingController controller = TextEditingController();
 
   @override
   void initState() {
-    controller.text = '할 일, 루틴 리스트';
+    controller.text = widget.title;
+    selectedColorName = widget.colorName;
 
     super.initState();
   }
@@ -41,7 +50,7 @@ class _TaskTitleModalSheetState extends State<TaskTitleModalSheet> {
   }
 
   onEditingComplete() {
-    //
+    widget.onCompleted(controller.text, selectedColorName);
   }
 
   @override
@@ -60,8 +69,7 @@ class _TaskTitleModalSheetState extends State<TaskTitleModalSheet> {
             right: 15,
             bottom: 0,
           ),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
+          child: ListView(
             children: [
               CommonModalItem(
                 title: '색상',

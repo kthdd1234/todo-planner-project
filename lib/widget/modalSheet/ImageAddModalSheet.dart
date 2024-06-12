@@ -1,9 +1,5 @@
 // ignore_for_file: use_build_context_synchronously
-
-import 'dart:developer';
 import 'dart:typed_data';
-
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:project/common/CommonModalSheet.dart';
@@ -69,25 +65,21 @@ class _ImageAddModalSheetState extends State<ImageAddModalSheet> {
   Widget build(BuildContext context) {
     return CommonModalSheet(
       title: '사진 추가',
-      height: 190,
-      child: Column(
+      height: 185,
+      child: Row(
         children: [
-          Row(
-            children: [
-              ModalButton(
-                svgName: 'camera',
-                actionText: '카메라',
-                color: textColor,
-                onTap: onCamera,
-              ),
-              CommonSpace(width: 5),
-              ModalButton(
-                svgName: 'gallery',
-                actionText: '갤러리',
-                color: textColor,
-                onTap: onGallery,
-              )
-            ],
+          ModalButton(
+            svgName: 'camera',
+            actionText: '카메라',
+            color: textColor,
+            onTap: onCamera,
+          ),
+          CommonSpace(width: 5),
+          ModalButton(
+            svgName: 'gallery',
+            actionText: '갤러리',
+            color: textColor,
+            onTap: onGallery,
           )
         ],
       ),

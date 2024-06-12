@@ -19,7 +19,8 @@ class UserBoxAdapter extends TypeAdapter<UserBox> {
     return UserBox(
       id: fields[0] as String,
       createDateTime: fields[1] as DateTime,
-      taskTitle: fields[9] as String,
+      taskTitleInfo: (fields[9] as Map).cast<String, dynamic>(),
+      memoTitleInfo: (fields[10] as Map).cast<String, dynamic>(),
       alarmInfo: (fields[2] as Map?)?.cast<String, dynamic>(),
       passwords: fields[3] as String?,
       calendarFormat: fields[4] as String?,
@@ -33,7 +34,7 @@ class UserBoxAdapter extends TypeAdapter<UserBox> {
   @override
   void write(BinaryWriter writer, UserBox obj) {
     writer
-      ..writeByte(10)
+      ..writeByte(11)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
@@ -53,7 +54,9 @@ class UserBoxAdapter extends TypeAdapter<UserBox> {
       ..writeByte(8)
       ..write(obj.googleDriveInfo)
       ..writeByte(9)
-      ..write(obj.taskTitle);
+      ..write(obj.taskTitleInfo)
+      ..writeByte(10)
+      ..write(obj.memoTitleInfo);
   }
 
   @override

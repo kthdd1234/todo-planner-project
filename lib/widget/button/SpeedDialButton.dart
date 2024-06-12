@@ -47,6 +47,7 @@ class _SpeedDialButtonState extends State<SpeedDialButton> {
       context,
       MaterialPageRoute<void>(
         builder: (BuildContext context) => MemoSettingPage(
+          recordBox: record,
           initDateTime: initDateTime,
         ),
       ),

@@ -39,7 +39,7 @@ class ImageSelectionModalSheet extends StatelessWidget {
             children: [
               ModalButton(
                 svgName: 'image',
-                actionText: '자세히 보기',
+                actionText: '사진 보기',
                 color: textColor,
                 onTap: onSlide,
               ),

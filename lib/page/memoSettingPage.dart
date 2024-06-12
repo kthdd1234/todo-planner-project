@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:typed_data';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
@@ -5,6 +7,7 @@ import 'package:project/common/CommonBackground.dart';
 import 'package:project/common/CommonButton.dart';
 import 'package:project/common/CommonContainer.dart';
 import 'package:project/common/CommonImage.dart';
+import 'package:project/model/record_box/record_box.dart';
 import 'package:project/widget/popup/AlertPopup.dart';
 import 'package:project/common/CommonScaffold.dart';
 import 'package:project/common/CommonSpace.dart';
@@ -17,8 +20,13 @@ import 'package:project/widget/modalSheet/ImageAddModalSheet.dart';
 import 'package:project/widget/modalSheet/ImageSelectionModalSheet.dart';
 
 class MemoSettingPage extends StatefulWidget {
-  MemoSettingPage({super.key, required this.initDateTime});
+  MemoSettingPage({
+    super.key,
+    required this.recordBox,
+    required this.initDateTime,
+  });
 
+  RecordBox? recordBox;
   DateTime initDateTime;
 
   @override
@@ -28,6 +36,18 @@ class MemoSettingPage extends StatefulWidget {
 class _MemoSettingPageState extends State<MemoSettingPage> {
   List<Uint8List> uint8ListList = [];
   TextEditingController memoContoller = TextEditingController();
+
+  @override
+  void initState() {
+    RecordBox? recordBox = widget.recordBox;
+    String? memo = recordBox?.memo ?? '';
+    List<Uint8List>? imageList = recordBox?.imageList ?? [];
+
+    memoContoller.text = memo;
+    uint8ListList = imageList;
+
+    super.initState();
+  }
 
   actionButton({
     required String text,
@@ -99,7 +119,7 @@ class _MemoSettingPageState extends State<MemoSettingPage> {
     );
   }
 
-  onCompletedMemo() {
+  onCompletedMemo() async {
     bool isEmpty = uint8ListList.isEmpty && memoContoller.text == '';
 
     if (isEmpty) {
@@ -113,7 +133,26 @@ class _MemoSettingPageState extends State<MemoSettingPage> {
         ),
       );
     } else {
-      //
+      String? memo = memoContoller.text != '' ? memoContoller.text : null;
+      List<Uint8List>? imageList =
+          uint8ListList.isNotEmpty ? uint8ListList : null;
+      if (widget.recordBox == null) {
+        recordRepository.updateRecord(
+          key: dateTimeKey(widget.initDateTime),
+          record: RecordBox(
+            createDateTime: widget.initDateTime,
+            memo: memo,
+            imageList: imageList,
+          ),
+        );
+      } else {
+        widget.recordBox!.memo = memo;
+        widget.recordBox!.imageList = imageList;
+
+        await widget.recordBox!.save();
+      }
+
+      navigatorPop(context);
     }
   }
 

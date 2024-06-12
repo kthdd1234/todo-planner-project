@@ -87,8 +87,9 @@ List<TaskBox> getTaskList({
   required String locale,
   required List<TaskBox> taskList,
   required DateTime targetDateTime,
+  required List<String>? orderList,
 }) {
-  return taskList.where((task) {
+  List<TaskBox> taskFilterList = taskList.where((task) {
     List<DateTime> dateTimeList = task.dateTimeList;
 
     if (task.taskType == tTodo.type) {
@@ -112,6 +113,17 @@ List<TaskBox> getTaskList({
 
     return false;
   }).toList();
+
+  if (orderList != null) {
+    taskFilterList.sort((taskA, taskB) {
+      int indexA = orderList.indexOf(taskA.id);
+      int indexB = orderList.indexOf(taskB.id);
+
+      return indexA.compareTo(indexB);
+    });
+  }
+
+  return taskFilterList;
 }
 
 void navigatorPop(context) {

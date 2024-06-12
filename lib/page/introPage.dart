@@ -24,7 +24,14 @@ class _IntroPageState extends State<IntroPage> {
     String userId = UniqueKey().hashCode.toString();
     String fontFamily = 'IM_Hyemin';
     String calendarFormat = CalendarFormat.week.toString();
-    String taskTitle = '할 일, 루틴 리스트';
+    Map<String, dynamic> taskTitleInfo = {
+      'title': '할 일, 루틴 리스트',
+      'colorName': "남색"
+    };
+    Map<String, dynamic> memoTitleInfo = {
+      'title': '메모',
+      'colorName': "주황색",
+    };
 
     UserRepository().updateUser(
       UserBox(
@@ -33,7 +40,8 @@ class _IntroPageState extends State<IntroPage> {
         calendarFormat: calendarFormat,
         language: locale,
         fontFamily: fontFamily,
-        taskTitle: taskTitle,
+        taskTitleInfo: taskTitleInfo,
+        memoTitleInfo: memoTitleInfo,
       ),
     );
 

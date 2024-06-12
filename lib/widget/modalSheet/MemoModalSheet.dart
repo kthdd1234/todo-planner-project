@@ -6,7 +6,11 @@ import 'package:project/util/final.dart';
 import 'package:project/widget/button/ModalButton.dart';
 
 class MemoModalSheet extends StatelessWidget {
-  MemoModalSheet({super.key, required this.onEdit, required this.onRemove});
+  MemoModalSheet({
+    super.key,
+    required this.onEdit,
+    required this.onRemove,
+  });
 
   Function() onEdit, onRemove;
 
