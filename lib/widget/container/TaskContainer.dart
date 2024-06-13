@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
@@ -57,28 +59,32 @@ class _TaskContainerState extends State<TaskContainer> {
     );
   }
 
-  onReorder(int oldIdx, int newIdx) async {
-    List<String>? taskOrderList = widget.recordBox?.taskOrderList;
-
-    if (taskOrderList == null || taskOrderList.isEmpty) {
-      List<TaskBox> taskList = getTaskList(
-        locale: widget.locale,
-        taskList: taskBox.values.toList(),
-        targetDateTime: widget.selectedDateTime,
-        orderList: null,
-      );
-      taskOrderList = taskList.map((task) => task.id).toList();
-    }
+  onReorder(int oldIdx, int newIdx, List<TaskBox> taskFilterList) async {
+    RecordBox? recordBox = widget.recordBox;
+    List<String> taskFilterIdList =
+        taskFilterList.map((task) => task.id).toList();
 
     if (oldIdx < newIdx) {
       newIdx -= 1;
     }
 
-    String id = taskOrderList.removeAt(oldIdx);
-    taskOrderList.insert(newIdx, id);
+    String id = taskFilterIdList.removeAt(oldIdx);
+    taskFilterIdList.insert(newIdx, id);
 
-    widget.recordBox?.taskOrderList = taskOrderList;
+    if (recordBox == null) {
+      recordRepository.updateRecord(
+        key: dateTimeKey(widget.selectedDateTime),
+        record: RecordBox(
+          createDateTime: widget.selectedDateTime,
+          taskOrderList: taskFilterIdList,
+        ),
+      );
+    } else {
+      widget.recordBox!.taskOrderList = taskFilterIdList;
+    }
+
     await widget.recordBox?.save();
+    setState(() {});
   }
 
   @override
@@ -146,7 +152,11 @@ class _TaskContainerState extends State<TaskContainer> {
                       selectedDateTime: widget.selectedDateTime,
                     );
                   },
-                  onReorder: onReorder,
+                  onReorder: (oldIdx, newIdx) => onReorder(
+                    oldIdx,
+                    newIdx,
+                    taskFilterList,
+                  ),
                 )
               : CommonEmpty(
                   height: 300,
@@ -248,25 +258,26 @@ class _TaskItemState extends State<TaskItem> {
                 widget.recordBox?.taskMarkList?.removeWhere(
                   (taskMark) => taskMark['id'] == widget.taskItem.id,
                 );
-                widget.recordBox?.taskOrderList?.remove(widget.taskItem.id);
-                widget.taskItem.task.dateTimeList.removeWhere(
-                  (dateTime) =>
-                      dateTimeKey(dateTime) ==
-                      dateTimeKey(widget.selectedDateTime),
-                );
+                widget.taskItem.task.dateTimeList = [];
 
-                await widget.taskBox.save();
+                await taskRepository.taskBox.delete(widget.taskBox.id);
                 await widget.recordBox?.save();
-
-                if (widget.taskItem.task.dateTimeList.isEmpty) {
-                  await taskRepository.taskBox.delete(widget.taskBox.id);
-                }
               },
             ),
           ],
         ),
       ),
     );
+  }
+
+  onSubText() {
+    String typeText = widget.taskItem.task.name;
+
+    if (widget.taskItem.task.type == tRoutin.type) {
+      typeText = '$typeText, ${repeatText[widget.taskItem.task.dateTimeType]!}';
+    }
+
+    return typeText;
   }
 
   @override
@@ -293,7 +304,7 @@ class _TaskItemState extends State<TaskItem> {
                     ),
                     CommonSpace(height: 5),
                     CommonText(
-                      text: widget.taskItem.task.name,
+                      text: onSubText(),
                       color: grey.original,
                       fontSize: 12,
                       overflow: TextOverflow.ellipsis,
@@ -315,3 +326,23 @@ class _TaskItemState extends State<TaskItem> {
     );
   }
 }
+
+// widget.taskItem.task.dateTimeList.removeWhere((dateTime) {
+// String taskType = widget.taskItem.task.type;
+// String taskDateTimeType = widget.taskItem.task.dateTimeType;
+
+// if (taskType == tTodo.type) {
+//   return dateTimeKey(dateTime) ==
+//       dateTimeKey(widget.selectedDateTime);
+// } else if (taskType == tRoutin.type) {
+//   return taskDateTimeType == dateTimeType.everyWeek
+//       ? eFormatter(locale: locale, dateTime: dateTime) ==
+//           eFormatter(
+//             locale: locale,
+//             dateTime: widget.selectedDateTime,
+//           )
+//       : dateTime.day == widget.selectedDateTime.day;
+// }
+
+// return false;
+// });

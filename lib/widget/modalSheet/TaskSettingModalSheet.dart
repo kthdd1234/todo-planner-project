@@ -1,4 +1,6 @@
 // ignore_for_file: use_build_context_synchronously
+import 'dart:developer';
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -9,6 +11,7 @@ import 'package:project/common/CommonOutlineInputField.dart';
 import 'package:project/common/CommonSpace.dart';
 import 'package:project/common/CommonSvgText.dart';
 import 'package:project/common/CommonTag.dart';
+import 'package:project/model/record_box/record_box.dart';
 import 'package:project/model/task_box/task_box.dart';
 import 'package:project/util/class.dart';
 import 'package:project/util/constants.dart';
@@ -164,12 +167,10 @@ class _TaskSettingModalSheetState extends State<TaskSettingModalSheet> {
     }
   }
 
-  onEditingComplete() async {
+  Future<bool> onSaveTask(String id) async {
     bool isEmptyTaskBox = widget.taskBox == null;
 
     if (isEmptyTaskBox) {
-      String id = uuid();
-
       await taskRepository.taskBox.put(
         id,
         TaskBox(
@@ -194,6 +195,11 @@ class _TaskSettingModalSheetState extends State<TaskSettingModalSheet> {
       await taskBox.save();
     }
 
+    return true;
+  }
+
+  onEditingComplete() async {
+    await onSaveTask(uuid());
     navigatorPop(context);
   }
 

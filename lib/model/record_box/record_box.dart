@@ -18,7 +18,6 @@ class RecordBox extends HiveObject {
 
   @HiveField(1)
   List<Map<String, dynamic>>? taskMarkList;
-  // [{ id: 'id', mark: 'mark', memo: 'memo' }]
 
   @HiveField(2)
   String? memo;

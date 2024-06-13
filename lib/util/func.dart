@@ -119,6 +119,9 @@ List<TaskBox> getTaskList({
       int indexA = orderList.indexOf(taskA.id);
       int indexB = orderList.indexOf(taskB.id);
 
+      indexA = indexA == -1 ? 999999 : indexA;
+      indexB = indexB == -1 ? 999999 : indexB;
+
       return indexA.compareTo(indexB);
     });
   }

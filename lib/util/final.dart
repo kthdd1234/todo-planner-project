@@ -275,3 +275,8 @@ final valueListenables = [
   recordRepository.recordBox.listenable(),
   taskRepository.taskBox.listenable(),
 ];
+
+final repeatText = {
+  'everyWeek': '매주',
+  'everyMonth': '매달',
+};
