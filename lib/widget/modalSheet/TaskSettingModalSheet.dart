@@ -4,6 +4,7 @@ import 'dart:developer';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:project/common/CommonContainer.dart';
 import 'package:project/common/CommonModalItem.dart';
 import 'package:project/common/CommonModalSheet.dart';
@@ -21,6 +22,7 @@ import 'package:project/util/func.dart';
 import 'package:project/widget/modalSheet/ColorModalsheet.dart';
 import 'package:project/widget/modalSheet/RepeatModalSheet.dart';
 import 'package:project/widget/modalSheet/SelectedDayModalSheet.dart';
+import 'package:project/widget/popup/AlertPopup.dart';
 
 class TaskSettingModalSheet extends StatefulWidget {
   TaskSettingModalSheet({
@@ -41,7 +43,7 @@ class _TaskSettingModalSheetState extends State<TaskSettingModalSheet> {
   bool isHighlighter = false;
 
   // 색상
-  String selectedColorName = '파란색';
+  String selectedColorName = '남색';
 
   // 날짜 / 반복
   TaskDateTimeInfoClass taskDateTimeInfo = TaskDateTimeInfoClass(
@@ -198,9 +200,42 @@ class _TaskSettingModalSheetState extends State<TaskSettingModalSheet> {
     return true;
   }
 
+  onInitState() {
+    isHighlighter = false;
+    selectedColorName = '남색';
+    taskDateTimeInfo.type = widget.initTask.dateTimeType;
+    taskDateTimeInfo.dateTimeList = widget.initTask.dateTimeList;
+
+    Fluttertoast.showToast(
+        msg: "This is Center Short Toast",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.CENTER,
+        timeInSecForIosWeb: 1,
+        backgroundColor: Colors.red,
+        textColor: Colors.white,
+        fontSize: 16.0);
+  }
+
   onEditingComplete() async {
-    await onSaveTask(uuid());
-    navigatorPop(context);
+    bool isEmptyTaskBox = widget.taskBox == null;
+
+    if (controller.text == '') {
+      showDialog(
+        context: context,
+        builder: (context) => AlertPopup(
+          desc: '한 글자 이상 입력해주세요',
+          buttonText: '확인',
+          height: 155,
+          onTap: () => navigatorPop(context),
+        ),
+      );
+    } else {
+      await onSaveTask(uuid());
+
+      if (isEmptyTaskBox) {
+        onInitState();
+      }
+    }
   }
 
   @override
@@ -213,7 +248,7 @@ class _TaskSettingModalSheetState extends State<TaskSettingModalSheet> {
       padding: EdgeInsets.only(bottom: bottom),
       child: CommonModalSheet(
         title:
-            '${widget.initTask.name} ${widget.taskBox == null ? '추가' : '편집'}',
+            '${widget.initTask.name} ${widget.taskBox == null ? '추가' : '수정'}',
         height: 330,
         child: CommonContainer(
           innerPadding: const EdgeInsets.only(

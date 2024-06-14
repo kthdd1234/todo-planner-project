@@ -1,16 +1,22 @@
 import 'package:flutter/material.dart';
 
 class VerticalBorder extends StatelessWidget {
-  const VerticalBorder({super.key, required this.color});
+  VerticalBorder({
+    super.key,
+    required this.color,
+    this.width,
+    this.right,
+  });
 
-  final Color color;
+  Color color;
+  double? width, right;
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(right: 10),
+      padding: EdgeInsets.only(right: right ?? 10),
       child: Container(
-        width: 5,
+        width: width ?? 5,
         height: double.infinity,
         decoration: BoxDecoration(
           color: color,

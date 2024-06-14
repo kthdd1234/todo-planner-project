@@ -254,12 +254,13 @@ class MarkItem extends StatelessWidget {
         children: [
           CommonSpace(height: 10),
           Container(
-            padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 85),
+            padding: const EdgeInsets.symmetric(vertical: 10),
             decoration: BoxDecoration(
               color: isSelected ? getColorClass(colorName).s50 : null,
               borderRadius: BorderRadius.circular(7),
             ),
             child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Padding(
                   padding: const EdgeInsets.only(top: 3),
@@ -270,15 +271,7 @@ class MarkItem extends StatelessWidget {
                   ),
                 ),
                 CommonSpace(width: 10),
-                Expanded(
-                  flex: 0,
-                  child: CommonText(
-                    text: name,
-                    fontSize: 15,
-                    color: textColor,
-                    textAlign: TextAlign.start,
-                  ),
-                )
+                CommonText(text: name, fontSize: 15, color: textColor)
               ],
             ),
           ),

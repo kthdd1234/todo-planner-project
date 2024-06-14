@@ -106,12 +106,25 @@ class _TaskContainerState extends State<TaskContainer> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          CommonTag(
-            text: taskTitle,
-            textColor: getColorClass(colorName).original,
-            bgColor: getColorClass(colorName).s50,
-            innerPadding: const EdgeInsets.only(bottom: 10),
-            onTap: () => onTaskTitle(taskTitle, colorName),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              CommonTag(
+                text: taskTitle,
+                textColor: getColorClass(colorName).original,
+                bgColor: getColorClass(colorName).s50,
+                innerPadding: const EdgeInsets.only(bottom: 10),
+                onTap: () => onTaskTitle(taskTitle, colorName),
+              ),
+              CommonText(
+                text: ymdeShortFormatter(
+                  locale: locale,
+                  dateTime: widget.selectedDateTime,
+                ),
+                fontSize: 12,
+                color: grey.original,
+              ),
+            ],
           ),
           taskFilterList.isNotEmpty
               ? ReorderableListView.builder(

@@ -15,6 +15,7 @@ class CommonText extends StatelessWidget {
     this.onTap,
     this.textAlign,
     this.overflow,
+    this.softWrap,
   });
 
   String text;
@@ -25,6 +26,7 @@ class CommonText extends StatelessWidget {
   Map<String, String>? nameArgs;
   TextAlign? textAlign;
   TextOverflow? overflow;
+  bool? softWrap;
   Function()? onTap;
 
   @override
@@ -32,6 +34,7 @@ class CommonText extends StatelessWidget {
     final basicText = Text(
       text,
       textAlign: textAlign ?? TextAlign.center,
+      softWrap: softWrap ?? true,
       style: TextStyle(
         color: color ?? Colors.black,
         fontSize: fontSize,

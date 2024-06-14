@@ -2,21 +2,27 @@
 import 'dart:developer';
 
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:project/common/CommonCircle.dart';
 import 'package:project/common/CommonNull.dart';
 import 'package:project/common/CommonSpace.dart';
+import 'package:project/common/CommonSvgButton.dart';
 import 'package:project/common/CommonSvgText.dart';
 import 'package:project/common/CommonTag.dart';
+import 'package:project/common/CommonText.dart';
 import 'package:project/model/task_box/task_box.dart';
 import 'package:project/model/user_box/user_box.dart';
 import 'package:project/provider/selectedDateTimeProvider.dart';
 import 'package:project/provider/titleDateTimeProvider.dart';
 import 'package:project/repositories/user_repository.dart';
 import 'package:project/util/class.dart';
+import 'package:project/util/constants.dart';
 import 'package:project/util/enum.dart';
 import 'package:project/util/final.dart';
 import 'package:project/util/func.dart';
+import 'package:project/widget/border/VerticalBorder.dart';
 import 'package:project/widget/popup/MonthPopup.dart';
 import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
@@ -92,6 +98,12 @@ class _AppBarTitleState extends State<AppBarTitle> {
     await user.save();
   }
 
+  onToday() {
+    context
+        .read<SelectedDateTimeProvider>()
+        .changeSelectedDateTime(dateTime: DateTime.now());
+  }
+
   @override
   Widget build(BuildContext context) {
     DateTime titleDateTime =
@@ -111,13 +123,21 @@ class _AppBarTitleState extends State<AppBarTitle> {
             svgDirection: SvgDirectionEnum.right,
             onTap: () => onDateTime(titleDateTime),
           ),
-          CommonTag(
-            text: calendarLabel,
-            textColor: Colors.white,
-            bgColor: indigo.s300,
-            isBold: true,
-            fontSize: 11,
-            onTap: onLabel,
+          Row(
+            children: [
+              CommonSvgButton(
+                name: calendarLabel,
+                width: 22.5,
+                onTap: onLabel,
+              ),
+              CommonSpace(width: 15),
+              CommonSvgButton(
+                name: 'setting-indigo',
+                color: indigo.s200,
+                width: 20,
+                onTap: () {},
+              ),
+            ],
           )
         ],
       ),
@@ -152,11 +172,10 @@ class _AppBarCalendarState extends State<AppBarCalendar> {
         .changeTitleDateTime(dateTime: dateTime);
   }
 
-  Widget? stickerBuilder(btx, calendarDateTime, _) {
-    List<ColorClass?> colorList = [];
-    List<String>? taskOrderList = recordRepository.recordBox
-        .get(dateTimeKey(calendarDateTime))
-        ?.taskOrderList;
+  List<TaskBox> onTasList(DateTime calendarDateTime) {
+    int recordKey = dateTimeKey(calendarDateTime);
+    List<String>? taskOrderList =
+        recordRepository.recordBox.get(recordKey)?.taskOrderList;
     List<TaskBox> taskList = getTaskList(
       locale: context.locale.toString(),
       taskList: taskRepository.taskBox.values.toList(),
@@ -164,7 +183,28 @@ class _AppBarCalendarState extends State<AppBarCalendar> {
       orderList: taskOrderList,
     );
 
-    for (var taskBox in taskList) {
+    return taskList;
+  }
+
+  onFormatChanged(CalendarFormat calendarFormat) async {
+    String month = CalendarFormat.month.toString();
+    String twoWeeks = CalendarFormat.twoWeeks.toString();
+    String week = CalendarFormat.week.toString();
+    String nextFormat = {
+      month: week,
+      twoWeeks: month,
+      week: month,
+    }[calendarFormat.toString()]!;
+
+    UserBox? user = userRepository.user;
+    user.calendarFormat = nextFormat;
+    await user.save();
+  }
+
+  Widget? stickerBuilder(btx, calendarDateTime, _) {
+    List<ColorClass?> colorList = [];
+
+    for (var taskBox in onTasList(calendarDateTime)) {
       if (colorList.length == 6) break;
       colorList.add(getColorClass(taskBox.colorName));
     }
@@ -198,44 +238,131 @@ class _AppBarCalendarState extends State<AppBarCalendar> {
     );
   }
 
+  Widget? barBuilder(btx, calendarDateTime, _) {
+    List<TaskBox> taskList = onTasList(calendarDateTime);
+
+    return taskList.isNotEmpty
+        ? Padding(
+            padding: const EdgeInsets.only(top: 40, right: 5, left: 5),
+            child: Container(
+              alignment: Alignment.topCenter,
+              child: SingleChildScrollView(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: taskList
+                      .map(
+                        (task) => IntrinsicHeight(
+                          child: Padding(
+                            padding: const EdgeInsets.only(bottom: 3),
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color: task.isHighlighter == true
+                                    ? getColorClass(task.colorName).s50
+                                    : null,
+                                borderRadius: BorderRadius.circular(3),
+                              ),
+                              child: Row(
+                                children: [
+                                  Expanded(
+                                    flex: 0,
+                                    child: VerticalBorder(
+                                      width: 2,
+                                      right: 3,
+                                      color: getColorClass(task.colorName).s200,
+                                    ),
+                                  ),
+                                  Flexible(
+                                    child: CommonText(
+                                      text: task.name,
+                                      overflow: TextOverflow.clip,
+                                      fontSize: 9,
+                                      softWrap: false,
+                                      textAlign: TextAlign.start,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                      )
+                      .toList(),
+                ),
+              ),
+            ),
+          )
+        : const CommonNull();
+  }
+
+  Widget? todayBuilder(context, DateTime day, focusedDay) {
+    return Column(
+      children: [
+        CommonSpace(height: 10),
+        Stack(
+          alignment: Alignment.center,
+          children: [
+            Container(
+              width: 27.5,
+              height: 27.5,
+              decoration: BoxDecoration(
+                color: indigo.s200,
+                borderRadius: BorderRadius.circular(100),
+              ),
+            ),
+            CommonText(text: '${day.day}', color: Colors.white, isBold: true)
+          ],
+        ),
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     DateTime selectedDateTime =
         context.watch<SelectedDateTimeProvider>().seletedDateTime;
+    bool isMonth = widget.calendarFormat == CalendarFormat.month;
 
     return Padding(
-      padding: const EdgeInsets.only(bottom: 10),
-      child: TableCalendar(
-        locale: widget.locale,
-        startingDayOfWeek: StartingDayOfWeek.monday,
-        calendarStyle: CalendarStyle(
-          cellMargin: const EdgeInsets.all(15),
-          todayDecoration: BoxDecoration(
-            color: Colors.indigo.shade300,
-            shape: BoxShape.circle,
+      padding: const EdgeInsets.only(bottom: 15),
+      child: SizedBox(
+        height: isMonth ? MediaQuery.of(context).size.height / 1.3 : null,
+        child: TableCalendar(
+          locale: widget.locale,
+          shouldFillViewport: isMonth,
+          // startingDayOfWeek: StartingDayOfWeek.monday,
+          calendarStyle: CalendarStyle(
+            cellMargin: const EdgeInsets.all(14),
+            cellAlignment: isMonth ? Alignment.topCenter : Alignment.center,
+            todayDecoration: BoxDecoration(
+              color: indigo.s200,
+              shape: BoxShape.circle,
+            ),
+            todayTextStyle: const TextStyle(
+              color: Colors.white,
+              fontWeight: FontWeight.bold,
+              fontSize: 13,
+            ),
           ),
-          todayTextStyle: const TextStyle(
-            color: Colors.white,
-            fontWeight: FontWeight.bold,
-            fontSize: 13,
+          calendarBuilders: CalendarBuilders(
+            markerBuilder: isMonth ? barBuilder : stickerBuilder,
+            todayBuilder: isMonth ? todayBuilder : null,
           ),
+          daysOfWeekStyle: const DaysOfWeekStyle(
+            weekdayStyle: TextStyle(color: Colors.grey, fontSize: 13),
+            weekendStyle: TextStyle(color: Colors.grey, fontSize: 13),
+          ),
+          headerVisible: false,
+          firstDay: DateTime.utc(2000, 1, 1),
+          lastDay: DateTime.utc(3000, 1, 1),
+          currentDay: selectedDateTime,
+          focusedDay: selectedDateTime,
+          calendarFormat: widget.calendarFormat,
+          availableCalendarFormats: availableCalendarFormats,
+          onPageChanged: onPageChanged,
+          onDaySelected: onDaySelected,
+          onFormatChanged: onFormatChanged,
         ),
-        calendarBuilders: CalendarBuilders(
-          markerBuilder: stickerBuilder,
-        ),
-        daysOfWeekStyle: const DaysOfWeekStyle(
-          weekdayStyle: TextStyle(color: Colors.grey, fontSize: 13),
-          weekendStyle: TextStyle(color: Colors.grey, fontSize: 13),
-        ),
-        headerVisible: false,
-        firstDay: DateTime.utc(2000, 1, 1),
-        lastDay: DateTime.utc(3000, 1, 1),
-        currentDay: selectedDateTime,
-        focusedDay: selectedDateTime,
-        calendarFormat: widget.calendarFormat,
-        availableCalendarFormats: availableCalendarFormats,
-        onPageChanged: onPageChanged,
-        onDaySelected: onDaySelected,
       ),
     );
   }

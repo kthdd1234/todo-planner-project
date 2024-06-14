@@ -255,9 +255,9 @@ final calendarFormatInfo = {
 };
 
 final availableCalendarFormats = {
-  CalendarFormat.week: '1주일',
-  CalendarFormat.twoWeeks: '2주일',
-  CalendarFormat.month: '1개월',
+  CalendarFormat.week: 'week',
+  CalendarFormat.twoWeeks: 'twoWeeks',
+  CalendarFormat.month: 'month',
 };
 
 const nextCalendarFormats = {

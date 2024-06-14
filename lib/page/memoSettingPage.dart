@@ -1,5 +1,6 @@
 // ignore_for_file: use_build_context_synchronously
 
+import 'dart:ffi';
 import 'dart:typed_data';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
@@ -224,17 +225,20 @@ class ImageContainer extends StatelessWidget {
     super.key,
     required this.uint8ListList,
     required this.onImage,
+    this.length,
   });
 
   List<Uint8List> uint8ListList;
+  int? length;
   Function(Uint8List) onImage;
 
   @override
   Widget build(BuildContext context) {
     return GridView(
+      physics: const ClampingScrollPhysics(),
       shrinkWrap: true,
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 3,
+      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: length ?? 3,
         crossAxisSpacing: 10,
         mainAxisSpacing: 10,
       ),

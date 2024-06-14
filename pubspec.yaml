@@ -51,6 +51,8 @@ dependencies:
   image_picker: ^1.1.2
   multi_value_listenable_builder: ^0.0.2
   syncfusion_flutter_datepicker: ^23.2.7
+  pull_to_refresh: ^2.0.0
+  fluttertoast: ^8.2.6
 
 dev_dependencies:
   flutter_test:
@@ -110,6 +112,9 @@ flutter:
     - assets/svg/camera.svg
     - assets/svg/gallery.svg
     - assets/svg/image.svg
+    - assets/svg/month.svg
+    - assets/svg/twoWeeks.svg
+    - assets/svg/week.svg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
