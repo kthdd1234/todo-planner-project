@@ -1,16 +1,12 @@
 // ignore_for_file: use_build_context_synchronously
-import 'dart:developer';
-
 import 'package:easy_localization/easy_localization.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:project/common/CommonCircle.dart';
+import 'package:project/common/CommonContainer.dart';
 import 'package:project/common/CommonNull.dart';
 import 'package:project/common/CommonSpace.dart';
 import 'package:project/common/CommonSvgButton.dart';
 import 'package:project/common/CommonSvgText.dart';
-import 'package:project/common/CommonTag.dart';
 import 'package:project/common/CommonText.dart';
 import 'package:project/model/task_box/task_box.dart';
 import 'package:project/model/user_box/user_box.dart';
@@ -44,14 +40,8 @@ class _CommonAppBarState extends State<CommonAppBar> {
 
     return Column(
       children: [
-        AppBarTitle(
-          locale: locale,
-          calendarFormat: calendarFormat,
-        ),
-        AppBarCalendar(
-          locale: locale,
-          calendarFormat: calendarFormat,
-        ),
+        AppBarTitle(locale: locale, calendarFormat: calendarFormat),
+        AppBarCalendar(locale: locale, calendarFormat: calendarFormat),
       ],
     );
   }
@@ -205,11 +195,11 @@ class _AppBarCalendarState extends State<AppBarCalendar> {
     List<ColorClass?> colorList = [];
 
     for (var taskBox in onTasList(calendarDateTime)) {
-      if (colorList.length == 6) break;
+      if (colorList.length == 9) break;
       colorList.add(getColorClass(taskBox.colorName));
     }
 
-    while (colorList.length < 6) {
+    while (colorList.length < 9) {
       colorList.add(null);
     }
 
@@ -228,13 +218,17 @@ class _AppBarCalendarState extends State<AppBarCalendar> {
       );
     }
 
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.end,
-      children: [
-        wRow(colorList.sublist(0, 3)),
-        CommonSpace(height: 2),
-        wRow(colorList.sublist(3, 6)),
-      ],
+    return Padding(
+      padding: const EdgeInsets.only(top: 40),
+      child: ListView(
+        children: [
+          wRow(colorList.sublist(0, 3)),
+          CommonSpace(height: 2),
+          wRow(colorList.sublist(3, 6)),
+          CommonSpace(height: 2),
+          wRow(colorList.sublist(6, 9)),
+        ],
+      ),
     );
   }
 
@@ -248,8 +242,6 @@ class _AppBarCalendarState extends State<AppBarCalendar> {
               alignment: Alignment.topCenter,
               child: SingleChildScrollView(
                 child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: taskList
                       .map(
                         (task) => IntrinsicHeight(
@@ -317,6 +309,38 @@ class _AppBarCalendarState extends State<AppBarCalendar> {
     );
   }
 
+  Widget? dowBuilder(BuildContext context, DateTime weekNumber) {
+    String locale = context.locale.toString();
+    Color color = weekNumber.weekday == 6
+        ? blue.original
+        : weekNumber.weekday == 7
+            ? red.original
+            : textColor;
+
+    return CommonText(
+      text: eFormatter(locale: locale, dateTime: weekNumber),
+      color: color,
+      fontSize: 13,
+    );
+  }
+
+  Widget? defaultBuilder(BuildContext btx, DateTime dateTime, _) {
+    Color color = dateTime.weekday == 6
+        ? blue.original
+        : dateTime.weekday == 7
+            ? red.original
+            : textColor;
+
+    return SizedBox(
+      child: Column(
+        children: [
+          CommonSpace(height: 13.5),
+          CommonText(text: '${dateTime.day}', color: color),
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     DateTime selectedDateTime =
@@ -324,13 +348,15 @@ class _AppBarCalendarState extends State<AppBarCalendar> {
     bool isMonth = widget.calendarFormat == CalendarFormat.month;
 
     return Padding(
-      padding: const EdgeInsets.only(bottom: 15),
-      child: SizedBox(
+      padding: const EdgeInsets.only(bottom: 10),
+      child: CommonContainer(
+        innerPadding: const EdgeInsets.symmetric(vertical: 15),
+        outerPadding: const EdgeInsets.symmetric(horizontal: 7),
         height: isMonth ? MediaQuery.of(context).size.height / 1.3 : null,
         child: TableCalendar(
           locale: widget.locale,
           shouldFillViewport: isMonth,
-          // startingDayOfWeek: StartingDayOfWeek.monday,
+          // startingDayOfWeek: StartingDayOfWeek.monday
           calendarStyle: CalendarStyle(
             cellMargin: const EdgeInsets.all(14),
             cellAlignment: isMonth ? Alignment.topCenter : Alignment.center,
@@ -345,13 +371,12 @@ class _AppBarCalendarState extends State<AppBarCalendar> {
             ),
           ),
           calendarBuilders: CalendarBuilders(
+            defaultBuilder: defaultBuilder,
+            dowBuilder: dowBuilder,
             markerBuilder: isMonth ? barBuilder : stickerBuilder,
             todayBuilder: isMonth ? todayBuilder : null,
           ),
-          daysOfWeekStyle: const DaysOfWeekStyle(
-            weekdayStyle: TextStyle(color: Colors.grey, fontSize: 13),
-            weekendStyle: TextStyle(color: Colors.grey, fontSize: 13),
-          ),
+
           headerVisible: false,
           firstDay: DateTime.utc(2000, 1, 1),
           lastDay: DateTime.utc(3000, 1, 1),

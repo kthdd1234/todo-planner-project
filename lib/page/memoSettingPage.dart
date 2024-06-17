@@ -180,7 +180,7 @@ class _MemoSettingPageState extends State<MemoSettingPage> {
           children: [
             Expanded(
               child: CommonContainer(
-                outerPadding: 7,
+                outerPadding: EdgeInsets.fromLTRB(7, 0, 7, 7),
                 child: ListView(
                   children: [
                     ImageContainer(
@@ -260,26 +260,38 @@ class MemoField extends StatelessWidget {
     super.key,
     required this.controller,
     required this.onChanged,
+    this.fontSize,
+    this.autofocus,
+    this.onEditingComplete,
+    this.textInputAction,
+    this.hintText,
   });
 
+  String? hintText;
+  double? fontSize;
+  bool? autofocus;
   TextEditingController controller;
+  TextInputAction? textInputAction;
   Function(String) onChanged;
+  Function()? onEditingComplete;
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
       controller: controller,
-      autofocus: true,
+      autofocus: autofocus ?? true,
       maxLines: null,
       minLines: null,
-      textInputAction: TextInputAction.newline,
+      textInputAction: textInputAction ?? TextInputAction.newline,
+      style: fontSize != null ? TextStyle(fontSize: fontSize!) : null,
       decoration: InputDecoration(
         isDense: true,
         border: InputBorder.none,
-        hintText: '메모를 입력해주세요 :D',
+        hintText: hintText ?? '메모를 입력해주세요 :D',
         hintStyle: TextStyle(color: grey.s400),
       ),
       onChanged: onChanged,
+      onEditingComplete: onEditingComplete,
     );
   }
 }

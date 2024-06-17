@@ -65,6 +65,8 @@ class _TaskSettingModalSheetState extends State<TaskSettingModalSheet> {
       taskDateTimeInfo.dateTimeList = taskBox.dateTimeList;
       controller.text = taskBox.name;
     } else {
+      selectedColorName = widget.initTask.type == tTodo.type ? '남색' : '청록색';
+
       taskDateTimeInfo.type = widget.initTask.dateTimeType;
       taskDateTimeInfo.dateTimeList = widget.initTask.dateTimeList;
     }
@@ -195,25 +197,32 @@ class _TaskSettingModalSheetState extends State<TaskSettingModalSheet> {
       taskBox.name = controller.text;
 
       await taskBox.save();
+      navigatorPop(context);
     }
 
     return true;
   }
 
   onInitState() {
+    Color backgroundColor = getColorClass(selectedColorName).s200;
+
     isHighlighter = false;
-    selectedColorName = '남색';
+    selectedColorName = widget.initTask.type == tTodo.type ? '남색' : '청록색';
     taskDateTimeInfo.type = widget.initTask.dateTimeType;
     taskDateTimeInfo.dateTimeList = widget.initTask.dateTimeList;
+    controller.text = '';
+
+    setState(() {});
 
     Fluttertoast.showToast(
-        msg: "This is Center Short Toast",
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.CENTER,
-        timeInSecForIosWeb: 1,
-        backgroundColor: Colors.red,
-        textColor: Colors.white,
-        fontSize: 16.0);
+      msg: "추가 되었습니다",
+      toastLength: Toast.LENGTH_SHORT,
+      gravity: ToastGravity.TOP,
+      timeInSecForIosWeb: 2,
+      backgroundColor: backgroundColor,
+      textColor: Colors.white,
+      fontSize: 16.0,
+    );
   }
 
   onEditingComplete() async {

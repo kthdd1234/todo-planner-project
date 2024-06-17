@@ -203,8 +203,6 @@ final colorList = [
   pink,
   green,
   teal,
-  cyan,
-  lime,
   blue,
   brown,
   orange,
@@ -250,19 +248,16 @@ final dateTimeType = DateTimeTypeClass(
 
 final calendarFormatInfo = {
   CalendarFormat.week.toString(): CalendarFormat.week,
-  CalendarFormat.twoWeeks.toString(): CalendarFormat.twoWeeks,
   CalendarFormat.month.toString(): CalendarFormat.month,
 };
 
 final availableCalendarFormats = {
   CalendarFormat.week: 'week',
-  CalendarFormat.twoWeeks: 'twoWeeks',
   CalendarFormat.month: 'month',
 };
 
 const nextCalendarFormats = {
-  CalendarFormat.week: CalendarFormat.twoWeeks,
-  CalendarFormat.twoWeeks: CalendarFormat.month,
+  CalendarFormat.week: CalendarFormat.month,
   CalendarFormat.month: CalendarFormat.week
 };
 

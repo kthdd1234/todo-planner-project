@@ -127,7 +127,7 @@ class _MemoContainerState extends State<MemoContainer> {
     return isMemo
         ? CommonContainer(
             innerPadding: const EdgeInsets.all(15),
-            outerPadding: 7,
+            outerPadding: EdgeInsets.fromLTRB(7, 0, 7, 7),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [

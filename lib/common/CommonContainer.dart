@@ -10,25 +10,24 @@ class CommonContainer extends StatelessWidget {
     this.color,
     this.radius,
     this.onTap,
+    this.height,
   });
 
   Widget child;
   Color? color;
-  double? radius, outerPadding;
-  EdgeInsets? innerPadding;
+  double? radius, height;
+  EdgeInsets? innerPadding, outerPadding;
   Function()? onTap;
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: outerPadding != null
-          ? EdgeInsets.fromLTRB(outerPadding!, 0, outerPadding!, outerPadding!)
-          : const EdgeInsets.all(0.0),
+      padding: outerPadding ?? const EdgeInsets.all(0),
       child: GestureDetector(
         onTap: onTap,
         child: Container(
           width: MediaQuery.of(context).size.width,
-          height: null,
+          height: height,
           padding: innerPadding ?? const EdgeInsets.all(15),
           decoration: BoxDecoration(
               color: color ?? Colors.white,

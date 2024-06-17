@@ -6,6 +6,7 @@ import 'package:hive/hive.dart';
 import 'package:project/common/CommonContainer.dart';
 import 'package:project/common/CommonEmpty.dart';
 import 'package:project/common/CommonModalSheet.dart';
+import 'package:project/common/CommonNull.dart';
 import 'package:project/common/CommonSpace.dart';
 import 'package:project/common/CommonSvgButton.dart';
 import 'package:project/common/CommonTag.dart';
@@ -101,7 +102,7 @@ class _TaskContainerState extends State<TaskContainer> {
     String colorName = taskTitleInfo['colorName'];
 
     return CommonContainer(
-      outerPadding: 7,
+      outerPadding: EdgeInsets.fromLTRB(7, 0, 7, 60),
       innerPadding: const EdgeInsets.fromLTRB(20, 25, 20, 15),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -241,7 +242,7 @@ class _TaskItemState extends State<TaskItem> {
       context: context,
       builder: (context) => CommonModalSheet(
         title: widget.taskItem.name,
-        height: 200,
+        height: 185,
         child: Row(
           children: [
             ModalButton(
@@ -283,29 +284,27 @@ class _TaskItemState extends State<TaskItem> {
     );
   }
 
-  onSubText() {
-    String typeText = widget.taskItem.task.name;
-
-    if (widget.taskItem.task.type == tRoutin.type) {
-      typeText = '$typeText, ${repeatText[widget.taskItem.task.dateTimeType]!}';
-    }
-
-    return typeText;
-  }
-
   @override
   Widget build(BuildContext context) {
+    bool isMark = getTaskInfo(
+          key: 'mark',
+          recordBox: widget.recordBox,
+          taskId: widget.taskBox.id,
+        ) !=
+        null;
+
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 12.5),
       child: IntrinsicHeight(
         child: Row(
           children: [
-            VerticalBorder(color: widget.taskItem.color.s50),
+            VerticalBorder(color: widget.taskItem.color.s100),
             Expanded(
               flex: 1,
               child: InkWell(
                 onTap: onMore,
                 child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     CommonText(
@@ -314,15 +313,22 @@ class _TaskItemState extends State<TaskItem> {
                       highlightColor: widget.taskItem.isHighlight == true
                           ? widget.taskItem.color.s50
                           : null,
+                      decoration: isMark ? TextDecoration.lineThrough : null,
+                      decorationColor:
+                          isMark ? widget.taskItem.color.s300 : null,
                     ),
-                    CommonSpace(height: 5),
-                    CommonText(
-                      text: onSubText(),
-                      color: grey.original,
-                      fontSize: 12,
-                      overflow: TextOverflow.ellipsis,
-                      textAlign: TextAlign.start,
-                    )
+                    widget.taskItem.memo != null
+                        ? Padding(
+                            padding: const EdgeInsets.only(top: 5),
+                            child: CommonText(
+                              text: widget.taskItem.memo!,
+                              color: grey.original,
+                              fontSize: 12,
+                              overflow: TextOverflow.ellipsis,
+                              textAlign: TextAlign.start,
+                            ),
+                          )
+                        : const CommonNull()
                   ],
                 ),
               ),
@@ -330,7 +336,9 @@ class _TaskItemState extends State<TaskItem> {
             wAction(
               svgName: 'mark-${widget.taskItem.mark ?? 'E'}',
               width: 25,
-              actionColor: widget.taskItem.color.s100,
+              actionColor: widget.taskItem.mark == null
+                  ? widget.taskItem.color.s200
+                  : widget.taskItem.color.s100,
               onTap: onMark,
             ),
           ],

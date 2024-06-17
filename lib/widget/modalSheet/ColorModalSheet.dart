@@ -18,9 +18,10 @@ class ColorModalSheet extends StatelessWidget {
     return CommonModalSheet(
       title: '색상',
       isBack: true,
-      height: 400,
+      height: 330,
       child: CommonContainer(
-        child: Center(
+        child: Padding(
+          padding: const EdgeInsets.only(top: 10),
           child: ColorGridView(
             selectedColorName: selectedColorName,
             onTap: onTap,

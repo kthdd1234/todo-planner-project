@@ -11,6 +11,7 @@ import 'package:project/common/CommonSpace.dart';
 import 'package:project/common/CommonText.dart';
 import 'package:project/model/record_box/record_box.dart';
 import 'package:project/model/task_box/task_box.dart';
+import 'package:project/page/MemoSettingPage.dart';
 import 'package:project/util/class.dart';
 import 'package:project/util/constants.dart';
 import 'package:project/util/final.dart';
@@ -60,15 +61,19 @@ class _MarkPopupState extends State<MarkPopup> {
     super.initState();
   }
 
-  onMark(String mark) async {
+  onMark(String selectedMark) async {
     String taskId = widget.taskBox.id;
-    Map<String, dynamic> taskMark =
-        TaskMarkClass(id: taskId, mark: mark).toMap();
+    Map<String, dynamic> taskMark = TaskMarkClass(
+      id: taskId,
+      mark: selectedMark,
+    ).toMap();
 
+    // 메모가 있으면 같이 추가
     if (memoController.text != '') {
       taskMark['memo'] = memoController.text;
     }
 
+    // 기록 리스트에 추가
     if (widget.recordBox == null) {
       recordRepository.updateRecord(
         key: dateTimeKey(widget.selectedDateTime),
@@ -87,6 +92,31 @@ class _MarkPopupState extends State<MarkPopup> {
       idx == -1
           ? widget.recordBox!.taskMarkList!.add(taskMark)
           : widget.recordBox!.taskMarkList![idx] = taskMark;
+    }
+
+    // 내일 할래요 기능 체크
+    if (selectedMark == mark.T) {
+      DateTime selectedDateTime = widget.selectedDateTime;
+      DateTime tomorrowDateTime = DateTime(
+        selectedDateTime.year,
+        selectedDateTime.month,
+        selectedDateTime.day + 1,
+      );
+      String id = uuid();
+
+      await taskRepository.taskBox.put(
+        id,
+        TaskBox(
+          id: id,
+          name: widget.taskBox.name,
+          taskType: tTodo.type,
+          colorName: widget.taskBox.colorName,
+          dateTimeType: dateTimeType.oneDay,
+          dateTimeList: [tomorrowDateTime],
+        ),
+      );
+
+      await widget.taskBox.save();
     }
 
     await widget.recordBox?.save();
@@ -132,10 +162,11 @@ class _MarkPopupState extends State<MarkPopup> {
             ? widget.recordBox!.taskMarkList!.add(taskMark)
             : widget.recordBox!.taskMarkList![idx] = taskMark;
       }
+
+      setState(() => isShowInput = false);
     }
 
     await widget.recordBox?.save();
-    setState(() => isShowInput = false);
   }
 
   wText(String text, Function()? onTap) {
@@ -175,6 +206,10 @@ class _MarkPopupState extends State<MarkPopup> {
     setState(() {});
   }
 
+  onChanged(_) {
+    //
+  }
+
   @override
   Widget build(BuildContext context) {
     return CommonPopup(
@@ -196,15 +231,24 @@ class _MarkPopupState extends State<MarkPopup> {
                   .toList(),
             ),
             Padding(
-              padding: EdgeInsets.only(top: isShowInput ? 20 : 10),
+              padding: EdgeInsets.only(top: isShowInput ? 10 : 10),
               child: isShowInput
-                  ? CommonOutlineInputField(
-                      autofocus: isAutoFocus,
-                      hintText: '메모 입력하기',
-                      controller: memoController,
-                      onEditingComplete: onEditingComplete,
-                      onSuffixIcon: onEditingComplete,
-                      onChanged: (_) => setState(() {}),
+                  ? Container(
+                      height: 70,
+                      padding: const EdgeInsets.symmetric(horizontal: 10),
+                      decoration: BoxDecoration(
+                        color: whiteBgBtnColor,
+                        borderRadius: BorderRadius.circular(5),
+                      ),
+                      child: MemoField(
+                        hintText: '메모 입력하기',
+                        fontSize: 15,
+                        autofocus: isAutoFocus,
+                        controller: memoController,
+                        textInputAction: TextInputAction.done,
+                        onChanged: onChanged,
+                        onEditingComplete: onEditingComplete,
+                      ),
                     )
                   : Column(
                       crossAxisAlignment: CrossAxisAlignment.start,

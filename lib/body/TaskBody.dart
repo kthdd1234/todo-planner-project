@@ -127,24 +127,3 @@ class _ContentViewState extends State<ContentView> {
     );
   }
 }
-
-
-// return CarouselSlider.builder(
-//   itemCount: 2,
-//   options: CarouselOptions(
-//     aspectRatio: 0.65,
-//     viewportFraction: 1,
-//     enableInfiniteScroll: false,
-//     onPageChanged: onPageChanged,
-//   ),
-//   itemBuilder: (ctx, itemIdx, pvIdx) =>
-//   Column(
-//     children: [
-//       MemoContainer(recordBox: recordBox),
-//       TaskContainer(
-//         recordBox: recordBox,
-//         selectedDateTime: selectedDateTime,
-//       )
-//     ],
-//   ),
-// );

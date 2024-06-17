@@ -16,6 +16,8 @@ class CommonText extends StatelessWidget {
     this.textAlign,
     this.overflow,
     this.softWrap,
+    this.decoration,
+    this.decorationColor,
   });
 
   String text;
@@ -27,6 +29,8 @@ class CommonText extends StatelessWidget {
   TextAlign? textAlign;
   TextOverflow? overflow;
   bool? softWrap;
+  TextDecoration? decoration;
+  Color? decorationColor;
   Function()? onTap;
 
   @override
@@ -40,6 +44,8 @@ class CommonText extends StatelessWidget {
         fontSize: fontSize,
         fontWeight: isBold == true ? FontWeight.bold : FontWeight.w400,
         overflow: overflow,
+        decoration: decoration,
+        decorationColor: decorationColor,
       ),
     );
 
