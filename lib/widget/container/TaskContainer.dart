@@ -102,30 +102,17 @@ class _TaskContainerState extends State<TaskContainer> {
     String colorName = taskTitleInfo['colorName'];
 
     return CommonContainer(
-      outerPadding: EdgeInsets.fromLTRB(7, 0, 7, 60),
-      innerPadding: const EdgeInsets.fromLTRB(20, 25, 20, 15),
+      outerPadding: const EdgeInsets.fromLTRB(7, 0, 7, 60),
+      innerPadding: const EdgeInsets.fromLTRB(20, 20, 20, 15),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              CommonTag(
-                text: taskTitle,
-                textColor: getColorClass(colorName).original,
-                bgColor: getColorClass(colorName).s50,
-                innerPadding: const EdgeInsets.only(bottom: 10),
-                onTap: () => onTaskTitle(taskTitle, colorName),
-              ),
-              CommonText(
-                text: ymdeShortFormatter(
-                  locale: locale,
-                  dateTime: widget.selectedDateTime,
-                ),
-                fontSize: 12,
-                color: grey.original,
-              ),
-            ],
+          CommonTag(
+            text: taskTitle,
+            textColor: getColorClass(colorName).original,
+            bgColor: getColorClass(colorName).s50,
+            innerPadding: const EdgeInsets.only(bottom: 5),
+            onTap: () => onTaskTitle(taskTitle, colorName),
           ),
           taskFilterList.isNotEmpty
               ? ReorderableListView.builder(

@@ -127,7 +127,7 @@ class _MemoContainerState extends State<MemoContainer> {
     return isMemo
         ? CommonContainer(
             innerPadding: const EdgeInsets.all(15),
-            outerPadding: EdgeInsets.fromLTRB(7, 0, 7, 7),
+            outerPadding: EdgeInsets.fromLTRB(7, 0, 7, 10),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -139,26 +139,32 @@ class _MemoContainerState extends State<MemoContainer> {
                     vertical: 10,
                     horizontal: 10,
                   ),
-                  child: isText
-                      ? InkWell(
-                          onTap: onMemoText,
-                          child: CommonText(
-                            text: widget.recordBox!.memo!,
-                          ),
-                        )
-                      : const CommonNull(),
+                  child: Column(
+                    children: [
+                      isText
+                          ? InkWell(
+                              onTap: onMemoText,
+                              child: CommonText(
+                                text: widget.recordBox!.memo!,
+                                textAlign: TextAlign.start,
+                              ),
+                            )
+                          : const CommonNull(),
+                      isImageList
+                          ? Padding(
+                              padding: const EdgeInsets.only(top: 10),
+                              child: ImageContainer(
+                                // length: widget.recordBox?.imageList?.length ?? 0,
+                                uint8ListList:
+                                    widget.recordBox!.imageList ?? [],
+                                onImage: onImage,
+                              ),
+                            )
+                          : const CommonNull(),
+                    ],
+                  ),
                 ),
                 HorizentalBorder(color: orange.s50),
-                isImageList
-                    ? Padding(
-                        padding: const EdgeInsets.only(top: 10),
-                        child: ImageContainer(
-                          length: widget.recordBox?.imageList?.length ?? 0,
-                          uint8ListList: widget.recordBox!.imageList ?? [],
-                          onImage: onImage,
-                        ),
-                      )
-                    : const CommonNull(),
               ],
             ),
           )

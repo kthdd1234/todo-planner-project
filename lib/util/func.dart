@@ -45,6 +45,10 @@ String mdeFormatter({required String locale, required DateTime dateTime}) {
   return DateFormat.MMMEd(locale).format(dateTime);
 }
 
+String mdFormatter({required String locale, required DateTime dateTime}) {
+  return DateFormat.MMMd(locale).format(dateTime);
+}
+
 String ymdeFormatter({required String locale, required DateTime dateTime}) {
   return DateFormat.yMMMEd(locale).format(dateTime);
 }
@@ -58,12 +62,20 @@ String yMFormatter({required String locale, required DateTime dateTime}) {
   return DateFormat.yMMM(locale).format(dateTime);
 }
 
+String yFormatter({required String locale, required DateTime dateTime}) {
+  return DateFormat.y(locale).format(dateTime);
+}
+
 String dFormatter({required String locale, required DateTime dateTime}) {
   return DateFormat.d(locale).format(dateTime);
 }
 
 String eFormatter({required String locale, required DateTime dateTime}) {
   return DateFormat.E(locale).format(dateTime);
+}
+
+String eeeeFormatter({required String locale, required DateTime dateTime}) {
+  return DateFormat.EEEE(locale).format(dateTime);
 }
 
 ColorClass getColorClass(String name) {

@@ -5,9 +5,11 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:project/common/CommonCircle.dart';
 import 'package:project/common/CommonContainer.dart';
 import 'package:project/common/CommonModalItem.dart';
 import 'package:project/common/CommonModalSheet.dart';
+import 'package:project/common/CommonNull.dart';
 import 'package:project/common/CommonOutlineInputField.dart';
 import 'package:project/common/CommonSpace.dart';
 import 'package:project/common/CommonSvgText.dart';
@@ -78,18 +80,19 @@ class _TaskSettingModalSheetState extends State<TaskSettingModalSheet> {
     setState(() => isHighlighter = newValue);
   }
 
-  onColor() {
-    showModalBottomSheet(
-      isScrollControlled: true,
-      context: context,
-      builder: (context) => ColorModalSheet(
-        selectedColorName: selectedColorName,
-        onTap: (String colorName) {
-          setState(() => selectedColorName = colorName);
-          navigatorPop(context);
-        },
-      ),
-    );
+  onColor(String colorName) {
+    setState(() => selectedColorName = colorName);
+    // showModalBottomSheet(
+    //   isScrollControlled: true,
+    //   context: context,
+    //   builder: (context) => ColorModalSheet(
+    //     selectedColorName: selectedColorName,
+    //     onTap: (String colorName) {
+    //       setState(() => selectedColorName = colorName);
+    //       navigatorPop(context);
+    //     },
+    //   ),
+    // );
   }
 
   onSelectedDay() {
@@ -148,7 +151,7 @@ class _TaskSettingModalSheetState extends State<TaskSettingModalSheet> {
     taskDateTimeInfo.dateTimeList
         .sort((dtA, dtB) => ymdToInt(dtA).compareTo(ymdToInt(dtB)));
 
-    return '$result${taskDateTimeInfo.dateTimeList.length > 2 ? '....+${taskDateTimeInfo.dateTimeList.length - 1}' : ''}';
+    return '$result${taskDateTimeInfo.dateTimeList.length > 1 ? '....+${taskDateTimeInfo.dateTimeList.length - 1}' : ''}';
   }
 
   displayRepeatDateTime(String locale) {
@@ -206,10 +209,10 @@ class _TaskSettingModalSheetState extends State<TaskSettingModalSheet> {
   onInitState() {
     Color backgroundColor = getColorClass(selectedColorName).s200;
 
-    isHighlighter = false;
-    selectedColorName = widget.initTask.type == tTodo.type ? '남색' : '청록색';
-    taskDateTimeInfo.type = widget.initTask.dateTimeType;
-    taskDateTimeInfo.dateTimeList = widget.initTask.dateTimeList;
+    // isHighlighter = false;
+    // selectedColorName = widget.initTask.type == tTodo.type ? '남색' : '청록색';
+    // taskDateTimeInfo.type = widget.initTask.dateTimeType;
+    // taskDateTimeInfo.dateTimeList = widget.initTask.dateTimeList;
     controller.text = '';
 
     setState(() {});
@@ -279,13 +282,43 @@ class _TaskSettingModalSheetState extends State<TaskSettingModalSheet> {
               ),
               CommonModalItem(
                 title: '색상',
-                onTap: onColor,
-                child: CommonTag(
-                  text: getColorClass(selectedColorName).colorName,
-                  textColor: getColorClass(selectedColorName).original,
-                  bgColor: getColorClass(selectedColorName).s50,
-                  onTap: onColor,
-                ),
+                onTap: () {},
+                child: SizedBox(
+                  width: MediaQuery.of(context).size.width / 2,
+                  height: 30,
+                  child: ListView(
+                      shrinkWrap: true,
+                      scrollDirection: Axis.horizontal,
+                      children: colorList
+                          .map(
+                            (color) => Padding(
+                              padding: const EdgeInsets.only(right: 7),
+                              child: GestureDetector(
+                                onTap: () => onColor(color.colorName),
+                                child: Stack(
+                                  alignment: AlignmentDirectional.center,
+                                  children: [
+                                    CommonCircle(color: color.s100, size: 30),
+                                    selectedColorName == color.colorName
+                                        ? svgAsset(
+                                            name: 'mark-V',
+                                            width: 15,
+                                            color: color.s300)
+                                        : const CommonNull(),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          )
+                          .toList()),
+                ), //
+
+                // CommonTag(
+                //   text: getColorClass(selectedColorName).colorName,
+                //   textColor: getColorClass(selectedColorName).original,
+                //   bgColor: getColorClass(selectedColorName).s50,
+                //   onTap: onColor,
+                // ),
               ),
               CommonModalItem(
                 title: widget.initTask.dateTimeLabel,

@@ -14,7 +14,7 @@ import 'package:project/util/final.dart';
 import 'package:project/util/func.dart';
 import 'package:project/widget/button/AddButton.dart';
 import 'package:project/widget/button/TodayButton.dart';
-import 'package:project/widget/button/TrackerButton.dart';
+import 'package:project/widget/button/InfoButton.dart';
 import 'package:provider/provider.dart';
 import 'package:table_calendar/table_calendar.dart';
 
@@ -91,7 +91,7 @@ class Fab extends StatelessWidget {
                               isToday
                                   ? const CommonNull()
                                   : const TodayButton(),
-                              const TrackerButton(),
+                              const InfoButton(),
                             ],
                           ),
                         )

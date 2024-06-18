@@ -62,65 +62,49 @@ class _RepeatModalSheetState extends State<RepeatModalSheet> {
     super.initState();
   }
 
-  @override
-  Widget build(BuildContext context) {
-    onRepeatType(String type) {
-      DateTime now = DateTime.now();
+  onRepeatType(String type) {
+    DateTime now = DateTime.now();
 
-      setState(() {
-        if (type == taskDateTimeType.everyWeek && isEmptyWeekDays(weekDays)) {
-          weekDays[now.weekday - 1].isVisible = true;
-        } else if (type == taskDateTimeType.everyMonth &&
-            isEmptyMonthDays(monthDays)) {
-          monthDays[now.day - 1].isVisible = true;
+    setState(() {
+      if (type == taskDateTimeType.everyWeek && isEmptyWeekDays(weekDays)) {
+        weekDays[now.weekday - 1].isVisible = true;
+      } else if (type == taskDateTimeType.everyMonth &&
+          isEmptyMonthDays(monthDays)) {
+        monthDays[now.day - 1].isVisible = true;
+      }
+
+      selectedRepeatType = type;
+    });
+  }
+
+  onWeekDay(WeekDayClass weekDay) {
+    setState(() {
+      weekDays = weekDays.map((item) {
+        if (item.id == weekDay.id) {
+          item.isVisible = !weekDay.isVisible;
         }
 
-        selectedRepeatType = type;
-      });
-    }
+        return item;
+      }).toList();
+    });
+  }
 
-    onWeekDay(WeekDayClass weekDay) {
-      bool isVisible = !weekDay.isVisible;
+  onMonthDay(MonthDayClass monthDay) {
+    bool isVisible = !monthDay.isVisible;
 
-      if (isVisible == false) {
-        bool isOverTwice =
-            weekDays.where((item) => item.isVisible).toList().length > 1;
+    setState(() {
+      monthDays = monthDays.map((item) {
+        if (item.id == monthDay.id) {
+          item.isVisible = isVisible;
+        }
 
-        if (isOverTwice == false) return;
-      }
+        return item;
+      }).toList();
+    });
+  }
 
-      setState(() {
-        weekDays = weekDays.map((item) {
-          if (item.id == weekDay.id) {
-            item.isVisible = isVisible;
-          }
-
-          return item;
-        }).toList();
-      });
-    }
-
-    onMonthDay(MonthDayClass monthDay) {
-      bool isVisible = !monthDay.isVisible;
-
-      if (isVisible == false) {
-        bool isOverTwice =
-            monthDays.where((item) => item.isVisible).toList().length > 1;
-
-        if (isOverTwice == false) return;
-      }
-
-      setState(() {
-        monthDays = monthDays.map((item) {
-          if (item.id == monthDay.id) {
-            item.isVisible = isVisible;
-          }
-
-          return item;
-        }).toList();
-      });
-    }
-
+  @override
+  Widget build(BuildContext context) {
     Widget child = {
       taskDateTimeType.everyWeek: EveryWeekRepeatDay(
         weekDays: weekDays,
@@ -131,6 +115,12 @@ class _RepeatModalSheetState extends State<RepeatModalSheet> {
         onMonthDay: onMonthDay,
       ),
     }[selectedRepeatType]!;
+
+    bool isCompletedWeek =
+        weekDays.where((item) => item.isVisible).toList().isNotEmpty;
+
+    bool isCompletedMonth =
+        monthDays.where((item) => item.isVisible).toList().isNotEmpty;
 
     return CommonModalSheet(
       title: '반복',
@@ -153,14 +143,30 @@ class _RepeatModalSheetState extends State<RepeatModalSheet> {
           ),
           CommonButton(
             text: '완료',
-            textColor: Colors.white,
-            buttonColor: buttonColor,
+            textColor: selectedRepeatType == taskDateTimeType.everyWeek
+                ? isCompletedWeek
+                    ? Colors.white
+                    : grey.s400
+                : isCompletedMonth
+                    ? Colors.white
+                    : grey.s400,
+            buttonColor: selectedRepeatType == taskDateTimeType.everyWeek
+                ? isCompletedWeek
+                    ? buttonColor
+                    : grey.s300
+                : isCompletedMonth
+                    ? buttonColor
+                    : grey.s300,
             outerPadding: const EdgeInsets.only(top: 15),
             verticalPadding: 15,
             borderRadius: 100,
             onTap: () => selectedRepeatType == taskDateTimeType.everyWeek
-                ? widget.onCompletedEveryWeek(weekDays)
-                : widget.onCompletedEveryMonth(monthDays),
+                ? isCompletedWeek
+                    ? widget.onCompletedEveryWeek(weekDays)
+                    : null
+                : isCompletedMonth
+                    ? widget.onCompletedEveryMonth(monthDays)
+                    : null,
           )
         ],
       ),

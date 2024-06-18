@@ -52,13 +52,7 @@ class _SelectedDayModalSheetState extends State<SelectedDayModalSheet> {
       focusedDay = dateTime;
 
       if (isMultiSelection) {
-        if (idx != -1) {
-          if (dateTimeList.length > 1) {
-            dateTimeList.removeAt(idx);
-          }
-        } else {
-          dateTimeList.add(dateTime);
-        }
+        idx != -1 ? dateTimeList.removeAt(idx) : dateTimeList.add(dateTime);
       } else {
         dateTimeList = [];
         dateTimeList.add(dateTime);
@@ -120,6 +114,7 @@ class _SelectedDayModalSheetState extends State<SelectedDayModalSheet> {
   @override
   Widget build(BuildContext context) {
     String locale = context.locale.toString();
+    bool isCompleted = dateTimeList.isNotEmpty;
 
     return CommonModalSheet(
       title: '날짜',
@@ -184,12 +179,12 @@ class _SelectedDayModalSheetState extends State<SelectedDayModalSheet> {
           ),
           CommonButton(
             text: '완료',
-            textColor: Colors.white,
-            buttonColor: buttonColor,
+            textColor: isCompleted ? Colors.white : grey.s400,
+            buttonColor: isCompleted ? buttonColor : grey.s300,
             outerPadding: const EdgeInsets.only(top: 15),
             verticalPadding: 15,
             borderRadius: 100,
-            onTap: () => widget.onCompleted(dateTimeList),
+            onTap: () => isCompleted ? widget.onCompleted(dateTimeList) : null,
           )
         ],
       ),

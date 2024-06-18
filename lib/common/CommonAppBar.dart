@@ -61,7 +61,8 @@ class _AppBarTitleState extends State<AppBarTitle> {
   onDateTime(DateTime dateTime) {
     showDialog(
       context: context,
-      builder: (context) => MonthPopup(
+      builder: (context) => CalendarPopup(
+        view: DateRangePickerView.year,
         initialdDateTime: dateTime,
         onSelectionChanged: (DateRangePickerSelectionChangedArgs args) async {
           UserBox? user = userRepository.user;
