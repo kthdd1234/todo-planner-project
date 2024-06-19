@@ -5,6 +5,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:project/common/CommonText.dart';
 import 'package:project/model/record_box/record_box.dart';
 import 'package:project/model/task_box/task_box.dart';
@@ -212,5 +213,21 @@ speedDialChildButton({
       child: CommonText(text: lable, color: Colors.white, isBold: true),
     ),
     onTap: onTap,
+  );
+}
+
+Future<Map<String, dynamic>> getAppInfo() async {
+  PackageInfo info = await PackageInfo.fromPlatform();
+
+  return {
+    "appVerstion": info.version,
+    'appBuildNumber': info.buildNumber,
+  };
+}
+
+movePage({required BuildContext context, required Widget page}) {
+  Navigator.push(
+    context,
+    MaterialPageRoute<void>(builder: (BuildContext context) => page),
   );
 }

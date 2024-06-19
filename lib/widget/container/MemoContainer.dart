@@ -126,7 +126,7 @@ class _MemoContainerState extends State<MemoContainer> {
 
     return isMemo
         ? CommonContainer(
-            innerPadding: const EdgeInsets.all(15),
+            innerPadding: const EdgeInsets.all(0),
             outerPadding: EdgeInsets.fromLTRB(7, 0, 7, 10),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -137,7 +137,7 @@ class _MemoContainerState extends State<MemoContainer> {
                   color: Color.fromARGB(255, 255, 251, 243),
                   padding: const EdgeInsets.symmetric(
                     vertical: 10,
-                    horizontal: 10,
+                    horizontal: 12.5,
                   ),
                   child: Column(
                     children: [
@@ -150,15 +150,12 @@ class _MemoContainerState extends State<MemoContainer> {
                               ),
                             )
                           : const CommonNull(),
+                      CommonSpace(height: isText && isImageList ? 10 : 0),
                       isImageList
-                          ? Padding(
-                              padding: const EdgeInsets.only(top: 10),
-                              child: ImageContainer(
-                                // length: widget.recordBox?.imageList?.length ?? 0,
-                                uint8ListList:
-                                    widget.recordBox!.imageList ?? [],
-                                onImage: onImage,
-                              ),
+                          ? ImageContainer(
+                              length: widget.recordBox!.imageList?.length ?? 0,
+                              uint8ListList: widget.recordBox!.imageList ?? [],
+                              onImage: onImage,
                             )
                           : const CommonNull(),
                     ],

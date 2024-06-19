@@ -199,3 +199,26 @@ class TaskMarkClass {
     return {'id': id, 'mark': mark, 'memo': memo};
   }
 }
+
+class SettingItemClass {
+  SettingItemClass({
+    required this.name,
+    required this.svg,
+    required this.onTap,
+    this.value,
+  });
+
+  String name, svg;
+  Widget? value;
+  Function() onTap;
+}
+
+class PremiumBenefitClass {
+  PremiumBenefitClass({
+    required this.svgName,
+    required this.mainTitle,
+    required this.subTitle,
+  });
+
+  String svgName, mainTitle, subTitle;
+}

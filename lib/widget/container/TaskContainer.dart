@@ -234,7 +234,7 @@ class _TaskItemState extends State<TaskItem> {
           children: [
             ModalButton(
               svgName: 'highlighter',
-              actionText: '수정하기',
+              actionText: '${widget.taskItem.task.name} 수정',
               color: textColor,
               onTap: () {
                 navigatorPop(context);
@@ -251,7 +251,7 @@ class _TaskItemState extends State<TaskItem> {
             CommonSpace(width: 5),
             ModalButton(
               svgName: 'remove',
-              actionText: '삭제하기',
+              actionText: '${widget.taskItem.task.name} 삭제',
               color: red.s200,
               onTap: () async {
                 navigatorPop(context);

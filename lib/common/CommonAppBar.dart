@@ -10,6 +10,7 @@ import 'package:project/common/CommonSvgText.dart';
 import 'package:project/common/CommonText.dart';
 import 'package:project/model/task_box/task_box.dart';
 import 'package:project/model/user_box/user_box.dart';
+import 'package:project/page/SettingPage.dart';
 import 'package:project/provider/selectedDateTimeProvider.dart';
 import 'package:project/provider/titleDateTimeProvider.dart';
 import 'package:project/repositories/user_repository.dart';
@@ -89,6 +90,13 @@ class _AppBarTitleState extends State<AppBarTitle> {
     await user.save();
   }
 
+  onSetting() {
+    Navigator.push(
+      context,
+      MaterialPageRoute<void>(builder: (BuildContext context) => SettingPage()),
+    );
+  }
+
   onToday() {
     context
         .read<SelectedDateTimeProvider>()
@@ -126,7 +134,7 @@ class _AppBarTitleState extends State<AppBarTitle> {
                 name: 'setting-indigo',
                 color: indigo.s200,
                 width: 20,
-                onTap: () {},
+                onTap: onSetting,
               ),
             ],
           )

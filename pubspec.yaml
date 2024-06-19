@@ -53,6 +53,8 @@ dependencies:
   syncfusion_flutter_datepicker: ^23.2.7
   pull_to_refresh: ^2.0.0
   fluttertoast: ^8.2.6
+  package_info_plus: ^8.0.0
+  google_mobile_ads: ^5.1.0
 
 dev_dependencies:
   flutter_test:
@@ -81,15 +83,9 @@ flutter:
     - assets/translation/en.json
     - assets/translation/ja.json
     - assets/image/CloudyApple.png
-    - assets/image/test.png
+    - assets/image/t-23.png
     - assets/svg/setting-grey.svg
     - assets/svg/setting-indigo.svg
-    - assets/svg/time-grey.svg
-    - assets/svg/time-indigo.svg
-    - assets/svg/todo-indigo.svg
-    - assets/svg/todo-grey.svg
-    - assets/svg/tracker-grey.svg
-    - assets/svg/tracker-indigo.svg
     - assets/svg/dir-down.svg
     - assets/svg/dir-right.svg
     - assets/svg/calendar-check.svg
@@ -115,6 +111,15 @@ flutter:
     - assets/svg/month.svg
     - assets/svg/twoWeeks.svg
     - assets/svg/week.svg
+    - assets/svg/crown.svg
+    - assets/svg/review.svg
+    - assets/svg/share.svg
+    - assets/svg/version.svg
+    - assets/svg/private.svg
+    - assets/svg/premium-badge.svg
+    - assets/svg/premium-free.svg
+    - assets/svg/premium-no-ads.svg
+    - assets/svg/premium-photos.svg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

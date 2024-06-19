@@ -13,10 +13,7 @@ class HorizentalBorder extends StatelessWidget {
       height: height ?? 3,
       decoration: BoxDecoration(
         color: color,
-        borderRadius: const BorderRadius.vertical(
-          top: Radius.circular(3),
-          bottom: Radius.circular(3),
-        ),
+        borderRadius: BorderRadius.circular(10),
       ),
     );
   }

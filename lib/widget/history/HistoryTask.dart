@@ -1,4 +1,6 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:project/common/CommonNull.dart';
 import 'package:project/common/CommonSpace.dart';
 import 'package:project/common/CommonText.dart';
@@ -17,26 +19,45 @@ class HistoryTask extends StatelessWidget {
   List<String>? taskOrderList;
 
   Widget wHistoryItem(Map<String, dynamic> taskMark, String? lastTaskId) {
-    bool isLast = taskMark['id'] == lastTaskId;
-
-    return Padding(
-      padding: EdgeInsets.only(bottom: isLast ? 5 : 10),
-      child: Row(
+    return Container(
+      padding: EdgeInsets.only(bottom: taskMark['id'] == lastTaskId ? 5 : 10),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Padding(
-            padding: const EdgeInsets.only(top: 1.5),
-            child: svgAsset(
-                name: 'mark-${taskMark['mark']}',
-                width: 14,
-                color: getColorClass(taskMark['colorName']).s300),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Expanded(
+                flex: 0,
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 3),
+                  child: svgAsset(
+                      name: 'mark-${taskMark['mark']}',
+                      width: 14,
+                      color: getColorClass(taskMark['colorName']).s300),
+                ),
+              ),
+              CommonSpace(width: 10),
+              CommonText(
+                text: taskMark['name'],
+                highlightColor: taskMark['isHighlighter'] == true
+                    ? getColorClass(taskMark['colorName']).s50
+                    : null,
+              ),
+            ],
           ),
-          CommonSpace(width: 10),
-          CommonText(
-            text: taskMark['name'],
-            highlightColor: taskMark['isHighlighter'] == true
-                ? getColorClass(taskMark['colorName']).s50
-                : null,
-          ),
+          taskMark['memo'] != null
+              ? Padding(
+                  padding: const EdgeInsets.only(top: 5, left: 25),
+                  child: CommonText(
+                    text: taskMark['memo']!,
+                    textAlign: TextAlign.start,
+                    overflow: TextOverflow.ellipsis,
+                    fontSize: 11,
+                    color: grey.original,
+                  ),
+                )
+              : const CommonNull()
         ],
       ),
     );

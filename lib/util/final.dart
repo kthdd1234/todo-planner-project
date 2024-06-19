@@ -123,7 +123,7 @@ final purple = ColorClass(
 
 final grey = ColorClass(
   colorName: '회색',
-  original: Colors.grey,
+  original: Colors.grey.shade600,
   s50: Colors.grey.shade50,
   s100: Colors.grey.shade100,
   s200: Colors.grey.shade200,
@@ -275,3 +275,21 @@ final repeatText = {
   'everyWeek': '매주',
   'everyMonth': '매달',
 };
+
+final premiumBenefitList = [
+  PremiumBenefitClass(
+    svgName: 'premium-free',
+    mainTitle: '평생 무료로 이용 할 수 있어요',
+    subTitle: '커피 한잔의 가격으로 단 한번 결제!',
+  ),
+  PremiumBenefitClass(
+    svgName: 'premium-no-ads',
+    mainTitle: '모든 화면에서 광고가 나오지 않아요',
+    subTitle: '광고없이 쾌적하게 앱을 사용해보세요!',
+  ),
+  PremiumBenefitClass(
+    svgName: 'premium-photos-four',
+    mainTitle: '사진을 최대 3장까지 추가 할 수 있어요',
+    subTitle: '보다 사진을 추가해보세요!',
+  ),
+];
