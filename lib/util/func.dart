@@ -1,7 +1,8 @@
-import 'dart:developer';
-import 'dart:ui';
+// ignore_for_file: unused_local_variable, prefer_const_declarations
 
+import 'dart:io';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -10,6 +11,7 @@ import 'package:project/common/CommonText.dart';
 import 'package:project/model/record_box/record_box.dart';
 import 'package:project/model/task_box/task_box.dart';
 import 'package:project/util/class.dart';
+import 'package:project/util/constants.dart';
 import 'package:project/util/final.dart';
 
 SvgPicture svgAsset({
@@ -230,4 +232,42 @@ movePage({required BuildContext context, required Widget page}) {
     context,
     MaterialPageRoute<void>(builder: (BuildContext context) => page),
   );
+}
+
+// ad: banner, native, appOpening
+String getAdId(String ad) {
+  final platform = Platform.isIOS ? 'ios' : 'android';
+  final env = kDebugMode ? 'debug' : 'real';
+  final adId = {
+    'android': {
+      'banner': {
+        'debug': androidBannerTestId,
+        'real': androidBannerRealId,
+      },
+      'native': {
+        'debug': androidNativeTestId,
+        'real': androidNativeRealId,
+      },
+      'appOpening': {
+        'debug': androidAppOpeningTestId,
+        'real': androidAppOpeningRealId,
+      }
+    },
+    'ios': {
+      'banner': {
+        'debug': iOSBannerTestId,
+        'real': iOSBannerRealId,
+      },
+      'native': {
+        'debug': iOSNativeTestId,
+        'real': iOSNativeRealId,
+      },
+      'appOpening': {
+        'debug': iOSNativeTestId,
+        'real': iOSAppOpeningRealId,
+      }
+    },
+  };
+
+  return adId[platform]![ad]![env]!;
 }

@@ -180,7 +180,7 @@ class _MemoSettingPageState extends State<MemoSettingPage> {
           children: [
             Expanded(
               child: CommonContainer(
-                outerPadding: EdgeInsets.fromLTRB(7, 0, 7, 7),
+                outerPadding: const EdgeInsets.fromLTRB(7, 0, 7, 7),
                 child: ListView(
                   children: [
                     ImageContainer(

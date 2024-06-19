@@ -49,20 +49,22 @@ class _HomePageState extends State<HomePage> {
     return CommonBackground(
       child: CommonScaffold(
         body: bottomNavigationBarItemList[seletedIdx].body,
-        bottomNavigationBar: Theme(
-          data: Theme.of(context).copyWith(
-            canvasColor: Colors.transparent,
-          ),
-          child: BottomNavigationBar(
-            items: items,
-            elevation: 0,
-            currentIndex: seletedIdx,
-            selectedItemColor: textColor,
-            onTap: onBottomNavigation,
-          ),
-        ),
         isFab: seletedIdx == 0,
       ),
     );
   }
 }
+
+
+  // bottomNavigationBar: Theme(
+        //   data: Theme.of(context).copyWith(
+        //     canvasColor: Colors.transparent,
+        //   ),
+        //   child: BottomNavigationBar(
+        //     items: items,
+        //     elevation: 0,
+        //     currentIndex: seletedIdx,
+        //     selectedItemColor: textColor,
+        //     onTap: onBottomNavigation,
+        //   ),
+        // ),

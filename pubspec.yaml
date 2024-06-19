@@ -55,6 +55,7 @@ dependencies:
   fluttertoast: ^8.2.6
   package_info_plus: ^8.0.0
   google_mobile_ads: ^5.1.0
+  url_launcher: ^6.3.0
 
 dev_dependencies:
   flutter_test:
@@ -120,6 +121,7 @@ flutter:
     - assets/svg/premium-free.svg
     - assets/svg/premium-no-ads.svg
     - assets/svg/premium-photos.svg
+    - assets/svg/app-icon.svg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

@@ -5,9 +5,13 @@ import 'package:flutter/material.dart';
 import 'package:project/common/CommonBackground.dart';
 import 'package:project/common/CommonButton.dart';
 import 'package:project/common/CommonScaffold.dart';
+import 'package:project/common/CommonSpace.dart';
+import 'package:project/common/CommonText.dart';
 import 'package:project/model/user_box/user_box.dart';
 import 'package:project/repositories/user_repository.dart';
+import 'package:project/util/constants.dart';
 import 'package:project/util/final.dart';
+import 'package:project/util/func.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 class IntroPage extends StatefulWidget {
@@ -58,8 +62,15 @@ class _IntroPageState extends State<IntroPage> {
     return CommonBackground(
       child: CommonScaffold(
         body: Column(
-          mainAxisAlignment: MainAxisAlignment.end,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            const Spacer(),
+            svgAsset(name: 'app-icon', width: 80),
+            CommonSpace(height: 20),
+            CommonText(text: '반가워요! 투두 플래너와 함께', color: textColor),
+            CommonSpace(height: 2),
+            CommonText(text: '오늘의 할 일, 루틴을 실천해봐요 :D', color: textColor),
+            const Spacer(),
             CommonButton(
               outerPadding: const EdgeInsets.symmetric(horizontal: 10),
               text: '시작하기',

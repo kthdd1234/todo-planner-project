@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -37,7 +39,7 @@ final indigo = ColorClass(
   s50: Colors.indigo.shade50,
   s100: Colors.indigo.shade100,
   s200: Colors.indigo.shade200,
-  s300: Colors.indigo.shade300,
+  s300: Colors.indigo.shade300, // 255, 121, 134, 203
   s400: Colors.indigo.shade400,
 );
 
@@ -56,8 +58,8 @@ final teal = ColorClass(
   original: Colors.teal,
   s50: Colors.teal.shade50,
   s100: Colors.teal.shade100,
-  s200: Colors.teal.shade200,
-  s300: Colors.teal.shade300,
+  s200: Colors.teal.shade200, // 128, 203, 196
+  s300: Colors.teal.shade300, // 255, 77, 182, 172
   s400: Colors.teal.shade400,
 ); //
 
@@ -66,8 +68,8 @@ final red = ColorClass(
   original: Colors.red,
   s50: Colors.red.shade50,
   s100: Colors.red.shade100,
-  s200: Colors.red.shade200,
-  s300: Colors.red.shade300,
+  s200: Colors.red.shade200, // 239, 154, 154
+  s300: Colors.red.shade300, // 229, 115, 115
   s400: Colors.red.shade400,
 ); //
 
@@ -106,7 +108,7 @@ final orange = ColorClass(
   original: Colors.orange,
   s50: Colors.orange.shade50,
   s100: Colors.orange.shade100,
-  s200: Colors.orange.shade200,
+  s200: Colors.orange.shade200, // 255, 204, 128
   s300: Colors.orange.shade300,
   s400: Colors.orange.shade400,
 ); //
@@ -116,7 +118,7 @@ final purple = ColorClass(
   original: Colors.purple,
   s50: Colors.purple.shade50,
   s100: Colors.purple.shade100,
-  s200: Colors.purple.shade200,
+  s200: Colors.purple.shade200, // 206, 147, 216
   s300: Colors.purple.shade300,
   s400: Colors.purple.shade400,
 ); //

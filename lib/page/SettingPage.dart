@@ -15,6 +15,7 @@ import 'package:project/util/enum.dart';
 import 'package:project/util/final.dart';
 import 'package:project/util/func.dart';
 import 'package:project/widget/button/ImageButton.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class SettingPage extends StatefulWidget {
   const SettingPage({super.key});
@@ -46,8 +47,15 @@ class _SettingPageState extends State<SettingPage> {
     movePage(context: context, page: const PremiumPage());
   }
 
-  onPrivate() {
-    //
+  onPrivate() async {
+    Uri url = Uri(
+      scheme: 'https',
+      host: 'nettle-dill-e85.notion.site',
+      path: 'c065423d61494b74b4d284ebdf6ec532',
+      queryParameters: {'pvs': '4'},
+    );
+
+    await canLaunchUrl(url) ? await launchUrl(url) : throw 'launchUrl error';
   }
 
   @override

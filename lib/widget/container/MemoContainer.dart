@@ -1,7 +1,11 @@
+import 'dart:developer';
 import 'dart:typed_data';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:project/common/CommonContainer.dart';
+import 'package:project/common/CommonDivider.dart';
 import 'package:project/common/CommonImage.dart';
 import 'package:project/common/CommonNull.dart';
 import 'package:project/common/CommonSpace.dart';
@@ -14,6 +18,7 @@ import 'package:project/page/MemoSettingPage.dart';
 import 'package:project/util/final.dart';
 import 'package:project/util/func.dart';
 import 'package:project/widget/border/HorizentalBorder.dart';
+import 'package:project/widget/border/VerticalBorder.dart';
 import 'package:project/widget/modalSheet/ImageSelectionModalSheet.dart';
 import 'package:project/widget/modalSheet/MemoModalSheet.dart';
 import 'package:project/widget/modalSheet/TitleSettingModalSheet.dart';
@@ -34,6 +39,7 @@ class MemoContainer extends StatefulWidget {
 
 class _MemoContainerState extends State<MemoContainer> {
   UserBox user = userRepository.user;
+  // GlobalKey _containerKey = GlobalKey();
 
   onMemoTitle(String memoTitle, String memoColorName) {
     showModalBottomSheet(
@@ -114,15 +120,24 @@ class _MemoContainerState extends State<MemoContainer> {
     }
   }
 
+  // GlobalKey _containerKey = GlobalKey();
+
   @override
   Widget build(BuildContext context) {
-    Map<String, dynamic> taskTitleInfo = user.memoTitleInfo;
-    String memoTitle = taskTitleInfo['title'];
-    String colorName = taskTitleInfo['colorName'];
-
     bool isText = widget.recordBox?.memo != null;
     bool isImageList = widget.recordBox?.imageList != null;
     bool isMemo = widget.recordBox != null && (isText || isImageList);
+
+    // Size? getSize() {
+    //   if (_containerKey.currentContext != null) {
+    //     RenderBox renderBox =
+    //         _containerKey.currentContext!.findRenderObject() as RenderBox;
+    //     Size size = renderBox.size;
+    //     return size;
+    //   }
+    // }
+
+    // log('${getSize()?.height}');
 
     return isMemo
         ? CommonContainer(
@@ -134,31 +149,55 @@ class _MemoContainerState extends State<MemoContainer> {
                 HorizentalBorder(color: orange.s50),
                 Container(
                   width: double.infinity,
-                  color: Color.fromARGB(255, 255, 251, 243),
-                  padding: const EdgeInsets.symmetric(
-                    vertical: 10,
-                    horizontal: 12.5,
-                  ),
-                  child: Column(
-                    children: [
-                      isText
-                          ? InkWell(
-                              onTap: onMemoText,
-                              child: CommonText(
-                                text: widget.recordBox!.memo!,
-                                textAlign: TextAlign.start,
-                              ),
-                            )
-                          : const CommonNull(),
-                      CommonSpace(height: isText && isImageList ? 10 : 0),
-                      isImageList
-                          ? ImageContainer(
-                              length: widget.recordBox!.imageList?.length ?? 0,
-                              uint8ListList: widget.recordBox!.imageList ?? [],
-                              onImage: onImage,
-                            )
-                          : const CommonNull(),
-                    ],
+                  color: const Color.fromARGB(255, 255, 251, 243),
+                  child: CustomPaint(
+                    painter: BacgroundPaint(),
+                    child: Stack(
+                      children: [
+                        // Column(
+                        //   children: [
+                        //     CommonDivider(color: orange.s50, vertical: 10),
+                        //     CommonDivider(color: orange.s50, vertical: 10),
+                        //     CommonDivider(color: orange.s50, vertical: 10),
+                        //     CommonDivider(color: orange.s50, vertical: 10),
+                        //     CommonDivider(color: orange.s50, vertical: 10),
+                        //     CommonDivider(color: orange.s50, vertical: 10),
+                        //     CommonDivider(color: orange.s50, vertical: 10),
+                        //     CommonDivider(color: orange.s50, vertical: 10),
+                        //   ],
+                        // ),
+
+                        Padding(
+                          padding: const EdgeInsets.symmetric(
+                            vertical: 10,
+                            horizontal: 12.5,
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              isText
+                                  ? InkWell(
+                                      onTap: onMemoText,
+                                      child: CommonText(
+                                        text: widget.recordBox!.memo!,
+                                        textAlign: TextAlign.start,
+                                      ),
+                                    )
+                                  : const CommonNull(),
+                              CommonSpace(
+                                  height: isText && isImageList ? 10 : 0),
+                              isImageList
+                                  ? ImageContainer(
+                                      uint8ListList:
+                                          widget.recordBox!.imageList ?? [],
+                                      onImage: onImage,
+                                    )
+                                  : const CommonNull(),
+                            ],
+                          ),
+                        )
+                      ],
+                    ),
                   ),
                 ),
                 HorizentalBorder(color: orange.s50),
@@ -166,5 +205,32 @@ class _MemoContainerState extends State<MemoContainer> {
             ),
           )
         : const CommonNull();
+  }
+}
+
+class BacgroundPaint extends CustomPainter {
+  @override
+  void paint(Canvas canvas, Size size) {
+    final height = size.height;
+    final width = size.width;
+    final paint = Paint();
+
+    Path mainBackground = Path();
+    mainBackground.addRect(Rect.fromLTRB(0, 0, width, height));
+    paint.color = orange.s50;
+
+    for (int i = 1; i < height; i++) {
+      if (i % 15 == 0) {
+        Path linePath = Path();
+        linePath.addRect(
+            Rect.fromLTRB(0, i.toDouble(), width, (i + 0.5).toDouble()));
+        canvas.drawPath(linePath, paint);
+      }
+    }
+  }
+
+  @override
+  bool shouldRepaint(CustomPainter oldDelegate) {
+    return oldDelegate != this;
   }
 }

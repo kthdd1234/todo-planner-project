@@ -9,7 +9,7 @@ class CommonDivider extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: EdgeInsets.symmetric(
-        horizontal: horizontal ?? 20,
+        horizontal: horizontal ?? 0,
         vertical: vertical ?? 0,
       ),
       child: Divider(

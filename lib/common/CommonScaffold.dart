@@ -12,6 +12,7 @@ import 'package:project/repositories/user_repository.dart';
 import 'package:project/util/class.dart';
 import 'package:project/util/final.dart';
 import 'package:project/util/func.dart';
+import 'package:project/widget/ad/BannerAd.dart';
 import 'package:project/widget/button/AddButton.dart';
 import 'package:project/widget/button/TodayButton.dart';
 import 'package:project/widget/button/InfoButton.dart';
@@ -54,7 +55,6 @@ class CommonScaffold extends StatelessWidget {
           child: body,
         ),
       ),
-      // bottomNavigationBar: bottomNavigationBar,
       floatingActionButton: Fab(isFab: isFab),
     );
   }
