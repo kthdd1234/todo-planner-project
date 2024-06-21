@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:project/common/CommonBackground.dart';
@@ -50,12 +51,15 @@ class CommonModalSheet extends StatelessWidget {
                                 ),
                               )
                             : const CommonNull(),
-                        Padding(
-                          padding: const EdgeInsets.only(bottom: 15),
-                          child: CommonText(
-                            text: title!,
-                            fontSize: 15,
-                            textAlign: TextAlign.center,
+                        Expanded(
+                          child: Padding(
+                            padding: const EdgeInsets.only(bottom: 15),
+                            child: CommonText(
+                              text: title!,
+                              fontSize: 15,
+                              textAlign: TextAlign.center,
+                              overflow: TextOverflow.ellipsis,
+                            ),
                           ),
                         ),
                         isBack == true

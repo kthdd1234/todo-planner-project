@@ -65,7 +65,7 @@ class _IntroPageState extends State<IntroPage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             const Spacer(),
-            svgAsset(name: 'app-icon', width: 80),
+            svgAsset(name: 'todo-planner-app-icon', width: 80),
             CommonSpace(height: 20),
             CommonText(text: '반가워요! 투두 플래너와 함께', color: textColor),
             CommonSpace(height: 2),

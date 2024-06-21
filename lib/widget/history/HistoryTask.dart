@@ -19,45 +19,48 @@ class HistoryTask extends StatelessWidget {
   List<String>? taskOrderList;
 
   Widget wHistoryItem(Map<String, dynamic> taskMark, String? lastTaskId) {
-    return Container(
+    return Padding(
       padding: EdgeInsets.only(bottom: taskMark['id'] == lastTaskId ? 5 : 10),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Expanded(
-                flex: 0,
-                child: Padding(
-                  padding: const EdgeInsets.only(top: 3),
+          taskMark['mark'] != null
+              ? Padding(
+                  padding: const EdgeInsets.only(top: 3, right: 10),
                   child: svgAsset(
                       name: 'mark-${taskMark['mark']}',
                       width: 14,
                       color: getColorClass(taskMark['colorName']).s300),
-                ),
-              ),
-              CommonSpace(width: 10),
-              CommonText(
-                text: taskMark['name'],
-                highlightColor: taskMark['isHighlighter'] == true
-                    ? getColorClass(taskMark['colorName']).s50
-                    : null,
-              ),
-            ],
-          ),
-          taskMark['memo'] != null
-              ? Padding(
-                  padding: const EdgeInsets.only(top: 5, left: 25),
-                  child: CommonText(
-                    text: taskMark['memo']!,
-                    textAlign: TextAlign.start,
-                    overflow: TextOverflow.ellipsis,
-                    fontSize: 11,
-                    color: grey.original,
-                  ),
                 )
-              : const CommonNull()
+              : const CommonNull(),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                CommonText(
+                  text: taskMark['name'],
+                  highlightColor: taskMark['isHighlighter'] == true
+                      ? getColorClass(taskMark['colorName']).s50
+                      : null,
+                  textAlign: TextAlign.start,
+                ),
+                taskMark['memo'] != null
+                    ? Padding(
+                        padding: const EdgeInsets.only(top: 5),
+                        child: CommonText(
+                          text: taskMark['memo']!,
+                          textAlign: TextAlign.start,
+                          overflow: TextOverflow.ellipsis,
+                          fontSize: 11,
+                          color: grey.original,
+                        ),
+                      )
+                    : const CommonNull(),
+              ],
+            ),
+          ),
         ],
       ),
     );

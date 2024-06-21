@@ -229,7 +229,7 @@ class _TaskItemState extends State<TaskItem> {
       context: context,
       builder: (context) => CommonModalSheet(
         title: widget.taskItem.name,
-        height: 185,
+        height: 187,
         child: Row(
           children: [
             ModalButton(
@@ -324,8 +324,8 @@ class _TaskItemState extends State<TaskItem> {
               svgName: 'mark-${widget.taskItem.mark ?? 'E'}',
               width: 25,
               actionColor: widget.taskItem.mark == null
-                  ? widget.taskItem.color.s200
-                  : widget.taskItem.color.s100,
+                  ? widget.taskItem.color.s300
+                  : widget.taskItem.color.s200,
               onTap: onMark,
             ),
           ],

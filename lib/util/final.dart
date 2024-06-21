@@ -37,7 +37,7 @@ final indigo = ColorClass(
   colorName: '남색',
   original: Colors.indigo,
   s50: Colors.indigo.shade50,
-  s100: Colors.indigo.shade100,
+  s100: Colors.indigo.shade100, // 197, 202, 233
   s200: Colors.indigo.shade200,
   s300: Colors.indigo.shade300, // 255, 121, 134, 203
   s400: Colors.indigo.shade400,
@@ -57,7 +57,7 @@ final teal = ColorClass(
   colorName: '청록색',
   original: Colors.teal,
   s50: Colors.teal.shade50,
-  s100: Colors.teal.shade100,
+  s100: Colors.teal.shade100, // 178, 223, 219
   s200: Colors.teal.shade200, // 128, 203, 196
   s300: Colors.teal.shade300, // 255, 77, 182, 172
   s400: Colors.teal.shade400,
@@ -67,7 +67,7 @@ final red = ColorClass(
   colorName: '빨간색',
   original: Colors.red,
   s50: Colors.red.shade50,
-  s100: Colors.red.shade100,
+  s100: Colors.red.shade100, // 255, 205, 210
   s200: Colors.red.shade200, // 239, 154, 154
   s300: Colors.red.shade300, // 229, 115, 115
   s400: Colors.red.shade400,
@@ -87,7 +87,7 @@ final blue = ColorClass(
   colorName: '파란색',
   original: Colors.blue,
   s50: Colors.blue.shade50,
-  s100: Colors.blue.shade100,
+  s100: Colors.blue.shade100, // 187, 222, 251
   s200: Colors.blue.shade200,
   s300: Colors.blue.shade300,
   s400: Colors.blue.shade400,
@@ -107,7 +107,7 @@ final orange = ColorClass(
   colorName: '주황색',
   original: Colors.orange,
   s50: Colors.orange.shade50,
-  s100: Colors.orange.shade100,
+  s100: Colors.orange.shade100, // 255, 224, 178
   s200: Colors.orange.shade200, // 255, 204, 128
   s300: Colors.orange.shade300,
   s400: Colors.orange.shade400,
@@ -117,7 +117,7 @@ final purple = ColorClass(
   colorName: '보라색',
   original: Colors.purple,
   s50: Colors.purple.shade50,
-  s100: Colors.purple.shade100,
+  s100: Colors.purple.shade100, // 225, 190, 231
   s200: Colors.purple.shade200, // 206, 147, 216
   s300: Colors.purple.shade300,
   s400: Colors.purple.shade400,

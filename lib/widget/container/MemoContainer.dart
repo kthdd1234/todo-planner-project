@@ -15,6 +15,7 @@ import 'package:project/model/record_box/record_box.dart';
 import 'package:project/model/user_box/user_box.dart';
 import 'package:project/page/ImageSlidePage.dart';
 import 'package:project/page/MemoSettingPage.dart';
+import 'package:project/util/constants.dart';
 import 'package:project/util/final.dart';
 import 'package:project/util/func.dart';
 import 'package:project/widget/border/HorizentalBorder.dart';
@@ -120,83 +121,53 @@ class _MemoContainerState extends State<MemoContainer> {
     }
   }
 
-  // GlobalKey _containerKey = GlobalKey();
-
   @override
   Widget build(BuildContext context) {
     bool isText = widget.recordBox?.memo != null;
     bool isImageList = widget.recordBox?.imageList != null;
     bool isMemo = widget.recordBox != null && (isText || isImageList);
 
-    // Size? getSize() {
-    //   if (_containerKey.currentContext != null) {
-    //     RenderBox renderBox =
-    //         _containerKey.currentContext!.findRenderObject() as RenderBox;
-    //     Size size = renderBox.size;
-    //     return size;
-    //   }
-    // }
-
-    // log('${getSize()?.height}');
-
     return isMemo
         ? CommonContainer(
+            color: memoBgColor,
             innerPadding: const EdgeInsets.all(0),
-            outerPadding: EdgeInsets.fromLTRB(7, 0, 7, 10),
+            outerPadding: const EdgeInsets.fromLTRB(7, 0, 7, 10),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 HorizentalBorder(color: orange.s50),
                 Container(
                   width: double.infinity,
-                  color: const Color.fromARGB(255, 255, 251, 243),
+                  color: memoBgColor,
                   child: CustomPaint(
                     painter: BacgroundPaint(),
-                    child: Stack(
-                      children: [
-                        // Column(
-                        //   children: [
-                        //     CommonDivider(color: orange.s50, vertical: 10),
-                        //     CommonDivider(color: orange.s50, vertical: 10),
-                        //     CommonDivider(color: orange.s50, vertical: 10),
-                        //     CommonDivider(color: orange.s50, vertical: 10),
-                        //     CommonDivider(color: orange.s50, vertical: 10),
-                        //     CommonDivider(color: orange.s50, vertical: 10),
-                        //     CommonDivider(color: orange.s50, vertical: 10),
-                        //     CommonDivider(color: orange.s50, vertical: 10),
-                        //   ],
-                        // ),
-
-                        Padding(
-                          padding: const EdgeInsets.symmetric(
-                            vertical: 10,
-                            horizontal: 12.5,
-                          ),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              isText
-                                  ? InkWell(
-                                      onTap: onMemoText,
-                                      child: CommonText(
-                                        text: widget.recordBox!.memo!,
-                                        textAlign: TextAlign.start,
-                                      ),
-                                    )
-                                  : const CommonNull(),
-                              CommonSpace(
-                                  height: isText && isImageList ? 10 : 0),
-                              isImageList
-                                  ? ImageContainer(
-                                      uint8ListList:
-                                          widget.recordBox!.imageList ?? [],
-                                      onImage: onImage,
-                                    )
-                                  : const CommonNull(),
-                            ],
-                          ),
-                        )
-                      ],
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                        vertical: 10,
+                        horizontal: 12.5,
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          isText
+                              ? InkWell(
+                                  onTap: onMemoText,
+                                  child: CommonText(
+                                    text: widget.recordBox!.memo!,
+                                    textAlign: TextAlign.start,
+                                  ),
+                                )
+                              : const CommonNull(),
+                          CommonSpace(height: isText && isImageList ? 10 : 0),
+                          isImageList
+                              ? ImageContainer(
+                                  uint8ListList:
+                                      widget.recordBox!.imageList ?? [],
+                                  onImage: onImage,
+                                )
+                              : const CommonNull(),
+                        ],
+                      ),
                     ),
                   ),
                 ),

@@ -3,12 +3,17 @@
 import 'dart:ffi';
 import 'dart:typed_data';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:project/common/CommonBackground.dart';
 import 'package:project/common/CommonButton.dart';
 import 'package:project/common/CommonContainer.dart';
 import 'package:project/common/CommonImage.dart';
 import 'package:project/model/record_box/record_box.dart';
+import 'package:project/util/constants.dart';
+import 'package:project/widget/border/HorizentalBorder.dart';
+import 'package:project/widget/container/MemoContainer.dart';
 import 'package:project/widget/popup/AlertPopup.dart';
 import 'package:project/common/CommonScaffold.dart';
 import 'package:project/common/CommonSpace.dart';
@@ -67,14 +72,6 @@ class _MemoSettingPageState extends State<MemoSettingPage> {
     );
   }
 
-  onDateTime() {
-    //
-  }
-
-  onChanged(_) {
-    //
-  }
-
   onAddImage() {
     showModalBottomSheet(
       context: context,
@@ -113,7 +110,11 @@ class _MemoSettingPageState extends State<MemoSettingPage> {
         onRemove: () {
           setState(() {
             uint8ListList.removeWhere((uint8List_) => uint8List_ == uint8List);
+            if (uint8ListList.isEmpty) widget.recordBox?.imageList = null;
+
+            widget.recordBox?.save();
           });
+
           navigatorPop(context);
         },
       ),
@@ -180,17 +181,41 @@ class _MemoSettingPageState extends State<MemoSettingPage> {
           children: [
             Expanded(
               child: CommonContainer(
+                innerPadding: const EdgeInsets.all(0),
                 outerPadding: const EdgeInsets.fromLTRB(7, 0, 7, 7),
-                child: ListView(
+                child: Column(
                   children: [
-                    ImageContainer(
-                      uint8ListList: uint8ListList,
-                      onImage: onImage,
+                    HorizentalBorder(color: orange.s50),
+                    Expanded(
+                      child: Container(
+                        color: memoBgColor,
+                        child: CustomPaint(
+                          painter: BacgroundPaint(),
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(
+                              vertical: 10,
+                              horizontal: 15,
+                            ),
+                            child: ListView(
+                              children: [
+                                MemoField(
+                                  controller: memoContoller,
+                                  onChanged: (_) {},
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.only(top: 10),
+                                  child: ImageContainer(
+                                    uint8ListList: uint8ListList,
+                                    onImage: onImage,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
                     ),
-                    MemoField(
-                      controller: memoContoller,
-                      onChanged: onChanged,
-                    ),
+                    HorizentalBorder(color: orange.s50),
                   ],
                 ),
               ),
@@ -265,6 +290,7 @@ class MemoField extends StatelessWidget {
     this.onEditingComplete,
     this.textInputAction,
     this.hintText,
+    this.contentPadding,
   });
 
   String? hintText;
@@ -272,6 +298,7 @@ class MemoField extends StatelessWidget {
   bool? autofocus;
   TextEditingController controller;
   TextInputAction? textInputAction;
+  EdgeInsets? contentPadding;
   Function(String) onChanged;
   Function()? onEditingComplete;
 
@@ -285,6 +312,8 @@ class MemoField extends StatelessWidget {
       textInputAction: textInputAction ?? TextInputAction.newline,
       style: fontSize != null ? TextStyle(fontSize: fontSize!) : null,
       decoration: InputDecoration(
+        contentPadding: contentPadding ??
+            const EdgeInsets.symmetric(horizontal: 0, vertical: 0),
         isDense: true,
         border: InputBorder.none,
         hintText: hintText ?? '메모를 입력해주세요 :D',

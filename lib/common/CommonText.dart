@@ -9,7 +9,6 @@ class CommonText extends StatelessWidget {
     this.fontSize,
     this.isNotTr,
     this.isBold,
-    this.isRequired,
     this.highlightColor,
     this.nameArgs,
     this.onTap,
@@ -23,7 +22,7 @@ class CommonText extends StatelessWidget {
   String text;
   Color? color;
   double? fontSize;
-  bool? isNotTr, isBold, isRequired;
+  bool? isNotTr, isBold;
   Color? highlightColor;
   Map<String, String>? nameArgs;
   TextAlign? textAlign;
@@ -35,32 +34,25 @@ class CommonText extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final basicText = Text(
-      text,
-      textAlign: textAlign ?? TextAlign.center,
-      softWrap: softWrap ?? true,
-      style: TextStyle(
-        color: color ?? Colors.black,
-        fontSize: fontSize,
-        fontWeight: isBold == true ? FontWeight.bold : FontWeight.w400,
-        overflow: overflow,
-        decoration: decoration,
-        decorationColor: decorationColor,
-      ),
-    );
-
     return Container(
       padding: EdgeInsets.all(highlightColor != null ? 3 : 0),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(3),
         color: highlightColor,
       ),
-      child: isRequired != true
-          ? basicText
-          : Row(children: [
-              basicText,
-              const Text(' *', style: TextStyle(color: Colors.red))
-            ]),
+      child: Text(
+        text,
+        textAlign: textAlign ?? TextAlign.center,
+        softWrap: softWrap ?? true,
+        style: TextStyle(
+          color: color ?? Colors.black,
+          fontSize: fontSize,
+          fontWeight: isBold == true ? FontWeight.bold : FontWeight.w400,
+          overflow: overflow,
+          decoration: decoration,
+          decorationColor: decorationColor,
+        ),
+      ),
     );
   }
 }

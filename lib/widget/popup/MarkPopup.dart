@@ -245,6 +245,10 @@ class _MarkPopupState extends State<MarkPopup> {
                         fontSize: 15,
                         autofocus: isAutoFocus,
                         controller: memoController,
+                        contentPadding: const EdgeInsets.symmetric(
+                          horizontal: 0,
+                          vertical: 8,
+                        ),
                         textInputAction: TextInputAction.done,
                         onChanged: onChanged,
                         onEditingComplete: onEditingComplete,
@@ -311,7 +315,7 @@ class MarkItem extends StatelessWidget {
                   child: svgAsset(
                     name: 'mark-$mark',
                     width: 15,
-                    color: getColorClass(colorName).s200,
+                    color: getColorClass(colorName).s300,
                   ),
                 ),
                 CommonSpace(width: 10),

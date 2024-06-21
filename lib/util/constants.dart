@@ -10,6 +10,9 @@ const textColor = Color(0xFF404763);
 /// whiteBgBtnColor
 const whiteBgBtnColor = Color(0xffF3F4F9);
 
+/// memoBgColor
+const memoBgColor = Color.fromARGB(255, 255, 251, 243);
+
 /// buttonColor
 final buttonColor = indigo.s200;
 

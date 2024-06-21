@@ -1,6 +1,10 @@
+import 'dart:developer';
+
+import 'package:app_tracking_transparency/app_tracking_transparency.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:project/page/HomePage.dart';
 import 'package:project/page/IntroPage.dart';
@@ -25,14 +29,38 @@ void main() async {
     EasyLocalization(
       supportedLocales: const [Locale('ko'), Locale('en'), Locale('ja')],
       path: 'assets/translation',
-      fallbackLocale: const Locale('en'),
+      fallbackLocale: const Locale('ko'),
       child: const MyApp(),
     ),
   );
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  appTrackingTransparency() async {
+    try {
+      TrackingStatus status =
+          await AppTrackingTransparency.trackingAuthorizationStatus;
+
+      if (status == TrackingStatus.notDetermined) {
+        await AppTrackingTransparency.requestTrackingAuthorization();
+      }
+    } on PlatformException {
+      log('error');
+    }
+  }
+
+  @override
+  void initState() {
+    appTrackingTransparency();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {

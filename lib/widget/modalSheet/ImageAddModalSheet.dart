@@ -1,7 +1,9 @@
 // ignore_for_file: use_build_context_synchronously
+import 'dart:developer';
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:project/common/CommonModalSheet.dart';
 import 'package:project/widget/popup/AlertPopup.dart';
 import 'package:project/common/CommonSpace.dart';
@@ -40,11 +42,25 @@ class _ImageAddModalSheetState extends State<ImageAddModalSheet> {
         ),
       );
     } else {
-      XFile? xFile = await picker.pickImage(source: ImageSource.camera);
-      Uint8List? uint8List = await xFile?.readAsBytes();
+      try {
+        XFile? xFile = await picker.pickImage(source: ImageSource.camera);
+        Uint8List? uint8List = await xFile?.readAsBytes();
 
-      if (uint8List != null) {
-        widget.onCamera(uint8List);
+        if (uint8List != null) widget.onCamera(uint8List);
+      } catch (e) {
+        PermissionStatus status = await Permission.camera.status;
+
+        if (status.isDenied) {
+          showDialog(
+            context: context,
+            builder: (context) => AlertPopup(
+              desc: '카메라 접근 권한이 없습니다.\n설정으로 이동하여\n카메라 접근을 허용해주세요.',
+              buttonText: '설정으로 이동',
+              height: 195,
+              onTap: openAppSettings,
+            ),
+          );
+        }
       }
     }
   }
