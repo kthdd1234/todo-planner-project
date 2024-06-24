@@ -5,7 +5,10 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:hive/hive.dart';
+import 'package:home_widget/home_widget.dart';
 import 'package:intl/date_symbol_data_local.dart';
+import 'package:project/model/user_box/user_box.dart';
 import 'package:project/page/HomePage.dart';
 import 'package:project/page/IntroPage.dart';
 import 'package:project/provider/bottomTabIndexProvider.dart';
@@ -24,6 +27,7 @@ void main() async {
   await initializeDateFormatting();
   await EasyLocalization.ensureInitialized();
   await InitHive().initializeHive();
+  await HomeWidget.setAppGroupId('group.todo-planner-widget');
 
   runApp(
     EasyLocalization(
@@ -42,7 +46,9 @@ class MyApp extends StatefulWidget {
   State<MyApp> createState() => _MyAppState();
 }
 
-class _MyAppState extends State<MyApp> {
+class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
+  Box<UserBox>? userBox;
+
   appTrackingTransparency() async {
     try {
       TrackingStatus status =
@@ -56,10 +62,45 @@ class _MyAppState extends State<MyApp> {
     }
   }
 
+  launchedFromHomeWidget(Uri? uri) async {
+    UserBox? user = userBox?.get('userProfile');
+    String? scheme = uri?.scheme;
+
+    //
+  }
+
   @override
   void initState() {
+    userBox = Hive.box('userBox');
     appTrackingTransparency();
+
+    WidgetsBinding.instance.addObserver(this);
     super.initState();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) async {
+    UserBox? user = userBox?.get('userProfile');
+    bool isBackground = state == AppLifecycleState.paused ||
+        state == AppLifecycleState.detached;
+
+    if (isBackground && user != null) {
+      //
+    }
+  }
+
+  @override
+  void didChangeDependencies() {
+    HomeWidget.initiallyLaunchedFromHomeWidget().then(launchedFromHomeWidget);
+    HomeWidget.widgetClicked.listen(launchedFromHomeWidget);
+
+    super.didChangeDependencies();
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
   }
 
   @override

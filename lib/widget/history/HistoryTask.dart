@@ -21,46 +21,55 @@ class HistoryTask extends StatelessWidget {
   Widget wHistoryItem(Map<String, dynamic> taskMark, String? lastTaskId) {
     return Padding(
       padding: EdgeInsets.only(bottom: taskMark['id'] == lastTaskId ? 5 : 10),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.start,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          taskMark['mark'] != null
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              taskMark['mark'] != null
+                  ? Padding(
+                      padding: const EdgeInsets.only(top: 3, right: 10),
+                      child: svgAsset(
+                          name: 'mark-${taskMark['mark']}',
+                          width: 14,
+                          color: getColorClass(taskMark['colorName']).s300),
+                    )
+                  : const CommonNull(),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    CommonText(
+                      text: taskMark['name'],
+                      highlightColor: taskMark['isHighlighter'] == true
+                          ? getColorClass(taskMark['colorName']).s50
+                          : null,
+                      textAlign: TextAlign.start,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+          taskMark['memo'] != null
               ? Padding(
-                  padding: const EdgeInsets.only(top: 3, right: 10),
-                  child: svgAsset(
-                      name: 'mark-${taskMark['mark']}',
-                      width: 14,
-                      color: getColorClass(taskMark['colorName']).s300),
+                  padding: EdgeInsets.only(
+                    top: 5,
+                    left: taskMark['mark'] != null ? 25 : 0,
+                  ),
+                  child: CommonText(
+                    text: taskMark['memo']!,
+                    textAlign: TextAlign.start,
+                    overflow: TextOverflow.ellipsis,
+                    fontSize: 11,
+                    color: grey.original,
+                  ),
                 )
               : const CommonNull(),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                CommonText(
-                  text: taskMark['name'],
-                  highlightColor: taskMark['isHighlighter'] == true
-                      ? getColorClass(taskMark['colorName']).s50
-                      : null,
-                  textAlign: TextAlign.start,
-                ),
-                taskMark['memo'] != null
-                    ? Padding(
-                        padding: const EdgeInsets.only(top: 5),
-                        child: CommonText(
-                          text: taskMark['memo']!,
-                          textAlign: TextAlign.start,
-                          overflow: TextOverflow.ellipsis,
-                          fontSize: 11,
-                          color: grey.original,
-                        ),
-                      )
-                    : const CommonNull(),
-              ],
-            ),
-          ),
         ],
       ),
     );
@@ -83,6 +92,9 @@ class HistoryTask extends StatelessWidget {
       taskRenderList.sort((taskA, taskB) {
         int indexA = taskOrderList!.indexOf(taskA['id']);
         int indexB = taskOrderList!.indexOf(taskB['id']);
+
+        indexA = indexA == -1 ? 999999 : 0;
+        indexB = indexB == -1 ? 999999 : 0;
 
         return indexA.compareTo(indexB);
       });

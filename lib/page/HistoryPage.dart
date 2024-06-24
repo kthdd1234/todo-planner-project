@@ -1,3 +1,4 @@
+// ignore_for_file: prefer_is_empty
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:project/common/CommonBackground.dart';
@@ -71,6 +72,8 @@ class _HistoryPageState extends State<HistoryPage> {
     Iterable<RecordBox> recordList = isRecent
         ? recordRepository.recordList.reversed
         : recordRepository.recordList;
+    bool isRecord = recordList.any((record) =>
+        record.taskMarkList != null && record.taskMarkList?.length != 0);
 
     recordList = recordList
         .where((record) =>
@@ -98,7 +101,7 @@ class _HistoryPageState extends State<HistoryPage> {
             ),
           ],
         ),
-        body: recordList.isNotEmpty
+        body: isRecord
             ? ListView(
                 children: recordList.map((record) {
                   bool isShow = (record.taskMarkList != null &&

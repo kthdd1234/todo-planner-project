@@ -14,6 +14,22 @@
 		97C146FC1CF9000F007C117D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FA1CF9000F007C117D /* Main.storyboard */; };
 		97C146FE1CF9000F007C117D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FD1CF9000F007C117D /* Assets.xcassets */; };
 		97C147011CF9000F007C117D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FF1CF9000F007C117D /* LaunchScreen.storyboard */; };
+		D3058C612C285230009DEFB3 /* variable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3058C602C285230009DEFB3 /* variable.swift */; };
+		D3058C622C285230009DEFB3 /* variable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3058C602C285230009DEFB3 /* variable.swift */; };
+		D3058C642C2915D0009DEFB3 /* view.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3058C632C2915D0009DEFB3 /* view.swift */; };
+		D3058C652C2915D0009DEFB3 /* view.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3058C632C2915D0009DEFB3 /* view.swift */; };
+		D3058C672C29226F009DEFB3 /* func.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3058C662C29226F009DEFB3 /* func.swift */; };
+		D3058C682C29226F009DEFB3 /* func.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3058C662C29226F009DEFB3 /* func.swift */; };
+		D3058C6A2C2924DC009DEFB3 /* model.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3058C692C2924DC009DEFB3 /* model.swift */; };
+		D3058C6B2C2924DC009DEFB3 /* model.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3058C692C2924DC009DEFB3 /* model.swift */; };
+		D3058C6E2C296FE0009DEFB3 /* HeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3058C6D2C296FE0009DEFB3 /* HeaderView.swift */; };
+		D3058C6F2C296FE0009DEFB3 /* HeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3058C6D2C296FE0009DEFB3 /* HeaderView.swift */; };
+		D3B48CF72C2817A800441F60 /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D3B48CF62C2817A800441F60 /* WidgetKit.framework */; };
+		D3B48CF92C2817A800441F60 /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D3B48CF82C2817A800441F60 /* SwiftUI.framework */; };
+		D3B48CFC2C2817A800441F60 /* TodoRoutinWidgetBundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3B48CFB2C2817A800441F60 /* TodoRoutinWidgetBundle.swift */; };
+		D3B48CFE2C2817A800441F60 /* TodoRoutinWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3B48CFD2C2817A800441F60 /* TodoRoutinWidget.swift */; };
+		D3B48D002C2817AB00441F60 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D3B48CFF2C2817AB00441F60 /* Assets.xcassets */; };
+		D3B48D042C2817AB00441F60 /* TodoRoutinWidgetExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = D3B48CF52C2817A800441F60 /* TodoRoutinWidgetExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		E43DE868C479BD2D3405FDEE /* Pods_Runner.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2E96AE677625D7707DD9BD02 /* Pods_Runner.framework */; };
 /* End PBXBuildFile section */
 
@@ -24,6 +40,13 @@
 			proxyType = 1;
 			remoteGlobalIDString = 97C146ED1CF9000F007C117D;
 			remoteInfo = Runner;
+		};
+		D3B48D022C2817AB00441F60 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 97C146E61CF9000F007C117D /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = D3B48CF42C2817A800441F60;
+			remoteInfo = TodoRoutinWidgetExtension;
 		};
 /* End PBXContainerItemProxy section */
 
@@ -36,6 +59,17 @@
 			files = (
 			);
 			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D3B48D052C2817AB00441F60 /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				D3B48D042C2817AB00441F60 /* TodoRoutinWidgetExtension.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXCopyFilesBuildPhase section */
@@ -60,6 +94,19 @@
 		97C147001CF9000F007C117D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		97C147021CF9000F007C117D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A78FE16E0D1F57069A25BD63 /* Pods-Runner.profile.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Runner.profile.xcconfig"; path = "Target Support Files/Pods-Runner/Pods-Runner.profile.xcconfig"; sourceTree = "<group>"; };
+		D3058C602C285230009DEFB3 /* variable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = variable.swift; sourceTree = "<group>"; };
+		D3058C632C2915D0009DEFB3 /* view.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = view.swift; sourceTree = "<group>"; };
+		D3058C662C29226F009DEFB3 /* func.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = func.swift; sourceTree = "<group>"; };
+		D3058C692C2924DC009DEFB3 /* model.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = model.swift; sourceTree = "<group>"; };
+		D3058C6D2C296FE0009DEFB3 /* HeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeaderView.swift; sourceTree = "<group>"; };
+		D3B48CF52C2817A800441F60 /* TodoRoutinWidgetExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = TodoRoutinWidgetExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		D3B48CF62C2817A800441F60 /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
+		D3B48CF82C2817A800441F60 /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
+		D3B48CFB2C2817A800441F60 /* TodoRoutinWidgetBundle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodoRoutinWidgetBundle.swift; sourceTree = "<group>"; };
+		D3B48CFD2C2817A800441F60 /* TodoRoutinWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodoRoutinWidget.swift; sourceTree = "<group>"; };
+		D3B48CFF2C2817AB00441F60 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		D3B48D012C2817AB00441F60 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		D3B48D0A2C2819AF00441F60 /* Runner.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Runner.entitlements; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -75,6 +122,15 @@
 			buildActionMask = 2147483647;
 			files = (
 				E43DE868C479BD2D3405FDEE /* Pods_Runner.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D3B48CF22C2817A800441F60 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D3B48CF92C2817A800441F60 /* SwiftUI.framework in Frameworks */,
+				D3B48CF72C2817A800441F60 /* WidgetKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -113,8 +169,10 @@
 		97C146E51CF9000F007C117D = {
 			isa = PBXGroup;
 			children = (
+				D3058C5E2C2851E9009DEFB3 /* Common */,
 				9740EEB11CF90186004384FC /* Flutter */,
 				97C146F01CF9000F007C117D /* Runner */,
+				D3B48CFA2C2817A800441F60 /* TodoRoutinWidget */,
 				97C146EF1CF9000F007C117D /* Products */,
 				331C8082294A63A400263BE5 /* RunnerTests */,
 				95239A035CCCEF8BA1BDA23B /* Pods */,
@@ -127,6 +185,7 @@
 			children = (
 				97C146EE1CF9000F007C117D /* Runner.app */,
 				331C8081294A63A400263BE5 /* RunnerTests.xctest */,
+				D3B48CF52C2817A800441F60 /* TodoRoutinWidgetExtension.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -134,6 +193,7 @@
 		97C146F01CF9000F007C117D /* Runner */ = {
 			isa = PBXGroup;
 			children = (
+				D3B48D0A2C2819AF00441F60 /* Runner.entitlements */,
 				97C146FA1CF9000F007C117D /* Main.storyboard */,
 				97C146FD1CF9000F007C117D /* Assets.xcassets */,
 				97C146FF1CF9000F007C117D /* LaunchScreen.storyboard */,
@@ -150,8 +210,41 @@
 			isa = PBXGroup;
 			children = (
 				2E96AE677625D7707DD9BD02 /* Pods_Runner.framework */,
+				D3B48CF62C2817A800441F60 /* WidgetKit.framework */,
+				D3B48CF82C2817A800441F60 /* SwiftUI.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		D3058C5E2C2851E9009DEFB3 /* Common */ = {
+			isa = PBXGroup;
+			children = (
+				D3058C602C285230009DEFB3 /* variable.swift */,
+				D3058C632C2915D0009DEFB3 /* view.swift */,
+				D3058C662C29226F009DEFB3 /* func.swift */,
+				D3058C692C2924DC009DEFB3 /* model.swift */,
+			);
+			path = Common;
+			sourceTree = "<group>";
+		};
+		D3058C6C2C296FB3009DEFB3 /* view */ = {
+			isa = PBXGroup;
+			children = (
+				D3058C6D2C296FE0009DEFB3 /* HeaderView.swift */,
+			);
+			path = view;
+			sourceTree = "<group>";
+		};
+		D3B48CFA2C2817A800441F60 /* TodoRoutinWidget */ = {
+			isa = PBXGroup;
+			children = (
+				D3058C6C2C296FB3009DEFB3 /* view */,
+				D3B48CFB2C2817A800441F60 /* TodoRoutinWidgetBundle.swift */,
+				D3B48CFD2C2817A800441F60 /* TodoRoutinWidget.swift */,
+				D3B48CFF2C2817AB00441F60 /* Assets.xcassets */,
+				D3B48D012C2817AB00441F60 /* Info.plist */,
+			);
+			path = TodoRoutinWidget;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -184,6 +277,7 @@
 				97C146EA1CF9000F007C117D /* Sources */,
 				97C146EB1CF9000F007C117D /* Frameworks */,
 				97C146EC1CF9000F007C117D /* Resources */,
+				D3B48D052C2817AB00441F60 /* Embed Foundation Extensions */,
 				9705A1C41CF9048500538489 /* Embed Frameworks */,
 				3B06AD1E1E4923F5004D2608 /* Thin Binary */,
 				811A92077668E28DC13BDD2B /* [CP] Embed Pods Frameworks */,
@@ -192,11 +286,29 @@
 			buildRules = (
 			);
 			dependencies = (
+				D3B48D032C2817AB00441F60 /* PBXTargetDependency */,
 			);
 			name = Runner;
 			productName = Runner;
 			productReference = 97C146EE1CF9000F007C117D /* Runner.app */;
 			productType = "com.apple.product-type.application";
+		};
+		D3B48CF42C2817A800441F60 /* TodoRoutinWidgetExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = D3B48D092C2817AB00441F60 /* Build configuration list for PBXNativeTarget "TodoRoutinWidgetExtension" */;
+			buildPhases = (
+				D3B48CF12C2817A800441F60 /* Sources */,
+				D3B48CF22C2817A800441F60 /* Frameworks */,
+				D3B48CF32C2817A800441F60 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = TodoRoutinWidgetExtension;
+			productName = TodoRoutinWidgetExtension;
+			productReference = D3B48CF52C2817A800441F60 /* TodoRoutinWidgetExtension.appex */;
+			productType = "com.apple.product-type.app-extension";
 		};
 /* End PBXNativeTarget section */
 
@@ -205,6 +317,7 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = YES;
+				LastSwiftUpdateCheck = 1540;
 				LastUpgradeCheck = 1510;
 				ORGANIZATIONNAME = "";
 				TargetAttributes = {
@@ -215,6 +328,9 @@
 					97C146ED1CF9000F007C117D = {
 						CreatedOnToolsVersion = 7.3.1;
 						LastSwiftMigration = 1100;
+					};
+					D3B48CF42C2817A800441F60 = {
+						CreatedOnToolsVersion = 15.4;
 					};
 				};
 			};
@@ -233,6 +349,7 @@
 			targets = (
 				97C146ED1CF9000F007C117D /* Runner */,
 				331C8080294A63A400263BE5 /* RunnerTests */,
+				D3B48CF42C2817A800441F60 /* TodoRoutinWidgetExtension */,
 			);
 		};
 /* End PBXProject section */
@@ -253,6 +370,14 @@
 				3B3967161E833CAA004F5970 /* AppFrameworkInfo.plist in Resources */,
 				97C146FE1CF9000F007C117D /* Assets.xcassets in Resources */,
 				97C146FC1CF9000F007C117D /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D3B48CF32C2817A800441F60 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D3B48D002C2817AB00441F60 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -361,8 +486,27 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D3058C672C29226F009DEFB3 /* func.swift in Sources */,
+				D3058C6A2C2924DC009DEFB3 /* model.swift in Sources */,
+				D3058C642C2915D0009DEFB3 /* view.swift in Sources */,
+				D3058C612C285230009DEFB3 /* variable.swift in Sources */,
 				74858FAF1ED2DC5600515810 /* AppDelegate.swift in Sources */,
 				1498D2341E8E89220040F4C2 /* GeneratedPluginRegistrant.m in Sources */,
+				D3058C6E2C296FE0009DEFB3 /* HeaderView.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D3B48CF12C2817A800441F60 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D3058C682C29226F009DEFB3 /* func.swift in Sources */,
+				D3058C6B2C2924DC009DEFB3 /* model.swift in Sources */,
+				D3058C652C2915D0009DEFB3 /* view.swift in Sources */,
+				D3058C622C285230009DEFB3 /* variable.swift in Sources */,
+				D3B48CFE2C2817A800441F60 /* TodoRoutinWidget.swift in Sources */,
+				D3B48CFC2C2817A800441F60 /* TodoRoutinWidgetBundle.swift in Sources */,
+				D3058C6F2C296FE0009DEFB3 /* HeaderView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -373,6 +517,11 @@
 			isa = PBXTargetDependency;
 			target = 97C146ED1CF9000F007C117D /* Runner */;
 			targetProxy = 331C8085294A63A400263BE5 /* PBXContainerItemProxy */;
+		};
+		D3B48D032C2817AB00441F60 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = D3B48CF42C2817A800441F60 /* TodoRoutinWidgetExtension */;
+			targetProxy = D3B48D022C2817AB00441F60 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -439,7 +588,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				SUPPORTED_PLATFORMS = iphoneos;
@@ -452,8 +601,10 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 7AFA3C8E1D35360C0083082E /* Release.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = Runner/Runner.entitlements;
 				CURRENT_PROJECT_VERSION = "$(FLUTTER_BUILD_NUMBER)";
 				DEVELOPMENT_TEAM = WLJ373955X;
 				ENABLE_BITCODE = NO;
@@ -574,7 +725,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -625,7 +776,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				SUPPORTED_PLATFORMS = iphoneos;
@@ -640,8 +791,10 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 9740EEB21CF90195004384FC /* Debug.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = Runner/Runner.entitlements;
 				CURRENT_PROJECT_VERSION = "$(FLUTTER_BUILD_NUMBER)";
 				DEVELOPMENT_TEAM = WLJ373955X;
 				ENABLE_BITCODE = NO;
@@ -671,8 +824,10 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 7AFA3C8E1D35360C0083082E /* Release.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = Runner/Runner.entitlements;
 				CURRENT_PROJECT_VERSION = "$(FLUTTER_BUILD_NUMBER)";
 				DEVELOPMENT_TEAM = WLJ373955X;
 				ENABLE_BITCODE = NO;
@@ -696,6 +851,123 @@
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Release;
+		};
+		D3B48D062C2817AB00441F60 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = WLJ373955X;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = TodoRoutinWidget/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = TodoRoutinWidget;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MARKETING_VERSION = 1.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.kthdd.todoPlanner.TodoRoutinWidget;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		D3B48D072C2817AB00441F60 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = WLJ373955X;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = TodoRoutinWidget/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = TodoRoutinWidget;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MARKETING_VERSION = 1.0;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.kthdd.todoPlanner.TodoRoutinWidget;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		D3B48D082C2817AB00441F60 /* Profile */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = WLJ373955X;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = TodoRoutinWidget/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = TodoRoutinWidget;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MARKETING_VERSION = 1.0;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.kthdd.todoPlanner.TodoRoutinWidget;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Profile;
 		};
 /* End XCBuildConfiguration section */
 
@@ -726,6 +998,16 @@
 				97C147061CF9000F007C117D /* Debug */,
 				97C147071CF9000F007C117D /* Release */,
 				249021D4217E4FDB00AE95B9 /* Profile */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		D3B48D092C2817AB00441F60 /* Build configuration list for PBXNativeTarget "TodoRoutinWidgetExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D3B48D062C2817AB00441F60 /* Debug */,
+				D3B48D072C2817AB00441F60 /* Release */,
+				D3B48D082C2817AB00441F60 /* Profile */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

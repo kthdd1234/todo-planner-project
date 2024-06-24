@@ -112,6 +112,12 @@ class _ContentViewState extends State<ContentView> {
     RecordBox? recordBox =
         recordRepository.recordBox.get(dateTimeKey(widget.selectedDateTime));
 
+    final r = lightBlue.s100.red;
+    final g = lightBlue.s100.green;
+    final b = lightBlue.s100.blue;
+
+    log('rgb $r $g $b');
+
     return Column(
       children: [
         MemoContainer(

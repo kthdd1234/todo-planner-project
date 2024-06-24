@@ -58,6 +58,7 @@ dependencies:
   url_launcher: ^6.3.0
   app_tracking_transparency: ^2.0.5
   permission_handler: ^11.3.1
+  home_widget: ^0.5.0
 
 dev_dependencies:
   flutter_test:
@@ -142,11 +143,6 @@ flutter:
         - asset: assets/font/Cafe24Dongdong.ttf
           weight: 400
 
-    - family: Cafe24Ohsquareair
-      fonts:
-        - asset: assets/font/Cafe24Ohsquareair.ttf
-          weight: 400
-
     - family: Cafe24Ssukssuk
       fonts:
         - asset: assets/font/Cafe24Ssukssuk.ttf
@@ -170,11 +166,6 @@ flutter:
     - family: SingleDay
       fonts:
         - asset: assets/font/SingleDay.ttf
-          weight: 400
-
-    - family: TDTDTadakTadak
-      fonts:
-        - asset: assets/font/TDTDTadakTadak.ttf
           weight: 400
   #
   # For details regarding fonts from package dependencies,
