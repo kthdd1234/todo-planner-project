@@ -16,6 +16,14 @@ func loadJson <T: Decodable>(json: String) -> T {
     }
 }
 
+func isWidgetSM(widgetFamily: WidgetFamily) -> Bool {
+    if(widgetFamily == .systemSmall || widgetFamily == .systemMedium){
+        return true
+    }
+    
+    return false
+}
+
 func isWidgetML(widgetFamily: WidgetFamily) -> Bool {
     if(widgetFamily == .systemMedium || widgetFamily == .systemLarge){
         return true
@@ -23,3 +31,17 @@ func isWidgetML(widgetFamily: WidgetFamily) -> Bool {
     
     return false
 }
+
+func color(rgb: [Double]) -> Color {
+    return Color(red: rgb[0]/255, green: rgb[1]/255, blue: rgb[2]/255)
+}
+
+func prefixList(widgetFamily: WidgetFamily, list: [ItemModel]) -> [ItemModel] {
+    if isWidgetSM(widgetFamily: widgetFamily) {
+        return Array(list.prefix(3))
+    }
+    
+    return Array(list.prefix(10))
+}
+
+

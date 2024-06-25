@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 
 class AppBarInfoClass {
@@ -221,4 +223,24 @@ class PremiumBenefitClass {
   });
 
   String svgName, mainTitle, subTitle;
+}
+
+class WidgetHeaderClass {
+  final String title, today;
+  final List<double> textRGB, bgRGB;
+
+  WidgetHeaderClass(this.title, this.today, this.textRGB, this.bgRGB);
+
+  WidgetHeaderClass.fromJson(Map<String, dynamic> json)
+      : title = json['title'] as String,
+        today = json['today'] as String,
+        textRGB = json['textRGB'] as List<double>,
+        bgRGB = json['bgRGB'] as List<double>;
+
+  Map<String, dynamic> toJson() =>
+      {'title': title, 'today': today, 'textRGB': textRGB, 'bgRGB': bgRGB};
+}
+
+class WidgetItemClass {
+  //
 }

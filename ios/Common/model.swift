@@ -2,15 +2,17 @@ import Foundation
 
 struct HeaderModel: Hashable, Codable {
     var title: String
-    var textRGB: [Int]
-    var bgRGB: [Int]
+    var today: String
+    var textRGB: [Double]
+    var bgRGB: [Double]
 }
 
-struct TaskModel: Hashable, Codable, Identifiable {
+struct ItemModel: Hashable, Codable, Identifiable {
     var id: String
     var name: String
     var mark: String
-    var lineRGB: [Int]
-    var markRGB: [Int]
-    var highlightRGB: [Int]
+    var barRGB: [Double]
+    var lineRGB: [Double]
+    var markRGB: [Double]
+    var highlightRGB: [Double]
 }

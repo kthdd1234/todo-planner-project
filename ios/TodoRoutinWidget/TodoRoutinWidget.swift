@@ -3,16 +3,17 @@ import SwiftUI
 
 struct Provider: TimelineProvider {
     func placeholder(in context: Context) -> TodoRoutinEntry {
-        TodoRoutinEntry(date: Date(), header: "", taskList: "", fontFamily: "")
+        TodoRoutinEntry(date: Date(), header: "", taskList: "", fontFamily: "", emptyText: "")
     }
 
     func getSnapshot(in context: Context, completion: @escaping (TodoRoutinEntry) -> ()) {
         let data = UserDefaults.init(suiteName: widgetGroupId)
         let header = data?.string(forKey: "header") ?? ""
         let taskList = data?.string(forKey: "taskList") ?? ""
-        let fontFamily = data?.string(forKey: "fontFamily") ?? ""
+        let fontFamily = data?.string(forKey: "fontFamily") ?? "IM_Hyemin"
+        let emptyText = data?.string(forKey: "emptyText") ?? "할 일, 루틴이 없어요."
         
-        let entry = TodoRoutinEntry(date: Date(), header: header, taskList: taskList, fontFamily: fontFamily)
+        let entry = TodoRoutinEntry(date: Date(), header: header, taskList: taskList, fontFamily: fontFamily, emptyText: emptyText)
         
         completion(entry)
     }
@@ -30,32 +31,32 @@ struct TodoRoutinEntry: TimelineEntry {
     let header: String
     let taskList: String
     let fontFamily: String
+    let emptyText: String
 }
 
 struct TodoRoutinWidgetEntryView : View {
     var entry: Provider.Entry
     
     @Environment(\.widgetFamily) var eWidgetFamily
-//    @State var headerState: HeaderModel
-//    @State var taskListState: [TaskModel]
+    @State var headerState: HeaderModel
+    @State var itemListState: [ItemModel]
     
     init(entry: Provider.Entry) {
         self.entry = entry
-//        self.headerState = loadJson(json: entry.header)
-//        self.taskListState = loadJson(json: entry.taskList)
+        self.headerState = entry.header != "" ? loadJson(json: entry.header) : HeaderModel(title: "할 일, 루틴 리스트", today: "날짜 없음", textRGB: [63, 81, 181], bgRGB: [232, 234, 246])
+        self.itemListState = entry.taskList != "" ? loadJson(json: entry.taskList) : []
         
-        cutomFont(fontFamily: entry.fontFamily)
+        cutomFont(fontFamily: "IM_Hyemin")
     }
 
     var body: some View {
         VStack {
-            HeaderView(widgetFamily: eWidgetFamily, fontFamily: "", title: "할 일, 루틴 리스트", today: "6월 24일 (월)")
-            Spacer()
+            HeaderView(widgetFamily: eWidgetFamily, fontFamily: entry.fontFamily, header: headerState)
+            ListView(widgetFamily: eWidgetFamily,emptyText: entry.emptyText != "" ? entry.emptyText : "할 일, 루틴이 없어요" , fontFamily: entry.fontFamily, itemList: itemListState
+            )
         }
         .widgetURL(URL(string: "todoRoutin://message?message=task&homeWidget"))
-        .containerBackground(for: .widget) {
-//            .background(widgetBgColor)
-        }
+        .containerBackground(for: .widget) {}
     }
 }
 
@@ -71,8 +72,8 @@ struct TodoRoutinWidget: Widget {
     }
 }
 
-#Preview(as: .systemSmall) {
+#Preview(as: .systemMedium) {
     TodoRoutinWidget()
 } timeline: {
-    TodoRoutinEntry(date: .now, header: "", taskList: "", fontFamily: "")
+    TodoRoutinEntry(date: .now, header: "", taskList: "", fontFamily: "", emptyText: "")
 }

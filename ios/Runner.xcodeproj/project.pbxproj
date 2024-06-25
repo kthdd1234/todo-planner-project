@@ -24,6 +24,8 @@
 		D3058C6B2C2924DC009DEFB3 /* model.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3058C692C2924DC009DEFB3 /* model.swift */; };
 		D3058C6E2C296FE0009DEFB3 /* HeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3058C6D2C296FE0009DEFB3 /* HeaderView.swift */; };
 		D3058C6F2C296FE0009DEFB3 /* HeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3058C6D2C296FE0009DEFB3 /* HeaderView.swift */; };
+		D31275DB2C2A71C9005625EB /* ListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D31275DA2C2A71C9005625EB /* ListView.swift */; };
+		D31275DC2C2A71C9005625EB /* ListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D31275DA2C2A71C9005625EB /* ListView.swift */; };
 		D3B48CF72C2817A800441F60 /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D3B48CF62C2817A800441F60 /* WidgetKit.framework */; };
 		D3B48CF92C2817A800441F60 /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D3B48CF82C2817A800441F60 /* SwiftUI.framework */; };
 		D3B48CFC2C2817A800441F60 /* TodoRoutinWidgetBundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3B48CFB2C2817A800441F60 /* TodoRoutinWidgetBundle.swift */; };
@@ -99,6 +101,7 @@
 		D3058C662C29226F009DEFB3 /* func.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = func.swift; sourceTree = "<group>"; };
 		D3058C692C2924DC009DEFB3 /* model.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = model.swift; sourceTree = "<group>"; };
 		D3058C6D2C296FE0009DEFB3 /* HeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeaderView.swift; sourceTree = "<group>"; };
+		D31275DA2C2A71C9005625EB /* ListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListView.swift; sourceTree = "<group>"; };
 		D3B48CF52C2817A800441F60 /* TodoRoutinWidgetExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = TodoRoutinWidgetExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		D3B48CF62C2817A800441F60 /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
 		D3B48CF82C2817A800441F60 /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
@@ -231,6 +234,7 @@
 			isa = PBXGroup;
 			children = (
 				D3058C6D2C296FE0009DEFB3 /* HeaderView.swift */,
+				D31275DA2C2A71C9005625EB /* ListView.swift */,
 			);
 			path = view;
 			sourceTree = "<group>";
@@ -489,6 +493,7 @@
 				D3058C672C29226F009DEFB3 /* func.swift in Sources */,
 				D3058C6A2C2924DC009DEFB3 /* model.swift in Sources */,
 				D3058C642C2915D0009DEFB3 /* view.swift in Sources */,
+				D31275DB2C2A71C9005625EB /* ListView.swift in Sources */,
 				D3058C612C285230009DEFB3 /* variable.swift in Sources */,
 				74858FAF1ED2DC5600515810 /* AppDelegate.swift in Sources */,
 				1498D2341E8E89220040F4C2 /* GeneratedPluginRegistrant.m in Sources */,
@@ -503,6 +508,7 @@
 				D3058C682C29226F009DEFB3 /* func.swift in Sources */,
 				D3058C6B2C2924DC009DEFB3 /* model.swift in Sources */,
 				D3058C652C2915D0009DEFB3 /* view.swift in Sources */,
+				D31275DC2C2A71C9005625EB /* ListView.swift in Sources */,
 				D3058C622C285230009DEFB3 /* variable.swift in Sources */,
 				D3B48CFE2C2817A800441F60 /* TodoRoutinWidget.swift in Sources */,
 				D3B48CFC2C2817A800441F60 /* TodoRoutinWidgetBundle.swift in Sources */,

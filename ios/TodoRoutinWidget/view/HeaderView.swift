@@ -4,21 +4,25 @@ import SwiftUI
 struct HeaderView: View {
     let widgetFamily: WidgetFamily
     let fontFamily: String
-    let title: String
-    let today: String
+    let header: HeaderModel
     
     var body: some View {
-        HStack{
-            TextView(text: title,
+        HStack(alignment: .bottom) {
+            TextView(text: header.title,
                      fontFamily: fontFamily,
-                     isBold: true,
-                     textColor: nil,
+                     fontSize: 13,
+                     isBold: false,
+                     textColor: color(rgb: header.textRGB),
                      isLineThrough: nil,
                      lineThroughColor: nil)
+            .padding(EdgeInsets(top: 5, leading: 7, bottom: 5, trailing: 7))
+            .background(color(rgb: header.bgRGB))
+            .cornerRadius(5)
             Spacer()
             if(isWidgetML(widgetFamily: widgetFamily)) {
-                TextView(text: today,
+                TextView(text: header.today,
                          fontFamily: fontFamily,
+                         fontSize: 11,
                          isBold: true,
                          textColor: .gray,
                          isLineThrough: nil,
@@ -26,9 +30,6 @@ struct HeaderView: View {
             }
             
         }
+        .padding(EdgeInsets(top: 5, leading: 0, bottom: 7, trailing: 0))
     }
-}
-
-#Preview {
-    HeaderView(widgetFamily: .systemSmall, fontFamily: "", title: "", today: "")
 }

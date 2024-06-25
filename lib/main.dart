@@ -30,11 +30,18 @@ void main() async {
   await HomeWidget.setAppGroupId('group.todo-planner-widget');
 
   runApp(
-    EasyLocalization(
-      supportedLocales: const [Locale('ko'), Locale('en'), Locale('ja')],
-      path: 'assets/translation',
-      fallbackLocale: const Locale('ko'),
-      child: const MyApp(),
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (context) => BottomTabIndexProvider()),
+        ChangeNotifierProvider(create: (context) => SelectedDateTimeProvider()),
+        ChangeNotifierProvider(create: (context) => TitleDateTimeProvider())
+      ],
+      child: EasyLocalization(
+        supportedLocales: const [Locale('ko'), Locale('en'), Locale('ja')],
+        path: 'assets/translation',
+        fallbackLocale: const Locale('ko'),
+        child: const MyApp(),
+      ),
     ),
   );
 }
@@ -63,10 +70,14 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
   }
 
   launchedFromHomeWidget(Uri? uri) async {
-    UserBox? user = userBox?.get('userProfile');
-    String? scheme = uri?.scheme;
+    DateTime now = DateTime.now();
 
-    //
+    if (uri != null) {
+      context
+          .read<SelectedDateTimeProvider>()
+          .changeSelectedDateTime(dateTime: now);
+      context.read<TitleDateTimeProvider>().changeTitleDateTime(dateTime: now);
+    }
   }
 
   @override
@@ -108,30 +119,22 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
     bool isUser = UserRepository().isUser;
     String initialRoute = isUser ? 'home-page' : 'intro-page';
 
-    return MultiProvider(
-      providers: [
-        ChangeNotifierProvider(create: (context) => BottomTabIndexProvider()),
-        ChangeNotifierProvider(create: (context) => SelectedDateTimeProvider()),
-        ChangeNotifierProvider(create: (context) => TitleDateTimeProvider())
-      ],
-      child: MaterialApp(
-        title: 'Todo Planner',
-        theme: ThemeData(
-          useMaterial3: true,
-          fontFamily: initFontFamily,
-          cupertinoOverrideTheme:
-              const CupertinoThemeData(applyThemeToAll: true),
-        ),
-        localizationsDelegates: context.localizationDelegates,
-        supportedLocales: context.supportedLocales,
-        locale: context.locale,
-        debugShowCheckedModeBanner: false,
-        initialRoute: initialRoute,
-        routes: {
-          'home-page': (context) => const HomePage(),
-          'intro-page': (context) => const IntroPage()
-        },
+    return MaterialApp(
+      title: 'Todo Planner',
+      theme: ThemeData(
+        useMaterial3: true,
+        fontFamily: initFontFamily,
+        cupertinoOverrideTheme: const CupertinoThemeData(applyThemeToAll: true),
       ),
+      localizationsDelegates: context.localizationDelegates,
+      supportedLocales: context.supportedLocales,
+      locale: context.locale,
+      debugShowCheckedModeBanner: false,
+      initialRoute: initialRoute,
+      routes: {
+        'home-page': (context) => const HomePage(),
+        'intro-page': (context) => const IntroPage()
+      },
     );
   }
 }

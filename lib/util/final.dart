@@ -35,10 +35,10 @@ final bottomNavigationBarItemList = [
 
 final indigo = ColorClass(
   colorName: '남색',
-  original: Colors.indigo,
-  s50: Colors.indigo.shade50,
+  original: Colors.indigo, // 63, 81, 181
+  s50: Colors.indigo.shade50, // 232, 234, 246
   s100: Colors.indigo.shade100, // 197, 202, 233
-  s200: Colors.indigo.shade200,
+  s200: Colors.indigo.shade200, //
   s300: Colors.indigo.shade300, // 255, 121, 134, 203
   s400: Colors.indigo.shade400,
 );
@@ -85,12 +85,12 @@ final pink = ColorClass(
 
 final blue = ColorClass(
   colorName: '파란색',
-  original: Colors.blue,
-  s50: Colors.blue.shade50,
+  original: Colors.blue, // 33, 150, 243
+  s50: Colors.blue.shade50, // 227, 242, 253
   s100: Colors.blue.shade100, // 187, 222, 251
-  s200: Colors.blue.shade200,
-  s300: Colors.blue.shade300,
-  s400: Colors.blue.shade400,
+  s200: Colors.blue.shade200, // 144, 202, 249
+  s300: Colors.blue.shade300, // 100, 181, 246
+  s400: Colors.blue.shade400, // 66, 165, 245
 ); //
 
 final brown = ColorClass(
