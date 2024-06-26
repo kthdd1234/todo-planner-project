@@ -13,7 +13,6 @@ struct HeaderView: View {
                      fontSize: 13,
                      isBold: false,
                      textColor: color(rgb: header.textRGB),
-                     isLineThrough: nil,
                      lineThroughColor: nil)
             .padding(EdgeInsets(top: 5, leading: 7, bottom: 5, trailing: 7))
             .background(color(rgb: header.bgRGB))
@@ -25,7 +24,6 @@ struct HeaderView: View {
                          fontSize: 11,
                          isBold: true,
                          textColor: .gray,
-                         isLineThrough: nil,
                          lineThroughColor: nil)
             }
             

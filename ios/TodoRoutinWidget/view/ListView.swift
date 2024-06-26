@@ -10,7 +10,7 @@ struct ListView: View {
     var body: some View {
         if itemList.isEmpty {
                 Spacer()
-                TextView(text: emptyText, fontFamily: fontFamily, fontSize: 14, isBold: false, textColor: .gray, isLineThrough: nil, lineThroughColor: nil)
+                TextView(text: emptyText, fontFamily: fontFamily, fontSize: 14, isBold: false, textColor: .gray, lineThroughColor: nil)
                 Spacer()
         } else {
             ForEach(prefixList(widgetFamily: widgetFamily, list: itemList)) { item in
@@ -28,10 +28,13 @@ struct ItemView: View {
     var body: some View {
         HStack {
             Rectangle()
-                .fill(color(rgb: item.barRGB))
-                .frame(width: 5, height: 14)
+                .fill(color(rgb: item.barRGB)!)
+                .frame(width: 5, height: 16)
                 .cornerRadius(2)
-            TextView(text: item.name, fontFamily: fontFamily, fontSize: 14, isBold: false, textColor: .black, isLineThrough: item.mark != "E", lineThroughColor: item.mark != "E" ? color(rgb: item.lineRGB) : nil)
+            TextView(text: item.name, fontFamily: fontFamily, fontSize: 14, isBold: false, textColor: .black, lineThroughColor: item.mark != "E" ? color(rgb: item.lineRGB) : nil)
+                .padding(item.highlightRGB != nil ? EdgeInsets(top: 2, leading: 3, bottom: 2, trailing: 3) : EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
+                .background(color(rgb: item.highlightRGB))
+                .cornerRadius(5)
             Spacer()
             Image("mark-\(item.mark)")
                 .renderingMode(.template)

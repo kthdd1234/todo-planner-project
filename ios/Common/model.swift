@@ -14,5 +14,5 @@ struct ItemModel: Hashable, Codable, Identifiable {
     var barRGB: [Double]
     var lineRGB: [Double]
     var markRGB: [Double]
-    var highlightRGB: [Double]
+    var highlightRGB: [Double]?
 }

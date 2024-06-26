@@ -61,3 +61,15 @@ const iOSNativeRealId = 'ca-app-pub-6804308271128440/5985687094';
 
 // iOSAppOpeningRealId
 const iOSAppOpeningRealId = 'ca-app-pub-6804308271128440/3184263934';
+
+/// appleApiKey
+const appleApiKey = 'appl_pXSYpqBvTJABLdPrTuwNjLMeKTJ';
+
+/// googleApiKey
+const googleApiKey = '';
+
+/// offeringIdentifier
+const offeringIdentifier = 'premium_IOS';
+
+/// entitlementIdentifier
+const entitlementIdentifier = 'premium';

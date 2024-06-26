@@ -32,8 +32,12 @@ func isWidgetML(widgetFamily: WidgetFamily) -> Bool {
     return false
 }
 
-func color(rgb: [Double]) -> Color {
-    return Color(red: rgb[0]/255, green: rgb[1]/255, blue: rgb[2]/255)
+func color(rgb: [Double]?) -> Color? {
+    if(rgb == nil) {
+        return nil
+    }
+    
+    return Color(red: rgb![0]/255, green: rgb![1]/255, blue: rgb![2]/255)
 }
 
 func prefixList(widgetFamily: WidgetFamily, list: [ItemModel]) -> [ItemModel] {

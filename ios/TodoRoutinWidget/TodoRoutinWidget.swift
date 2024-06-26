@@ -8,6 +8,7 @@ struct Provider: TimelineProvider {
 
     func getSnapshot(in context: Context, completion: @escaping (TodoRoutinEntry) -> ()) {
         let data = UserDefaults.init(suiteName: widgetGroupId)
+        
         let header = data?.string(forKey: "header") ?? ""
         let taskList = data?.string(forKey: "taskList") ?? ""
         let fontFamily = data?.string(forKey: "fontFamily") ?? "IM_Hyemin"
@@ -43,7 +44,8 @@ struct TodoRoutinWidgetEntryView : View {
     
     init(entry: Provider.Entry) {
         self.entry = entry
-        self.headerState = entry.header != "" ? loadJson(json: entry.header) : HeaderModel(title: "할 일, 루틴 리스트", today: "날짜 없음", textRGB: [63, 81, 181], bgRGB: [232, 234, 246])
+        self.headerState = entry.header != "" ? loadJson(json: entry.header) : 
+        HeaderModel(title: "할 일, 루틴 리스트", today: "날짜 없음", textRGB: [63, 81, 181], bgRGB: [232, 234, 246])
         self.itemListState = entry.taskList != "" ? loadJson(json: entry.taskList) : []
         
         cutomFont(fontFamily: "IM_Hyemin")

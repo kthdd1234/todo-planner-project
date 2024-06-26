@@ -1,6 +1,3 @@
-import 'dart:io';
-
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:project/repositories/record_repository.dart';
@@ -8,30 +5,7 @@ import 'package:project/repositories/task_repository.dart';
 import 'package:project/repositories/user_repository.dart';
 import 'package:project/util/class.dart';
 import 'package:project/util/enum.dart';
-import 'package:project/body/SettingBody.dart';
-import 'package:project/body/TaskBody.dart';
 import 'package:table_calendar/table_calendar.dart';
-
-final bottomNavigationBarItemList = [
-  BottomNavigationBarClass(
-    svgAsset: 'todo',
-    index: 0,
-    label: '할 일',
-    body: const TaskBody(),
-  ),
-  // BottomNavigationBarClass(
-  //   svgAsset: 'time',
-  //   index: 1,
-  //   label: '달력',
-  //   body: const TimeTableBody(),
-  // ),
-  BottomNavigationBarClass(
-    svgAsset: 'setting',
-    index: 2,
-    label: '설정',
-    body: const SettingBody(),
-  ),
-];
 
 final indigo = ColorClass(
   colorName: '남색',
@@ -289,9 +263,9 @@ final premiumBenefitList = [
     mainTitle: '모든 화면에서 광고가 나오지 않아요',
     subTitle: '광고없이 쾌적하게 앱을 사용해보세요!',
   ),
-  PremiumBenefitClass(
-    svgName: 'premium-photos-four',
-    mainTitle: '사진을 최대 3장까지 추가 할 수 있어요',
-    subTitle: '보다 사진을 추가해보세요!',
-  ),
+  // PremiumBenefitClass(
+  //   svgName: 'premium-photos',
+  //   mainTitle: '사진을 최대 3장까지 추가 할 수 있어요',
+  //   subTitle: '보다 많은 사진을 추가해보세요!',
+  // ),
 ];

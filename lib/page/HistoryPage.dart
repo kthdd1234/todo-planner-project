@@ -8,14 +8,17 @@ import 'package:project/common/CommonScaffold.dart';
 import 'package:project/common/CommonTag.dart';
 import 'package:project/common/CommonText.dart';
 import 'package:project/model/record_box/record_box.dart';
+import 'package:project/provider/PremiumProvider.dart';
 import 'package:project/util/class.dart';
 import 'package:project/util/final.dart';
 import 'package:project/util/func.dart';
+import 'package:project/widget/ad/NativeAd.dart';
 import 'package:project/widget/history/HistoryImage.dart';
 import 'package:project/widget/history/HistoryMemo.dart';
 import 'package:project/widget/history/HistoryTask.dart';
 import 'package:project/widget/history/HistoryTitle.dart';
 import 'package:project/widget/popup/MonthPopup.dart';
+import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 
 class HistoryPage extends StatefulWidget {
@@ -68,10 +71,11 @@ class _HistoryPageState extends State<HistoryPage> {
 
   @override
   Widget build(BuildContext context) {
+    bool isPremium = context.watch<PremiumProvider>().isPremium;
     String locale = context.locale.toString();
-    Iterable<RecordBox> recordList = isRecent
-        ? recordRepository.recordList.reversed
-        : recordRepository.recordList;
+    List<RecordBox> recordList = isRecent
+        ? recordRepository.recordList.reversed.toList()
+        : recordRepository.recordList.toList();
     bool isRecord = recordList.any((record) =>
         record.taskMarkList != null && record.taskMarkList?.length != 0);
 
@@ -80,6 +84,14 @@ class _HistoryPageState extends State<HistoryPage> {
             yFormatter(locale: locale, dateTime: record.createDateTime) ==
             yFormatter(locale: locale, dateTime: yearDateTime))
         .toList();
+
+    if (isPremium == false && recordList.isNotEmpty) {
+      for (var i = 0; i < recordList.length; i++) {
+        if (i != 0 && i % 4 == 0) {
+          recordList.insert(i, RecordBox(createDateTime: DateTime(1000)));
+        }
+      }
+    }
 
     return CommonBackground(
       child: CommonScaffold(
@@ -104,6 +116,10 @@ class _HistoryPageState extends State<HistoryPage> {
         body: isRecord
             ? ListView(
                 children: recordList.map((record) {
+                  if (record.createDateTime.year == 1000) {
+                    return NativeAdWidget();
+                  }
+
                   bool isShow = (record.taskMarkList != null &&
                           record.taskMarkList?.isNotEmpty == true) ||
                       record.memo != null ||

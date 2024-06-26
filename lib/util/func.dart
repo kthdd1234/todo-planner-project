@@ -1,9 +1,11 @@
 // ignore_for_file: unused_local_variable, prefer_const_declarations
 
+import 'dart:developer';
 import 'dart:io';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:package_info_plus/package_info_plus.dart';
@@ -13,6 +15,7 @@ import 'package:project/model/task_box/task_box.dart';
 import 'package:project/util/class.dart';
 import 'package:project/util/constants.dart';
 import 'package:project/util/final.dart';
+import 'package:purchases_flutter/purchases_flutter.dart';
 
 SvgPicture svgAsset({
   required String name,
@@ -263,11 +266,47 @@ String getAdId(String ad) {
         'real': iOSNativeRealId,
       },
       'appOpening': {
-        'debug': iOSNativeTestId,
+        'debug': iOSAppOpeningTestId,
         'real': iOSAppOpeningRealId,
       }
     },
   };
 
   return adId[platform]![ad]![env]!;
+}
+
+Future<bool> setPurchasePremium(Package package) async {
+  try {
+    CustomerInfo customerInfo = await Purchases.purchasePackage(package);
+    return customerInfo.entitlements.all[entitlementIdentifier]?.isActive ==
+        true;
+  } on PlatformException catch (e) {
+    log('e =>> ${e.toString()}');
+    return false;
+  }
+}
+
+Future<bool> isPurchasePremium() async {
+  try {
+    CustomerInfo customerInfo = await Purchases.getCustomerInfo();
+    bool isActive =
+        customerInfo.entitlements.all[entitlementIdentifier]?.isActive == true;
+
+    return false;
+  } on PlatformException catch (e) {
+    log('e =>> ${e.toString()}');
+    return false;
+  }
+}
+
+Future<bool> isPurchaseRestore() async {
+  try {
+    CustomerInfo customerInfo = await Purchases.restorePurchases();
+    bool isActive =
+        customerInfo.entitlements.all[entitlementIdentifier]?.isActive == true;
+    return isActive;
+  } on PlatformException catch (e) {
+    log('e =>> ${e.toString()}');
+    return false;
+  }
 }

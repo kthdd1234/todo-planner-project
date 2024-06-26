@@ -227,20 +227,55 @@ class PremiumBenefitClass {
 
 class WidgetHeaderClass {
   final String title, today;
-  final List<double> textRGB, bgRGB;
+  final List<int> textRGB, bgRGB;
 
   WidgetHeaderClass(this.title, this.today, this.textRGB, this.bgRGB);
 
   WidgetHeaderClass.fromJson(Map<String, dynamic> json)
       : title = json['title'] as String,
         today = json['today'] as String,
-        textRGB = json['textRGB'] as List<double>,
-        bgRGB = json['bgRGB'] as List<double>;
+        textRGB = json['textRGB'] as List<int>,
+        bgRGB = json['bgRGB'] as List<int>;
 
-  Map<String, dynamic> toJson() =>
-      {'title': title, 'today': today, 'textRGB': textRGB, 'bgRGB': bgRGB};
+  Map<String, dynamic> toJson() => {
+        'title': title,
+        'today': today,
+        'textRGB': textRGB,
+        'bgRGB': bgRGB,
+      };
 }
 
 class WidgetItemClass {
-  //
+  final String id, name, mark;
+  final List<int> barRGB, lineRGB, markRGB;
+  final List<int>? highlightRGB;
+
+  WidgetItemClass(
+    this.id,
+    this.name,
+    this.mark,
+    this.barRGB,
+    this.lineRGB,
+    this.markRGB,
+    this.highlightRGB,
+  );
+
+  WidgetItemClass.fromJson(Map<String, dynamic> json)
+      : id = json['id'] as String,
+        name = json['name'] as String,
+        mark = json['mark'] as String,
+        barRGB = json['barRGB'] as List<int>,
+        lineRGB = json['lineRGB'] as List<int>,
+        markRGB = json['markRGB'] as List<int>,
+        highlightRGB = json['highlightRGB'] as List<int>?;
+
+  Map<String, dynamic> toJson() => {
+        'id': id,
+        'name': name,
+        'mark': mark,
+        'barRGB': barRGB,
+        'lineRGB': lineRGB,
+        'markRGB': markRGB,
+        'highlightRGB': highlightRGB
+      };
 }

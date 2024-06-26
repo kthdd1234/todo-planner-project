@@ -6,7 +6,6 @@ struct TextView: View {
     let fontSize: CGFloat
     let isBold: Bool
     let textColor: Color?
-    let isLineThrough: Bool?
     let lineThroughColor: Color?
     
     var body: some View {
@@ -15,8 +14,7 @@ struct TextView: View {
             .font(Font.custom(fontFamily, size: fontSize))
             .foregroundColor(textColor)
             .lineLimit(1)
-            .strikethrough(isLineThrough == true, pattern: .solid, color: lineThroughColor)
-        
+            .strikethrough(lineThroughColor != nil, pattern: .solid, color: lineThroughColor)
     }
 }
 

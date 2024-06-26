@@ -1,40 +1,51 @@
 import 'dart:developer';
+import 'dart:io';
 
 import 'package:app_tracking_transparency/app_tracking_transparency.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:hive/hive.dart';
 import 'package:home_widget/home_widget.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:project/model/user_box/user_box.dart';
 import 'package:project/page/HomePage.dart';
 import 'package:project/page/IntroPage.dart';
+import 'package:project/provider/PremiumProvider.dart';
 import 'package:project/provider/bottomTabIndexProvider.dart';
 import 'package:project/provider/selectedDateTimeProvider.dart';
 import 'package:project/provider/titleDateTimeProvider.dart';
 import 'package:project/repositories/init_hive.dart';
 import 'package:project/repositories/user_repository.dart';
 import 'package:project/util/constants.dart';
+import 'package:project/util/service.dart';
 import 'package:provider/provider.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:purchases_flutter/purchases_flutter.dart';
+
+PurchasesConfiguration _configuration =
+    PurchasesConfiguration(Platform.isIOS ? appleApiKey : googleApiKey);
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
+  await Purchases.configure(_configuration);
   await MobileAds.instance.initialize();
   await initializeDateFormatting();
   await EasyLocalization.ensureInitialized();
   await InitHive().initializeHive();
   await HomeWidget.setAppGroupId('group.todo-planner-widget');
+  await dotenv.load(fileName: ".env");
 
   runApp(
     MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => BottomTabIndexProvider()),
         ChangeNotifierProvider(create: (context) => SelectedDateTimeProvider()),
-        ChangeNotifierProvider(create: (context) => TitleDateTimeProvider())
+        ChangeNotifierProvider(create: (context) => TitleDateTimeProvider()),
+        ChangeNotifierProvider(create: (context) => PremiumProvider())
       ],
       child: EasyLocalization(
         supportedLocales: const [Locale('ko'), Locale('en'), Locale('ja')],
@@ -96,16 +107,16 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
         state == AppLifecycleState.detached;
 
     if (isBackground && user != null) {
-      //
+      await HomeWidgetService().updateTodoRoutin();
     }
   }
 
   @override
   void didChangeDependencies() {
+    super.didChangeDependencies();
+
     HomeWidget.initiallyLaunchedFromHomeWidget().then(launchedFromHomeWidget);
     HomeWidget.widgetClicked.listen(launchedFromHomeWidget);
-
-    super.didChangeDependencies();
   }
 
   @override
