@@ -126,7 +126,7 @@ class _AppBarTitleState extends State<AppBarTitle> {
             children: [
               CommonSvgButton(
                 name: calendarLabel,
-                width: 22.5,
+                width: 22,
                 onTap: onLabel,
               ),
               CommonSpace(width: 15),

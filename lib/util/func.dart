@@ -292,7 +292,7 @@ Future<bool> isPurchasePremium() async {
     bool isActive =
         customerInfo.entitlements.all[entitlementIdentifier]?.isActive == true;
 
-    return false;
+    return isActive;
   } on PlatformException catch (e) {
     log('e =>> ${e.toString()}');
     return false;

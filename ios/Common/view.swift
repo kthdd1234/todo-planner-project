@@ -17,4 +17,3 @@ struct TextView: View {
             .strikethrough(lineThroughColor != nil, pattern: .solid, color: lineThroughColor)
     }
 }
-

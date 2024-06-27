@@ -82,8 +82,25 @@ class _SettingPageState extends State<SettingPage> {
         : Share.share(playStoreLink!, subject: '투두 플래너');
   }
 
-  onVersion() {
-    //
+  onInquire() async {
+    Uri url = Uri(
+      scheme: 'https',
+      host: 'open.kakao.com',
+      path: 'o/szS9jCzg',
+    );
+
+    await canLaunchUrl(url) ? await launchUrl(url) : print('err');
+  }
+
+  onVersion() async {
+    Uri url = Uri(
+      scheme: 'https',
+      host: 'apps.apple.com',
+      path:
+          'app/%ED%88%AC%EB%91%90-%ED%94%8C%EB%9E%98%EB%84%88-todo-planner/id6504663551',
+    );
+
+    await canLaunchUrl(url) ? await launchUrl(url) : print('err');
   }
 
   @override
@@ -123,6 +140,11 @@ class _SettingPageState extends State<SettingPage> {
         onTap: onShare,
       ),
       SettingItemClass(
+        name: '카카오톡 고객센터 문의',
+        svg: 'inquire',
+        onTap: onInquire,
+      ),
+      SettingItemClass(
         name: '개인정보처리방침',
         svg: 'private',
         onTap: onPrivate,
@@ -130,7 +152,7 @@ class _SettingPageState extends State<SettingPage> {
       SettingItemClass(
         name: '앱 버전',
         svg: 'version',
-        onTap: () {},
+        onTap: onVersion,
         value: CommonText(
           text: '$appVerstion ($appBuildNumber)',
           color: grey.original,
