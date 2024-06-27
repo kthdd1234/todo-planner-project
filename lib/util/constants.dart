@@ -1,3 +1,5 @@
+// ignore_for_file: constant_identifier_names
+
 import 'package:flutter/material.dart';
 import 'package:project/util/final.dart';
 
@@ -73,3 +75,10 @@ const offeringIdentifier = 'premium_IOS';
 
 /// entitlementIdentifier
 const entitlementIdentifier = 'premium';
+
+/// APP_STORE_LINK
+const APP_STORE_LINK =
+    "https://apps.apple.com/app/%ED%88%AC%EB%91%90-%ED%94%8C%EB%9E%98%EB%84%88-todo-planner/id6504663551";
+
+///
+const PLAY_STORE_LINK = "";

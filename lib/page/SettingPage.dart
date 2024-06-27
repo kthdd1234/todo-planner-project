@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:in_app_review/in_app_review.dart';
 import 'package:project/common/CommonBackground.dart';
+import 'package:project/common/CommonContainer.dart';
+import 'package:project/common/CommonModalSheet.dart';
 import 'package:project/common/CommonNull.dart';
 import 'package:project/common/CommonScaffold.dart';
 import 'package:project/common/CommonSpace.dart';
@@ -17,6 +19,8 @@ import 'package:project/util/enum.dart';
 import 'package:project/util/final.dart';
 import 'package:project/util/func.dart';
 import 'package:project/widget/button/ImageButton.dart';
+import 'package:project/widget/button/ModalButton.dart';
+import 'package:project/widget/modalSheet/ThemeModalSheet.dart';
 import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -51,6 +55,13 @@ class _SettingPageState extends State<SettingPage> {
     movePage(context: context, page: const PremiumPage());
   }
 
+  onTheme() {
+    showModalBottomSheet(
+      context: context,
+      builder: (context) => const ThemeModalSheet(),
+    );
+  }
+
   onPrivate() async {
     Uri url = Uri(
       scheme: 'https',
@@ -74,12 +85,9 @@ class _SettingPageState extends State<SettingPage> {
   }
 
   onShare() {
-    String? appStoreLink = dotenv.env['APP_STORE_LINK'];
-    String? playStoreLink = dotenv.env['PLAY_STORE_LINK'];
-
     Platform.isIOS
-        ? Share.share(appStoreLink!, subject: '투두 플래너')
-        : Share.share(playStoreLink!, subject: '투두 플래너');
+        ? Share.share(APP_STORE_LINK, subject: '투두 플래너')
+        : Share.share('', subject: '투두 플래너');
   }
 
   onInquire() async {
@@ -128,6 +136,11 @@ class _SettingPageState extends State<SettingPage> {
                 fontSize: 12,
                 onTap: onPremium,
               ),
+      ),
+      SettingItemClass(
+        name: '화면 테마',
+        svg: 'theme',
+        onTap: onTheme,
       ),
       SettingItemClass(
         name: '앱 리뷰 작성',

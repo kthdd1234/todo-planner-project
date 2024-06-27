@@ -11,17 +11,22 @@ class ModalButton extends StatelessWidget {
     required this.actionText,
     required this.color,
     required this.onTap,
+    this.bgColor,
+    this.isBold,
   });
 
   String svgName;
   String actionText;
   Color color;
+  Color? bgColor;
+  bool? isBold;
   Function() onTap;
 
   @override
   Widget build(BuildContext context) {
     return Expanded(
       child: CommonContainer(
+        color: bgColor,
         onTap: onTap,
         radius: 7,
         child: Column(
@@ -29,7 +34,7 @@ class ModalButton extends StatelessWidget {
           children: [
             svgAsset(name: svgName, width: 25, color: color),
             CommonSpace(height: 10),
-            CommonText(text: actionText, color: color)
+            CommonText(text: actionText, color: color, isBold: isBold)
           ],
         ),
       ),

@@ -121,10 +121,10 @@ final cyan = ColorClass(
   colorName: '민트색',
   original: Colors.cyan,
   s50: Colors.cyan.shade50,
-  s100: Colors.cyan.shade100,
-  s200: Colors.cyan.shade200,
+  s100: Colors.cyan.shade100, // 178, 235, 242
+  s200: Colors.cyan.shade200, // 128, 222, 234
   s300: Colors.cyan.shade300,
-  s400: Colors.cyan.shade400,
+  s400: Colors.cyan.shade400, // 38, 198, 218
 ); //
 
 final ember = ColorClass(

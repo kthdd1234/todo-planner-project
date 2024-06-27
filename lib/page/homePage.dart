@@ -6,8 +6,11 @@ import 'package:flutter/material.dart';
 import 'package:project/body/TaskBody.dart';
 import 'package:project/common/CommonBackground.dart';
 import 'package:project/common/CommonScaffold.dart';
+import 'package:project/model/user_box/user_box.dart';
 import 'package:project/provider/PremiumProvider.dart';
 import 'package:project/provider/bottomTabIndexProvider.dart';
+import 'package:project/provider/themeProvider.dart';
+import 'package:project/util/final.dart';
 import 'package:project/util/func.dart';
 import 'package:project/util/service.dart';
 import 'package:provider/provider.dart';
@@ -22,20 +25,38 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   late AppLifecycleReactor _appLifecycleReactor;
 
-  @override
-  void initState() {
-    initializePremium() async {
-      bool isPremium = await isPurchasePremium();
-      context.read<PremiumProvider>().setPremiumValue(isPremium);
-    }
-
+  initializeAppOpenAd() {
     AppOpenAdManager appOpenAdManager = AppOpenAdManager()..loadAd();
     _appLifecycleReactor = AppLifecycleReactor(
       appOpenAdManager: appOpenAdManager,
     );
     _appLifecycleReactor.listenToAppStateChanges();
+  }
 
+  initializePremium() async {
+    bool isPremium = await isPurchasePremium();
+    context.read<PremiumProvider>().setPremiumValue(isPremium);
+  }
+
+  initializeHiveDB() async {
+    UserBox? user = userRepository.user;
+
+    if (mounted) {
+      user.theme ??= 'light';
+      WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+        context.read<ThemeProvider>().setThemeValue(user.theme!);
+      });
+    }
+
+    await user.save();
+  }
+
+  @override
+  void initState() {
+    initializeAppOpenAd();
     initializePremium();
+    initializeHiveDB();
+
     super.initState();
   }
 
@@ -62,22 +83,22 @@ class _HomePageState extends State<HomePage> {
 //   ),
 // ),
 
-  // List<BottomNavigationBarItem> items = bottomNavigationBarItemList
-    //     .map((item) => BottomNavigationBarItem(
-    //           icon: Padding(
-    //             padding: const EdgeInsets.only(bottom: 3),
-    //             child: svgAsset(
-    //               width: 27,
-    //               name:
-    //                   '${item.svgAsset}-${seletedIdx == item.index ? "indigo" : 'grey'}',
-    //             ),
-    //           ),
-    //           label: item.label,
-    //         ))
-    //     .toList();
+// List<BottomNavigationBarItem> items = bottomNavigationBarItemList
+//     .map((item) => BottomNavigationBarItem(
+//           icon: Padding(
+//             padding: const EdgeInsets.only(bottom: 3),
+//             child: svgAsset(
+//               width: 27,
+//               name:
+//                   '${item.svgAsset}-${seletedIdx == item.index ? "indigo" : 'grey'}',
+//             ),
+//           ),
+//           label: item.label,
+//         ))
+//     .toList();
 
-    // onBottomNavigation(int newIndex) {
-    //   context
-    //       .read<BottomTabIndexProvider>()
-    //       .changeSeletedIdx(newIndex: newIndex);
-    // }
+// onBottomNavigation(int newIndex) {
+//   context
+//       .read<BottomTabIndexProvider>()
+//       .changeSeletedIdx(newIndex: newIndex);
+// }

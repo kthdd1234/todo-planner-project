@@ -17,6 +17,7 @@ class UserBox extends HiveObject {
     this.language,
     this.fontFamily,
     this.googleDriveInfo,
+    this.theme,
   });
 
   @HiveField(0)
@@ -52,8 +53,11 @@ class UserBox extends HiveObject {
   @HiveField(10)
   Map<String, dynamic> memoTitleInfo;
 
+  @HiveField(11)
+  String? theme;
+
   @override
   String toString() {
-    return '{id: $id, createDateTime: $createDateTime, alarmInfo: $alarmInfo, passwords: $passwords, calendarFormat: $calendarFormat, calendarMaker: $calendarMaker, language: $language, fontFamily: $fontFamily, googleDriveInfo: $googleDriveInfo, taskTitleInfo: $taskTitleInfo, memoTitleInfo: $memoTitleInfo}';
+    return '{id: $id, createDateTime: $createDateTime, alarmInfo: $alarmInfo, passwords: $passwords, calendarFormat: $calendarFormat, calendarMaker: $calendarMaker, language: $language, fontFamily: $fontFamily, googleDriveInfo: $googleDriveInfo, taskTitleInfo: $taskTitleInfo, memoTitleInfo: $memoTitleInfo, theme: $theme}';
   }
 }

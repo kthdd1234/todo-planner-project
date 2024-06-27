@@ -131,6 +131,9 @@ flutter:
     - assets/svg/premium-photos.svg
     - assets/svg/todo-planner-app-icon.svg
     - assets/svg/inquire.svg
+    - assets/svg/theme.svg
+    - assets/svg/light.svg
+    - assets/svg/dark.svg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

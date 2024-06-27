@@ -14,6 +14,7 @@ class CommonBackground extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    //
     return Container(
       height: height ?? MediaQuery.of(context).size.height,
       decoration: BoxDecoration(

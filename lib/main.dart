@@ -16,6 +16,7 @@ import 'package:project/page/IntroPage.dart';
 import 'package:project/provider/PremiumProvider.dart';
 import 'package:project/provider/bottomTabIndexProvider.dart';
 import 'package:project/provider/selectedDateTimeProvider.dart';
+import 'package:project/provider/themeProvider.dart';
 import 'package:project/provider/titleDateTimeProvider.dart';
 import 'package:project/repositories/init_hive.dart';
 import 'package:project/repositories/user_repository.dart';
@@ -45,7 +46,8 @@ void main() async {
         ChangeNotifierProvider(create: (context) => BottomTabIndexProvider()),
         ChangeNotifierProvider(create: (context) => SelectedDateTimeProvider()),
         ChangeNotifierProvider(create: (context) => TitleDateTimeProvider()),
-        ChangeNotifierProvider(create: (context) => PremiumProvider())
+        ChangeNotifierProvider(create: (context) => PremiumProvider()),
+        ChangeNotifierProvider(create: (context) => ThemeProvider()),
       ],
       child: EasyLocalization(
         supportedLocales: const [Locale('ko'), Locale('en'), Locale('ja')],

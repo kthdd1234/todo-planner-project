@@ -28,13 +28,14 @@ class UserBoxAdapter extends TypeAdapter<UserBox> {
       language: fields[6] as String?,
       fontFamily: fields[7] as String?,
       googleDriveInfo: (fields[8] as Map?)?.cast<String, dynamic>(),
+      theme: fields[11] as String?,
     );
   }
 
   @override
   void write(BinaryWriter writer, UserBox obj) {
     writer
-      ..writeByte(11)
+      ..writeByte(12)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
@@ -56,7 +57,9 @@ class UserBoxAdapter extends TypeAdapter<UserBox> {
       ..writeByte(9)
       ..write(obj.taskTitleInfo)
       ..writeByte(10)
-      ..write(obj.memoTitleInfo);
+      ..write(obj.memoTitleInfo)
+      ..writeByte(11)
+      ..write(obj.theme);
   }
 
   @override

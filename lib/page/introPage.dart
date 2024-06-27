@@ -46,6 +46,7 @@ class _IntroPageState extends State<IntroPage> {
         fontFamily: fontFamily,
         taskTitleInfo: taskTitleInfo,
         memoTitleInfo: memoTitleInfo,
+        theme: 'light',
       ),
     );
 
