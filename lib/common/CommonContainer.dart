@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:project/provider/themeProvider.dart';
+import 'package:project/util/constants.dart';
+import 'package:provider/provider.dart';
 
 class CommonContainer extends StatelessWidget {
   CommonContainer({
@@ -21,6 +24,9 @@ class CommonContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    bool isLight = context.watch<ThemeProvider>().isLight;
+
+    // themeContainerColor
     return Padding(
       padding: outerPadding ?? const EdgeInsets.all(0),
       child: GestureDetector(
@@ -30,7 +36,7 @@ class CommonContainer extends StatelessWidget {
           height: height,
           padding: innerPadding ?? const EdgeInsets.all(15),
           decoration: BoxDecoration(
-              color: color ?? Colors.white,
+              color: color ?? (isLight ? Colors.white : darkContainerColor),
               borderRadius: BorderRadius.circular(radius ?? 10),
               boxShadow: [
                 BoxShadow(

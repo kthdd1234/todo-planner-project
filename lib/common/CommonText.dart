@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:project/provider/themeProvider.dart';
 import 'package:project/util/constants.dart';
+import 'package:provider/provider.dart';
 
 class CommonText extends StatelessWidget {
   CommonText({
@@ -34,6 +36,9 @@ class CommonText extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    bool isLight = context.watch<ThemeProvider>().isLight;
+    Color defaultColor = isLight ? Colors.black : Colors.white;
+
     return Container(
       padding: EdgeInsets.all(highlightColor != null ? 3 : 0),
       decoration: BoxDecoration(
@@ -45,7 +50,7 @@ class CommonText extends StatelessWidget {
         textAlign: textAlign ?? TextAlign.center,
         softWrap: softWrap ?? true,
         style: TextStyle(
-          color: color ?? Colors.black,
+          color: color ?? defaultColor,
           fontSize: fontSize,
           fontWeight: isBold == true ? FontWeight.bold : FontWeight.w400,
           overflow: overflow,

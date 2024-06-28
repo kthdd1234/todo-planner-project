@@ -117,9 +117,9 @@ flutter:
     - assets/svg/camera.svg
     - assets/svg/gallery.svg
     - assets/svg/image.svg
-    - assets/svg/month.svg
+    - assets/svg/month-indigo.svg
     - assets/svg/twoWeeks.svg
-    - assets/svg/week.svg
+    - assets/svg/week-indigo.svg
     - assets/svg/crown.svg
     - assets/svg/review.svg
     - assets/svg/share.svg
@@ -134,6 +134,10 @@ flutter:
     - assets/svg/theme.svg
     - assets/svg/light.svg
     - assets/svg/dark.svg
+    - assets/svg/dir-down-bold.svg
+    - assets/svg/week-white.svg
+    - assets/svg/month-white.svg
+    - assets/svg/setting-white.svg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

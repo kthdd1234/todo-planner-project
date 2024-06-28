@@ -13,6 +13,7 @@ class CommonSvgText extends StatelessWidget {
     required this.svgName,
     required this.svgWidth,
     required this.svgDirection,
+    this.isBold,
     this.svgRight,
     this.svgLeft,
     this.svgColor,
@@ -24,6 +25,7 @@ class CommonSvgText extends StatelessWidget {
   Color? textColor, svgColor;
   double svgWidth, fontSize;
   double? svgLeft, svgRight;
+  bool? isBold;
   SvgDirectionEnum svgDirection;
   Function()? onTap;
 
@@ -33,6 +35,7 @@ class CommonSvgText extends StatelessWidget {
       CommonText(
         text: text,
         fontSize: fontSize,
+        isBold: isBold,
         color: textColor,
         overflow: TextOverflow.ellipsis,
       )

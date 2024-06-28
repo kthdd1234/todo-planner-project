@@ -12,6 +12,7 @@ import 'package:project/model/task_box/task_box.dart';
 import 'package:project/model/user_box/user_box.dart';
 import 'package:project/page/SettingPage.dart';
 import 'package:project/provider/selectedDateTimeProvider.dart';
+import 'package:project/provider/themeProvider.dart';
 import 'package:project/provider/titleDateTimeProvider.dart';
 import 'package:project/repositories/user_repository.dart';
 import 'package:project/util/class.dart';
@@ -108,6 +109,7 @@ class _AppBarTitleState extends State<AppBarTitle> {
     DateTime titleDateTime =
         context.watch<TitleDateTimeProvider>().titleDateTime;
     String calendarLabel = availableCalendarFormats[widget.calendarFormat]!;
+    bool isLight = context.watch<ThemeProvider>().isLight;
 
     return Padding(
       padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
@@ -117,22 +119,24 @@ class _AppBarTitleState extends State<AppBarTitle> {
           CommonSvgText(
             text: yMFormatter(locale: widget.locale, dateTime: titleDateTime),
             fontSize: 18,
-            svgName: 'dir-down',
+            isBold: !isLight,
+            svgName: isLight ? 'dir-down' : 'dir-down-bold',
             svgWidth: 14,
+            svgColor: isLight ? textColor : Colors.white,
             svgDirection: SvgDirectionEnum.right,
             onTap: () => onDateTime(titleDateTime),
           ),
           Row(
             children: [
               CommonSvgButton(
-                name: calendarLabel,
+                name: '$calendarLabel-${isLight ? 'indigo' : 'white'}',
                 width: 22,
                 onTap: onLabel,
               ),
               CommonSpace(width: 15),
               CommonSvgButton(
-                name: 'setting-indigo',
-                color: indigo.s200,
+                name: 'setting-${isLight ? 'indigo' : 'white'}',
+                color: isLight ? indigo.s200 : Colors.white,
                 width: 20,
                 onTap: onSetting,
               ),
@@ -241,8 +245,18 @@ class _AppBarCalendarState extends State<AppBarCalendar> {
     );
   }
 
-  Widget? barBuilder(btx, calendarDateTime, _) {
-    List<TaskBox> taskList = onTasList(calendarDateTime);
+  Widget? barBuilder(bool isLight, DateTime dateTime) {
+    List<TaskBox> taskList = onTasList(dateTime);
+
+    Color? highlighterColor(TaskBox task) {
+      bool isHighlighter = task.isHighlighter == true;
+
+      return isHighlighter
+          ? isLight
+              ? getColorClass(task.colorName).s50
+              : Colors.blue
+          : null;
+    }
 
     return taskList.isNotEmpty
         ? Padding(
@@ -258,9 +272,7 @@ class _AppBarCalendarState extends State<AppBarCalendar> {
                             padding: const EdgeInsets.only(bottom: 3),
                             child: Container(
                               decoration: BoxDecoration(
-                                color: task.isHighlighter == true
-                                    ? getColorClass(task.colorName).s50
-                                    : null,
+                                color: highlighterColor(task),
                                 borderRadius: BorderRadius.circular(3),
                               ),
                               child: Row(
@@ -277,6 +289,7 @@ class _AppBarCalendarState extends State<AppBarCalendar> {
                                     child: CommonText(
                                       text: task.name,
                                       overflow: TextOverflow.clip,
+                                      isBold: !isLight,
                                       fontSize: 9,
                                       softWrap: false,
                                       textAlign: TextAlign.start,
@@ -296,7 +309,7 @@ class _AppBarCalendarState extends State<AppBarCalendar> {
         : const CommonNull();
   }
 
-  Widget? todayBuilder(context, DateTime day, focusedDay) {
+  Widget? todayBuilder(bool isLight, DateTime dateTime) {
     return Column(
       children: [
         CommonSpace(height: 10),
@@ -307,46 +320,53 @@ class _AppBarCalendarState extends State<AppBarCalendar> {
               width: 27.5,
               height: 27.5,
               decoration: BoxDecoration(
-                color: indigo.s200,
+                color: isLight ? indigo.s200 : calendarSelectedDateTimeBgColor,
                 borderRadius: BorderRadius.circular(100),
               ),
             ),
-            CommonText(text: '${day.day}', color: Colors.white, isBold: true)
+            CommonText(
+              text: '${dateTime.day}',
+              color: isLight ? Colors.white : calendarSelectedDateTimeTextColor,
+              isBold: isLight,
+            )
           ],
         ),
       ],
     );
   }
 
-  Widget? dowBuilder(BuildContext context, DateTime weekNumber) {
+  Widget? dowBuilder(bool isLight, DateTime dateTime) {
     String locale = context.locale.toString();
-    Color color = weekNumber.weekday == 6
-        ? blue.original
-        : weekNumber.weekday == 7
-            ? red.original
-            : textColor;
-
-    return CommonText(
-      text: eFormatter(locale: locale, dateTime: weekNumber),
-      color: color,
-      fontSize: 13,
-    );
-  }
-
-  Widget? defaultBuilder(BuildContext btx, DateTime dateTime, _) {
     Color color = dateTime.weekday == 6
         ? blue.original
         : dateTime.weekday == 7
             ? red.original
-            : textColor;
+            : isLight
+                ? textColor
+                : Colors.white;
 
-    return SizedBox(
-      child: Column(
-        children: [
-          CommonSpace(height: 13.5),
-          CommonText(text: '${dateTime.day}', color: color),
-        ],
-      ),
+    return CommonText(
+      text: eFormatter(locale: locale, dateTime: dateTime),
+      color: color,
+      fontSize: 13,
+      isBold: !isLight,
+    );
+  }
+
+  Widget? defaultBuilder(bool isLight, DateTime dateTime) {
+    Color color = dateTime.weekday == 6
+        ? blue.original
+        : dateTime.weekday == 7
+            ? red.original
+            : isLight
+                ? textColor
+                : Colors.white;
+
+    return Column(
+      children: [
+        CommonSpace(height: 13.5),
+        CommonText(text: '${dateTime.day}', color: color, isBold: !isLight),
+      ],
     );
   }
 
@@ -354,38 +374,47 @@ class _AppBarCalendarState extends State<AppBarCalendar> {
   Widget build(BuildContext context) {
     DateTime selectedDateTime =
         context.watch<SelectedDateTimeProvider>().seletedDateTime;
+    bool isLight = context.watch<ThemeProvider>().isLight;
     bool isMonth = widget.calendarFormat == CalendarFormat.month;
 
     return Padding(
       padding: const EdgeInsets.only(bottom: 10),
       child: CommonContainer(
-        innerPadding: const EdgeInsets.symmetric(vertical: 15),
-        outerPadding: const EdgeInsets.symmetric(horizontal: 7),
+        color: isLight ? Colors.white : darkBgColor,
+        innerPadding: isLight
+            ? const EdgeInsets.symmetric(vertical: 15)
+            : const EdgeInsets.all(0),
+        outerPadding: isLight
+            ? const EdgeInsets.symmetric(horizontal: 7)
+            : const EdgeInsets.all(0),
         height: isMonth ? MediaQuery.of(context).size.height / 1.3 : null,
         child: TableCalendar(
           locale: widget.locale,
           shouldFillViewport: isMonth,
-          // startingDayOfWeek: StartingDayOfWeek.monday
           calendarStyle: CalendarStyle(
             cellMargin: const EdgeInsets.all(14),
             cellAlignment: isMonth ? Alignment.topCenter : Alignment.center,
             todayDecoration: BoxDecoration(
-              color: indigo.s200,
+              color: isLight ? indigo.s200 : calendarSelectedDateTimeBgColor,
               shape: BoxShape.circle,
             ),
-            todayTextStyle: const TextStyle(
-              color: Colors.white,
-              fontWeight: FontWeight.bold,
+            todayTextStyle: TextStyle(
+              color: isLight ? Colors.white : calendarSelectedDateTimeTextColor,
+              fontWeight: isLight ? FontWeight.bold : null,
               fontSize: 13,
             ),
           ),
           calendarBuilders: CalendarBuilders(
-            defaultBuilder: defaultBuilder,
-            dowBuilder: dowBuilder,
-            markerBuilder: isMonth ? barBuilder : stickerBuilder,
-            todayBuilder: isMonth ? todayBuilder : null,
+            defaultBuilder: (cx, dateTime, _) =>
+                defaultBuilder(isLight, dateTime),
+            dowBuilder: (cx, dateTime) => dowBuilder(isLight, dateTime),
+            markerBuilder: isMonth
+                ? (cx, dateTime, _) => barBuilder(isLight, dateTime)
+                : stickerBuilder,
+            todayBuilder: isMonth
+                ? (cx, dateTime, _) => todayBuilder(isLight, dateTime)
+                : null,
           ),
-
           headerVisible: false,
           firstDay: DateTime.utc(2000, 1, 1),
           lastDay: DateTime.utc(3000, 1, 1),

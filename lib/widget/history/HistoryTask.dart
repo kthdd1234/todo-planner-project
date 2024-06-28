@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -93,8 +95,8 @@ class HistoryTask extends StatelessWidget {
         int indexA = taskOrderList!.indexOf(taskA['id']);
         int indexB = taskOrderList!.indexOf(taskB['id']);
 
-        indexA = indexA == -1 ? 999999 : 0;
-        indexB = indexB == -1 ? 999999 : 0;
+        indexA = indexA != -1 ? indexA : 999999;
+        indexB = indexB != -1 ? indexB : 999999;
 
         return indexA.compareTo(indexB);
       });

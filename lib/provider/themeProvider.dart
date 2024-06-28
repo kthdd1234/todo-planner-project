@@ -11,4 +11,8 @@ class ThemeProvider with ChangeNotifier {
     theme = newValue;
     notifyListeners();
   }
+
+  bool get isLight {
+    return theme == 'light';
+  }
 }

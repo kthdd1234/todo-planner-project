@@ -73,9 +73,9 @@ class _HistoryPageState extends State<HistoryPage> {
   Widget build(BuildContext context) {
     bool isPremium = context.watch<PremiumProvider>().isPremium;
     String locale = context.locale.toString();
-    List<RecordBox> recordList = isRecent
-        ? recordRepository.recordList.reversed.toList()
-        : recordRepository.recordList.toList();
+    List<RecordBox> recordList = recordRepository.recordList;
+    recordList = isRecent ? recordList.reversed.toList() : recordList.toList();
+
     bool isRecord = recordList.any((record) =>
         record.taskMarkList != null && record.taskMarkList?.length != 0);
 
