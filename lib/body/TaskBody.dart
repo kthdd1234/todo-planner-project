@@ -17,8 +17,24 @@ import 'package:provider/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:table_calendar/table_calendar.dart';
 
-class TaskBody extends StatelessWidget {
+class TaskBody extends StatefulWidget {
   const TaskBody({super.key});
+
+  @override
+  State<TaskBody> createState() => _TaskBodyState();
+}
+
+class _TaskBodyState extends State<TaskBody> {
+  @override
+  void initState() {
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      context
+          .read<SelectedDateTimeProvider>()
+          .changeSelectedDateTime(dateTime: DateTime.now());
+    });
+
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {

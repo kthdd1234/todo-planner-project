@@ -9,6 +9,9 @@ const pagePadding = EdgeInsets.all(15);
 /// textColor
 const textColor = Color(0xFF404763);
 
+/// unTextColor
+final unTextColor = Colors.grey.shade600;
+
 /// whiteBgBtnColor
 const whiteBgBtnColor = Color(0xffF3F4F9);
 

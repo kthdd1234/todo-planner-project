@@ -1,10 +1,6 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:multi_value_listenable_builder/multi_value_listenable_builder.dart';
 import 'package:project/common/CommonNull.dart';
-import 'package:project/common/CommonSpace.dart';
-import 'package:project/common/CommonTag.dart';
 import 'package:project/common/CommonText.dart';
 import 'package:project/model/user_box/user_box.dart';
 import 'package:project/provider/selectedDateTimeProvider.dart';
@@ -12,10 +8,8 @@ import 'package:project/repositories/user_repository.dart';
 import 'package:project/util/class.dart';
 import 'package:project/util/final.dart';
 import 'package:project/util/func.dart';
-import 'package:project/widget/ad/BannerAd.dart';
 import 'package:project/widget/button/AddButton.dart';
 import 'package:project/widget/button/TodayButton.dart';
-import 'package:project/widget/button/InfoButton.dart';
 import 'package:provider/provider.dart';
 import 'package:table_calendar/table_calendar.dart';
 
@@ -56,6 +50,7 @@ class CommonScaffold extends StatelessWidget {
         ),
       ),
       floatingActionButton: Fab(isFab: isFab),
+      bottomNavigationBar: Bnb(bnb: bottomNavigationBar),
     );
   }
 }
@@ -75,30 +70,41 @@ class Fab extends StatelessWidget {
                   context.watch<SelectedDateTimeProvider>().seletedDateTime;
               bool isToday =
                   dateTimeKey(DateTime.now()) == dateTimeKey(selectedDateTime);
-              UserBox? user = UserRepository().user;
-              CalendarFormat calendarFormat =
-                  calendarFormatInfo[user.calendarFormat]!;
-              bool isNotMonth = calendarFormat != CalendarFormat.month;
+
+              bool isNotMonth = userRepository.user.calendarFormat !=
+                  CalendarFormat.month.toString();
 
               return Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   isNotMonth
-                      ? Padding(
-                          padding: const EdgeInsets.only(right: 10),
-                          child: Row(
-                            children: [
-                              isToday
-                                  ? const CommonNull()
-                                  : const TodayButton(),
-                              const InfoButton(),
-                            ],
-                          ),
-                        )
+                      ? isToday
+                          ? const CommonNull()
+                          : const TodayButton()
                       : const CommonNull(),
                   const AddButton(),
                 ],
               );
+            })
+        : const CommonNull();
+  }
+}
+
+class Bnb extends StatelessWidget {
+  Bnb({super.key, this.bnb});
+
+  Widget? bnb;
+
+  @override
+  Widget build(BuildContext context) {
+    return bnb != null
+        ? MultiValueListenableBuilder(
+            valueListenables: valueListenables,
+            builder: (context, values, child) {
+              bool isNotMonth = userRepository.user.calendarFormat !=
+                  CalendarFormat.month.toString();
+
+              return isNotMonth ? bnb! : const CommonNull();
             })
         : const CommonNull();
   }

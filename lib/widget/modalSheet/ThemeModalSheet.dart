@@ -42,7 +42,7 @@ class _ThemeModalSheetState extends State<ThemeModalSheet> {
 
   @override
   Widget build(BuildContext context) {
-    String theme = context.watch<ThemeProvider>().themeValue();
+    String theme = context.watch<ThemeProvider>().theme;
 
     return CommonModalSheet(
       title: '화면 테마',

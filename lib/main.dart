@@ -12,7 +12,9 @@ import 'package:intl/date_symbol_data_local.dart';
 import 'package:project/model/user_box/user_box.dart';
 import 'package:project/page/HomePage.dart';
 import 'package:project/page/IntroPage.dart';
+import 'package:project/provider/HistoryOrderProvider.dart';
 import 'package:project/provider/PremiumProvider.dart';
+import 'package:project/provider/YearDateTimeProvider.dart';
 import 'package:project/provider/bottomTabIndexProvider.dart';
 import 'package:project/provider/selectedDateTimeProvider.dart';
 import 'package:project/provider/themeProvider.dart';
@@ -47,6 +49,8 @@ void main() async {
         ChangeNotifierProvider(create: (context) => TitleDateTimeProvider()),
         ChangeNotifierProvider(create: (context) => PremiumProvider()),
         ChangeNotifierProvider(create: (context) => ThemeProvider()),
+        ChangeNotifierProvider(create: (context) => YearDateTimeProvider()),
+        ChangeNotifierProvider(create: (context) => HistoryOrderProvider()),
       ],
       child: EasyLocalization(
         supportedLocales: const [Locale('ko'), Locale('en'), Locale('ja')],

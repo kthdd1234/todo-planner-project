@@ -1,11 +1,41 @@
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:project/body/AnalyzeBody.dart';
+import 'package:project/body/HistoryBody.dart';
+import 'package:project/body/SettingBody.dart';
+import 'package:project/body/TaskBody.dart';
 import 'package:project/repositories/record_repository.dart';
 import 'package:project/repositories/task_repository.dart';
 import 'package:project/repositories/user_repository.dart';
 import 'package:project/util/class.dart';
 import 'package:project/util/enum.dart';
 import 'package:table_calendar/table_calendar.dart';
+
+final bottomNavigationBarItemList = [
+  const BottomNavigationBarItem(
+    label: '홈',
+    icon: Icon(Icons.home_rounded),
+  ),
+  const BottomNavigationBarItem(
+    label: '히스토리',
+    icon: Icon(Icons.format_list_bulleted_rounded),
+  ),
+  const BottomNavigationBarItem(
+    label: '분석',
+    icon: Icon(Icons.bar_chart_rounded),
+  ),
+  const BottomNavigationBarItem(
+    label: '더보기',
+    icon: Icon(Icons.more_horiz_rounded),
+  ),
+];
+
+final bodyList = [
+  const TaskBody(),
+  const HistoryBody(),
+  const AnalyzeBody(),
+  const SettingBody()
+];
 
 final indigo = ColorClass(
   colorName: '남색',
