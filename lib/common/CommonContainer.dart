@@ -38,14 +38,16 @@ class CommonContainer extends StatelessWidget {
           decoration: BoxDecoration(
               color: color ?? (isLight ? Colors.white : darkContainerColor),
               borderRadius: BorderRadius.circular(radius ?? 10),
-              boxShadow: [
-                BoxShadow(
-                  color:
-                      const Color.fromARGB(255, 206, 206, 206).withOpacity(0.1),
-                  blurRadius: 10,
-                  offset: const Offset(2, 4),
-                )
-              ]),
+              boxShadow: isLight
+                  ? [
+                      BoxShadow(
+                        color: const Color.fromARGB(255, 206, 206, 206)
+                            .withOpacity(0.1),
+                        blurRadius: 10,
+                        offset: const Offset(2, 4),
+                      )
+                    ]
+                  : null),
           child: child,
         ),
       ),

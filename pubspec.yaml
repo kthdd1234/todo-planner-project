@@ -63,6 +63,7 @@ dependencies:
   share_plus: ^9.0.0
   in_app_review: ^2.0.9
   purchases_flutter: ^6.29.4
+  syncfusion_flutter_datagrid: ^23.2.7
 
 dev_dependencies:
   flutter_test:

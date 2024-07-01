@@ -14,6 +14,7 @@ import 'package:project/common/CommonText.dart';
 import 'package:project/model/record_box/record_box.dart';
 import 'package:project/model/task_box/task_box.dart';
 import 'package:project/model/user_box/user_box.dart';
+import 'package:project/provider/themeProvider.dart';
 import 'package:project/util/class.dart';
 import 'package:project/util/constants.dart';
 import 'package:project/util/final.dart';
@@ -23,6 +24,7 @@ import 'package:project/widget/border/VerticalBorder.dart';
 import 'package:project/widget/modalSheet/TaskSettingModalSheet.dart';
 import 'package:project/widget/modalSheet/TitleSettingModalSheet.dart';
 import 'package:project/widget/popup/MarkPopup.dart';
+import 'package:provider/provider.dart';
 
 class TaskContainer extends StatefulWidget {
   TaskContainer({
@@ -90,6 +92,7 @@ class _TaskContainerState extends State<TaskContainer> {
 
   @override
   Widget build(BuildContext context) {
+    bool isLight = context.watch<ThemeProvider>().isLight;
     String locale = context.locale.toString();
     List<TaskBox> taskFilterList = getTaskList(
       locale: locale,
@@ -109,8 +112,13 @@ class _TaskContainerState extends State<TaskContainer> {
         children: [
           CommonTag(
             text: taskTitle,
-            textColor: getColorClass(colorName).original,
-            bgColor: getColorClass(colorName).s50,
+            isBold: !isLight,
+            textColor: isLight
+                ? getColorClass(colorName).original
+                : getColorClass(colorName).s50,
+            bgColor: isLight
+                ? getColorClass(colorName).s50
+                : getColorClass(colorName).s400,
             innerPadding: const EdgeInsets.only(bottom: 5),
             onTap: () => onTaskTitle(taskTitle, colorName),
           ),
@@ -273,6 +281,7 @@ class _TaskItemState extends State<TaskItem> {
 
   @override
   Widget build(BuildContext context) {
+    bool isLight = context.watch<ThemeProvider>().isLight;
     bool isMark = getTaskInfo(
           key: 'mark',
           recordBox: widget.recordBox,
@@ -285,7 +294,11 @@ class _TaskItemState extends State<TaskItem> {
       child: IntrinsicHeight(
         child: Row(
           children: [
-            VerticalBorder(color: widget.taskItem.color.s100),
+            VerticalBorder(
+              color: isLight
+                  ? widget.taskItem.color.s100
+                  : widget.taskItem.color.s400,
+            ),
             Expanded(
               flex: 1,
               child: InkWell(
@@ -298,11 +311,14 @@ class _TaskItemState extends State<TaskItem> {
                       text: widget.taskItem.name,
                       textAlign: TextAlign.start,
                       highlightColor: widget.taskItem.isHighlight == true
-                          ? widget.taskItem.color.s50
+                          ? isLight
+                              ? widget.taskItem.color.s50
+                              : widget.taskItem.color.s400
                           : null,
                       decoration: isMark ? TextDecoration.lineThrough : null,
                       decorationColor:
                           isMark ? widget.taskItem.color.s300 : null,
+                      isBold: !isLight,
                     ),
                     widget.taskItem.memo != null
                         ? Padding(
@@ -324,8 +340,12 @@ class _TaskItemState extends State<TaskItem> {
               svgName: 'mark-${widget.taskItem.mark ?? 'E'}',
               width: 25,
               actionColor: widget.taskItem.mark == null
-                  ? widget.taskItem.color.s300
-                  : widget.taskItem.color.s200,
+                  ? isLight
+                      ? widget.taskItem.color.s300
+                      : widget.taskItem.color.s400
+                  : isLight
+                      ? widget.taskItem.color.s200
+                      : widget.taskItem.color.s300,
               onTap: onMark,
             ),
           ],

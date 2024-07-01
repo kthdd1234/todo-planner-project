@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:project/body/AnalyzeBody.dart';
+import 'package:project/body/ReportBody.dart';
 import 'package:project/body/HistoryBody.dart';
 import 'package:project/body/SettingBody.dart';
 import 'package:project/body/TaskBody.dart';
@@ -9,6 +9,10 @@ import 'package:project/repositories/task_repository.dart';
 import 'package:project/repositories/user_repository.dart';
 import 'package:project/util/class.dart';
 import 'package:project/util/enum.dart';
+import 'package:project/widget/appBar/ReportAppBar.dart';
+import 'package:project/widget/appBar/HistoryAppBar.dart';
+import 'package:project/widget/appBar/SettingAppBar.dart';
+import 'package:project/widget/appBar/TaskAppBar.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 final bottomNavigationBarItemList = [
@@ -18,23 +22,16 @@ final bottomNavigationBarItemList = [
   ),
   const BottomNavigationBarItem(
     label: '히스토리',
-    icon: Icon(Icons.format_list_bulleted_rounded),
+    icon: Icon(Icons.view_timeline_outlined),
   ),
-  const BottomNavigationBarItem(
-    label: '분석',
-    icon: Icon(Icons.bar_chart_rounded),
-  ),
+  // const BottomNavigationBarItem(
+  //   label: '리포트',
+  //   icon: Icon(Icons.view_timeline_outlined),
+  // ),
   const BottomNavigationBarItem(
     label: '더보기',
     icon: Icon(Icons.more_horiz_rounded),
   ),
-];
-
-final bodyList = [
-  const TaskBody(),
-  const HistoryBody(),
-  const AnalyzeBody(),
-  const SettingBody()
 ];
 
 final indigo = ColorClass(
@@ -299,3 +296,5 @@ final premiumBenefitList = [
   //   subTitle: '보다 많은 사진을 추가해보세요!',
   // ),
 ];
+
+final appBarList = [TaskAppBar(), HistoryAppBar(), SettingAppBar()];

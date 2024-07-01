@@ -1,9 +1,6 @@
 // ignore_for_file: prefer_is_empty
-import 'dart:developer';
-
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:project/common/CommonAppBar.dart';
 import 'package:project/common/CommonContainer.dart';
 import 'package:project/common/CommonNull.dart';

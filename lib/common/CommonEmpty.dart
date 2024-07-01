@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:project/common/CommonSpace.dart';
 import 'package:project/common/CommonText.dart';
+import 'package:project/provider/themeProvider.dart';
+import 'package:project/util/constants.dart';
 import 'package:project/util/final.dart';
+import 'package:provider/provider.dart';
 
 class CommonEmpty extends StatelessWidget {
   CommonEmpty({
@@ -16,6 +19,9 @@ class CommonEmpty extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    bool isLight = context.watch<ThemeProvider>().isLight;
+    Color color = isLight ? grey.original : Colors.white;
+
     return Container(
       width: double.infinity,
       height: height,
@@ -23,9 +29,9 @@ class CommonEmpty extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          CommonText(text: line_1, color: grey.original),
+          CommonText(text: line_1, color: color, isBold: !isLight),
           CommonSpace(height: 2),
-          CommonText(text: line_2, color: grey.original),
+          CommonText(text: line_2, color: color, isBold: !isLight),
         ],
       ),
     );

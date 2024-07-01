@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:project/model/record_box/record_box.dart';
 import 'package:project/page/MemoSettingPage.dart';
 import 'package:project/provider/selectedDateTimeProvider.dart';
+import 'package:project/provider/themeProvider.dart';
+import 'package:project/util/constants.dart';
 import 'package:project/util/final.dart';
 import 'package:project/util/func.dart';
 import 'package:project/widget/button/SpeedDialButton.dart';
@@ -54,6 +56,7 @@ class _AddButtonState extends State<AddButton> {
 
   @override
   Widget build(BuildContext context) {
+    bool isLight = context.watch<ThemeProvider>().isLight;
     DateTime selectedDateTime =
         context.watch<SelectedDateTimeProvider>().seletedDateTime;
     RecordBox? record =
@@ -62,7 +65,7 @@ class _AddButtonState extends State<AddButton> {
     return SpeedDialButton(
       icon: Icons.add,
       activeBackgroundColor: red.s200,
-      backgroundColor: indigo.s200,
+      backgroundColor: isLight ? indigo.s200 : darkButtonColor,
       children: [
         speedDialChildButton(
           svg: 'plus',

@@ -279,3 +279,10 @@ class WidgetItemClass {
         'highlightRGB': highlightRGB
       };
 }
+
+class MarkStateClass {
+  MarkStateClass({required this.mark, required this.color, required this.name});
+
+  String mark, name;
+  Color color;
+}

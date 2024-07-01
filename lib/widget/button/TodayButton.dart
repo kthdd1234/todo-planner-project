@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:project/common/CommonText.dart';
 import 'package:project/provider/selectedDateTimeProvider.dart';
+import 'package:project/provider/themeProvider.dart';
+import 'package:project/util/constants.dart';
 import 'package:project/util/final.dart';
 import 'package:provider/provider.dart';
 
@@ -22,7 +24,7 @@ class _TodayButtonState extends State<TodayButton> {
 
   @override
   Widget build(BuildContext context) {
-    //
+    bool isLight = context.watch<ThemeProvider>().isLight;
 
     return Padding(
       padding: const EdgeInsets.only(right: 10),
@@ -41,8 +43,7 @@ class _TodayButtonState extends State<TodayButton> {
         visible: true,
         overlayOpacity: 0.4,
         overlayColor: Colors.black87,
-        backgroundColor: blue.s200,
-        children: [],
+        backgroundColor: isLight ? blue.s200 : darkButtonColor,
       ),
     );
   }

@@ -1,5 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:project/common/CommonSpace.dart';
 import 'package:project/common/CommonSvgText.dart';
 import 'package:project/common/CommonTag.dart';
 import 'package:project/model/user_box/user_box.dart';
@@ -42,6 +43,10 @@ class _HistoryAppBarState extends State<HistoryAppBar> {
     context.read<HistoryOrderProvider>().setOrder(!isRecent);
   }
 
+  onDisplay() {
+    //
+  }
+
   @override
   Widget build(BuildContext context) {
     String locale = context.locale.toString();
@@ -68,14 +73,27 @@ class _HistoryAppBarState extends State<HistoryAppBar> {
             svgDirection: SvgDirectionEnum.right,
             onTap: () => onYear(yearDateTime),
           ),
-          CommonTag(
-            text: isRecent ? '최신순' : '과거순',
-            isBold: true,
-            fontSize: 10,
-            textColor: Colors.white,
-            bgColor: isRecent ? indigo.s200 : red.s200,
-            onTap: () => onOrder(isRecent),
-          )
+          Row(
+            children: [
+              CommonTag(
+                text: '표시 5',
+                isBold: true,
+                fontSize: 10,
+                textColor: Colors.white,
+                bgColor: indigo.s200,
+                onTap: onDisplay,
+              ),
+              CommonSpace(width: 5),
+              CommonTag(
+                text: isRecent ? '최신순' : '과거순',
+                isBold: true,
+                fontSize: 10,
+                textColor: Colors.white,
+                bgColor: isRecent ? indigo.s200 : red.s200,
+                onTap: () => onOrder(isRecent),
+              ),
+            ],
+          ),
         ],
       ),
     );

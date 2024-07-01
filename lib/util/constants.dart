@@ -97,3 +97,5 @@ const calendarSelectedDateTimeTextColor = Color(0xff202023);
 
 /// calendarSelectedDateTimeBgColor
 const calendarSelectedDateTimeBgColor = Color(0xffF0F0F2);
+
+const darkButtonColor = Color(0xff3E3E43);

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:multi_value_listenable_builder/multi_value_listenable_builder.dart';
 import 'package:project/model/user_box/user_box.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:project/common/CommonCircle.dart';
@@ -9,11 +10,9 @@ import 'package:project/common/CommonSvgText.dart';
 import 'package:project/common/CommonTag.dart';
 import 'package:project/common/CommonText.dart';
 import 'package:project/model/task_box/task_box.dart';
-import 'package:project/page/SettingPage.dart';
 import 'package:project/provider/selectedDateTimeProvider.dart';
 import 'package:project/provider/themeProvider.dart';
 import 'package:project/provider/titleDateTimeProvider.dart';
-import 'package:project/repositories/user_repository.dart';
 import 'package:project/util/class.dart';
 import 'package:project/util/constants.dart';
 import 'package:project/util/enum.dart';
@@ -31,14 +30,21 @@ class TaskAppBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     String locale = context.locale.toString();
-    UserBox? user = UserRepository().user;
-    CalendarFormat calendarFormat = calendarFormatInfo[user.calendarFormat]!;
 
-    return Column(
-      children: [
-        TaskTitle(locale: locale, calendarFormat: calendarFormat),
-        TaskCalendar(locale: locale, calendarFormat: calendarFormat),
-      ],
+    return MultiValueListenableBuilder(
+      valueListenables: valueListenables,
+      builder: (context, values, child) {
+        UserBox? user = userRepository.user;
+        CalendarFormat calendarFormat =
+            calendarFormatInfo[user.calendarFormat]!;
+
+        return Column(
+          children: [
+            TaskTitle(locale: locale, calendarFormat: calendarFormat),
+            TaskCalendar(locale: locale, calendarFormat: calendarFormat),
+          ],
+        );
+      },
     );
   }
 }
@@ -85,13 +91,6 @@ class _TaskTitleState extends State<TaskTitle> {
     await user.save();
   }
 
-  onSetting() {
-    Navigator.push(
-      context,
-      MaterialPageRoute<void>(builder: (BuildContext context) => SettingPage()),
-    );
-  }
-
   onToday() {
     context
         .read<SelectedDateTimeProvider>()
@@ -125,7 +124,7 @@ class _TaskTitleState extends State<TaskTitle> {
             isBold: true,
             fontSize: 10,
             textColor: Colors.white,
-            bgColor: indigo.s200,
+            bgColor: isLight ? indigo.s200 : darkButtonColor,
             onTap: onCalendarFormat,
           )
         ],
@@ -190,10 +189,10 @@ class _TaskCalendarState extends State<TaskCalendar> {
     await user.save();
   }
 
-  Widget? stickerBuilder(btx, calendarDateTime, _) {
+  Widget? stickerBuilder(bool isLight, DateTime dateTime) {
     List<ColorClass?> colorList = [];
 
-    for (var taskBox in onTasList(calendarDateTime)) {
+    for (var taskBox in onTasList(dateTime)) {
       if (colorList.length == 9) break;
       colorList.add(getColorClass(taskBox.colorName));
     }
@@ -204,7 +203,7 @@ class _TaskCalendarState extends State<TaskCalendar> {
 
     wCircle(ColorClass? color) {
       return CommonCircle(
-        color: color?.s200 ?? Colors.transparent,
+        color: (isLight ? color?.s200 : color?.s300) ?? Colors.transparent,
         size: 5,
         padding: const EdgeInsets.symmetric(horizontal: 1),
       );
@@ -240,7 +239,7 @@ class _TaskCalendarState extends State<TaskCalendar> {
       return isHighlighter
           ? isLight
               ? getColorClass(task.colorName).s50
-              : Colors.blue
+              : getColorClass(task.colorName).original
           : null;
     }
 
@@ -268,7 +267,9 @@ class _TaskCalendarState extends State<TaskCalendar> {
                                     child: VerticalBorder(
                                       width: 2,
                                       right: 3,
-                                      color: getColorClass(task.colorName).s200,
+                                      color: isLight
+                                          ? getColorClass(task.colorName).s200
+                                          : getColorClass(task.colorName).s300,
                                     ),
                                   ),
                                   Flexible(
@@ -372,7 +373,7 @@ class _TaskCalendarState extends State<TaskCalendar> {
             : const EdgeInsets.all(0),
         outerPadding: isLight
             ? const EdgeInsets.symmetric(horizontal: 7)
-            : const EdgeInsets.all(0),
+            : const EdgeInsets.only(bottom: 15),
         height: isMonth ? MediaQuery.of(context).size.height / 1.3 : null,
         child: TableCalendar(
           locale: widget.locale,
@@ -394,9 +395,9 @@ class _TaskCalendarState extends State<TaskCalendar> {
             defaultBuilder: (cx, dateTime, _) =>
                 defaultBuilder(isLight, dateTime),
             dowBuilder: (cx, dateTime) => dowBuilder(isLight, dateTime),
-            markerBuilder: isMonth
-                ? (cx, dateTime, _) => barBuilder(isLight, dateTime)
-                : stickerBuilder,
+            markerBuilder: (cx, dateTime, _) => isMonth
+                ? barBuilder(isLight, dateTime)
+                : stickerBuilder(isLight, dateTime),
             todayBuilder: isMonth
                 ? (cx, dateTime, _) => todayBuilder(isLight, dateTime)
                 : null,

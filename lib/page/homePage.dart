@@ -1,5 +1,11 @@
 // ignore_for_file: use_build_context_synchronously
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
+import 'package:project/body/ReportBody.dart';
+import 'package:project/body/HistoryBody.dart';
+import 'package:project/body/SettingBody.dart';
+import 'package:project/body/TaskBody.dart';
 import 'package:project/common/CommonBackground.dart';
 import 'package:project/common/CommonScaffold.dart';
 import 'package:project/model/user_box/user_box.dart';
@@ -63,6 +69,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    bool isLight = context.watch<ThemeProvider>().isLight;
     int seletedIdx = context.watch<BottomTabIndexProvider>().seletedIdx;
     List<BottomNavigationBarItem> items = bottomNavigationBarItemList
         .map((item) => BottomNavigationBarItem(
@@ -70,6 +77,12 @@ class _HomePageState extends State<HomePage> {
               label: item.label,
             ))
         .toList();
+
+    final bodyList = [
+      const TaskBody(),
+      const HistoryBody(),
+      const SettingBody()
+    ];
 
     return CommonBackground(
       child: CommonScaffold(
@@ -82,8 +95,19 @@ class _HomePageState extends State<HomePage> {
           child: BottomNavigationBar(
             items: items,
             elevation: 0,
-            selectedItemColor: textColor,
-            unselectedItemColor: unTextColor,
+            selectedItemColor: isLight ? indigo.s300 : Colors.white,
+            selectedLabelStyle: TextStyle(
+              color: isLight ? indigo.s200 : Colors.white,
+              fontWeight: isLight ? null : FontWeight.bold,
+            ),
+            unselectedItemColor:
+                isLight ? const Color(0xffA2A7B2) : const Color(0xff616261),
+            unselectedLabelStyle:
+                TextStyle(fontWeight: isLight ? null : FontWeight.bold),
+            // isLight
+            //     ? null
+            //     : const TextStyle(
+            //         fontWeight: FontWeight.bold, color: textColor),
             currentIndex: seletedIdx,
             onTap: onBottomNavigation,
           ),
