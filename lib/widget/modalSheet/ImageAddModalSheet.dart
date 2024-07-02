@@ -5,11 +5,13 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:project/common/CommonModalSheet.dart';
+import 'package:project/provider/themeProvider.dart';
 import 'package:project/widget/popup/AlertPopup.dart';
 import 'package:project/common/CommonSpace.dart';
 import 'package:project/util/constants.dart';
 import 'package:project/util/func.dart';
 import 'package:project/widget/button/ModalButton.dart';
+import 'package:provider/provider.dart';
 
 ImagePicker picker = ImagePicker();
 
@@ -79,6 +81,8 @@ class _ImageAddModalSheetState extends State<ImageAddModalSheet> {
 
   @override
   Widget build(BuildContext context) {
+    bool isLight = context.watch<ThemeProvider>().isLight;
+
     return CommonModalSheet(
       title: '사진 추가',
       height: 185,
@@ -87,14 +91,16 @@ class _ImageAddModalSheetState extends State<ImageAddModalSheet> {
           ModalButton(
             svgName: 'camera',
             actionText: '카메라',
-            color: textColor,
+            isBold: !isLight,
+            color: isLight ? textColor : darkTextColor,
             onTap: onCamera,
           ),
           CommonSpace(width: 5),
           ModalButton(
             svgName: 'gallery',
             actionText: '갤러리',
-            color: textColor,
+            isBold: !isLight,
+            color: isLight ? textColor : darkTextColor,
             onTap: onGallery,
           )
         ],

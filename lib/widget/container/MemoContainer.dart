@@ -1,28 +1,22 @@
-import 'dart:developer';
 import 'dart:typed_data';
-
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:project/common/CommonContainer.dart';
-import 'package:project/common/CommonDivider.dart';
-import 'package:project/common/CommonImage.dart';
 import 'package:project/common/CommonNull.dart';
 import 'package:project/common/CommonSpace.dart';
-import 'package:project/common/CommonTag.dart';
 import 'package:project/common/CommonText.dart';
 import 'package:project/model/record_box/record_box.dart';
 import 'package:project/model/user_box/user_box.dart';
 import 'package:project/page/ImageSlidePage.dart';
 import 'package:project/page/MemoSettingPage.dart';
+import 'package:project/provider/themeProvider.dart';
 import 'package:project/util/constants.dart';
 import 'package:project/util/final.dart';
 import 'package:project/util/func.dart';
 import 'package:project/widget/border/HorizentalBorder.dart';
-import 'package:project/widget/border/VerticalBorder.dart';
 import 'package:project/widget/modalSheet/ImageSelectionModalSheet.dart';
 import 'package:project/widget/modalSheet/MemoModalSheet.dart';
 import 'package:project/widget/modalSheet/TitleSettingModalSheet.dart';
+import 'package:provider/provider.dart';
 
 class MemoContainer extends StatefulWidget {
   MemoContainer({
@@ -40,7 +34,6 @@ class MemoContainer extends StatefulWidget {
 
 class _MemoContainerState extends State<MemoContainer> {
   UserBox user = userRepository.user;
-  // GlobalKey _containerKey = GlobalKey();
 
   onMemoTitle(String memoTitle, String memoColorName) {
     showModalBottomSheet(
@@ -123,55 +116,55 @@ class _MemoContainerState extends State<MemoContainer> {
 
   @override
   Widget build(BuildContext context) {
+    bool isLight = context.watch<ThemeProvider>().isLight;
     bool isText = widget.recordBox?.memo != null;
     bool isImageList = widget.recordBox?.imageList != null;
     bool isMemo = widget.recordBox != null && (isText || isImageList);
+    Color containerColor = isLight ? memoBgColor : darkContainerColor;
+    Color borderColor = isLight ? orange.s50 : Colors.white10;
 
     return isMemo
         ? CommonContainer(
-            color: memoBgColor,
+            color: containerColor,
             innerPadding: const EdgeInsets.all(0),
             outerPadding: const EdgeInsets.fromLTRB(7, 0, 7, 10),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                HorizentalBorder(color: orange.s50),
-                Container(
-                  width: double.infinity,
-                  color: memoBgColor,
-                  child: CustomPaint(
-                    painter: BacgroundPaint(),
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                        vertical: 10,
-                        horizontal: 12.5,
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          isText
-                              ? InkWell(
-                                  onTap: onMemoText,
-                                  child: CommonText(
-                                    text: widget.recordBox!.memo!,
-                                    textAlign: TextAlign.start,
-                                  ),
-                                )
-                              : const CommonNull(),
-                          CommonSpace(height: isText && isImageList ? 10 : 0),
-                          isImageList
-                              ? ImageContainer(
-                                  uint8ListList:
-                                      widget.recordBox!.imageList ?? [],
-                                  onImage: onImage,
-                                )
-                              : const CommonNull(),
-                        ],
-                      ),
+                HorizentalBorder(color: borderColor),
+                CustomPaint(
+                  painter: BacgroundPaint(isLight: isLight),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                      vertical: 10,
+                      horizontal: 12.5,
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        isText
+                            ? InkWell(
+                                onTap: onMemoText,
+                                child: CommonText(
+                                  text: widget.recordBox!.memo!,
+                                  textAlign: TextAlign.start,
+                                  isBold: !isLight,
+                                ),
+                              )
+                            : const CommonNull(),
+                        CommonSpace(height: isText && isImageList ? 10 : 0),
+                        isImageList
+                            ? ImageContainer(
+                                uint8ListList:
+                                    widget.recordBox!.imageList ?? [],
+                                onImage: onImage,
+                              )
+                            : const CommonNull(),
+                      ],
                     ),
                   ),
                 ),
-                HorizentalBorder(color: orange.s50),
+                HorizentalBorder(color: borderColor),
               ],
             ),
           )
@@ -180,6 +173,10 @@ class _MemoContainerState extends State<MemoContainer> {
 }
 
 class BacgroundPaint extends CustomPainter {
+  BacgroundPaint({required this.isLight});
+
+  bool isLight;
+
   @override
   void paint(Canvas canvas, Size size) {
     final height = size.height;
@@ -188,7 +185,7 @@ class BacgroundPaint extends CustomPainter {
 
     Path mainBackground = Path();
     mainBackground.addRect(Rect.fromLTRB(0, 0, width, height));
-    paint.color = orange.s50;
+    paint.color = isLight ? orange.s50 : Colors.transparent;
 
     for (int i = 1; i < height; i++) {
       if (i % 15 == 0) {

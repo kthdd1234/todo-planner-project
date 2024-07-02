@@ -6,10 +6,8 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:package_info_plus/package_info_plus.dart';
-import 'package:project/common/CommonText.dart';
 import 'package:project/model/record_box/record_box.dart';
 import 'package:project/model/task_box/task_box.dart';
 import 'package:project/util/class.dart';
@@ -201,24 +199,6 @@ int dateTimeKey(DateTime? dateTime) {
 
 String uuid() {
   return DateTime.now().microsecondsSinceEpoch.toString();
-}
-
-speedDialChildButton({
-  required String svg,
-  required String lable,
-  required ColorClass color,
-  required Function() onTap,
-}) {
-  return SpeedDialChild(
-    shape: const CircleBorder(),
-    child: svgAsset(name: svg, width: 15, color: Colors.white),
-    backgroundColor: color.s200,
-    labelWidget: Padding(
-      padding: const EdgeInsets.only(right: 10),
-      child: CommonText(text: lable, color: Colors.white, isBold: true),
-    ),
-    onTap: onTap,
-  );
 }
 
 Future<Map<String, dynamic>> getAppInfo() async {

@@ -89,6 +89,9 @@ const PLAY_STORE_LINK = "";
 /// themeBgColor
 const darkBgColor = Color(0xff1C1C1E);
 
+/// darkTextColor
+const darkTextColor = Color(0xffDADDE0);
+
 /// themeContainerColor
 const darkContainerColor = Color(0xff252429);
 
@@ -98,4 +101,11 @@ const calendarSelectedDateTimeTextColor = Color(0xff202023);
 /// calendarSelectedDateTimeBgColor
 const calendarSelectedDateTimeBgColor = Color(0xffF0F0F2);
 
+/// darkButtonColor
 const darkButtonColor = Color(0xff3E3E43);
+
+/// darkNotSelectedBgColor
+const darkNotSelectedBgColor = Color(0xff34343C);
+
+/// darkNotSelectedTextColor
+const darkNotSelectedTextColor = Color(0xff616261);

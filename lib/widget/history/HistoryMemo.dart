@@ -3,8 +3,9 @@ import 'package:project/common/CommonNull.dart';
 import 'package:project/common/CommonText.dart';
 
 class HistoryMemo extends StatelessWidget {
-  HistoryMemo({super.key, required this.memo});
+  HistoryMemo({super.key, required this.isLight, required this.memo});
 
+  bool isLight;
   String? memo;
 
   @override
@@ -15,6 +16,7 @@ class HistoryMemo extends StatelessWidget {
             child: CommonText(
               text: memo!,
               textAlign: TextAlign.start,
+              isBold: !isLight,
             ),
           )
         : const CommonNull();

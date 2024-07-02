@@ -4,8 +4,10 @@ import 'package:project/common/CommonNull.dart';
 import 'package:project/common/CommonText.dart';
 import 'package:project/model/user_box/user_box.dart';
 import 'package:project/provider/selectedDateTimeProvider.dart';
+import 'package:project/provider/themeProvider.dart';
 import 'package:project/repositories/user_repository.dart';
 import 'package:project/util/class.dart';
+import 'package:project/util/constants.dart';
 import 'package:project/util/final.dart';
 import 'package:project/util/func.dart';
 import 'package:project/widget/button/AddButton.dart';
@@ -31,12 +33,19 @@ class CommonScaffold extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    bool isLight = context.watch<ThemeProvider>().isLight;
+
     return Scaffold(
       backgroundColor: backgroundColor ?? Colors.transparent,
       resizeToAvoidBottomInset: resizeToAvoidBottomInset,
       appBar: appBarInfo != null
           ? AppBar(
-              title: CommonText(text: appBarInfo!.title, fontSize: 20),
+              foregroundColor: isLight ? Colors.black : darkTextColor,
+              title: CommonText(
+                text: appBarInfo!.title,
+                fontSize: 18,
+                isBold: !isLight,
+              ),
               centerTitle: appBarInfo!.isCenter,
               actions: appBarInfo!.actions,
               backgroundColor: backgroundColor ?? Colors.transparent,
@@ -62,6 +71,8 @@ class Fab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    bool isLight = context.watch<ThemeProvider>().isLight;
+
     return isFab == true
         ? MultiValueListenableBuilder(
             valueListenables: valueListenables,
@@ -82,7 +93,7 @@ class Fab extends StatelessWidget {
                           ? const CommonNull()
                           : const TodayButton()
                       : const CommonNull(),
-                  const AddButton(),
+                  AddButton(isLight: isLight),
                 ],
               );
             })

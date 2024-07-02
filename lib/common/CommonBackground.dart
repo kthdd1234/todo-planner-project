@@ -9,10 +9,12 @@ class CommonBackground extends StatelessWidget {
     required this.child,
     this.isRadius,
     this.height,
+    this.borderRadius,
   });
 
   bool? isRadius;
   double? height;
+  BorderRadius? borderRadius;
   Widget child;
 
   @override
@@ -23,7 +25,8 @@ class CommonBackground extends StatelessWidget {
       height: height ?? MediaQuery.of(context).size.height,
       decoration: BoxDecoration(
         color: isLight ? null : darkBgColor,
-        borderRadius: BorderRadius.circular(isRadius == true ? 10.0 : 0.0),
+        borderRadius: borderRadius ??
+            BorderRadius.circular(isRadius == true ? 10.0 : 0.0),
         image: isLight
             ? const DecorationImage(
                 image: AssetImage('assets/image/CloudyApple.png'),

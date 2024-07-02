@@ -115,10 +115,8 @@ class _TaskContainerState extends State<TaskContainer> {
             isBold: !isLight,
             textColor: isLight
                 ? getColorClass(colorName).original
-                : getColorClass(colorName).s50,
-            bgColor: isLight
-                ? getColorClass(colorName).s50
-                : getColorClass(colorName).s400,
+                : getColorClass(colorName).s200,
+            bgColor: isLight ? getColorClass(colorName).s50 : darkButtonColor,
             innerPadding: const EdgeInsets.only(bottom: 5),
             onTap: () => onTaskTitle(taskTitle, colorName),
           ),
@@ -231,7 +229,7 @@ class _TaskItemState extends State<TaskItem> {
     );
   }
 
-  onMore() {
+  onMore(bool isLight) {
     showModalBottomSheet(
       isScrollControlled: true,
       context: context,
@@ -243,7 +241,8 @@ class _TaskItemState extends State<TaskItem> {
             ModalButton(
               svgName: 'highlighter',
               actionText: '${widget.taskItem.task.name} 수정',
-              color: textColor,
+              isBold: !isLight,
+              color: isLight ? textColor : darkTextColor,
               onTap: () {
                 navigatorPop(context);
                 showModalBottomSheet(
@@ -260,6 +259,7 @@ class _TaskItemState extends State<TaskItem> {
             ModalButton(
               svgName: 'remove',
               actionText: '${widget.taskItem.task.name} 삭제',
+              isBold: !isLight,
               color: red.s200,
               onTap: () async {
                 navigatorPop(context);
@@ -302,7 +302,7 @@ class _TaskItemState extends State<TaskItem> {
             Expanded(
               flex: 1,
               child: InkWell(
-                onTap: onMore,
+                onTap: () => onMore(isLight),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -329,6 +329,7 @@ class _TaskItemState extends State<TaskItem> {
                               fontSize: 12,
                               overflow: TextOverflow.ellipsis,
                               textAlign: TextAlign.start,
+                              isBold: !isLight,
                             ),
                           )
                         : const CommonNull()

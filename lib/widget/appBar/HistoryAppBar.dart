@@ -11,7 +11,7 @@ import 'package:project/util/constants.dart';
 import 'package:project/util/enum.dart';
 import 'package:project/util/final.dart';
 import 'package:project/util/func.dart';
-import 'package:project/widget/popup/MonthPopup.dart';
+import 'package:project/widget/popup/CalendarPopup.dart';
 import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 
@@ -50,7 +50,6 @@ class _HistoryAppBarState extends State<HistoryAppBar> {
   @override
   Widget build(BuildContext context) {
     String locale = context.locale.toString();
-    UserBox? user = userRepository.user;
     bool isLight = context.watch<ThemeProvider>().isLight;
     DateTime yearDateTime = context.watch<YearDateTimeProvider>().yearDateTime;
     bool isRecent = context.watch<HistoryOrderProvider>().isRecent;
@@ -80,7 +79,7 @@ class _HistoryAppBarState extends State<HistoryAppBar> {
                 isBold: true,
                 fontSize: 10,
                 textColor: Colors.white,
-                bgColor: indigo.s200,
+                bgColor: isLight ? indigo.s200 : darkButtonColor,
                 onTap: onDisplay,
               ),
               CommonSpace(width: 5),
@@ -88,8 +87,16 @@ class _HistoryAppBarState extends State<HistoryAppBar> {
                 text: isRecent ? '최신순' : '과거순',
                 isBold: true,
                 fontSize: 10,
-                textColor: Colors.white,
-                bgColor: isRecent ? indigo.s200 : red.s200,
+                textColor: isLight
+                    ? Colors.white
+                    : isRecent
+                        ? indigo.s100
+                        : red.s100,
+                bgColor: isLight
+                    ? isRecent
+                        ? indigo.s200
+                        : red.s200
+                    : darkButtonColor,
                 onTap: () => onOrder(isRecent),
               ),
             ],

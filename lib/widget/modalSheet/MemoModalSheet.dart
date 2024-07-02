@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:project/common/CommonModalSheet.dart';
 import 'package:project/common/CommonSpace.dart';
+import 'package:project/provider/themeProvider.dart';
 import 'package:project/util/constants.dart';
 import 'package:project/util/final.dart';
 import 'package:project/widget/button/ModalButton.dart';
+import 'package:provider/provider.dart';
 
 class MemoModalSheet extends StatelessWidget {
   MemoModalSheet({
@@ -16,6 +18,8 @@ class MemoModalSheet extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    bool isLight = context.watch<ThemeProvider>().isLight;
+
     return CommonModalSheet(
       height: 150,
       child: Row(
@@ -23,7 +27,8 @@ class MemoModalSheet extends StatelessWidget {
           ModalButton(
             svgName: 'highlighter',
             actionText: '메모 수정',
-            color: textColor,
+            color: isLight ? textColor : darkTextColor,
+            isBold: !isLight,
             onTap: onEdit,
           ),
           CommonSpace(width: 5),
@@ -31,6 +36,7 @@ class MemoModalSheet extends StatelessWidget {
             svgName: 'remove',
             actionText: '메모 삭제',
             color: red.s200,
+            isBold: !isLight,
             onTap: onRemove,
           ),
         ],

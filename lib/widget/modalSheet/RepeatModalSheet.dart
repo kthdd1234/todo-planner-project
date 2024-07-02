@@ -1,27 +1,28 @@
 // ignore_for_file: avoid_function_literals_in_foreach_calls
-
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:project/common/CommonButton.dart';
 import 'package:project/common/CommonContainer.dart';
 import 'package:project/common/CommonModalSheet.dart';
 import 'package:project/common/CommonSpace.dart';
 import 'package:project/common/CommonText.dart';
+import 'package:project/provider/themeProvider.dart';
 import 'package:project/util/class.dart';
 import 'package:project/util/constants.dart';
 import 'package:project/util/final.dart';
 import 'package:project/util/func.dart';
 import 'package:project/widget/button/RepeatButton.dart';
+import 'package:provider/provider.dart';
 
 class RepeatModalSheet extends StatefulWidget {
   RepeatModalSheet({
     super.key,
+    required this.color,
     required this.taskDateTimeInfo,
     required this.onCompletedEveryWeek,
     required this.onCompletedEveryMonth,
   });
 
+  ColorClass color;
   TaskDateTimeInfoClass taskDateTimeInfo;
   Function(List<WeekDayClass>) onCompletedEveryWeek;
   Function(List<MonthDayClass>) onCompletedEveryMonth;
@@ -105,22 +106,41 @@ class _RepeatModalSheetState extends State<RepeatModalSheet> {
 
   @override
   Widget build(BuildContext context) {
+    bool isCompletedWeek =
+        weekDays.where((item) => item.isVisible).toList().isNotEmpty;
+    bool isCompletedMonth =
+        monthDays.where((item) => item.isVisible).toList().isNotEmpty;
+
+    bool isLight = context.watch<ThemeProvider>().isLight;
+    Color notTextColor = isLight ? grey.s400 : Colors.white;
+    Color notBgColor = isLight ? whiteBgBtnColor : darkNotSelectedBgColor;
+
+    onTextColor(bool isVisible) {
+      return isVisible ? widget.color.s50 : notTextColor;
+    }
+
+    onButtonColor(bool isVisible) {
+      return isVisible
+          ? isLight
+              ? widget.color.s200
+              : widget.color.s300
+          : notBgColor;
+    }
+
     Widget child = {
       taskDateTimeType.everyWeek: EveryWeekRepeatDay(
+        textColor: onTextColor,
+        buttonColor: onButtonColor,
         weekDays: weekDays,
         onWeekDay: onWeekDay,
       ),
       taskDateTimeType.everyMonth: EveryMonthRepeatDay(
+        textColor: onTextColor,
+        buttonColor: onButtonColor,
         monthDays: monthDays,
         onMonthDay: onMonthDay,
       ),
     }[selectedRepeatType]!;
-
-    bool isCompletedWeek =
-        weekDays.where((item) => item.isVisible).toList().isNotEmpty;
-
-    bool isCompletedMonth =
-        monthDays.where((item) => item.isVisible).toList().isNotEmpty;
 
     return CommonModalSheet(
       title: '반복',
@@ -133,6 +153,7 @@ class _RepeatModalSheetState extends State<RepeatModalSheet> {
               child: Column(
                 children: [
                   RepeatButtonContainer(
+                    color: widget.color,
                     selectedRepeatType: selectedRepeatType,
                     onTap: onRepeatType,
                   ),
@@ -144,19 +165,11 @@ class _RepeatModalSheetState extends State<RepeatModalSheet> {
           CommonButton(
             text: '완료',
             textColor: selectedRepeatType == taskDateTimeType.everyWeek
-                ? isCompletedWeek
-                    ? Colors.white
-                    : grey.s400
-                : isCompletedMonth
-                    ? Colors.white
-                    : grey.s400,
+                ? onTextColor(isCompletedWeek)
+                : onTextColor(isCompletedMonth),
             buttonColor: selectedRepeatType == taskDateTimeType.everyWeek
-                ? isCompletedWeek
-                    ? buttonColor
-                    : grey.s300
-                : isCompletedMonth
-                    ? buttonColor
-                    : grey.s300,
+                ? onButtonColor(isCompletedWeek)
+                : onButtonColor(isCompletedMonth),
             outerPadding: const EdgeInsets.only(top: 15),
             verticalPadding: 15,
             borderRadius: 100,
@@ -177,10 +190,12 @@ class _RepeatModalSheetState extends State<RepeatModalSheet> {
 class RepeatButtonContainer extends StatelessWidget {
   RepeatButtonContainer({
     super.key,
+    required this.color,
     required this.selectedRepeatType,
     required this.onTap,
   });
 
+  ColorClass color;
   String selectedRepeatType;
   Function(String) onTap;
 
@@ -192,6 +207,7 @@ class RepeatButtonContainer extends StatelessWidget {
         children: [
           RepeatButton(
             text: '매주',
+            color: color,
             type: taskDateTimeType.everyWeek,
             selectedRepeatType: selectedRepeatType,
             onTap: onTap,
@@ -199,6 +215,7 @@ class RepeatButtonContainer extends StatelessWidget {
           CommonSpace(width: 5),
           RepeatButton(
             text: '매달',
+            color: color,
             type: taskDateTimeType.everyMonth,
             selectedRepeatType: selectedRepeatType,
             onTap: onTap,
@@ -212,12 +229,15 @@ class RepeatButtonContainer extends StatelessWidget {
 class EveryWeekRepeatDay extends StatelessWidget {
   EveryWeekRepeatDay({
     super.key,
+    required this.textColor,
+    required this.buttonColor,
     required this.weekDays,
     required this.onWeekDay,
   });
 
   List<WeekDayClass> weekDays;
   Function(WeekDayClass) onWeekDay;
+  Function(bool) textColor, buttonColor;
 
   @override
   Widget build(BuildContext context) {
@@ -228,8 +248,8 @@ class EveryWeekRepeatDay extends StatelessWidget {
                   text: item.name,
                   fontSize: 13,
                   isBold: item.isVisible,
-                  textColor: item.isVisible ? Colors.white : grey.s400,
-                  buttonColor: item.isVisible ? indigo.s200 : whiteBgBtnColor,
+                  textColor: textColor(item.isVisible),
+                  buttonColor: buttonColor(item.isVisible),
                   verticalPadding: 10,
                   outerPadding: EdgeInsets.only(
                     right: item.id == weekDays.last.id ? 0 : 5,
@@ -246,15 +266,20 @@ class EveryWeekRepeatDay extends StatelessWidget {
 class EveryMonthRepeatDay extends StatelessWidget {
   EveryMonthRepeatDay({
     super.key,
+    required this.textColor,
+    required this.buttonColor,
     required this.monthDays,
     required this.onMonthDay,
   });
 
   List<MonthDayClass> monthDays;
   Function(MonthDayClass) onMonthDay;
+  Function(bool) textColor, buttonColor;
 
   @override
   Widget build(BuildContext context) {
+    bool isLight = context.watch<ThemeProvider>().isLight;
+
     return Expanded(
       child: Column(
         children: [
@@ -270,9 +295,8 @@ class EveryMonthRepeatDay extends StatelessWidget {
                 .map((monthDay) => CommonButton(
                       text: monthDay.id.toString(),
                       isBold: monthDay.isVisible,
-                      textColor: monthDay.isVisible ? Colors.white : grey.s400,
-                      buttonColor:
-                          monthDay.isVisible ? indigo.s200 : whiteBgBtnColor,
+                      textColor: textColor(monthDay.isVisible),
+                      buttonColor: buttonColor(monthDay.isVisible),
                       verticalPadding: 10,
                       borderRadius: 7,
                       onTap: () => onMonthDay(monthDay),
@@ -293,12 +317,12 @@ class EveryMonthRepeatDay extends StatelessWidget {
                 children: [
                   CommonText(
                     text: '30일, 31일을 선택할 경우 해당 일자가 없는 달에는',
-                    color: grey.original,
+                    color: isLight ? grey.original : Colors.white,
                     fontSize: 11,
                   ),
                   CommonText(
                     text: '할 일 화면에 표시되지 않아요.',
-                    color: grey.original,
+                    color: isLight ? grey.original : Colors.white,
                     fontSize: 11,
                     textAlign: TextAlign.end,
                   )

@@ -31,7 +31,7 @@ class CommonPopup extends StatelessWidget {
                   fit: BoxFit.cover,
                 )
               : null,
-          borderRadius: BorderRadius.all(Radius.circular(10)),
+          borderRadius: const BorderRadius.all(Radius.circular(10)),
         ),
         height: height,
         child: Padding(padding: const EdgeInsets.all(20), child: child),

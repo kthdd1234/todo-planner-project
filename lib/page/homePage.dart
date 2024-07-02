@@ -100,14 +100,12 @@ class _HomePageState extends State<HomePage> {
               color: isLight ? indigo.s200 : Colors.white,
               fontWeight: isLight ? null : FontWeight.bold,
             ),
-            unselectedItemColor:
-                isLight ? const Color(0xffA2A7B2) : const Color(0xff616261),
+            unselectedItemColor: // const Color(0xffA2A7B2)
+                isLight
+                    ? Color.fromARGB(255, 115, 120, 139)
+                    : const Color(0xff616261),
             unselectedLabelStyle:
                 TextStyle(fontWeight: isLight ? null : FontWeight.bold),
-            // isLight
-            //     ? null
-            //     : const TextStyle(
-            //         fontWeight: FontWeight.bold, color: textColor),
             currentIndex: seletedIdx,
             onTap: onBottomNavigation,
           ),

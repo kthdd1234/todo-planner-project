@@ -10,6 +10,7 @@ import 'package:project/model/record_box/record_box.dart';
 import 'package:project/provider/HistoryOrderProvider.dart';
 import 'package:project/provider/PremiumProvider.dart';
 import 'package:project/provider/YearDateTimeProvider.dart';
+import 'package:project/provider/themeProvider.dart';
 import 'package:project/util/final.dart';
 import 'package:project/util/func.dart';
 import 'package:project/widget/ad/NativeAd.dart';
@@ -117,10 +118,12 @@ class _ContentViewState extends State<ContentView> {
 
   @override
   Widget build(BuildContext context) {
+    bool isLight = context.watch<ThemeProvider>().isLight;
+
     return Column(
       children: widget.recordList.map((record) {
         if (record.createDateTime.year == 1000) {
-          return const NativeAdWidget();
+          return NativeAdWidget(isLight: isLight);
         }
 
         bool isShow = (record.taskMarkList != null &&
@@ -134,12 +137,16 @@ class _ContentViewState extends State<ContentView> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    HistoryTitle(dateTime: record.createDateTime),
+                    HistoryTitle(
+                      isLight: isLight,
+                      dateTime: record.createDateTime,
+                    ),
                     HistoryTask(
+                      isLight: isLight,
                       taskMarkList: record.taskMarkList,
                       taskOrderList: record.taskOrderList,
                     ),
-                    HistoryMemo(memo: record.memo),
+                    HistoryMemo(isLight: isLight, memo: record.memo),
                     HistoryImage(uint8ListList: record.imageList)
                   ],
                 ),

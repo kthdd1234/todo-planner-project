@@ -4,9 +4,10 @@ import 'package:project/common/CommonModalItem.dart';
 import 'package:project/common/CommonModalSheet.dart';
 import 'package:project/common/CommonOutlineInputField.dart';
 import 'package:project/common/CommonSpace.dart';
-import 'package:project/common/CommonTag.dart';
+import 'package:project/provider/themeProvider.dart';
 import 'package:project/util/func.dart';
-import 'package:project/widget/modalSheet/ColorModalsheet.dart';
+import 'package:project/widget/listView/ColorListView.dart';
+import 'package:provider/provider.dart';
 
 class TitleSettingModalSheet extends StatefulWidget {
   TitleSettingModalSheet({
@@ -35,18 +36,8 @@ class _TitleSettingModalSheetState extends State<TitleSettingModalSheet> {
     super.initState();
   }
 
-  onColor() {
-    showModalBottomSheet(
-      isScrollControlled: true,
-      context: context,
-      builder: (context) => ColorModalSheet(
-        selectedColorName: selectedColorName,
-        onTap: (String colorName) {
-          setState(() => selectedColorName = colorName);
-          navigatorPop(context);
-        },
-      ),
-    );
+  onColor(String colorName) {
+    setState(() => selectedColorName = colorName);
   }
 
   onEditingComplete() {
@@ -55,6 +46,8 @@ class _TitleSettingModalSheetState extends State<TitleSettingModalSheet> {
 
   @override
   Widget build(BuildContext context) {
+    bool isLight = context.watch<ThemeProvider>().isLight;
+
     return Padding(
       padding: EdgeInsets.only(
         bottom: MediaQuery.of(context).viewInsets.bottom,
@@ -73,18 +66,19 @@ class _TitleSettingModalSheetState extends State<TitleSettingModalSheet> {
             children: [
               CommonModalItem(
                 title: '색상',
-                onTap: onColor,
-                child: CommonTag(
-                  text: getColorClass(selectedColorName).colorName,
-                  textColor: getColorClass(selectedColorName).original,
-                  bgColor: getColorClass(selectedColorName).s50,
-                  onTap: onColor,
+                onTap: () {},
+                child: ColorListView(
+                  selectedColorName: selectedColorName,
+                  onColor: onColor,
                 ),
               ),
               CommonSpace(height: 17.5),
               CommonOutlineInputField(
-                hintText: '제목을 입력해주세요',
                 controller: controller,
+                hintText: '제목을 입력해주세요',
+                selectedColor: isLight
+                    ? getColorClass(selectedColorName).s200
+                    : getColorClass(selectedColorName).s300,
                 onSuffixIcon: onEditingComplete,
                 onEditingComplete: onEditingComplete,
                 onChanged: (_) => setState(() {}),

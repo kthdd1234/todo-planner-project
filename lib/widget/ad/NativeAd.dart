@@ -1,6 +1,4 @@
 import 'dart:developer';
-
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:project/common/CommonContainer.dart';
@@ -10,7 +8,9 @@ import 'package:project/util/constants.dart';
 import 'package:project/util/func.dart';
 
 class NativeAdWidget extends StatefulWidget {
-  const NativeAdWidget({super.key});
+  NativeAdWidget({super.key, required this.isLight});
+
+  bool isLight;
 
   @override
   State<NativeAdWidget> createState() => _NativeAdWidgetState();
@@ -38,8 +38,18 @@ class _NativeAdWidgetState extends State<NativeAdWidget> {
       request: const AdRequest(),
       nativeTemplateStyle: NativeTemplateStyle(
         templateType: TemplateType.medium,
-        mainBackgroundColor: whiteBgBtnColor,
+        mainBackgroundColor:
+            widget.isLight ? whiteBgBtnColor : darkNotSelectedBgColor,
         cornerRadius: 5.0,
+        primaryTextStyle: NativeTemplateTextStyle(
+          textColor: widget.isLight ? textColor : darkTextColor,
+        ),
+        tertiaryTextStyle: NativeTemplateTextStyle(
+          textColor: widget.isLight ? textColor : darkTextColor,
+        ),
+        secondaryTextStyle: NativeTemplateTextStyle(
+          textColor: widget.isLight ? textColor : darkTextColor,
+        ),
         callToActionTextStyle: NativeTemplateTextStyle(
           textColor: Colors.white,
           backgroundColor: textColor,
@@ -62,7 +72,12 @@ class _NativeAdWidgetState extends State<NativeAdWidget> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          CommonText(text: '광고', fontSize: 12, isBold: true, color: textColor),
+          CommonText(
+            text: '광고',
+            fontSize: 12,
+            isBold: true,
+            color: widget.isLight ? textColor : darkTextColor,
+          ),
           CommonSpace(height: 10),
           SizedBox(
             width: double.maxFinite,

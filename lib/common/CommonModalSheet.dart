@@ -5,8 +5,10 @@ import 'package:project/common/CommonBackground.dart';
 import 'package:project/common/CommonNull.dart';
 import 'package:project/common/CommonSpace.dart';
 import 'package:project/common/CommonText.dart';
+import 'package:project/provider/themeProvider.dart';
 import 'package:project/util/constants.dart';
 import 'package:project/util/func.dart';
+import 'package:provider/provider.dart';
 
 class CommonModalSheet extends StatelessWidget {
   CommonModalSheet({
@@ -24,7 +26,13 @@ class CommonModalSheet extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    bool isLight = context.watch<ThemeProvider>().isLight;
+
     return CommonBackground(
+      borderRadius: const BorderRadius.only(
+        topLeft: Radius.circular(10),
+        topRight: Radius.circular(10),
+      ),
       height: height,
       isRadius: true,
       child: SafeArea(
@@ -40,12 +48,12 @@ class CommonModalSheet extends StatelessWidget {
                         isBack == true
                             ? InkWell(
                                 onTap: () => navigatorPop(context),
-                                child: const Padding(
-                                  padding:
-                                      EdgeInsets.only(bottom: 15, right: 15),
+                                child: Padding(
+                                  padding: const EdgeInsets.only(
+                                      bottom: 15, right: 15),
                                   child: Icon(
                                     Icons.arrow_back_ios_new_rounded,
-                                    color: textColor,
+                                    color: isLight ? textColor : Colors.white,
                                     size: 16,
                                   ),
                                 ),
@@ -59,6 +67,7 @@ class CommonModalSheet extends StatelessWidget {
                               fontSize: 15,
                               textAlign: TextAlign.center,
                               overflow: TextOverflow.ellipsis,
+                              isBold: !isLight,
                             ),
                           ),
                         ),

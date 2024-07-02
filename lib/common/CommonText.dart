@@ -37,7 +37,7 @@ class CommonText extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     bool isLight = context.watch<ThemeProvider>().isLight;
-    Color defaultColor = isLight ? Colors.black : const Color(0xffDADDE0);
+    Color defaultColor = isLight ? Colors.black : darkTextColor;
 
     return Container(
       padding: EdgeInsets.all(highlightColor != null ? 3 : 0),

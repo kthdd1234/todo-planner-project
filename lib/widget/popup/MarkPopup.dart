@@ -1,22 +1,20 @@
 // ignore_for_file: use_build_context_synchronously
-
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:project/common/CommonContainer.dart';
 import 'package:project/common/CommonDivider.dart';
-import 'package:project/common/CommonOutlineInputField.dart';
 import 'package:project/common/CommonPopup.dart';
 import 'package:project/common/CommonSpace.dart';
 import 'package:project/common/CommonText.dart';
 import 'package:project/model/record_box/record_box.dart';
 import 'package:project/model/task_box/task_box.dart';
 import 'package:project/page/MemoSettingPage.dart';
+import 'package:project/provider/themeProvider.dart';
 import 'package:project/util/class.dart';
 import 'package:project/util/constants.dart';
 import 'package:project/util/final.dart';
 import 'package:project/util/func.dart';
 import 'package:project/widget/popup/AlertPopup.dart';
+import 'package:provider/provider.dart';
 
 class MarkPopup extends StatefulWidget {
   MarkPopup({
@@ -169,7 +167,7 @@ class _MarkPopupState extends State<MarkPopup> {
     await widget.recordBox?.save();
   }
 
-  wText(String text, Function()? onTap) {
+  wText(bool isLight, String text, Function()? onTap) {
     return InkWell(
       onTap: onTap,
       child: Padding(
@@ -178,6 +176,7 @@ class _MarkPopupState extends State<MarkPopup> {
           text: text,
           color: Colors.grey,
           fontSize: 11,
+          isBold: !isLight,
         ),
       ),
     );
@@ -212,6 +211,10 @@ class _MarkPopupState extends State<MarkPopup> {
 
   @override
   Widget build(BuildContext context) {
+    bool isLight = context.watch<ThemeProvider>().isLight;
+    Color cursorColor =
+        isLight ? getColorClass(widget.taskBox.colorName).s300 : darkTextColor;
+
     return CommonPopup(
       insetPaddingHorizontal: 40,
       height: 380,
@@ -237,12 +240,14 @@ class _MarkPopupState extends State<MarkPopup> {
                       height: 70,
                       padding: const EdgeInsets.symmetric(horizontal: 10),
                       decoration: BoxDecoration(
-                        color: whiteBgBtnColor,
+                        color:
+                            isLight ? whiteBgBtnColor : darkNotSelectedBgColor,
                         borderRadius: BorderRadius.circular(5),
                       ),
                       child: MemoField(
                         hintText: '메모 입력하기',
                         fontSize: 15,
+                        cursorColor: cursorColor,
                         autofocus: isAutoFocus,
                         controller: memoController,
                         contentPadding: const EdgeInsets.symmetric(
@@ -260,14 +265,15 @@ class _MarkPopupState extends State<MarkPopup> {
                         CommonText(
                           text: memoController.text,
                           textAlign: TextAlign.start,
+                          isBold: !isLight,
                         ),
                         CommonSpace(height: 5),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
-                            wText('수정', onEditMemo),
-                            wText('|', null),
-                            wText('삭제', onRemoveMemo)
+                            wText(isLight, '수정', onEditMemo),
+                            wText(isLight, '|', null),
+                            wText(isLight, '삭제', onRemoveMemo)
                           ],
                         )
                       ],
@@ -296,6 +302,8 @@ class MarkItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    bool isLight = context.watch<ThemeProvider>().isLight;
+
     return InkWell(
       onTap: () => onTap(mark),
       child: Column(
@@ -319,12 +327,19 @@ class MarkItem extends StatelessWidget {
                   ),
                 ),
                 CommonSpace(width: 10),
-                CommonText(text: name, fontSize: 15, color: textColor)
+                CommonText(
+                  text: name,
+                  fontSize: 15,
+                  color: isLight ? textColor : darkTextColor,
+                  isBold: !isLight,
+                )
               ],
             ),
           ),
           CommonSpace(height: 10),
-          CommonDivider(horizontal: 0)
+          CommonDivider(
+            color: isLight ? getColorClass(colorName).s50 : Colors.white12,
+          ),
         ],
       ),
     );

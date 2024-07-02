@@ -1,16 +1,14 @@
 // ignore_for_file: use_build_context_synchronously
 
-import 'dart:ffi';
 import 'dart:typed_data';
 import 'package:easy_localization/easy_localization.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:project/common/CommonBackground.dart';
 import 'package:project/common/CommonButton.dart';
 import 'package:project/common/CommonContainer.dart';
 import 'package:project/common/CommonImage.dart';
 import 'package:project/model/record_box/record_box.dart';
+import 'package:project/provider/themeProvider.dart';
 import 'package:project/util/constants.dart';
 import 'package:project/widget/border/HorizentalBorder.dart';
 import 'package:project/widget/container/MemoContainer.dart';
@@ -24,6 +22,7 @@ import 'package:project/util/final.dart';
 import 'package:project/util/func.dart';
 import 'package:project/widget/modalSheet/ImageAddModalSheet.dart';
 import 'package:project/widget/modalSheet/ImageSelectionModalSheet.dart';
+import 'package:provider/provider.dart';
 
 class MemoSettingPage extends StatefulWidget {
   MemoSettingPage({
@@ -57,14 +56,15 @@ class _MemoSettingPageState extends State<MemoSettingPage> {
 
   actionButton({
     required String text,
-    required ColorClass color,
+    required Color textColor,
+    required Color buttonColor,
     required Function() onTap,
   }) {
     return Expanded(
       child: CommonButton(
         text: text,
-        textColor: Colors.white,
-        buttonColor: color.s200,
+        textColor: textColor,
+        buttonColor: buttonColor,
         verticalPadding: 15,
         borderRadius: 7,
         onTap: onTap,
@@ -160,6 +160,10 @@ class _MemoSettingPageState extends State<MemoSettingPage> {
 
   @override
   Widget build(BuildContext context) {
+    bool isLight = context.watch<ThemeProvider>().isLight;
+    Color containerColor = isLight ? memoBgColor : darkContainerColor;
+    Color borderColor = isLight ? orange.s50 : Colors.white10;
+    Color cursorColor = isLight ? orange.s300 : darkTextColor;
     String locale = context.locale.toString();
 
     return CommonBackground(
@@ -172,7 +176,10 @@ class _MemoSettingPageState extends State<MemoSettingPage> {
               padding: const EdgeInsets.only(right: 20, top: 5),
               child: CommonText(
                 text: ymdeFormatter(
-                    locale: locale, dateTime: widget.initDateTime),
+                  locale: locale,
+                  dateTime: widget.initDateTime,
+                ),
+                isBold: !isLight,
               ),
             )
           ],
@@ -185,12 +192,12 @@ class _MemoSettingPageState extends State<MemoSettingPage> {
                 outerPadding: const EdgeInsets.fromLTRB(7, 0, 7, 7),
                 child: Column(
                   children: [
-                    HorizentalBorder(color: orange.s50),
+                    HorizentalBorder(color: borderColor),
                     Expanded(
                       child: Container(
-                        color: memoBgColor,
+                        color: containerColor,
                         child: CustomPaint(
-                          painter: BacgroundPaint(),
+                          painter: BacgroundPaint(isLight: isLight),
                           child: Padding(
                             padding: const EdgeInsets.symmetric(
                               vertical: 10,
@@ -200,6 +207,7 @@ class _MemoSettingPageState extends State<MemoSettingPage> {
                               children: [
                                 MemoField(
                                   controller: memoContoller,
+                                  cursorColor: cursorColor,
                                   onChanged: (_) {},
                                 ),
                                 Padding(
@@ -215,7 +223,7 @@ class _MemoSettingPageState extends State<MemoSettingPage> {
                         ),
                       ),
                     ),
-                    HorizentalBorder(color: orange.s50),
+                    HorizentalBorder(color: borderColor),
                   ],
                 ),
               ),
@@ -226,13 +234,15 @@ class _MemoSettingPageState extends State<MemoSettingPage> {
                 children: [
                   actionButton(
                     text: '+ 사진 추가',
-                    color: purple,
+                    textColor: isLight ? Colors.white : purple.s200,
+                    buttonColor: isLight ? purple.s200 : darkButtonColor,
                     onTap: onAddImage,
                   ),
                   CommonSpace(width: 7),
                   actionButton(
                     text: '완료',
-                    color: indigo,
+                    textColor: isLight ? Colors.white : indigo.s200,
+                    buttonColor: isLight ? indigo.s200 : darkButtonColor,
                     onTap: onCompletedMemo,
                   ),
                 ],
@@ -285,6 +295,7 @@ class MemoField extends StatelessWidget {
     super.key,
     required this.controller,
     required this.onChanged,
+    required this.cursorColor,
     this.fontSize,
     this.autofocus,
     this.onEditingComplete,
@@ -299,18 +310,26 @@ class MemoField extends StatelessWidget {
   TextEditingController controller;
   TextInputAction? textInputAction;
   EdgeInsets? contentPadding;
+  Color? cursorColor;
   Function(String) onChanged;
   Function()? onEditingComplete;
 
   @override
   Widget build(BuildContext context) {
+    bool isLight = context.watch<ThemeProvider>().isLight;
+
     return TextFormField(
       controller: controller,
       autofocus: autofocus ?? true,
       maxLines: null,
       minLines: null,
+      cursorColor: cursorColor,
       textInputAction: textInputAction ?? TextInputAction.newline,
-      style: fontSize != null ? TextStyle(fontSize: fontSize!) : null,
+      style: TextStyle(
+        fontSize: fontSize,
+        color: isLight ? Colors.black : darkTextColor,
+        fontWeight: isLight ? FontWeight.normal : FontWeight.bold,
+      ),
       decoration: InputDecoration(
         contentPadding: contentPadding ??
             const EdgeInsets.symmetric(horizontal: 0, vertical: 0),

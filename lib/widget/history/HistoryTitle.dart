@@ -6,8 +6,9 @@ import 'package:project/util/final.dart';
 import 'package:project/util/func.dart';
 
 class HistoryTitle extends StatelessWidget {
-  HistoryTitle({super.key, required this.dateTime});
+  HistoryTitle({super.key, required this.isLight, required this.dateTime});
 
+  bool isLight;
   DateTime dateTime;
 
   onMore() {
@@ -28,12 +29,15 @@ class HistoryTitle extends StatelessWidget {
             CommonText(
               text: mdFormatter(locale: locale, dateTime: dateTime),
               fontSize: 13,
+              isBold: !isLight,
             ),
             CommonSpace(height: 3),
             CommonText(
-                text: eeeeFormatter(locale: locale, dateTime: dateTime),
-                color: grey.original,
-                fontSize: 12),
+              text: eeeeFormatter(locale: locale, dateTime: dateTime),
+              color: grey.original,
+              fontSize: 12,
+              isBold: !isLight,
+            ),
           ],
         ),
         // InkWell(

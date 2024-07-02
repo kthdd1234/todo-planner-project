@@ -7,19 +7,25 @@ import 'package:project/common/CommonButton.dart';
 import 'package:project/common/CommonContainer.dart';
 import 'package:project/common/CommonModalSheet.dart';
 import 'package:project/common/CommonSpace.dart';
+import 'package:project/common/CommonSwitch.dart';
 import 'package:project/common/CommonText.dart';
+import 'package:project/provider/themeProvider.dart';
+import 'package:project/util/class.dart';
 import 'package:project/util/constants.dart';
 import 'package:project/util/final.dart';
 import 'package:project/util/func.dart';
+import 'package:provider/provider.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 class SelectedDayModalSheet extends StatefulWidget {
   SelectedDayModalSheet({
     super.key,
+    required this.color,
     required this.initDateTimeList,
     required this.onCompleted,
   });
 
+  ColorClass color;
   List<DateTime> initDateTimeList;
   Function(List<DateTime>) onCompleted;
 
@@ -76,20 +82,20 @@ class _SelectedDayModalSheetState extends State<SelectedDayModalSheet> {
   Widget? markerBuilder(
     String locale,
     DateTime dateTime,
+    bool isLight,
   ) {
-    int idx = isContainIdxDateTime(
-      locale: locale,
-      selectionList: dateTimeList,
-      targetDateTime: dateTime,
-    );
-
-    if (idx != -1) {
+    if (isContainIdxDateTime(
+          locale: locale,
+          selectionList: dateTimeList,
+          targetDateTime: dateTime,
+        ) !=
+        -1) {
       return Center(
         child: Container(
           width: 35,
           height: 35,
           decoration: BoxDecoration(
-            color: indigo.s200,
+            color: isLight ? widget.color.s200 : widget.color.s300,
             borderRadius: BorderRadius.circular(100),
           ),
           child: Padding(
@@ -98,7 +104,7 @@ class _SelectedDayModalSheetState extends State<SelectedDayModalSheet> {
               child: CommonText(
                 fontSize: 13,
                 text: '${dateTime.day}',
-                color: Colors.white,
+                color: isLight ? Colors.white : widget.color.s50,
                 isBold: true,
                 isNotTr: true,
               ),
@@ -115,6 +121,10 @@ class _SelectedDayModalSheetState extends State<SelectedDayModalSheet> {
   Widget build(BuildContext context) {
     String locale = context.locale.toString();
     bool isCompleted = dateTimeList.isNotEmpty;
+    bool isLight = context.watch<ThemeProvider>().isLight;
+
+    Color notCompletedBgColor = isLight ? grey.s300 : darkContainerColor;
+    Color notCompletedTextColor = isLight ? grey.s400 : const Color(0xff616261);
 
     return CommonModalSheet(
       title: '날짜',
@@ -129,23 +139,51 @@ class _SelectedDayModalSheetState extends State<SelectedDayModalSheet> {
                 children: [
                   TableCalendar(
                     locale: locale,
-                    // startingDayOfWeek: StartingDayOfWeek.monday,
                     headerStyle: HeaderStyle(
                       titleCentered: true,
+                      titleTextStyle: TextStyle(
+                        color: isLight ? Colors.black : Colors.white,
+                        fontWeight: isLight ? null : FontWeight.bold,
+                      ),
                       formatButtonVisible: false,
                       leftChevronIcon: Icon(
                         Icons.chevron_left,
-                        color: buttonColor,
+                        color: isLight ? buttonColor : Colors.white,
                       ),
                       rightChevronIcon: Icon(
                         Icons.chevron_right,
-                        color: buttonColor,
+                        color: isLight ? buttonColor : Colors.white,
                       ),
                     ),
-                    calendarStyle: const CalendarStyle(
-                      todayDecoration: BoxDecoration(color: Colors.transparent),
-                      todayTextStyle: TextStyle(color: Colors.black),
+                    calendarStyle: CalendarStyle(
+                      defaultTextStyle: TextStyle(
+                        color: isLight ? Colors.black : darkTextColor,
+                        fontWeight: isLight ? null : FontWeight.bold,
+                      ),
+                      weekendTextStyle: TextStyle(
+                        color: isLight ? Colors.black : red.s300,
+                        fontWeight: isLight ? null : FontWeight.bold,
+                      ),
+                      todayDecoration: const BoxDecoration(
+                        color: Colors.transparent,
+                      ),
+                      todayTextStyle: TextStyle(
+                        color: isLight ? Colors.black : darkTextColor,
+                        fontWeight: isLight ? null : FontWeight.bold,
+                      ),
                       outsideDaysVisible: false,
+                    ),
+                    daysOfWeekStyle: DaysOfWeekStyle(
+                      weekdayStyle: TextStyle(
+                        fontSize: 13,
+                        color: isLight ? Colors.black : darkTextColor,
+                        fontWeight: isLight ? null : FontWeight.bold,
+                      ),
+                      weekendStyle: TextStyle(
+                        fontSize: 13,
+                        color: red.s300,
+                        fontWeight: isLight ? null : FontWeight.bold,
+                      ),
                     ),
                     focusedDay: focusedDay,
                     firstDay: DateTime(2000, 1, 1),
@@ -158,16 +196,18 @@ class _SelectedDayModalSheetState extends State<SelectedDayModalSheet> {
                       markerBuilder: (btx, dateTime, _) => markerBuilder(
                         locale,
                         dateTime,
+                        isLight,
                       ),
                     ),
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
-                      CommonText(text: '날짜 모두 선택하기'),
+                      CommonText(text: '여러 날짜 선택하기', isBold: !isLight),
                       CommonSpace(width: 10),
-                      CupertinoSwitch(
-                        activeColor: buttonColor,
+                      CommonSwitch(
+                        activeColor:
+                            isLight ? widget.color.s200 : widget.color.s300,
                         value: isMultiSelection,
                         onChanged: onChanged,
                       )
@@ -179,8 +219,8 @@ class _SelectedDayModalSheetState extends State<SelectedDayModalSheet> {
           ),
           CommonButton(
             text: '완료',
-            textColor: isCompleted ? Colors.white : grey.s400,
-            buttonColor: isCompleted ? buttonColor : grey.s300,
+            textColor: isCompleted ? widget.color.s50 : notCompletedTextColor,
+            buttonColor: isCompleted ? widget.color.s300 : notCompletedBgColor,
             outerPadding: const EdgeInsets.only(top: 15),
             verticalPadding: 15,
             borderRadius: 100,

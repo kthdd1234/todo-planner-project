@@ -1,6 +1,4 @@
 // ignore_for_file: prefer_const_constructors
-import 'dart:developer';
-
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:multi_value_listenable_builder/multi_value_listenable_builder.dart';
@@ -125,8 +123,8 @@ class _ContentViewState extends State<ContentView> {
   @override
   Widget build(BuildContext context) {
     String locale = context.locale.toString();
-    RecordBox? recordBox =
-        recordRepository.recordBox.get(dateTimeKey(widget.selectedDateTime));
+    int recordKey = dateTimeKey(widget.selectedDateTime);
+    RecordBox? recordBox = recordRepository.recordBox.get(recordKey);
 
     return Column(
       children: [

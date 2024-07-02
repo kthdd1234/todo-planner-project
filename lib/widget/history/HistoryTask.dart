@@ -7,20 +7,30 @@ import 'package:project/common/CommonNull.dart';
 import 'package:project/common/CommonSpace.dart';
 import 'package:project/common/CommonText.dart';
 import 'package:project/model/task_box/task_box.dart';
+import 'package:project/provider/themeProvider.dart';
 import 'package:project/util/final.dart';
 import 'package:project/util/func.dart';
+import 'package:provider/provider.dart';
 
 class HistoryTask extends StatelessWidget {
   HistoryTask({
     super.key,
+    required this.isLight,
     required this.taskMarkList,
     required this.taskOrderList,
   });
 
+  bool isLight;
   List<Map<String, dynamic>>? taskMarkList;
   List<String>? taskOrderList;
 
   Widget wHistoryItem(Map<String, dynamic> taskMark, String? lastTaskId) {
+    Color? highlightColor = taskMark['isHighlighter'] == true
+        ? isLight
+            ? getColorClass(taskMark['colorName']).s50
+            : getColorClass(taskMark['colorName']).s400
+        : null;
+
     return Padding(
       padding: EdgeInsets.only(bottom: taskMark['id'] == lastTaskId ? 5 : 10),
       child: Column(
@@ -46,9 +56,8 @@ class HistoryTask extends StatelessWidget {
                   children: [
                     CommonText(
                       text: taskMark['name'],
-                      highlightColor: taskMark['isHighlighter'] == true
-                          ? getColorClass(taskMark['colorName']).s50
-                          : null,
+                      highlightColor: highlightColor,
+                      isBold: !isLight,
                       textAlign: TextAlign.start,
                       overflow: TextOverflow.ellipsis,
                     ),
@@ -65,6 +74,7 @@ class HistoryTask extends StatelessWidget {
                   ),
                   child: CommonText(
                     text: taskMark['memo']!,
+                    isBold: !isLight,
                     textAlign: TextAlign.start,
                     overflow: TextOverflow.ellipsis,
                     fontSize: 11,

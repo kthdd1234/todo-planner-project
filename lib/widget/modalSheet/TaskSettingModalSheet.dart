@@ -1,30 +1,26 @@
 // ignore_for_file: use_build_context_synchronously
-import 'dart:developer';
-
 import 'package:easy_localization/easy_localization.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:project/common/CommonCircle.dart';
 import 'package:project/common/CommonContainer.dart';
 import 'package:project/common/CommonModalItem.dart';
 import 'package:project/common/CommonModalSheet.dart';
-import 'package:project/common/CommonNull.dart';
 import 'package:project/common/CommonOutlineInputField.dart';
 import 'package:project/common/CommonSpace.dart';
 import 'package:project/common/CommonSvgText.dart';
-import 'package:project/common/CommonTag.dart';
-import 'package:project/model/record_box/record_box.dart';
+import 'package:project/common/CommonSwitch.dart';
 import 'package:project/model/task_box/task_box.dart';
+import 'package:project/provider/themeProvider.dart';
 import 'package:project/util/class.dart';
 import 'package:project/util/constants.dart';
 import 'package:project/util/enum.dart';
 import 'package:project/util/final.dart';
 import 'package:project/util/func.dart';
-import 'package:project/widget/modalSheet/ColorModalsheet.dart';
+import 'package:project/widget/listView/ColorListView.dart';
 import 'package:project/widget/modalSheet/RepeatModalSheet.dart';
 import 'package:project/widget/modalSheet/SelectedDayModalSheet.dart';
 import 'package:project/widget/popup/AlertPopup.dart';
+import 'package:provider/provider.dart';
 
 class TaskSettingModalSheet extends StatefulWidget {
   TaskSettingModalSheet({
@@ -82,17 +78,6 @@ class _TaskSettingModalSheetState extends State<TaskSettingModalSheet> {
 
   onColor(String colorName) {
     setState(() => selectedColorName = colorName);
-    // showModalBottomSheet(
-    //   isScrollControlled: true,
-    //   context: context,
-    //   builder: (context) => ColorModalSheet(
-    //     selectedColorName: selectedColorName,
-    //     onTap: (String colorName) {
-    //       setState(() => selectedColorName = colorName);
-    //       navigatorPop(context);
-    //     },
-    //   ),
-    // );
   }
 
   onSelectedDay() {
@@ -100,6 +85,7 @@ class _TaskSettingModalSheetState extends State<TaskSettingModalSheet> {
       isScrollControlled: true,
       context: context,
       builder: (context) => SelectedDayModalSheet(
+        color: getColorClass(selectedColorName),
         initDateTimeList: taskDateTimeInfo.dateTimeList,
         onCompleted: (List<DateTime> dateTimeList) {
           setState(() => taskDateTimeInfo.dateTimeList = dateTimeList);
@@ -116,6 +102,7 @@ class _TaskSettingModalSheetState extends State<TaskSettingModalSheet> {
       isScrollControlled: true,
       context: context,
       builder: (context) => RepeatModalSheet(
+        color: getColorClass(selectedColorName),
         taskDateTimeInfo: taskDateTimeInfo,
         onCompletedEveryWeek: (weekDays) {
           taskDateTimeInfo.type = taskDateTimeType.everyWeek;
@@ -208,11 +195,6 @@ class _TaskSettingModalSheetState extends State<TaskSettingModalSheet> {
 
   onInitState() {
     Color backgroundColor = getColorClass(selectedColorName).s200;
-
-    // isHighlighter = false;
-    // selectedColorName = widget.initTask.type == tTodo.type ? '남색' : '청록색';
-    // taskDateTimeInfo.type = widget.initTask.dateTimeType;
-    // taskDateTimeInfo.dateTimeList = widget.initTask.dateTimeList;
     controller.text = '';
 
     setState(() {});
@@ -255,6 +237,7 @@ class _TaskSettingModalSheetState extends State<TaskSettingModalSheet> {
     String locale = context.locale.toString();
     bool isTodo = widget.initTask.type == tTodo.type;
     double bottom = MediaQuery.of(context).viewInsets.bottom;
+    bool isLight = context.watch<ThemeProvider>().isLight;
 
     return Padding(
       padding: EdgeInsets.only(bottom: bottom),
@@ -274,8 +257,10 @@ class _TaskSettingModalSheetState extends State<TaskSettingModalSheet> {
               CommonModalItem(
                 title: '형광색',
                 onTap: () => onHighlighter(!isHighlighter),
-                child: CupertinoSwitch(
-                  activeColor: getColorClass(selectedColorName).s300,
+                child: CommonSwitch(
+                  activeColor: isLight
+                      ? getColorClass(selectedColorName).s200
+                      : getColorClass(selectedColorName).s300,
                   value: isHighlighter,
                   onChanged: onHighlighter,
                 ),
@@ -283,42 +268,10 @@ class _TaskSettingModalSheetState extends State<TaskSettingModalSheet> {
               CommonModalItem(
                 title: '색상',
                 onTap: () {},
-                child: SizedBox(
-                  width: MediaQuery.of(context).size.width / 2,
-                  height: 30,
-                  child: ListView(
-                      shrinkWrap: true,
-                      scrollDirection: Axis.horizontal,
-                      children: colorList
-                          .map(
-                            (color) => Padding(
-                              padding: const EdgeInsets.only(right: 7),
-                              child: GestureDetector(
-                                onTap: () => onColor(color.colorName),
-                                child: Stack(
-                                  alignment: AlignmentDirectional.center,
-                                  children: [
-                                    CommonCircle(color: color.s100, size: 30),
-                                    selectedColorName == color.colorName
-                                        ? svgAsset(
-                                            name: 'mark-V',
-                                            width: 15,
-                                            color: color.s300)
-                                        : const CommonNull(),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          )
-                          .toList()),
+                child: ColorListView(
+                  selectedColorName: selectedColorName,
+                  onColor: onColor,
                 ), //
-
-                // CommonTag(
-                //   text: getColorClass(selectedColorName).colorName,
-                //   textColor: getColorClass(selectedColorName).original,
-                //   bgColor: getColorClass(selectedColorName).s50,
-                //   onTap: onColor,
-                // ),
               ),
               CommonModalItem(
                 title: widget.initTask.dateTimeLabel,
@@ -328,7 +281,7 @@ class _TaskSettingModalSheetState extends State<TaskSettingModalSheet> {
                       ? displayTodoDateTime(locale)
                       : displayRepeatDateTime(locale),
                   fontSize: 14,
-                  textColor: textColor,
+                  textColor: isLight ? textColor : Colors.white,
                   svgColor: grey.s400,
                   svgName: 'dir-right',
                   svgWidth: 7,
@@ -339,8 +292,11 @@ class _TaskSettingModalSheetState extends State<TaskSettingModalSheet> {
               ),
               CommonSpace(height: 17.5),
               CommonOutlineInputField(
-                hintText: '할 일을 입력해주세요',
                 controller: controller,
+                hintText: '할 일을 입력해주세요',
+                selectedColor: isLight
+                    ? getColorClass(selectedColorName).s200
+                    : getColorClass(selectedColorName).s300,
                 onSuffixIcon: onEditingComplete,
                 onEditingComplete: onEditingComplete,
                 onChanged: (_) => setState(() {}),
