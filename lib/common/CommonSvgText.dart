@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
-import 'package:project/common/CommonSpace.dart';
+import 'package:project/common/CommonNull.dart';
 import 'package:project/common/CommonText.dart';
 import 'package:project/util/enum.dart';
 import 'package:project/util/func.dart';
@@ -10,9 +9,9 @@ class CommonSvgText extends StatelessWidget {
     super.key,
     required this.text,
     required this.fontSize,
-    required this.svgName,
     required this.svgWidth,
     required this.svgDirection,
+    this.svgName,
     this.isBold,
     this.svgRight,
     this.svgLeft,
@@ -21,7 +20,8 @@ class CommonSvgText extends StatelessWidget {
     this.onTap,
   });
 
-  String text, svgName;
+  String text;
+  String? svgName;
   Color? textColor, svgColor;
   double svgWidth, fontSize;
   double? svgLeft, svgRight;
@@ -40,23 +40,31 @@ class CommonSvgText extends StatelessWidget {
         overflow: TextOverflow.ellipsis,
       )
     ];
-    SvgPicture widget = svgAsset(
-      name: svgName,
-      width: svgWidth,
-      color: svgColor,
-    );
+    // SvgPicture widget =
 
     svgDirection == SvgDirectionEnum.left
-        ? children.insert(
-            0,
-            Padding(
-              padding: EdgeInsets.only(right: svgRight ?? 5),
-              child: widget,
-            ))
-        : children.add(Padding(
-            padding: EdgeInsets.only(left: svgLeft ?? 5, top: 1.5),
-            child: widget,
-          ));
+        ? svgName != null
+            ? children.insert(
+                0,
+                Padding(
+                  padding: EdgeInsets.only(right: svgRight ?? 5),
+                  child: svgAsset(
+                    name: svgName!,
+                    width: svgWidth,
+                    color: svgColor,
+                  ),
+                ))
+            : const CommonNull()
+        : svgName != null
+            ? children.add(Padding(
+                padding: EdgeInsets.only(left: svgLeft ?? 5, top: 1.5),
+                child: svgAsset(
+                  name: svgName!,
+                  width: svgWidth,
+                  color: svgColor,
+                ),
+              ))
+            : const CommonNull();
 
     return GestureDetector(
       onTap: onTap,

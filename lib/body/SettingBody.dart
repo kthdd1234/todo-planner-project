@@ -1,17 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:project/common/CommonAppBar.dart';
 import 'dart:io';
-import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:in_app_review/in_app_review.dart';
-import 'package:project/common/CommonBackground.dart';
 import 'package:project/common/CommonNull.dart';
-import 'package:project/common/CommonScaffold.dart';
 import 'package:project/common/CommonSpace.dart';
 import 'package:project/common/CommonSvgText.dart';
 import 'package:project/common/CommonText.dart';
 import 'package:project/page/PremiumPage.dart';
 import 'package:project/provider/PremiumProvider.dart';
+import 'package:project/provider/themeProvider.dart';
 import 'package:project/util/class.dart';
 import 'package:project/util/constants.dart';
 import 'package:project/util/enum.dart';
@@ -126,6 +124,7 @@ class _ContentViewState extends State<ContentView> {
   @override
   Widget build(BuildContext context) {
     bool isPremium = context.watch<PremiumProvider>().isPremium;
+    bool isLight = context.watch<ThemeProvider>().isLight;
 
     List<SettingItemClass> settingItemList = [
       SettingItemClass(
@@ -192,15 +191,13 @@ class _ContentViewState extends State<ContentView> {
             .map((item) => InkWell(
                   onTap: item.onTap,
                   child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                      vertical: 12.5,
-                    ),
+                    padding: const EdgeInsets.symmetric(vertical: 12.5),
                     child: Row(
                       children: [
                         Container(
-                          decoration: const BoxDecoration(
-                            color: whiteBgBtnColor,
-                            borderRadius: BorderRadius.all(
+                          decoration: BoxDecoration(
+                            color: isLight ? whiteBgBtnColor : darkSvgBgColor,
+                            borderRadius: const BorderRadius.all(
                               Radius.circular(5),
                             ),
                           ),
@@ -211,7 +208,7 @@ class _ContentViewState extends State<ContentView> {
                         CommonText(
                           text: item.name,
                           isBold: true,
-                          color: textColor,
+                          color: isLight ? textColor : darkTextColor,
                         ),
                         const Spacer(),
                         item.value != null ? item.value! : const CommonNull()

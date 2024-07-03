@@ -22,12 +22,25 @@ class _ThemeModalSheetState extends State<ThemeModalSheet> {
     required String target,
     required String name,
   }) {
+    bool isTarget = theme == target;
+    bool isLight = theme == 'light';
+
     return ModalButton(
       svgName: target,
       actionText: name,
-      isBold: theme == target,
-      color: theme == target ? Colors.white : grey.original,
-      bgColor: theme == target ? textColor : Colors.white,
+      isBold: isTarget ? true : !isLight,
+      color: isTarget
+          ? Colors.white
+          : isLight
+              ? textColor
+              : grey.s400,
+      bgColor: isTarget
+          ? isLight
+              ? indigo.s300
+              : textColor
+          : isLight
+              ? Colors.white
+              : darkContainerColor,
       onTap: () async {
         UserBox user = userRepository.user;
 

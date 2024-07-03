@@ -1,11 +1,7 @@
 // ignore_for_file: use_build_context_synchronously
-
 import 'dart:developer';
-
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter/widgets.dart';
 import 'package:project/common/CommonBackground.dart';
 import 'package:project/common/CommonContainer.dart';
 import 'package:project/common/CommonScaffold.dart';
@@ -13,6 +9,7 @@ import 'package:project/common/CommonSpace.dart';
 import 'package:project/common/CommonSvgText.dart';
 import 'package:project/common/CommonText.dart';
 import 'package:project/provider/PremiumProvider.dart';
+import 'package:project/provider/themeProvider.dart';
 import 'package:project/util/class.dart';
 import 'package:project/util/constants.dart';
 import 'package:project/util/enum.dart';
@@ -86,6 +83,7 @@ class _PremiumPageState extends State<PremiumPage> {
   @override
   Widget build(BuildContext context) {
     bool isPremium = context.watch<PremiumProvider>().isPremium;
+    bool isLight = context.watch<ThemeProvider>().isLight;
 
     return CommonBackground(
       child: CommonScaffold(
@@ -105,12 +103,13 @@ class _PremiumPageState extends State<PremiumPage> {
                         CommonText(
                           text: '프리미엄 혜택',
                           isBold: true,
-                          color: textColor,
+                          color: isLight ? textColor : darkTextColor,
                         ),
                         CommonText(
                           text: '구매 복원하기',
                           color: grey.original,
                           fontSize: 12,
+                          isBold: !isLight,
                         )
                       ],
                     ),
@@ -123,17 +122,23 @@ class _PremiumPageState extends State<PremiumPage> {
                             child: Row(
                               children: [
                                 svgAsset(
-                                    name: premiumBenefit.svgName, width: 50),
+                                  name: premiumBenefit.svgName,
+                                  width: 50,
+                                ),
                                 CommonSpace(width: 15),
                                 Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    CommonText(text: premiumBenefit.mainTitle),
+                                    CommonText(
+                                      text: premiumBenefit.mainTitle,
+                                      isBold: !isLight,
+                                    ),
                                     CommonSpace(height: 5),
                                     CommonText(
                                       text: premiumBenefit.subTitle,
                                       fontSize: 12,
                                       color: grey.original,
+                                      isBold: !isLight,
                                     ),
                                   ],
                                 )
@@ -149,6 +154,7 @@ class _PremiumPageState extends State<PremiumPage> {
                           child: CommonSvgText(
                             text: '구매가 완료되었어요 :D',
                             fontSize: 14,
+                            isBold: !isLight,
                             svgName: 'premium-badge',
                             svgWidth: 16,
                             svgDirection: SvgDirectionEnum.left,

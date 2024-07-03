@@ -109,3 +109,6 @@ const darkNotSelectedBgColor = Color(0xff34343C);
 
 /// darkNotSelectedTextColor
 const darkNotSelectedTextColor = Color(0xff616261);
+
+/// darkSvgBgColor
+const darkSvgBgColor = Color(0xff2C2C35);

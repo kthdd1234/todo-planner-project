@@ -11,6 +11,7 @@ import 'package:project/provider/bottomTabIndexProvider.dart';
 import 'package:project/provider/themeProvider.dart';
 import 'package:project/util/final.dart';
 import 'package:project/util/func.dart';
+import 'package:project/util/service.dart';
 import 'package:provider/provider.dart';
 
 class HomePage extends StatefulWidget {
@@ -21,6 +22,16 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  // late AppLifecycleReactor _appLifecycleReactor;
+
+  // initializeAppOpenAd() {
+  //   AppOpenAdManager appOpenAdManager = AppOpenAdManager()..loadAd();
+  //   _appLifecycleReactor = AppLifecycleReactor(
+  //     appOpenAdManager: appOpenAdManager,
+  //   );
+  //   _appLifecycleReactor.listenToAppStateChanges();
+  // }
+
   initializePremium() async {
     bool isPremium = await isPurchasePremium();
     context.read<PremiumProvider>().setPremiumValue(isPremium);
@@ -43,6 +54,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   void initState() {
+    // initializeAppOpenAd();
     initializePremium();
     initializeHiveDB();
 
