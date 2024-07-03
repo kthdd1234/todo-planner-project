@@ -1,15 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:project/body/ReportBody.dart';
-import 'package:project/body/HistoryBody.dart';
-import 'package:project/body/SettingBody.dart';
-import 'package:project/body/TaskBody.dart';
 import 'package:project/repositories/record_repository.dart';
 import 'package:project/repositories/task_repository.dart';
 import 'package:project/repositories/user_repository.dart';
 import 'package:project/util/class.dart';
 import 'package:project/util/enum.dart';
-import 'package:project/widget/appBar/ReportAppBar.dart';
 import 'package:project/widget/appBar/HistoryAppBar.dart';
 import 'package:project/widget/appBar/SettingAppBar.dart';
 import 'package:project/widget/appBar/TaskAppBar.dart';
@@ -297,4 +292,19 @@ final premiumBenefitList = [
   // ),
 ];
 
-final appBarList = [TaskAppBar(), HistoryAppBar(), SettingAppBar()];
+final appBarList = [
+  TaskAppBar(),
+  HistoryAppBar(),
+  SettingAppBar(),
+];
+
+final filterItemList = [
+  FilterItemClass(id: 'O', svg: 'O', name: '(완료 했어요)'),
+  FilterItemClass(id: 'X', svg: 'X', name: '(안했어요)'),
+  FilterItemClass(id: 'M', svg: 'M', name: '(덜 했어요)'),
+  FilterItemClass(id: 'T', svg: 'T', name: '(내일 할래요)'),
+  FilterItemClass(id: 'memo', svg: null, name: '메모 글'),
+  FilterItemClass(id: 'image', svg: null, name: '메모 사진'),
+];
+
+final filterIdList = filterItemList.map((item) => item.id).toList();

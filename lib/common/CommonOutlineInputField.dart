@@ -33,8 +33,9 @@ class CommonOutlineInputField extends StatelessWidget {
       padding: outerPadding ?? const EdgeInsets.all(0.0),
       child: TextFormField(
         style: TextStyle(
-            color: isLight ? textColor : darkTextColor,
-            fontWeight: FontWeight.bold),
+          color: isLight ? textColor : darkTextColor,
+          fontWeight: isLight ? FontWeight.normal : FontWeight.bold,
+        ),
         controller: controller,
         autofocus: autofocus ?? true,
         cursorColor: selectedColor,

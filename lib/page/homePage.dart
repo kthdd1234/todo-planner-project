@@ -1,8 +1,5 @@
 // ignore_for_file: use_build_context_synchronously
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
-import 'package:project/body/ReportBody.dart';
 import 'package:project/body/HistoryBody.dart';
 import 'package:project/body/SettingBody.dart';
 import 'package:project/body/TaskBody.dart';
@@ -12,10 +9,8 @@ import 'package:project/model/user_box/user_box.dart';
 import 'package:project/provider/PremiumProvider.dart';
 import 'package:project/provider/bottomTabIndexProvider.dart';
 import 'package:project/provider/themeProvider.dart';
-import 'package:project/util/constants.dart';
 import 'package:project/util/final.dart';
 import 'package:project/util/func.dart';
-import 'package:project/util/service.dart';
 import 'package:provider/provider.dart';
 
 class HomePage extends StatefulWidget {
@@ -26,16 +21,6 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  late AppLifecycleReactor _appLifecycleReactor;
-
-  initializeAppOpenAd() {
-    AppOpenAdManager appOpenAdManager = AppOpenAdManager()..loadAd();
-    _appLifecycleReactor = AppLifecycleReactor(
-      appOpenAdManager: appOpenAdManager,
-    );
-    _appLifecycleReactor.listenToAppStateChanges();
-  }
-
   initializePremium() async {
     bool isPremium = await isPurchasePremium();
     context.read<PremiumProvider>().setPremiumValue(isPremium);
@@ -46,6 +31,8 @@ class _HomePageState extends State<HomePage> {
 
     if (mounted) {
       user.theme ??= 'light';
+      user.filterIdList ??= filterIdList;
+
       WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
         context.read<ThemeProvider>().setThemeValue(user.theme!);
       });
@@ -56,7 +43,6 @@ class _HomePageState extends State<HomePage> {
 
   @override
   void initState() {
-    initializeAppOpenAd();
     initializePremium();
     initializeHiveDB();
 
@@ -102,7 +88,7 @@ class _HomePageState extends State<HomePage> {
             ),
             unselectedItemColor: // const Color(0xffA2A7B2)
                 isLight
-                    ? Color.fromARGB(255, 115, 120, 139)
+                    ? const Color.fromARGB(255, 115, 120, 139)
                     : const Color(0xff616261),
             unselectedLabelStyle:
                 TextStyle(fontWeight: isLight ? null : FontWeight.bold),
@@ -114,3 +100,14 @@ class _HomePageState extends State<HomePage> {
     );
   }
 }
+
+// late AppLifecycleReactor _appLifecycleReactor;
+
+  // initializeAppOpenAd() {
+  //   AppOpenAdManager appOpenAdManager = AppOpenAdManager()..loadAd();
+  //   _appLifecycleReactor = AppLifecycleReactor(
+  //     appOpenAdManager: appOpenAdManager,
+  //   );
+  //   _appLifecycleReactor.listenToAppStateChanges();
+  // }
+    // initializeAppOpenAd();

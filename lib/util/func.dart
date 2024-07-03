@@ -10,6 +10,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:project/model/record_box/record_box.dart';
 import 'package:project/model/task_box/task_box.dart';
+import 'package:project/model/user_box/user_box.dart';
 import 'package:project/util/class.dart';
 import 'package:project/util/constants.dart';
 import 'package:project/util/final.dart';
@@ -289,4 +290,11 @@ Future<bool> isPurchaseRestore() async {
     log('e =>> ${e.toString()}');
     return false;
   }
+}
+
+isVisibleHistory(String id) {
+  UserBox? user = userRepository.user;
+  List<String> filterList = user.filterIdList ?? [];
+
+  return filterList.contains(id) == true;
 }

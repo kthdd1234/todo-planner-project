@@ -90,6 +90,10 @@ class _TaskContainerState extends State<TaskContainer> {
     setState(() {});
   }
 
+  // Widget proxyDecorator(Widget widget, int index, _) {
+  //   //
+  // }
+
   @override
   Widget build(BuildContext context) {
     bool isLight = context.watch<ThemeProvider>().isLight;
@@ -122,6 +126,7 @@ class _TaskContainerState extends State<TaskContainer> {
           ),
           taskFilterList.isNotEmpty
               ? ReorderableListView.builder(
+                  // proxyDecorator: proxyDecorator,
                   itemCount: taskFilterList.length,
                   shrinkWrap: true,
                   physics: const ClampingScrollPhysics(),
@@ -289,67 +294,70 @@ class _TaskItemState extends State<TaskItem> {
         ) !=
         null;
 
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 12.5),
-      child: IntrinsicHeight(
-        child: Row(
-          children: [
-            VerticalBorder(
-              color: isLight
-                  ? widget.taskItem.color.s100
-                  : widget.taskItem.color.s400,
-            ),
-            Expanded(
-              flex: 1,
-              child: InkWell(
-                onTap: () => onMore(isLight),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    CommonText(
-                      text: widget.taskItem.name,
-                      textAlign: TextAlign.start,
-                      highlightColor: widget.taskItem.isHighlight == true
-                          ? isLight
-                              ? widget.taskItem.color.s50
-                              : widget.taskItem.color.s400
-                          : null,
-                      decoration: isMark ? TextDecoration.lineThrough : null,
-                      decorationColor:
-                          isMark ? widget.taskItem.color.s300 : null,
-                      isBold: !isLight,
-                    ),
-                    widget.taskItem.memo != null
-                        ? Padding(
-                            padding: const EdgeInsets.only(top: 5),
-                            child: CommonText(
-                              text: widget.taskItem.memo!,
-                              color: grey.original,
-                              fontSize: 12,
-                              overflow: TextOverflow.ellipsis,
-                              textAlign: TextAlign.start,
-                              isBold: !isLight,
-                            ),
-                          )
-                        : const CommonNull()
-                  ],
+    return Container(
+      color: isLight ? Colors.white : darkContainerColor,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 12.5),
+        child: IntrinsicHeight(
+          child: Row(
+            children: [
+              VerticalBorder(
+                color: isLight
+                    ? widget.taskItem.color.s100
+                    : widget.taskItem.color.s400,
+              ),
+              Expanded(
+                flex: 1,
+                child: InkWell(
+                  onTap: () => onMore(isLight),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      CommonText(
+                        text: widget.taskItem.name,
+                        textAlign: TextAlign.start,
+                        highlightColor: widget.taskItem.isHighlight == true
+                            ? isLight
+                                ? widget.taskItem.color.s50
+                                : widget.taskItem.color.s400
+                            : null,
+                        decoration: isMark ? TextDecoration.lineThrough : null,
+                        decorationColor:
+                            isMark ? widget.taskItem.color.s300 : null,
+                        isBold: !isLight,
+                      ),
+                      widget.taskItem.memo != null
+                          ? Padding(
+                              padding: const EdgeInsets.only(top: 5),
+                              child: CommonText(
+                                text: widget.taskItem.memo!,
+                                color: grey.original,
+                                fontSize: 12,
+                                overflow: TextOverflow.ellipsis,
+                                textAlign: TextAlign.start,
+                                isBold: !isLight,
+                              ),
+                            )
+                          : const CommonNull()
+                    ],
+                  ),
                 ),
               ),
-            ),
-            wAction(
-              svgName: 'mark-${widget.taskItem.mark ?? 'E'}',
-              width: 25,
-              actionColor: widget.taskItem.mark == null
-                  ? isLight
-                      ? widget.taskItem.color.s300
-                      : widget.taskItem.color.s400
-                  : isLight
-                      ? widget.taskItem.color.s200
-                      : widget.taskItem.color.s300,
-              onTap: onMark,
-            ),
-          ],
+              wAction(
+                svgName: 'mark-${widget.taskItem.mark ?? 'E'}',
+                width: 25,
+                actionColor: widget.taskItem.mark == null
+                    ? isLight
+                        ? widget.taskItem.color.s300
+                        : widget.taskItem.color.s400
+                    : isLight
+                        ? widget.taskItem.color.s200
+                        : widget.taskItem.color.s300,
+                onTap: onMark,
+              ),
+            ],
+          ),
         ),
       ),
     );

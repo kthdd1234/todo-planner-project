@@ -1,5 +1,6 @@
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:project/common/CommonContainer.dart';
 import 'package:project/common/CommonNull.dart';
 import 'package:project/common/CommonSpace.dart';
@@ -125,6 +126,7 @@ class _MemoContainerState extends State<MemoContainer> {
 
     return isMemo
         ? CommonContainer(
+            radius: 0,
             color: containerColor,
             innerPadding: const EdgeInsets.all(0),
             outerPadding: const EdgeInsets.fromLTRB(7, 0, 7, 10),
@@ -143,12 +145,15 @@ class _MemoContainerState extends State<MemoContainer> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         isText
-                            ? InkWell(
+                            ? GestureDetector(
                                 onTap: onMemoText,
-                                child: CommonText(
-                                  text: widget.recordBox!.memo!,
-                                  textAlign: TextAlign.start,
-                                  isBold: !isLight,
+                                child: SizedBox(
+                                  width: MediaQuery.of(context).size.width,
+                                  child: CommonText(
+                                    text: widget.recordBox!.memo!,
+                                    textAlign: TextAlign.start,
+                                    isBold: !isLight,
+                                  ),
                                 ),
                               )
                             : const CommonNull(),
@@ -185,7 +190,7 @@ class BacgroundPaint extends CustomPainter {
 
     Path mainBackground = Path();
     mainBackground.addRect(Rect.fromLTRB(0, 0, width, height));
-    paint.color = isLight ? orange.s50 : Colors.transparent;
+    paint.color = isLight ? orange.s50 : const Color.fromARGB(255, 43, 43, 43);
 
     for (int i = 1; i < height; i++) {
       if (i % 15 == 0) {

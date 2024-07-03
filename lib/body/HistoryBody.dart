@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_is_empty
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:multi_value_listenable_builder/multi_value_listenable_builder.dart';
 import 'package:project/common/CommonAppBar.dart';
 import 'package:project/common/CommonContainer.dart';
 import 'package:project/common/CommonNull.dart';
@@ -41,6 +42,7 @@ class _HistoryBodyState extends State<HistoryBody> {
 
   @override
   Widget build(BuildContext context) {
+    bool isLight = context.watch<ThemeProvider>().isLight;
     List<RecordBox> recordList = recordRepository.recordList;
     bool isRecent = context.watch<HistoryOrderProvider>().isRecent;
     DateTime yearDateTime = context.watch<YearDateTimeProvider>().yearDateTime;
@@ -65,25 +67,46 @@ class _HistoryBodyState extends State<HistoryBody> {
     bool isRecord = recordList.any((record) =>
         record.taskMarkList != null && record.taskMarkList?.length != 0);
 
-    return isRecord
-        ? SingleChildScrollView(
-            child: Column(
-              children: [
-                const CommonAppBar(),
-                ContentView(recordList: recordList)
-              ],
-            ),
-          )
-        : Column(
-            children: [
-              const CommonAppBar(),
-              Expanded(
-                child: Center(
-                  child: CommonText(text: '히스토리 내역이 없어요', color: grey.original),
+    return Column(
+      children: [
+        const CommonAppBar(),
+        isRecord
+            ? Expanded(
+                child: SingleChildScrollView(
+                  child: ContentView(recordList: recordList),
                 ),
               )
-            ],
-          );
+            : Expanded(
+                child: Center(
+                  child: CommonText(
+                    text: '히스토리 내역이 없어요',
+                    color: grey.original,
+                    isBold: !isLight,
+                  ),
+                ),
+              ),
+      ],
+    );
+    // isRecord
+    //     ?
+    // SingleChildScrollView(
+    //     child: Column(
+    //       children: [
+    //         const CommonAppBar(),
+    //         ContentView(recordList: recordList)
+    //       ],
+    //     ),
+    //   )
+    //     : Column(
+    //         children: [
+    //           const CommonAppBar(),
+    // Expanded(
+    //   child: Center(
+    //     child: CommonText(text: '히스토리 내역이 없어요', color: grey.original),
+    //   ),
+    //           )
+    //         ],
+    //       );
   }
 }
 
@@ -120,39 +143,42 @@ class _ContentViewState extends State<ContentView> {
   Widget build(BuildContext context) {
     bool isLight = context.watch<ThemeProvider>().isLight;
 
-    return Column(
-      children: widget.recordList.map((record) {
-        if (record.createDateTime.year == 1000) {
-          return NativeAdWidget(isLight: isLight);
-        }
+    return MultiValueListenableBuilder(
+      valueListenables: valueListenables,
+      builder: (context, value, child) => Column(
+        children: widget.recordList.map((record) {
+          if (record.createDateTime.year == 1000) {
+            return NativeAdWidget(isLight: isLight);
+          }
 
-        bool isShow = (record.taskMarkList != null &&
-                record.taskMarkList?.isNotEmpty == true) ||
-            record.memo != null ||
-            record.imageList != null;
+          bool isShow = (record.taskMarkList != null &&
+                  record.taskMarkList?.isNotEmpty == true) ||
+              record.memo != null ||
+              record.imageList != null;
 
-        return isShow
-            ? CommonContainer(
-                outerPadding: const EdgeInsets.fromLTRB(7, 0, 7, 10),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    HistoryTitle(
-                      isLight: isLight,
-                      dateTime: record.createDateTime,
-                    ),
-                    HistoryTask(
-                      isLight: isLight,
-                      taskMarkList: record.taskMarkList,
-                      taskOrderList: record.taskOrderList,
-                    ),
-                    HistoryMemo(isLight: isLight, memo: record.memo),
-                    HistoryImage(uint8ListList: record.imageList)
-                  ],
-                ),
-              )
-            : const CommonNull();
-      }).toList(),
+          return isShow
+              ? CommonContainer(
+                  outerPadding: const EdgeInsets.fromLTRB(7, 0, 7, 10),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      HistoryTitle(
+                        isLight: isLight,
+                        dateTime: record.createDateTime,
+                      ),
+                      HistoryTask(
+                        isLight: isLight,
+                        taskMarkList: record.taskMarkList,
+                        taskOrderList: record.taskOrderList,
+                      ),
+                      HistoryMemo(isLight: isLight, memo: record.memo),
+                      HistoryImage(uint8ListList: record.imageList)
+                    ],
+                  ),
+                )
+              : const CommonNull();
+        }).toList(),
+      ),
     );
   }
 }
@@ -179,4 +205,3 @@ class _ContentViewState extends State<ContentView> {
 //         ),
 //         body: ),
 //     );
-     

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:project/common/CommonNull.dart';
 import 'package:project/page/ImageSlidePage.dart';
 import 'package:project/page/MemoSettingPage.dart';
+import 'package:project/util/func.dart';
 
 class HistoryImage extends StatelessWidget {
   HistoryImage({super.key, required this.uint8ListList});
@@ -24,7 +25,7 @@ class HistoryImage extends StatelessWidget {
       );
     }
 
-    return uint8ListList != null
+    return uint8ListList != null && isVisibleHistory('image')
         ? Padding(
             padding: const EdgeInsets.only(top: 10),
             child: ImageContainer(

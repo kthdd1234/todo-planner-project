@@ -98,11 +98,11 @@ class _TaskBodyState extends State<TaskBody> {
               onLoading: onLoading,
               onRefresh: onRefresh,
               controller: refreshController,
-              child: ListView(
-                children: [
+              child: SingleChildScrollView(
+                child: Column(children: [
                   CommonAppBar(),
                   ContentView(selectedDateTime: selectedDateTime)
-                ],
+                ]),
               ),
             );
           }),

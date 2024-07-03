@@ -286,3 +286,14 @@ class MarkStateClass {
   String mark, name;
   Color color;
 }
+
+class FilterItemClass {
+  FilterItemClass({
+    required this.id,
+    required this.name,
+    this.svg,
+  });
+
+  String id, name;
+  String? svg;
+}
