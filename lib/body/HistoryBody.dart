@@ -14,6 +14,7 @@ import 'package:project/provider/YearDateTimeProvider.dart';
 import 'package:project/provider/themeProvider.dart';
 import 'package:project/util/final.dart';
 import 'package:project/util/func.dart';
+import 'package:project/widget/ad/BannerAd.dart';
 import 'package:project/widget/ad/NativeAd.dart';
 import 'package:project/widget/history/HistoryImage.dart';
 import 'package:project/widget/history/HistoryMemo.dart';
@@ -69,6 +70,7 @@ class _HistoryBodyState extends State<HistoryBody> {
 
     return Column(
       children: [
+        // const BannerAdWidget(),
         const CommonAppBar(),
         isRecord
             ? Expanded(
@@ -87,26 +89,6 @@ class _HistoryBodyState extends State<HistoryBody> {
               ),
       ],
     );
-    // isRecord
-    //     ?
-    // SingleChildScrollView(
-    //     child: Column(
-    //       children: [
-    //         const CommonAppBar(),
-    //         ContentView(recordList: recordList)
-    //       ],
-    //     ),
-    //   )
-    //     : Column(
-    //         children: [
-    //           const CommonAppBar(),
-    // Expanded(
-    //   child: Center(
-    //     child: CommonText(text: '히스토리 내역이 없어요', color: grey.original),
-    //   ),
-    //           )
-    //         ],
-    //       );
   }
 }
 

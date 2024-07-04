@@ -26,17 +26,21 @@ class SettingBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const SingleChildScrollView(
+    bool isLight = context.watch<ThemeProvider>().isLight;
+
+    return SingleChildScrollView(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-        children: [CommonAppBar(), ContentView()],
+        children: [const CommonAppBar(), ContentView(isLight: isLight)],
       ),
     );
   }
 }
 
 class ContentView extends StatefulWidget {
-  const ContentView({super.key});
+  ContentView({super.key, required this.isLight});
+
+  bool isLight;
 
   @override
   State<ContentView> createState() => _ContentViewState();
@@ -121,10 +125,52 @@ class _ContentViewState extends State<ContentView> {
     await canLaunchUrl(url) ? await launchUrl(url) : print('err');
   }
 
+  onValue(text) {
+    return CommonSvgText(
+      text: text,
+      fontSize: 13,
+      textColor: widget.isLight ? textColor : Colors.white,
+      svgColor: widget.isLight ? textColor : Colors.white,
+      svgName: 'dir-right',
+      svgWidth: 6,
+      svgLeft: 6,
+      svgDirection: SvgDirectionEnum.right,
+    );
+  }
+
+  onMarkIcon() {
+    return Row(
+      children: [
+        svgAsset(
+          name: 'mark-O',
+          width: 11,
+          color: widget.isLight ? textColor : Colors.white,
+        ),
+        CommonSpace(width: 6),
+        svgAsset(
+          name: 'dir-right',
+          width: 6,
+          color: widget.isLight ? textColor : Colors.white,
+        ),
+      ],
+    );
+  }
+
+  onStatWeek() {
+    //
+  }
+
+  onCompletedIcon() {
+    //
+  }
+
+  onInputTask() {
+    //
+  }
+
   @override
   Widget build(BuildContext context) {
     bool isPremium = context.watch<PremiumProvider>().isPremium;
-    bool isLight = context.watch<ThemeProvider>().isLight;
 
     List<SettingItemClass> settingItemList = [
       SettingItemClass(
@@ -136,6 +182,7 @@ class _ContentViewState extends State<ContentView> {
                 text: '구매 완료',
                 textColor: textColor,
                 fontSize: 14,
+                isBold: !widget.isLight,
                 svgName: 'premium-badge',
                 svgWidth: 16,
                 svgDirection: SvgDirectionEnum.left,
@@ -151,7 +198,26 @@ class _ContentViewState extends State<ContentView> {
       SettingItemClass(
         name: '화면 테마',
         svg: 'theme',
+        value: onValue(widget.isLight ? '기본 테마' : '어두운 테마'),
         onTap: onTheme,
+      ),
+      SettingItemClass(
+        name: '한 주의 시작',
+        svg: 'start-week',
+        value: onValue('일요일'),
+        onTap: onStatWeek,
+      ),
+      SettingItemClass(
+        name: '완료했어요 아이콘',
+        svg: 'check-icon',
+        value: onMarkIcon(),
+        onTap: onCompletedIcon,
+      ),
+      SettingItemClass(
+        name: '할 일, 루틴 입력 후 동작',
+        svg: 'input',
+        value: onValue('연속 입력'),
+        onTap: onInputTask,
       ),
       SettingItemClass(
         name: '앱 리뷰 작성',
@@ -196,7 +262,9 @@ class _ContentViewState extends State<ContentView> {
                       children: [
                         Container(
                           decoration: BoxDecoration(
-                            color: isLight ? whiteBgBtnColor : darkSvgBgColor,
+                            color: widget.isLight
+                                ? whiteBgBtnColor
+                                : darkSvgBgColor,
                             borderRadius: const BorderRadius.all(
                               Radius.circular(5),
                             ),
@@ -208,7 +276,7 @@ class _ContentViewState extends State<ContentView> {
                         CommonText(
                           text: item.name,
                           isBold: true,
-                          color: isLight ? textColor : darkTextColor,
+                          color: widget.isLight ? textColor : darkTextColor,
                         ),
                         const Spacer(),
                         item.value != null ? item.value! : const CommonNull()

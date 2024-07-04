@@ -139,6 +139,9 @@ flutter:
     - assets/svg/week-white.svg
     - assets/svg/month-white.svg
     - assets/svg/setting-white.svg
+    - assets/svg/start-week.svg
+    - assets/svg/check-icon.svg
+    - assets/svg/input.svg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

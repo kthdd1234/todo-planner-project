@@ -1,4 +1,6 @@
 // ignore_for_file: use_build_context_synchronously
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:project/common/CommonContainer.dart';
 import 'package:project/common/CommonDivider.dart';
@@ -80,16 +82,25 @@ class _MarkPopupState extends State<MarkPopup> {
           taskMarkList: [taskMark],
         ),
       );
-    } else if (widget.recordBox!.taskMarkList == null) {
+    } else if (widget.recordBox?.taskMarkList == null) {
       widget.recordBox!.taskMarkList = [taskMark];
     } else {
+      List<Map<String, dynamic>> taskMarkList = widget.recordBox!.taskMarkList!;
       int idx = widget.recordBox!.taskMarkList!.indexWhere(
         (taksMark) => taksMark['id'] == taskId,
       );
 
-      idx == -1
-          ? widget.recordBox!.taskMarkList!.add(taskMark)
-          : widget.recordBox!.taskMarkList![idx] = taskMark;
+      if (idx == -1) {
+        widget.recordBox!.taskMarkList!.add(taskMark);
+      } else {
+        int index = taskMarkList.indexWhere(
+          (task) => task['id'] == taskMark['id'],
+        );
+
+        taskMarkList[index]['mark'] == taskMark['mark']
+            ? widget.recordBox!.taskMarkList!.removeAt(index)
+            : widget.recordBox!.taskMarkList![index]['mark'] = taskMark['mark'];
+      }
     }
 
     // 내일 할래요 기능 체크
@@ -312,7 +323,11 @@ class MarkItem extends StatelessWidget {
           Container(
             padding: const EdgeInsets.symmetric(vertical: 10),
             decoration: BoxDecoration(
-              color: isSelected ? getColorClass(colorName).s50 : null,
+              color: isSelected
+                  ? isLight
+                      ? getColorClass(colorName).s50
+                      : getColorClass(colorName).s300
+                  : null,
               borderRadius: BorderRadius.circular(7),
             ),
             child: Row(
@@ -323,7 +338,11 @@ class MarkItem extends StatelessWidget {
                   child: svgAsset(
                     name: 'mark-$mark',
                     width: 15,
-                    color: getColorClass(colorName).s300,
+                    color: isSelected
+                        ? isLight
+                            ? getColorClass(colorName).s300
+                            : darkTextColor
+                        : getColorClass(colorName).s300,
                   ),
                 ),
                 CommonSpace(width: 10),

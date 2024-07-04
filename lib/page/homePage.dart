@@ -1,5 +1,6 @@
 // ignore_for_file: use_build_context_synchronously
 import 'package:flutter/material.dart';
+import 'package:project/body/CalendarBody.dart';
 import 'package:project/body/HistoryBody.dart';
 import 'package:project/body/SettingBody.dart';
 import 'package:project/body/TaskBody.dart';
@@ -78,6 +79,7 @@ class _HomePageState extends State<HomePage> {
 
     final bodyList = [
       const TaskBody(),
+      const CalendarBody(),
       const HistoryBody(),
       const SettingBody()
     ];

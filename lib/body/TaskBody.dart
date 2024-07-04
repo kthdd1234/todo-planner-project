@@ -100,8 +100,9 @@ class _TaskBodyState extends State<TaskBody> {
               controller: refreshController,
               child: SingleChildScrollView(
                 child: Column(children: [
+                  // BannerAdWidget(),
                   CommonAppBar(),
-                  ContentView(selectedDateTime: selectedDateTime)
+                  ContentView(selectedDateTime: selectedDateTime),
                 ]),
               ),
             );

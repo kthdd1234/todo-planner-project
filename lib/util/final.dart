@@ -5,6 +5,7 @@ import 'package:project/repositories/task_repository.dart';
 import 'package:project/repositories/user_repository.dart';
 import 'package:project/util/class.dart';
 import 'package:project/util/enum.dart';
+import 'package:project/widget/appBar/CalendarAppBar.dart';
 import 'package:project/widget/appBar/HistoryAppBar.dart';
 import 'package:project/widget/appBar/SettingAppBar.dart';
 import 'package:project/widget/appBar/TaskAppBar.dart';
@@ -12,17 +13,17 @@ import 'package:table_calendar/table_calendar.dart';
 
 final bottomNavigationBarItemList = [
   const BottomNavigationBarItem(
-    label: '홈',
-    icon: Icon(Icons.home_rounded),
+    label: '투두',
+    icon: Icon(Icons.edit_rounded),
+  ),
+  const BottomNavigationBarItem(
+    label: '캘린더',
+    icon: Icon(Icons.calendar_month_outlined),
   ),
   const BottomNavigationBarItem(
     label: '히스토리',
     icon: Icon(Icons.view_timeline_outlined),
   ),
-  // const BottomNavigationBarItem(
-  //   label: '리포트',
-  //   icon: Icon(Icons.view_timeline_outlined),
-  // ),
   const BottomNavigationBarItem(
     label: '더보기',
     icon: Icon(Icons.more_horiz_rounded),
@@ -34,7 +35,7 @@ final indigo = ColorClass(
   original: Colors.indigo, // 63, 81, 181
   s50: Colors.indigo.shade50, // 232, 234, 246
   s100: Colors.indigo.shade100, // 197, 202, 233
-  s200: Colors.indigo.shade200, //
+  s200: Colors.indigo.shade200, // 159, 168, 218
   s300: Colors.indigo.shade300, // 255, 121, 134, 203
   s400: Colors.indigo.shade400,
 );
@@ -44,7 +45,7 @@ final green = ColorClass(
   original: Colors.green,
   s50: Colors.green.shade50,
   s100: Colors.green.shade100,
-  s200: Colors.green.shade200,
+  s200: Colors.green.shade200, // 165, 214, 167
   s300: Colors.green.shade300,
   s400: Colors.green.shade400,
 ); //
@@ -143,7 +144,7 @@ final cyan = ColorClass(
   colorName: '민트색',
   original: Colors.cyan,
   s50: Colors.cyan.shade50,
-  s100: Colors.cyan.shade100, // 178, 235, 242
+  s100: Colors.cyan.shade100,
   s200: Colors.cyan.shade200, // 128, 222, 234
   s300: Colors.cyan.shade300,
   s400: Colors.cyan.shade400, // 38, 198, 218
@@ -163,8 +164,8 @@ final blueGrey = ColorClass(
   colorName: '청회색',
   original: Colors.blueGrey,
   s50: Colors.blueGrey.shade50,
-  s100: Colors.blueGrey.shade100,
-  s200: Colors.blueGrey.shade200,
+  s100: Colors.blueGrey.shade100, // 207, 216, 200
+  s200: Colors.blueGrey.shade200, // 176, 190, 197
   s300: Colors.blueGrey.shade300,
   s400: Colors.blueGrey.shade400,
 ); //
@@ -294,12 +295,13 @@ final premiumBenefitList = [
 
 final appBarList = [
   TaskAppBar(),
+  CalendarAppBar(),
   HistoryAppBar(),
   SettingAppBar(),
 ];
 
 final filterItemList = [
-  FilterItemClass(id: 'O', svg: 'O', name: '(완료 했어요)'),
+  FilterItemClass(id: 'O', svg: 'O', name: '(완료했어요)'),
   FilterItemClass(id: 'X', svg: 'X', name: '(안했어요)'),
   FilterItemClass(id: 'M', svg: 'M', name: '(덜 했어요)'),
   FilterItemClass(id: 'T', svg: 'T', name: '(내일 할래요)'),

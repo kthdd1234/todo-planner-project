@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:multi_value_listenable_builder/multi_value_listenable_builder.dart';
+import 'package:project/common/CommonCalendar.dart';
 import 'package:project/model/user_box/user_box.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:project/common/CommonCircle.dart';
-import 'package:project/common/CommonContainer.dart';
-import 'package:project/common/CommonNull.dart';
 import 'package:project/common/CommonSpace.dart';
 import 'package:project/common/CommonSvgText.dart';
 import 'package:project/common/CommonTag.dart';
@@ -18,7 +17,6 @@ import 'package:project/util/constants.dart';
 import 'package:project/util/enum.dart';
 import 'package:project/util/final.dart';
 import 'package:project/util/func.dart';
-import 'package:project/widget/border/VerticalBorder.dart';
 import 'package:project/widget/popup/CalendarPopup.dart';
 import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
@@ -148,7 +146,7 @@ class TaskCalendar extends StatefulWidget {
 }
 
 class _TaskCalendarState extends State<TaskCalendar> {
-  onDaySelected(DateTime dateTime, _) {
+  onDaySelected(DateTime dateTime) {
     context
         .read<SelectedDateTimeProvider>()
         .changeSelectedDateTime(dateTime: dateTime);
@@ -158,20 +156,6 @@ class _TaskCalendarState extends State<TaskCalendar> {
     context
         .read<TitleDateTimeProvider>()
         .changeTitleDateTime(dateTime: dateTime);
-  }
-
-  List<TaskBox> onTasList(DateTime calendarDateTime) {
-    int recordKey = dateTimeKey(calendarDateTime);
-    List<String>? taskOrderList =
-        recordRepository.recordBox.get(recordKey)?.taskOrderList;
-    List<TaskBox> taskList = getTaskList(
-      locale: context.locale.toString(),
-      taskList: taskRepository.taskBox.values.toList(),
-      targetDateTime: calendarDateTime,
-      orderList: taskOrderList,
-    );
-
-    return taskList;
   }
 
   onFormatChanged(CalendarFormat calendarFormat) async {
@@ -189,10 +173,24 @@ class _TaskCalendarState extends State<TaskCalendar> {
     await user.save();
   }
 
+  List<TaskBox> onTaskList(DateTime calendarDateTime) {
+    int recordKey = dateTimeKey(calendarDateTime);
+    List<String>? taskOrderList =
+        recordRepository.recordBox.get(recordKey)?.taskOrderList;
+    List<TaskBox> taskList = getTaskList(
+      locale: context.locale.toString(),
+      taskList: taskRepository.taskBox.values.toList(),
+      targetDateTime: calendarDateTime,
+      orderList: taskOrderList,
+    );
+
+    return taskList;
+  }
+
   Widget? stickerBuilder(bool isLight, DateTime dateTime) {
     List<ColorClass?> colorList = [];
 
-    for (var taskBox in onTasList(dateTime)) {
+    for (var taskBox in onTaskList(dateTime)) {
       if (colorList.length == 9) break;
       colorList.add(getColorClass(taskBox.colorName));
     }
@@ -227,98 +225,6 @@ class _TaskCalendarState extends State<TaskCalendar> {
           wRow(colorList.sublist(6, 9)),
         ],
       ),
-    );
-  }
-
-  Widget? barBuilder(bool isLight, DateTime dateTime) {
-    List<TaskBox> taskList = onTasList(dateTime);
-
-    Color? highlighterColor(TaskBox task) {
-      bool isHighlighter = task.isHighlighter == true;
-
-      return isHighlighter
-          ? isLight
-              ? getColorClass(task.colorName).s50
-              : getColorClass(task.colorName).original
-          : null;
-    }
-
-    return taskList.isNotEmpty
-        ? Padding(
-            padding: const EdgeInsets.only(top: 40, right: 5, left: 5),
-            child: Container(
-              alignment: Alignment.topCenter,
-              child: SingleChildScrollView(
-                child: Column(
-                  children: taskList
-                      .map(
-                        (task) => IntrinsicHeight(
-                          child: Padding(
-                            padding: const EdgeInsets.only(bottom: 3),
-                            child: Container(
-                              decoration: BoxDecoration(
-                                color: highlighterColor(task),
-                                borderRadius: BorderRadius.circular(3),
-                              ),
-                              child: Row(
-                                children: [
-                                  Expanded(
-                                    flex: 0,
-                                    child: VerticalBorder(
-                                      width: 2,
-                                      right: 3,
-                                      color: isLight
-                                          ? getColorClass(task.colorName).s200
-                                          : getColorClass(task.colorName).s300,
-                                    ),
-                                  ),
-                                  Flexible(
-                                    child: CommonText(
-                                      text: task.name,
-                                      overflow: TextOverflow.clip,
-                                      isBold: !isLight,
-                                      fontSize: 9,
-                                      softWrap: false,
-                                      textAlign: TextAlign.start,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                      )
-                      .toList(),
-                ),
-              ),
-            ),
-          )
-        : const CommonNull();
-  }
-
-  Widget? todayBuilder(bool isLight, DateTime dateTime) {
-    return Column(
-      children: [
-        CommonSpace(height: 10),
-        Stack(
-          alignment: Alignment.center,
-          children: [
-            Container(
-              width: 27.5,
-              height: 27.5,
-              decoration: BoxDecoration(
-                color: isLight ? indigo.s200 : calendarSelectedDateTimeBgColor,
-                borderRadius: BorderRadius.circular(100),
-              ),
-            ),
-            CommonText(
-              text: '${dateTime.day}',
-              color: isLight ? Colors.white : calendarSelectedDateTimeTextColor,
-              isBold: isLight,
-            )
-          ],
-        ),
-      ],
     );
   }
 
@@ -361,92 +267,15 @@ class _TaskCalendarState extends State<TaskCalendar> {
   Widget build(BuildContext context) {
     DateTime selectedDateTime =
         context.watch<SelectedDateTimeProvider>().seletedDateTime;
-    bool isLight = context.watch<ThemeProvider>().isLight;
-    bool isMonth = widget.calendarFormat == CalendarFormat.month;
 
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 10),
-      child: CommonContainer(
-        color: isLight ? Colors.white : darkBgColor,
-        innerPadding: isLight
-            ? const EdgeInsets.symmetric(vertical: 15)
-            : const EdgeInsets.all(0),
-        outerPadding: isLight
-            ? const EdgeInsets.symmetric(horizontal: 7)
-            : const EdgeInsets.only(bottom: 15),
-        height: isMonth ? MediaQuery.of(context).size.height / 1.3 : null,
-        child: TableCalendar(
-          locale: widget.locale,
-          shouldFillViewport: isMonth,
-          calendarStyle: CalendarStyle(
-            cellMargin: const EdgeInsets.all(14),
-            cellAlignment: isMonth ? Alignment.topCenter : Alignment.center,
-            todayDecoration: BoxDecoration(
-              color: isLight ? indigo.s200 : calendarSelectedDateTimeBgColor,
-              shape: BoxShape.circle,
-            ),
-            todayTextStyle: TextStyle(
-              color: isLight ? Colors.white : calendarSelectedDateTimeTextColor,
-              fontWeight: isLight ? FontWeight.bold : null,
-              fontSize: 13,
-            ),
-          ),
-          calendarBuilders: CalendarBuilders(
-            defaultBuilder: (cx, dateTime, _) =>
-                defaultBuilder(isLight, dateTime),
-            dowBuilder: (cx, dateTime) => dowBuilder(isLight, dateTime),
-            markerBuilder: (cx, dateTime, _) => isMonth
-                ? barBuilder(isLight, dateTime)
-                : stickerBuilder(isLight, dateTime),
-            todayBuilder: isMonth
-                ? (cx, dateTime, _) => todayBuilder(isLight, dateTime)
-                : null,
-          ),
-          headerVisible: false,
-          firstDay: DateTime.utc(2000, 1, 1),
-          lastDay: DateTime.utc(3000, 1, 1),
-          currentDay: selectedDateTime,
-          focusedDay: selectedDateTime,
-          calendarFormat: widget.calendarFormat,
-          availableCalendarFormats: availableCalendarFormats,
-          onPageChanged: onPageChanged,
-          onDaySelected: onDaySelected,
-          onFormatChanged: onFormatChanged,
-        ),
-      ),
+    return CommonCalendar(
+      selectedDateTime: selectedDateTime,
+      calendarFormat: widget.calendarFormat,
+      shouldFillViewport: false,
+      markerBuilder: stickerBuilder,
+      onPageChanged: onPageChanged,
+      onDaySelected: onDaySelected,
+      onFormatChanged: onFormatChanged,
     );
   }
 }
-
-// dayBuilder(context, day, events) {
-//   return Container(
-//     padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 8),
-//     decoration: BoxDecoration(
-//       color: Colors.indigo.shade100, // const Color(0xffF3F4F9)
-//       borderRadius: BorderRadius.circular(3),
-//     ),
-//     child: CommonText(
-//       text: 'D-12',
-//       fontSize: 9,
-//       color: Colors.white,
-//       isBold: true,
-//     ),
-//   );
-// }
-
-  // Row(
-   //         children: [
-              // CommonSvgButton(
-              //   name: '$calendarLabel-${isLight ? 'indigo' : 'white'}',
-              //   width: 22,
-              //   onTap: onLabel,
-              // ),
-              // CommonSpace(width: 15),
-              // CommonSvgButton(
-              //   name: 'setting-${isLight ? 'indigo' : 'white'}',
-              //   color: isLight ? indigo.s200 : Colors.white,
-              //   width: 20,
-              //   onTap: onSetting,
-              // ),
-          //  ],
-     //     )
