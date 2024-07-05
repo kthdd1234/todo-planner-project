@@ -46,6 +46,10 @@ String ymdFormatter({required String locale, required DateTime dateTime}) {
   return DateFormat.yMd(locale).format(dateTime);
 }
 
+String ymdFullFormatter({required String locale, required DateTime dateTime}) {
+  return DateFormat.yMMMMd(locale).format(dateTime);
+}
+
 String mdeFormatter({required String locale, required DateTime dateTime}) {
   return DateFormat.MMMEd(locale).format(dateTime);
 }
@@ -273,7 +277,8 @@ Future<bool> isPurchasePremium() async {
     bool isActive =
         customerInfo.entitlements.all[entitlementIdentifier]?.isActive == true;
 
-    return isActive;
+    // return isActive;
+    return true;
   } on PlatformException catch (e) {
     log('e =>> ${e.toString()}');
     return false;
@@ -292,7 +297,10 @@ Future<bool> isPurchaseRestore() async {
   }
 }
 
-isVisibleHistory(String id) {
+//
+bool isVisibleHistory(String? id) {
+  if (id == null) return false;
+
   UserBox? user = userRepository.user;
   List<String> filterList = user.filterIdList ?? [];
 

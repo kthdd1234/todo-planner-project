@@ -35,13 +35,7 @@ class TaskAppBar extends StatelessWidget {
         UserBox? user = userRepository.user;
         CalendarFormat calendarFormat =
             calendarFormatInfo[user.calendarFormat]!;
-
-        return Column(
-          children: [
-            TaskTitle(locale: locale, calendarFormat: calendarFormat),
-            TaskCalendar(locale: locale, calendarFormat: calendarFormat),
-          ],
-        );
+        return TaskTitle(locale: locale, calendarFormat: calendarFormat);
       },
     );
   }

@@ -1,17 +1,12 @@
-import 'dart:developer';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:project/common/CommonNull.dart';
-import 'package:project/common/CommonSpace.dart';
 import 'package:project/common/CommonText.dart';
 import 'package:project/model/task_box/task_box.dart';
-import 'package:project/provider/themeProvider.dart';
 import 'package:project/util/class.dart';
 import 'package:project/util/final.dart';
 import 'package:project/util/func.dart';
-import 'package:provider/provider.dart';
 
 class HistoryTask extends StatelessWidget {
   HistoryTask({
@@ -32,10 +27,6 @@ class HistoryTask extends StatelessWidget {
             ? color.s50
             : color.s400
         : null;
-
-    onCheckedMark() {
-      //
-    }
 
     return taskMark['mark'] != null && isVisibleHistory(taskMark['mark'])
         ? Padding(

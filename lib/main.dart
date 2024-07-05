@@ -13,6 +13,7 @@ import 'package:project/model/user_box/user_box.dart';
 import 'package:project/page/HomePage.dart';
 import 'package:project/page/IntroPage.dart';
 import 'package:project/provider/HistoryOrderProvider.dart';
+import 'package:project/provider/KeywordProvider.dart';
 import 'package:project/provider/PremiumProvider.dart';
 import 'package:project/provider/YearDateTimeProvider.dart';
 import 'package:project/provider/bottomTabIndexProvider.dart';
@@ -51,6 +52,7 @@ void main() async {
         ChangeNotifierProvider(create: (context) => ThemeProvider()),
         ChangeNotifierProvider(create: (context) => YearDateTimeProvider()),
         ChangeNotifierProvider(create: (context) => HistoryOrderProvider()),
+        ChangeNotifierProvider(create: (context) => KeywordProvider()),
       ],
       child: EasyLocalization(
         supportedLocales: const [Locale('ko'), Locale('en'), Locale('ja')],

@@ -4,6 +4,7 @@ import 'package:multi_value_listenable_builder/multi_value_listenable_builder.da
 import 'package:project/common/CommonSpace.dart';
 import 'package:project/common/CommonSvgText.dart';
 import 'package:project/common/CommonTag.dart';
+import 'package:project/common/CommonText.dart';
 import 'package:project/provider/HistoryOrderProvider.dart';
 import 'package:project/provider/YearDateTimeProvider.dart';
 import 'package:project/provider/themeProvider.dart';
@@ -63,19 +64,20 @@ class _HistoryAppBarState extends State<HistoryAppBar> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            CommonSvgText(
-              text: yFormatter(
-                locale: locale,
-                dateTime: yearDateTime,
-              ),
-              fontSize: 18,
-              isBold: !isLight,
-              svgName: isLight ? 'dir-down' : 'dir-down-bold',
-              svgWidth: 14,
-              svgColor: isLight ? textColor : Colors.white,
-              svgDirection: SvgDirectionEnum.right,
-              onTap: () => onYear(yearDateTime),
-            ),
+            // CommonSvgText(
+            //   text: yFormatter(
+            //     locale: locale,
+            //     dateTime: yearDateTime,
+            //   ),
+            //   fontSize: 18,
+            //   isBold: !isLight,
+            //   svgName: isLight ? 'dir-down' : 'dir-down-bold',
+            //   svgWidth: 14,
+            //   svgColor: isLight ? textColor : Colors.white,
+            //   svgDirection: SvgDirectionEnum.right,
+            //   onTap: () => onYear(yearDateTime),
+            // ),
+            CommonText(text: '히스토리', fontSize: 18, isBold: !isLight),
             Row(
               children: [
                 CommonTag(

@@ -95,6 +95,9 @@ class _CommonCalendarState extends State<CommonCalendar> {
             fontSize: 13,
           ),
         ),
+        availableGestures: widget.shouldFillViewport
+            ? AvailableGestures.horizontalSwipe
+            : AvailableGestures.all,
         calendarBuilders: CalendarBuilders(
           defaultBuilder: (cx, dateTime, _) =>
               defaultBuilder(isLight, dateTime),

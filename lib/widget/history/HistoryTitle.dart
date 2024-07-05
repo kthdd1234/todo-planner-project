@@ -27,7 +27,7 @@ class HistoryTitle extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             CommonText(
-              text: mdFormatter(locale: locale, dateTime: dateTime),
+              text: ymdFullFormatter(locale: locale, dateTime: dateTime),
               fontSize: 13,
               isBold: !isLight,
             ),

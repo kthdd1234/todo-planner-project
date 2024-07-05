@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_constructors
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:multi_value_listenable_builder/multi_value_listenable_builder.dart';
 import 'package:project/common/CommonAppBar.dart';
 import 'package:project/model/record_box/record_box.dart';
@@ -9,6 +10,8 @@ import 'package:project/provider/titleDateTimeProvider.dart';
 import 'package:project/provider/selectedDateTimeProvider.dart';
 import 'package:project/util/final.dart';
 import 'package:project/util/func.dart';
+import 'package:project/widget/ad/BannerAd.dart';
+import 'package:project/widget/appBar/TaskAppBar.dart';
 import 'package:project/widget/container/MemoContainer.dart';
 import 'package:project/widget/container/TaskContainer.dart';
 import 'package:provider/provider.dart';
@@ -72,42 +75,21 @@ class _TaskBodyState extends State<TaskBody> {
       refreshController.loadComplete();
     }
 
-    return GestureDetector(
-      onHorizontalDragEnd: onHorizontalDragEnd,
-      child: MultiValueListenableBuilder(
-          valueListenables: valueListenables,
-          builder: (btx, list, w) {
-            return SmartRefresher(
-              header: ClassicHeader(
-                height: 0,
-                spacing: 0,
-                refreshingText: '',
-                completeText: '',
-                idleText: '',
-                releaseText: null,
-                releaseIcon: null,
-                completeIcon: null,
+    return MultiValueListenableBuilder(
+        valueListenables: valueListenables,
+        builder: (btx, list, w) {
+          return Column(
+            children: [
+              BannerAdWidget(),
+              CommonAppBar(),
+              Expanded(
+                child: SingleChildScrollView(
+                  child: ContentView(selectedDateTime: selectedDateTime),
+                ),
               ),
-              footer: ClassicFooter(
-                spacing: 0,
-                height: 0,
-                loadingText: '',
-                canLoadingText: '',
-                idleText: '',
-              ),
-              onLoading: onLoading,
-              onRefresh: onRefresh,
-              controller: refreshController,
-              child: SingleChildScrollView(
-                child: Column(children: [
-                  // BannerAdWidget(),
-                  CommonAppBar(),
-                  ContentView(selectedDateTime: selectedDateTime),
-                ]),
-              ),
-            );
-          }),
-    );
+            ],
+          );
+        });
   }
 }
 
@@ -123,12 +105,15 @@ class ContentView extends StatefulWidget {
 class _ContentViewState extends State<ContentView> {
   @override
   Widget build(BuildContext context) {
+    UserBox? user = userRepository.user;
     String locale = context.locale.toString();
     int recordKey = dateTimeKey(widget.selectedDateTime);
     RecordBox? recordBox = recordRepository.recordBox.get(recordKey);
+    CalendarFormat calendarFormat = calendarFormatInfo[user.calendarFormat]!;
 
     return Column(
       children: [
+        TaskCalendar(locale: locale, calendarFormat: calendarFormat),
         MemoContainer(
           recordBox: recordBox,
           selectedDateTime: widget.selectedDateTime,

@@ -1,6 +1,10 @@
 // ignore_for_file: prefer_is_empty
+import 'dart:developer';
+
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:multi_value_listenable_builder/multi_value_listenable_builder.dart';
 import 'package:project/common/CommonAppBar.dart';
 import 'package:project/common/CommonContainer.dart';
@@ -8,7 +12,9 @@ import 'package:project/common/CommonNull.dart';
 import 'package:project/common/CommonTag.dart';
 import 'package:project/common/CommonText.dart';
 import 'package:project/model/record_box/record_box.dart';
+import 'package:project/model/user_box/user_box.dart';
 import 'package:project/provider/HistoryOrderProvider.dart';
+import 'package:project/provider/KeywordProvider.dart';
 import 'package:project/provider/PremiumProvider.dart';
 import 'package:project/provider/YearDateTimeProvider.dart';
 import 'package:project/provider/themeProvider.dart';
@@ -20,6 +26,7 @@ import 'package:project/widget/history/HistoryImage.dart';
 import 'package:project/widget/history/HistoryMemo.dart';
 import 'package:project/widget/history/HistoryTask.dart';
 import 'package:project/widget/history/HistoryTitle.dart';
+import 'package:project/widget/history/historySearch.dart';
 import 'package:provider/provider.dart';
 
 class HistoryBody extends StatefulWidget {
@@ -33,22 +40,23 @@ class _HistoryBodyState extends State<HistoryBody> {
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      context
-          .read<YearDateTimeProvider>()
-          .changeYearDateTime(dateTime: DateTime.now());
+      context.read<KeywordProvider>().changeKeyword('');
     });
 
     super.initState();
   }
 
+  onDismiss() {
+    FocusScope.of(context).unfocus();
+  }
+
   @override
   Widget build(BuildContext context) {
-    bool isLight = context.watch<ThemeProvider>().isLight;
+    String locale = context.locale.toString();
     List<RecordBox> recordList = recordRepository.recordList;
     bool isRecent = context.watch<HistoryOrderProvider>().isRecent;
     DateTime yearDateTime = context.watch<YearDateTimeProvider>().yearDateTime;
     bool isPremium = context.watch<PremiumProvider>().isPremium;
-    String locale = context.locale.toString();
 
     recordList = isRecent ? recordList.reversed.toList() : recordList.toList();
     recordList = recordList
@@ -70,23 +78,17 @@ class _HistoryBodyState extends State<HistoryBody> {
 
     return Column(
       children: [
-        // const BannerAdWidget(),
+        const BannerAdWidget(),
         const CommonAppBar(),
-        isRecord
-            ? Expanded(
-                child: SingleChildScrollView(
-                  child: ContentView(recordList: recordList),
-                ),
-              )
-            : Expanded(
-                child: Center(
-                  child: CommonText(
-                    text: '히스토리 내역이 없어요',
-                    color: grey.original,
-                    isBold: !isLight,
-                  ),
-                ),
-              ),
+        const HistorySearch(),
+        Expanded(
+          child: GestureDetector(
+            onTap: onDismiss,
+            child: isRecord
+                ? ContentView(recordList: recordList)
+                : const EmptyHistory(),
+          ),
+        ),
       ],
     );
   }
@@ -121,69 +123,92 @@ class _ContentViewState extends State<ContentView> {
     );
   }
 
+  isShow(RecordBox record) {
+    bool isVisibleMark = record.taskMarkList
+            ?.any((taskMark) => isVisibleHistory(taskMark['mark'])) ==
+        true;
+    bool isVisibleMemo = record.memo != null && isVisibleHistory('memo');
+    bool isVisibleImage = record.imageList != null && isVisibleHistory('image');
+
+    return isVisibleMark || isVisibleMemo || isVisibleImage;
+  }
+
   @override
   Widget build(BuildContext context) {
+    String keyword = context.watch<KeywordProvider>().keyword;
     bool isLight = context.watch<ThemeProvider>().isLight;
+    List<RecordBox> recordList = widget.recordList;
+
+    if (keyword != '') {
+      recordList = recordList.where((record) {
+        if (record.createDateTime.year == 1000) {
+          return true;
+        }
+
+        bool? isKeywordInTask = record.taskMarkList?.any((taskMark) {
+              String taskId = taskMark['id'];
+              String? taskName = taskRepository.taskBox.get(taskId)?.name;
+              return taskName?.contains(keyword) == true;
+            }) ==
+            true;
+        bool isKeywordInMemo = record.memo?.contains(keyword) == true;
+
+        return isKeywordInTask || isKeywordInMemo;
+      }).toList();
+    }
 
     return MultiValueListenableBuilder(
       valueListenables: valueListenables,
-      builder: (context, value, child) => Column(
-        children: widget.recordList.map((record) {
-          if (record.createDateTime.year == 1000) {
-            return NativeAdWidget(isLight: isLight);
-          }
+      builder: (context, value, child) => recordList.isNotEmpty
+          ? SingleChildScrollView(
+              child: Column(
+                children: recordList.map((record) {
+                  if (record.createDateTime.year == 1000) {
+                    return NativeAdWidget(isLight: isLight);
+                  }
 
-          bool isShow = (record.taskMarkList != null &&
-                  record.taskMarkList?.isNotEmpty == true) ||
-              record.memo != null ||
-              record.imageList != null;
-
-          return isShow
-              ? CommonContainer(
-                  outerPadding: const EdgeInsets.fromLTRB(7, 0, 7, 10),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      HistoryTitle(
-                        isLight: isLight,
-                        dateTime: record.createDateTime,
-                      ),
-                      HistoryTask(
-                        isLight: isLight,
-                        taskMarkList: record.taskMarkList,
-                        taskOrderList: record.taskOrderList,
-                      ),
-                      HistoryMemo(isLight: isLight, memo: record.memo),
-                      HistoryImage(uint8ListList: record.imageList)
-                    ],
-                  ),
-                )
-              : const CommonNull();
-        }).toList(),
-      ),
+                  return isShow(record)
+                      ? CommonContainer(
+                          outerPadding: const EdgeInsets.fromLTRB(7, 0, 7, 10),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              HistoryTitle(
+                                isLight: isLight,
+                                dateTime: record.createDateTime,
+                              ),
+                              HistoryTask(
+                                isLight: isLight,
+                                taskMarkList: record.taskMarkList,
+                                taskOrderList: record.taskOrderList,
+                              ),
+                              HistoryMemo(isLight: isLight, memo: record.memo),
+                              HistoryImage(uint8ListList: record.imageList)
+                            ],
+                          ),
+                        )
+                      : const CommonNull();
+                }).toList(),
+              ),
+            )
+          : const EmptyHistory(),
     );
   }
 }
 
-// CommonBackground(
-//       child: CommonScaffold(
-//         appBarInfo: AppBarInfoClass(
-//           isCenter: false,
-//           title: '히스토리',
-//           actions: [
-//             wAction(
-//               right: 5,
-//               text: yFormatter(locale: locale, dateTime: yearDateTime),
-//               bgColor: indigo.s300,
-//               onTap: onYear,
-//             ),
-//             wAction(
-//               right: 15,
-//               text: isRecent ? '최신순' : '과거순',
-//               bgColor: isRecent ? blue.s300 : red.s300,
-//               onTap: onOrder,
-//             ),
-//           ],
-//         ),
-//         body: ),
-//     );
+class EmptyHistory extends StatelessWidget {
+  const EmptyHistory({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    bool isLight = context.watch<ThemeProvider>().isLight;
+
+    return Center(
+      child: CommonText(
+        text: '히스토리 내역이 없어요',
+        color: grey.original,
+        isBold: !isLight,
+      ),
+    );
+  }
+}

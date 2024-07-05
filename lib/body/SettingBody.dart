@@ -201,24 +201,24 @@ class _ContentViewState extends State<ContentView> {
         value: onValue(widget.isLight ? '기본 테마' : '어두운 테마'),
         onTap: onTheme,
       ),
-      SettingItemClass(
-        name: '한 주의 시작',
-        svg: 'start-week',
-        value: onValue('일요일'),
-        onTap: onStatWeek,
-      ),
-      SettingItemClass(
-        name: '완료했어요 아이콘',
-        svg: 'check-icon',
-        value: onMarkIcon(),
-        onTap: onCompletedIcon,
-      ),
-      SettingItemClass(
-        name: '할 일, 루틴 입력 후 동작',
-        svg: 'input',
-        value: onValue('연속 입력'),
-        onTap: onInputTask,
-      ),
+      // SettingItemClass(
+      //   name: '한 주의 시작',
+      //   svg: 'start-week',
+      //   value: onValue('일요일'),
+      //   onTap: onStatWeek,
+      // ),
+      // SettingItemClass(
+      //   name: '완료했어요 아이콘',
+      //   svg: 'check-icon',
+      //   value: onMarkIcon(),
+      //   onTap: onCompletedIcon,
+      // ),
+      // SettingItemClass(
+      //   name: '할 일, 루틴 입력 후 동작',
+      //   svg: 'input',
+      //   value: onValue('연속 입력'),
+      //   onTap: onInputTask,
+      // ),
       SettingItemClass(
         name: '앱 리뷰 작성',
         svg: 'review',
