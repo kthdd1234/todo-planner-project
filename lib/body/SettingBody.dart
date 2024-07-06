@@ -8,6 +8,7 @@ import 'package:project/common/CommonSpace.dart';
 import 'package:project/common/CommonSvgText.dart';
 import 'package:project/common/CommonText.dart';
 import 'package:project/page/PremiumPage.dart';
+import 'package:project/page/StateIconPage.dart';
 import 'package:project/provider/PremiumProvider.dart';
 import 'package:project/provider/themeProvider.dart';
 import 'package:project/util/class.dart';
@@ -139,14 +140,22 @@ class _ContentViewState extends State<ContentView> {
   }
 
   onMarkIcon() {
+    List<String> markList = ['E2', 'O', 'X', 'M', 'T'];
+
     return Row(
       children: [
-        svgAsset(
-          name: 'mark-O',
-          width: 11,
-          color: widget.isLight ? textColor : Colors.white,
+        Row(
+          children: markList
+              .map((state) => Padding(
+                    padding: const EdgeInsets.only(right: 6),
+                    child: svgAsset(
+                      name: 'mark-$state',
+                      width: 11,
+                      color: widget.isLight ? textColor : Colors.white,
+                    ),
+                  ))
+              .toList(),
         ),
-        CommonSpace(width: 6),
         svgAsset(
           name: 'dir-right',
           width: 6,
@@ -156,12 +165,12 @@ class _ContentViewState extends State<ContentView> {
     );
   }
 
-  onStatWeek() {
+  onStateWeek() {
     //
   }
 
-  onCompletedIcon() {
-    //
+  onStateIcon() {
+    movePage(context: context, page: const StateIconPage());
   }
 
   onInputTask() {
@@ -180,7 +189,7 @@ class _ContentViewState extends State<ContentView> {
         value: isPremium
             ? CommonSvgText(
                 text: '구매 완료',
-                textColor: textColor,
+                textColor: widget.isLight ? textColor : darkTextColor,
                 fontSize: 14,
                 isBold: !widget.isLight,
                 svgName: 'premium-badge',
@@ -201,17 +210,17 @@ class _ContentViewState extends State<ContentView> {
         value: onValue(widget.isLight ? '기본 테마' : '어두운 테마'),
         onTap: onTheme,
       ),
+      SettingItemClass(
+        name: '상태 아이콘',
+        svg: 'premium-state-icon',
+        value: onMarkIcon(),
+        onTap: onStateIcon,
+      ),
       // SettingItemClass(
       //   name: '한 주의 시작',
       //   svg: 'start-week',
       //   value: onValue('일요일'),
       //   onTap: onStatWeek,
-      // ),
-      // SettingItemClass(
-      //   name: '완료했어요 아이콘',
-      //   svg: 'check-icon',
-      //   value: onMarkIcon(),
-      //   onTap: onCompletedIcon,
       // ),
       // SettingItemClass(
       //   name: '할 일, 루틴 입력 후 동작',
@@ -245,7 +254,8 @@ class _ContentViewState extends State<ContentView> {
         onTap: onVersion,
         value: CommonText(
           text: '$appVerstion ($appBuildNumber)',
-          color: grey.original,
+          color: widget.isLight ? grey.original : darkTextColor,
+          isBold: !widget.isLight,
         ),
       ),
     ];

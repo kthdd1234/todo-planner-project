@@ -90,10 +90,6 @@ class _TaskContainerState extends State<TaskContainer> {
     setState(() {});
   }
 
-  // Widget proxyDecorator(Widget widget, int index, _) {
-  //   //
-  // }
-
   @override
   Widget build(BuildContext context) {
     bool isLight = context.watch<ThemeProvider>().isLight;
@@ -267,15 +263,20 @@ class _TaskItemState extends State<TaskItem> {
               isBold: !isLight,
               color: red.s200,
               onTap: () async {
-                navigatorPop(context);
-
                 widget.recordBox?.taskMarkList?.removeWhere(
                   (taskMark) => taskMark['id'] == widget.taskItem.id,
                 );
                 widget.taskItem.task.dateTimeList = [];
 
+                if (isEmptyRecord(widget.recordBox)) {
+                  await recordRepository.recordBox
+                      .delete(dateTimeKey(widget.selectedDateTime));
+                }
+
                 await taskRepository.taskBox.delete(widget.taskBox.id);
                 await widget.recordBox?.save();
+
+                navigatorPop(context);
               },
             ),
           ],

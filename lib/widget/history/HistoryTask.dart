@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -52,7 +54,7 @@ class HistoryTask extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
                           CommonText(
-                            text: taskMark['name'],
+                            text: taskMark['name'] ?? '',
                             highlightColor: highlightColor,
                             isBold: !isLight,
                             textAlign: TextAlign.start,
@@ -116,10 +118,9 @@ class HistoryTask extends StatelessWidget {
             child: Column(
               children: taskRenderList
                   .map(
-                    (taskMark) => wHistoryItem(
-                      taskMark,
-                      taskRenderList.last['id'],
-                    ),
+                    (taskMark) => taskMark['name'] != null
+                        ? wHistoryItem(taskMark, taskRenderList.last['id'])
+                        : const CommonNull(),
                   )
                   .toList(),
             ),

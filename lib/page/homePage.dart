@@ -7,12 +7,14 @@ import 'package:project/body/TaskBody.dart';
 import 'package:project/common/CommonBackground.dart';
 import 'package:project/common/CommonScaffold.dart';
 import 'package:project/model/user_box/user_box.dart';
+import 'package:project/provider/KeywordProvider.dart';
 import 'package:project/provider/PremiumProvider.dart';
+import 'package:project/provider/titleDateTimeProvider.dart';
 import 'package:project/provider/bottomTabIndexProvider.dart';
+import 'package:project/provider/selectedDateTimeProvider.dart';
 import 'package:project/provider/themeProvider.dart';
 import 'package:project/util/final.dart';
 import 'package:project/util/func.dart';
-import 'package:project/util/service.dart';
 import 'package:provider/provider.dart';
 
 class HomePage extends StatefulWidget {
@@ -23,16 +25,6 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  // late AppLifecycleReactor _appLifecycleReactor;
-
-  // initializeAppOpenAd() {
-  //   AppOpenAdManager appOpenAdManager = AppOpenAdManager()..loadAd();
-  //   _appLifecycleReactor = AppLifecycleReactor(
-  //     appOpenAdManager: appOpenAdManager,
-  //   );
-  //   _appLifecycleReactor.listenToAppStateChanges();
-  // }
-
   initializePremium() async {
     bool isPremium = await isPurchasePremium();
     context.read<PremiumProvider>().setPremiumValue(isPremium);
@@ -55,7 +47,6 @@ class _HomePageState extends State<HomePage> {
 
   @override
   void initState() {
-    // initializeAppOpenAd();
     initializePremium();
     initializeHiveDB();
 
@@ -63,6 +54,17 @@ class _HomePageState extends State<HomePage> {
   }
 
   onBottomNavigation(int newIndex) {
+    if (newIndex == 0 || newIndex == 1) {
+      context
+          .read<SelectedDateTimeProvider>()
+          .changeSelectedDateTime(dateTime: DateTime.now());
+      context
+          .read<TitleDateTimeProvider>()
+          .changeTitleDateTime(dateTime: DateTime.now());
+    } else if (newIndex == 2) {
+      context.read<KeywordProvider>().changeKeyword('');
+    }
+
     context.read<BottomTabIndexProvider>().changeSeletedIdx(newIndex: newIndex);
   }
 
@@ -87,7 +89,7 @@ class _HomePageState extends State<HomePage> {
     return CommonBackground(
       child: CommonScaffold(
         body: bodyList[seletedIdx],
-        isFab: seletedIdx == 0,
+        isFab: seletedIdx == 0 || seletedIdx == 1,
         bottomNavigationBar: Theme(
           data: Theme.of(context).copyWith(
             canvasColor: Colors.transparent,
@@ -117,11 +119,11 @@ class _HomePageState extends State<HomePage> {
 
 // late AppLifecycleReactor _appLifecycleReactor;
 
-  // initializeAppOpenAd() {
-  //   AppOpenAdManager appOpenAdManager = AppOpenAdManager()..loadAd();
-  //   _appLifecycleReactor = AppLifecycleReactor(
-  //     appOpenAdManager: appOpenAdManager,
-  //   );
-  //   _appLifecycleReactor.listenToAppStateChanges();
-  // }
-    // initializeAppOpenAd();
+// initializeAppOpenAd() {
+//   AppOpenAdManager appOpenAdManager = AppOpenAdManager()..loadAd();
+//   _appLifecycleReactor = AppLifecycleReactor(
+//     appOpenAdManager: appOpenAdManager,
+//   );
+//   _appLifecycleReactor.listenToAppStateChanges();
+// }
+// initializeAppOpenAd();

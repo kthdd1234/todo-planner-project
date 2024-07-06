@@ -42,9 +42,9 @@ class _HistorySearchState extends State<HistorySearch> {
       showDialog(
         context: context,
         builder: (context) => AlertPopup(
-          desc: '할 일, 루틴은\n투두 화면에서 체크한 항목만 검색돼요\n(미체크한 할 일, 루틴은 검색x)',
+          desc: '미체크된 할 일, 루틴은 검색 되지 않아요',
           buttonText: '확인',
-          height: 195,
+          height: 160,
           onTap: () => navigatorPop(context),
         ),
       );

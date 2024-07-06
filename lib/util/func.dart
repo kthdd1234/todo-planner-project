@@ -87,7 +87,11 @@ String eeeeFormatter({required String locale, required DateTime dateTime}) {
   return DateFormat.EEEE(locale).format(dateTime);
 }
 
-ColorClass getColorClass(String name) {
+ColorClass getColorClass(String? name) {
+  if (name == null) {
+    return indigo;
+  }
+
   return colorList.firstWhere((info) => info.colorName == name);
 }
 
@@ -276,9 +280,8 @@ Future<bool> isPurchasePremium() async {
     CustomerInfo customerInfo = await Purchases.getCustomerInfo();
     bool isActive =
         customerInfo.entitlements.all[entitlementIdentifier]?.isActive == true;
-
-    // return isActive;
     return true;
+    // return isActive;
   } on PlatformException catch (e) {
     log('e =>> ${e.toString()}');
     return false;
@@ -305,4 +308,13 @@ bool isVisibleHistory(String? id) {
   List<String> filterList = user.filterIdList ?? [];
 
   return filterList.contains(id) == true;
+}
+
+bool isEmptyRecord(RecordBox? record) {
+  bool isEmptyMark =
+      record?.taskMarkList == null || record?.taskMarkList?.length == 0;
+  bool isEmptyMemo = record?.memo == null;
+  bool isEmptyImage = record?.imageList == null;
+
+  return isEmptyMark && isEmptyMemo && isEmptyImage;
 }

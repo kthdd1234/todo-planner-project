@@ -52,30 +52,6 @@ class TaskTitle extends StatefulWidget {
 }
 
 class _TaskTitleState extends State<TaskTitle> {
-  onDateTime(DateTime dateTime) {
-    showDialog(
-      context: context,
-      builder: (context) => CalendarPopup(
-        view: DateRangePickerView.year,
-        initialdDateTime: dateTime,
-        onSelectionChanged: (DateRangePickerSelectionChangedArgs args) async {
-          UserBox? user = userRepository.user;
-          context
-              .read<TitleDateTimeProvider>()
-              .changeTitleDateTime(dateTime: args.value);
-          context
-              .read<SelectedDateTimeProvider>()
-              .changeSelectedDateTime(dateTime: args.value);
-
-          user.calendarFormat = CalendarFormat.month.toString();
-          await user.save();
-
-          navigatorPop(context);
-        },
-      ),
-    );
-  }
-
   onCalendarFormat() async {
     UserBox? user = userRepository.user;
     user.calendarFormat =
@@ -91,8 +67,6 @@ class _TaskTitleState extends State<TaskTitle> {
 
   @override
   Widget build(BuildContext context) {
-    DateTime titleDateTime =
-        context.watch<TitleDateTimeProvider>().titleDateTime;
     bool isWeek = availableCalendarFormats[widget.calendarFormat]! == 'week';
     bool isLight = context.watch<ThemeProvider>().isLight;
 
@@ -101,16 +75,7 @@ class _TaskTitleState extends State<TaskTitle> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          CommonSvgText(
-            text: yMFormatter(locale: widget.locale, dateTime: titleDateTime),
-            fontSize: 18,
-            isBold: !isLight,
-            svgName: isLight ? 'dir-down' : 'dir-down-bold',
-            svgWidth: 14,
-            svgColor: isLight ? textColor : Colors.white,
-            svgDirection: SvgDirectionEnum.right,
-            onTap: () => onDateTime(titleDateTime),
-          ),
+          const TitleDateTime(),
           CommonTag(
             text: isWeek ? '일주일' : '한 달',
             isBold: true,
@@ -164,6 +129,7 @@ class _TaskCalendarState extends State<TaskCalendar> {
 
     UserBox? user = userRepository.user;
     user.calendarFormat = nextFormat;
+
     await user.save();
   }
 
@@ -270,6 +236,57 @@ class _TaskCalendarState extends State<TaskCalendar> {
       onPageChanged: onPageChanged,
       onDaySelected: onDaySelected,
       onFormatChanged: onFormatChanged,
+    );
+  }
+}
+
+class TitleDateTime extends StatefulWidget {
+  const TitleDateTime({super.key});
+
+  @override
+  State<TitleDateTime> createState() => _TitleDateTimeState();
+}
+
+class _TitleDateTimeState extends State<TitleDateTime> {
+  onDateTime(DateTime dateTime) {
+    showDialog(
+      context: context,
+      builder: (context) => CalendarPopup(
+        view: DateRangePickerView.year,
+        initialdDateTime: dateTime,
+        onSelectionChanged: (DateRangePickerSelectionChangedArgs args) async {
+          context
+              .read<TitleDateTimeProvider>()
+              .changeTitleDateTime(dateTime: args.value);
+          context
+              .read<SelectedDateTimeProvider>()
+              .changeSelectedDateTime(dateTime: args.value);
+
+          navigatorPop(context);
+          // UserBox? user = userRepository.user;
+          // user.calendarFormat = CalendarFormat.month.toString();
+          // await user.save();
+        },
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    DateTime titleDateTime =
+        context.watch<TitleDateTimeProvider>().titleDateTime;
+    String locale = context.locale.toString();
+    bool isLight = context.watch<ThemeProvider>().isLight;
+
+    return CommonSvgText(
+      text: yMFormatter(locale: locale, dateTime: titleDateTime),
+      fontSize: 18,
+      isBold: !isLight,
+      svgName: isLight ? 'dir-down' : 'dir-down-bold',
+      svgWidth: 14,
+      svgColor: isLight ? textColor : Colors.white,
+      svgDirection: SvgDirectionEnum.right,
+      onTap: () => onDateTime(titleDateTime),
     );
   }
 }

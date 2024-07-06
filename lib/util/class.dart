@@ -297,3 +297,10 @@ class FilterItemClass {
   String id, name;
   String? svg;
 }
+
+class StateIconClass {
+  StateIconClass({required this.title, required this.iconList});
+
+  String title;
+  List<String> iconList;
+}

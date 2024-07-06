@@ -286,11 +286,11 @@ final premiumBenefitList = [
     mainTitle: '모든 화면에서 광고가 나오지 않아요',
     subTitle: '광고없이 쾌적하게 앱을 사용해보세요!',
   ),
-  // PremiumBenefitClass(
-  //   svgName: 'premium-photos',
-  //   mainTitle: '사진을 최대 3장까지 추가 할 수 있어요',
-  //   subTitle: '보다 많은 사진을 추가해보세요!',
-  // ),
+  PremiumBenefitClass(
+    svgName: 'premium-state-icon',
+    mainTitle: '다양한 상태 아이콘을 사용할 수 있어요',
+    subTitle: '보다 다채롭게 상태를 체크해보세요!',
+  ),
 ];
 
 final appBarList = [

@@ -142,6 +142,8 @@ flutter:
     - assets/svg/start-week.svg
     - assets/svg/check-icon.svg
     - assets/svg/input.svg
+    - assets/svg/premium-state-icon.svg
+    - assets/svg/mark-E2.svg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

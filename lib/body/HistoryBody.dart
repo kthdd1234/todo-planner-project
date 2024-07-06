@@ -2,9 +2,7 @@
 import 'dart:developer';
 
 import 'package:easy_localization/easy_localization.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:multi_value_listenable_builder/multi_value_listenable_builder.dart';
 import 'package:project/common/CommonAppBar.dart';
 import 'package:project/common/CommonContainer.dart';
@@ -12,7 +10,6 @@ import 'package:project/common/CommonNull.dart';
 import 'package:project/common/CommonTag.dart';
 import 'package:project/common/CommonText.dart';
 import 'package:project/model/record_box/record_box.dart';
-import 'package:project/model/user_box/user_box.dart';
 import 'package:project/provider/HistoryOrderProvider.dart';
 import 'package:project/provider/KeywordProvider.dart';
 import 'package:project/provider/PremiumProvider.dart';
@@ -29,26 +26,8 @@ import 'package:project/widget/history/HistoryTitle.dart';
 import 'package:project/widget/history/historySearch.dart';
 import 'package:provider/provider.dart';
 
-class HistoryBody extends StatefulWidget {
+class HistoryBody extends StatelessWidget {
   const HistoryBody({super.key});
-
-  @override
-  State<HistoryBody> createState() => _HistoryBodyState();
-}
-
-class _HistoryBodyState extends State<HistoryBody> {
-  @override
-  void initState() {
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      context.read<KeywordProvider>().changeKeyword('');
-    });
-
-    super.initState();
-  }
-
-  onDismiss() {
-    FocusScope.of(context).unfocus();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -56,7 +35,6 @@ class _HistoryBodyState extends State<HistoryBody> {
     List<RecordBox> recordList = recordRepository.recordList;
     bool isRecent = context.watch<HistoryOrderProvider>().isRecent;
     DateTime yearDateTime = context.watch<YearDateTimeProvider>().yearDateTime;
-    bool isPremium = context.watch<PremiumProvider>().isPremium;
 
     recordList = isRecent ? recordList.reversed.toList() : recordList.toList();
     recordList = recordList
@@ -64,14 +42,6 @@ class _HistoryBodyState extends State<HistoryBody> {
             yFormatter(locale: locale, dateTime: record.createDateTime) ==
             yFormatter(locale: locale, dateTime: yearDateTime))
         .toList();
-
-    if (isPremium == false && recordList.isNotEmpty) {
-      for (var i = 0; i < recordList.length; i++) {
-        if (i != 0 && i % 4 == 0) {
-          recordList.insert(i, RecordBox(createDateTime: DateTime(1000)));
-        }
-      }
-    }
 
     bool isRecord = recordList.any((record) =>
         record.taskMarkList != null && record.taskMarkList?.length != 0);
@@ -83,7 +53,7 @@ class _HistoryBodyState extends State<HistoryBody> {
         const HistorySearch(),
         Expanded(
           child: GestureDetector(
-            onTap: onDismiss,
+            onTap: () => FocusScope.of(context).unfocus(),
             child: isRecord
                 ? ContentView(recordList: recordList)
                 : const EmptyHistory(),
@@ -135,9 +105,9 @@ class _ContentViewState extends State<ContentView> {
 
   @override
   Widget build(BuildContext context) {
+    List<RecordBox> recordList = widget.recordList;
     String keyword = context.watch<KeywordProvider>().keyword;
     bool isLight = context.watch<ThemeProvider>().isLight;
-    List<RecordBox> recordList = widget.recordList;
 
     if (keyword != '') {
       recordList = recordList.where((record) {
@@ -156,6 +126,15 @@ class _ContentViewState extends State<ContentView> {
         return isKeywordInTask || isKeywordInMemo;
       }).toList();
     }
+
+    // if (isPremium == false && recordList.isNotEmpty) {
+    //   for (var i = 0; i < recordList.length; i++) {
+    //     log('$i ${i % 5 == 0}');
+    //     if (i != 0 && i % 5 == 0) {
+    //       recordList.insert(i, RecordBox(createDateTime: DateTime(1000)));
+    //     }
+    //   }
+    // }
 
     return MultiValueListenableBuilder(
       valueListenables: valueListenables,

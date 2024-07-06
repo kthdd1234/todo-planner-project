@@ -1,19 +1,22 @@
+// ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
+import 'package:multi_value_listenable_builder/multi_value_listenable_builder.dart';
 import 'package:project/common/CommonAppBar.dart';
 import 'package:project/common/CommonCalendar.dart';
-import 'package:project/common/CommonContainer.dart';
 import 'package:project/common/CommonNull.dart';
 import 'package:project/common/CommonSpace.dart';
 import 'package:project/common/CommonText.dart';
 import 'package:project/model/task_box/task_box.dart';
+import 'package:project/provider/titleDateTimeProvider.dart';
+import 'package:project/provider/selectedDateTimeProvider.dart';
 import 'package:project/util/constants.dart';
 import 'package:project/util/final.dart';
 import 'package:project/util/func.dart';
 import 'package:project/widget/ad/BannerAd.dart';
-import 'package:project/widget/appBar/TaskAppBar.dart';
 import 'package:project/widget/border/VerticalBorder.dart';
+import 'package:provider/provider.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 class CalendarBody extends StatelessWidget {
@@ -21,12 +24,15 @@ class CalendarBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        BannerAdWidget(),
-        CommonAppBar(),
-        Expanded(child: SingleChildScrollView(child: ContentView())),
-      ],
+    return MultiValueListenableBuilder(
+      valueListenables: valueListenables,
+      builder: (context, values, child) => Column(
+        children: [
+          const BannerAdWidget(),
+          const CommonAppBar(),
+          Expanded(child: SingleChildScrollView(child: ContentView())),
+        ],
+      ),
     );
   }
 }
@@ -40,15 +46,15 @@ class ContentView extends StatefulWidget {
 
 class _ContentViewState extends State<ContentView> {
   onDaySelected(DateTime dateTime) {
-    // context
-    //     .read<SelectedDateTimeProvider>()
-    //     .changeSelectedDateTime(dateTime: dateTime);
+    context
+        .read<SelectedDateTimeProvider>()
+        .changeSelectedDateTime(dateTime: dateTime);
   }
 
   onPageChanged(DateTime dateTime) {
-    // context
-    //     .read<TitleDateTimeProvider>()
-    //     .changeTitleDateTime(dateTime: dateTime);
+    context
+        .read<TitleDateTimeProvider>()
+        .changeTitleDateTime(dateTime: dateTime);
   }
 
   Widget? todayBuilder(bool isLight, DateTime dateTime) {
@@ -159,8 +165,11 @@ class _ContentViewState extends State<ContentView> {
 
   @override
   Widget build(BuildContext context) {
+    DateTime selectedDateTime =
+        context.watch<SelectedDateTimeProvider>().seletedDateTime;
+
     return CommonCalendar(
-      selectedDateTime: DateTime.now(),
+      selectedDateTime: selectedDateTime,
       calendarFormat: CalendarFormat.month,
       shouldFillViewport: true,
       markerBuilder: barBuilder,
