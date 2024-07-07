@@ -124,10 +124,10 @@ List<TaskBox> getTaskList({
   List<TaskBox> taskFilterList = taskList.where((task) {
     List<DateTime> dateTimeList = task.dateTimeList;
 
-    if (task.taskType == tTodo.type) {
+    if (task.dateTimeType == taskDateTimeType.selection) {
       return dateTimeList.any(
           (dateTime) => dateTimeKey(dateTime) == dateTimeKey(targetDateTime));
-    } else if (task.taskType == tRoutin.type) {
+    } else {
       return dateTimeList.any((dateTime) {
         if (task.dateTimeType == taskDateTimeType.everyWeek) {
           return eFormatter(locale: locale, dateTime: dateTime) ==
@@ -142,8 +142,6 @@ List<TaskBox> getTaskList({
         return false;
       });
     }
-
-    return false;
   }).toList();
 
   if (orderList != null) {

@@ -120,7 +120,7 @@ class _MarkPopupState extends State<MarkPopup> {
           name: widget.taskBox.name,
           taskType: tTodo.type,
           colorName: widget.taskBox.colorName,
-          dateTimeType: dateTimeType.oneDay,
+          dateTimeType: taskDateTimeType.selection,
           dateTimeList: [tomorrowDateTime],
         ),
       );
@@ -212,6 +212,11 @@ class _MarkPopupState extends State<MarkPopup> {
 
     isShowInput = true;
     isAutoFocus = false;
+
+    if (isEmptyRecord(widget.recordBox)) {
+      await recordRepository.recordBox
+          .delete(dateTimeKey(widget.selectedDateTime));
+    }
 
     setState(() {});
   }

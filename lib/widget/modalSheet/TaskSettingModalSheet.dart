@@ -1,4 +1,6 @@
 // ignore_for_file: use_build_context_synchronously
+import 'dart:developer';
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -17,8 +19,7 @@ import 'package:project/util/enum.dart';
 import 'package:project/util/final.dart';
 import 'package:project/util/func.dart';
 import 'package:project/widget/listView/ColorListView.dart';
-import 'package:project/widget/modalSheet/RepeatModalSheet.dart';
-import 'package:project/widget/modalSheet/SelectedDayModalSheet.dart';
+import 'package:project/widget/modalSheet/DateTimeModalSheet.dart';
 import 'package:project/widget/popup/AlertPopup.dart';
 import 'package:provider/provider.dart';
 
@@ -43,13 +44,13 @@ class _TaskSettingModalSheetState extends State<TaskSettingModalSheet> {
   // 색상
   String selectedColorName = '남색';
 
-  // 날짜 / 반복
+  // 날짜
   TaskDateTimeInfoClass taskDateTimeInfo = TaskDateTimeInfoClass(
     type: taskDateTimeType.selection,
     dateTimeList: [DateTime.now()],
   );
 
-  // 할 일 / 루틴 이름
+  // 할 일
   TextEditingController controller = TextEditingController();
 
   @override
@@ -63,9 +64,6 @@ class _TaskSettingModalSheetState extends State<TaskSettingModalSheet> {
       taskDateTimeInfo.dateTimeList = taskBox.dateTimeList;
       controller.text = taskBox.name;
     } else {
-      selectedColorName = widget.initTask.type == tTodo.type ? '남색' : '청록색';
-
-      taskDateTimeInfo.type = widget.initTask.dateTimeType;
       taskDateTimeInfo.dateTimeList = widget.initTask.dateTimeList;
     }
 
@@ -80,31 +78,27 @@ class _TaskSettingModalSheetState extends State<TaskSettingModalSheet> {
     setState(() => selectedColorName = colorName);
   }
 
-  onSelectedDay() {
-    showModalBottomSheet(
-      isScrollControlled: true,
-      context: context,
-      builder: (context) => SelectedDayModalSheet(
-        color: getColorClass(selectedColorName),
-        initDateTimeList: taskDateTimeInfo.dateTimeList,
-        onCompleted: (List<DateTime> dateTimeList) {
-          setState(() => taskDateTimeInfo.dateTimeList = dateTimeList);
-          navigatorPop(context);
-        },
-      ),
-    );
+  onClose() {
+    setState(() {});
+    navigatorPop(context);
   }
 
-  onRepeatDay() {
+  onDateTime() {
     DateTime now = DateTime.now();
 
     showModalBottomSheet(
       isScrollControlled: true,
       context: context,
-      builder: (context) => RepeatModalSheet(
+      builder: (context) => DateTimeModalSheet(
         color: getColorClass(selectedColorName),
         taskDateTimeInfo: taskDateTimeInfo,
-        onCompletedEveryWeek: (weekDays) {
+        onSelection: (selectionDays) {
+          taskDateTimeInfo.type = taskDateTimeType.selection;
+          taskDateTimeInfo.dateTimeList = selectionDays;
+
+          onClose();
+        },
+        onWeek: (weekDays) {
           taskDateTimeInfo.type = taskDateTimeType.everyWeek;
           taskDateTimeInfo.dateTimeList = weekDays
               .where((weekDay) => weekDay.isVisible)
@@ -112,37 +106,33 @@ class _TaskSettingModalSheetState extends State<TaskSettingModalSheet> {
                   now.subtract(Duration(days: now.weekday - weekday.id)))
               .toList();
 
-          navigatorPop(context);
-          setState(() {});
+          onClose();
         },
-        onCompletedEveryMonth: (monthDays) {
+        onMonth: (monthDays) {
           taskDateTimeInfo.type = taskDateTimeType.everyMonth;
           taskDateTimeInfo.dateTimeList = monthDays
               .where((monthDay) => monthDay.isVisible)
               .map((monthDay) => DateTime(now.year, 1, monthDay.id))
               .toList();
 
-          navigatorPop(context);
-          setState(() {});
+          onClose();
         },
       ),
     );
   }
 
-  displayTodoDateTime(String locale) {
-    String result = ymdeFormatter(
-      locale: locale,
-      dateTime: taskDateTimeInfo.dateTimeList[0],
-    );
+  displayDateTime(String locale) {
+    if (taskDateTimeInfo.type == taskDateTimeType.selection) {
+      String result = ymdeFormatter(
+        locale: locale,
+        dateTime: taskDateTimeInfo.dateTimeList[0],
+      );
 
-    taskDateTimeInfo.dateTimeList
-        .sort((dtA, dtB) => ymdToInt(dtA).compareTo(ymdToInt(dtB)));
+      taskDateTimeInfo.dateTimeList
+          .sort((dtA, dtB) => ymdToInt(dtA).compareTo(ymdToInt(dtB)));
 
-    return '$result${taskDateTimeInfo.dateTimeList.length > 1 ? '....+${taskDateTimeInfo.dateTimeList.length - 1}' : ''}';
-  }
-
-  displayRepeatDateTime(String locale) {
-    if (taskDateTimeInfo.type == taskDateTimeType.everyWeek) {
+      return '$result${taskDateTimeInfo.dateTimeList.length > 1 ? '....+${taskDateTimeInfo.dateTimeList.length - 1}' : ''}';
+    } else if (taskDateTimeInfo.type == taskDateTimeType.everyWeek) {
       String join = taskDateTimeInfo.dateTimeList
           .map((dateTime) => eFormatter(locale: locale, dateTime: dateTime))
           .join(', ');
@@ -162,9 +152,7 @@ class _TaskSettingModalSheetState extends State<TaskSettingModalSheet> {
   }
 
   Future<bool> onSaveTask(String id) async {
-    bool isEmptyTaskBox = widget.taskBox == null;
-
-    if (isEmptyTaskBox) {
+    if (widget.taskBox == null) {
       await taskRepository.taskBox.put(
         id,
         TaskBox(
@@ -211,8 +199,6 @@ class _TaskSettingModalSheetState extends State<TaskSettingModalSheet> {
   }
 
   onEditingComplete() async {
-    bool isEmptyTaskBox = widget.taskBox == null;
-
     if (controller.text == '') {
       showDialog(
         context: context,
@@ -226,16 +212,13 @@ class _TaskSettingModalSheetState extends State<TaskSettingModalSheet> {
     } else {
       await onSaveTask(uuid());
 
-      if (isEmptyTaskBox) {
-        onInitState();
-      }
+      if (widget.taskBox == null) onInitState();
     }
   }
 
   @override
   Widget build(BuildContext context) {
     String locale = context.locale.toString();
-    bool isTodo = widget.initTask.type == tTodo.type;
     double bottom = MediaQuery.of(context).viewInsets.bottom;
     bool isLight = context.watch<ThemeProvider>().isLight;
 
@@ -274,12 +257,10 @@ class _TaskSettingModalSheetState extends State<TaskSettingModalSheet> {
                 ), //
               ),
               CommonModalItem(
-                title: widget.initTask.dateTimeLabel,
-                onTap: isTodo ? onSelectedDay : onRepeatDay,
+                title: '날짜',
+                onTap: onDateTime,
                 child: CommonSvgText(
-                  text: isTodo
-                      ? displayTodoDateTime(locale)
-                      : displayRepeatDateTime(locale),
+                  text: displayDateTime(locale),
                   fontSize: 14,
                   textColor: isLight ? textColor : Colors.white,
                   svgColor: grey.s400,
@@ -287,7 +268,7 @@ class _TaskSettingModalSheetState extends State<TaskSettingModalSheet> {
                   svgWidth: 7,
                   svgLeft: 7,
                   svgDirection: SvgDirectionEnum.right,
-                  onTap: isTodo ? onSelectedDay : onRepeatDay,
+                  onTap: onDateTime,
                 ),
               ),
               CommonSpace(height: 17.5),

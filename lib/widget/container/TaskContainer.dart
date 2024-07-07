@@ -90,6 +90,18 @@ class _TaskContainerState extends State<TaskContainer> {
     setState(() {});
   }
 
+  onAddTask(DateTime initDateTime) {
+    tTodo.dateTimeList = [initDateTime];
+
+    showModalBottomSheet(
+      isScrollControlled: true,
+      context: context,
+      builder: (context) => TaskSettingModalSheet(
+        initTask: tTodo,
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     bool isLight = context.watch<ThemeProvider>().isLight;
@@ -170,6 +182,7 @@ class _TaskContainerState extends State<TaskContainer> {
                   height: 300,
                   line_1: '할 일, 루틴이 없어요.',
                   line_2: '+ 버튼을 눌러 추가해보세요.',
+                  onTap: () => onAddTask(widget.selectedDateTime),
                 ),
         ],
       ),
@@ -268,13 +281,13 @@ class _TaskItemState extends State<TaskItem> {
                 );
                 widget.taskItem.task.dateTimeList = [];
 
+                await taskRepository.taskBox.delete(widget.taskBox.id);
+                await widget.recordBox?.save();
+
                 if (isEmptyRecord(widget.recordBox)) {
                   await recordRepository.recordBox
                       .delete(dateTimeKey(widget.selectedDateTime));
                 }
-
-                await taskRepository.taskBox.delete(widget.taskBox.id);
-                await widget.recordBox?.save();
 
                 navigatorPop(context);
               },

@@ -107,13 +107,18 @@ class _MemoSettingPageState extends State<MemoSettingPage> {
             ),
           );
         },
-        onRemove: () {
+        onRemove: () async {
           setState(() {
             uint8ListList.removeWhere((uint8List_) => uint8List_ == uint8List);
             if (uint8ListList.isEmpty) widget.recordBox?.imageList = null;
 
             widget.recordBox?.save();
           });
+
+          if (isEmptyRecord(widget.recordBox)) {
+            await recordRepository.recordBox
+                .delete(dateTimeKey(widget.initDateTime));
+          }
 
           navigatorPop(context);
         },

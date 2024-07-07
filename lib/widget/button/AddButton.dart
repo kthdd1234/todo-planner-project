@@ -57,17 +57,17 @@ class _AddButtonState extends State<AddButton> {
     );
   }
 
-  onAddRoutin(DateTime initDateTime) {
-    tRoutin.dateTimeList = [initDateTime];
+  // onAddRoutin(DateTime initDateTime) {
+  //   tRoutin.dateTimeList = [initDateTime];
 
-    showModalBottomSheet(
-      isScrollControlled: true,
-      context: context,
-      builder: (context) => TaskSettingModalSheet(
-        initTask: tRoutin,
-      ),
-    );
-  }
+  //   showModalBottomSheet(
+  //     isScrollControlled: true,
+  //     context: context,
+  //     builder: (context) => TaskSettingModalSheet(
+  //       initTask: tRoutin,
+  //     ),
+  //   );
+  // }
 
   onAddMemo(RecordBox? record, initDateTime) {
     Navigator.push(
@@ -99,12 +99,12 @@ class _AddButtonState extends State<AddButton> {
           color: indigo,
           onTap: () => onAddTodo(selectedDateTime),
         ),
-        speedDialChildButton(
-          svg: 'routin',
-          lable: '루틴 추가',
-          color: teal,
-          onTap: () => onAddRoutin(selectedDateTime),
-        ),
+        // speedDialChildButton(
+        //   svg: 'routin',
+        //   lable: '루틴 추가',
+        //   color: teal,
+        //   onTap: () => onAddRoutin(selectedDateTime),
+        // ),
         speedDialChildButton(
           svg: 'pencil',
           lable: '메모 추가',

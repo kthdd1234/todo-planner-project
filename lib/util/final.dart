@@ -238,12 +238,12 @@ final markList = [
   {'mark': mark.T, 'name': mark.markName(mark.T)},
 ];
 
-final dateTimeType = DateTimeTypeClass(
-  oneDay: "oneDay",
-  manyDay: "manyDay",
-  everyWeek: "everyWeek",
-  everyMonth: "everyMonth",
-);
+// final dateTimeType = DateTimeTypeClass(
+//   oneDay: "oneDay",
+//   manyDay: "manyDay",
+//   everyWeek: "everyWeek",
+//   everyMonth: "everyMonth",
+// );
 
 final calendarFormatInfo = {
   CalendarFormat.week.toString(): CalendarFormat.week,
@@ -310,3 +310,11 @@ final filterItemList = [
 ];
 
 final filterIdList = filterItemList.map((item) => item.id).toList();
+
+final stateIconList = [
+  StateIconClass(title: '기본', iconList: ['E']),
+  StateIconClass(title: '완료했어요', iconList: ['O']),
+  StateIconClass(title: '안했어요', iconList: ['X']),
+  StateIconClass(title: '덜 했어요', iconList: ['M']),
+  StateIconClass(title: '내일 할래요', iconList: ['T']),
+];

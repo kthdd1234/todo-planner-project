@@ -70,10 +70,15 @@ class _MemoContainerState extends State<MemoContainer> {
           );
         },
         onRemove: () async {
-          navigatorPop(context);
-
           widget.recordBox?.memo = null;
           await widget.recordBox?.save();
+
+          if (isEmptyRecord(widget.recordBox)) {
+            await recordRepository.recordBox
+                .delete(dateTimeKey(widget.selectedDateTime));
+          }
+
+          navigatorPop(context);
         },
       ),
     );
