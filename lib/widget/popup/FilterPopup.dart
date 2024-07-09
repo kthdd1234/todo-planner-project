@@ -26,7 +26,7 @@ class _FilterPopupState extends State<FilterPopup> {
   UserBox user = userRepository.user;
 
   onChanged(String id, bool newValue) async {
-    isVisibleHistory(id) == true
+    isSearchCategory(id) == true
         ? user.filterIdList?.remove(id)
         : user.filterIdList?.add(id);
 
@@ -58,7 +58,7 @@ class _FilterPopupState extends State<FilterPopup> {
                           id: item.id,
                           svg: item.svg,
                           name: item.name,
-                          isVisible: isVisibleHistory(item.id),
+                          isVisible: isSearchCategory(item.id),
                           onChanged: onChanged,
                         ))
                     .toList(),

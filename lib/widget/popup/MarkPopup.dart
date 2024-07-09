@@ -1,6 +1,4 @@
 // ignore_for_file: use_build_context_synchronously
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:project/common/CommonContainer.dart';
 import 'package:project/common/CommonDivider.dart';
@@ -111,20 +109,7 @@ class _MarkPopupState extends State<MarkPopup> {
         selectedDateTime.month,
         selectedDateTime.day + 1,
       );
-      String id = uuid();
-
-      await taskRepository.taskBox.put(
-        id,
-        TaskBox(
-          id: id,
-          name: widget.taskBox.name,
-          taskType: tTodo.type,
-          colorName: widget.taskBox.colorName,
-          dateTimeType: taskDateTimeType.selection,
-          dateTimeList: [tomorrowDateTime],
-        ),
-      );
-
+      widget.taskBox.dateTimeList.add(tomorrowDateTime);
       await widget.taskBox.save();
     }
 
@@ -230,10 +215,14 @@ class _MarkPopupState extends State<MarkPopup> {
     bool isLight = context.watch<ThemeProvider>().isLight;
     Color cursorColor =
         isLight ? getColorClass(widget.taskBox.colorName).s300 : darkTextColor;
+    bool isSelection =
+        widget.taskBox.dateTimeType == taskDateTimeType.selection;
+    List<Map<String, dynamic>> markList =
+        isSelection ? selectionMarkList : weekMonthMarkList;
 
     return CommonPopup(
       insetPaddingHorizontal: 40,
-      height: 380,
+      height: isSelection ? 380 : 320,
       child: CommonContainer(
         innerPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
         child: ListView(

@@ -6,9 +6,10 @@ import 'package:project/repositories/user_repository.dart';
 import 'package:project/util/class.dart';
 import 'package:project/util/enum.dart';
 import 'package:project/widget/appBar/CalendarAppBar.dart';
-import 'package:project/widget/appBar/HistoryAppBar.dart';
+import 'package:project/widget/appBar/SearchAppBar.dart';
 import 'package:project/widget/appBar/SettingAppBar.dart';
 import 'package:project/widget/appBar/TaskAppBar.dart';
+import 'package:project/widget/appBar/TrackerAppBar.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 final bottomNavigationBarItemList = [
@@ -20,8 +21,12 @@ final bottomNavigationBarItemList = [
     label: '캘린더',
     icon: Icon(Icons.calendar_month_outlined),
   ),
+  // const BottomNavigationBarItem(
+  //   label: '검색',
+  //   icon: Icon(Icons.search_rounded),
+  // ),
   const BottomNavigationBarItem(
-    label: '히스토리',
+    label: '트래커',
     icon: Icon(Icons.view_timeline_outlined),
   ),
   const BottomNavigationBarItem(
@@ -231,11 +236,17 @@ final tRoutin = TaskClass(
   dateTimeList: [DateTime.now()],
 );
 
-final markList = [
+final selectionMarkList = [
   {'mark': mark.O, 'name': mark.markName(mark.O)},
   {'mark': mark.X, 'name': mark.markName(mark.X)},
   {'mark': mark.M, 'name': mark.markName(mark.M)},
   {'mark': mark.T, 'name': mark.markName(mark.T)},
+];
+
+final weekMonthMarkList = [
+  {'mark': mark.O, 'name': mark.markName(mark.O)},
+  {'mark': mark.X, 'name': mark.markName(mark.X)},
+  {'mark': mark.M, 'name': mark.markName(mark.M)},
 ];
 
 // final dateTimeType = DateTimeTypeClass(
@@ -286,18 +297,11 @@ final premiumBenefitList = [
     mainTitle: '모든 화면에서 광고가 나오지 않아요',
     subTitle: '광고없이 쾌적하게 앱을 사용해보세요!',
   ),
-  PremiumBenefitClass(
-    svgName: 'premium-state-icon',
-    mainTitle: '다양한 상태 아이콘을 사용할 수 있어요',
-    subTitle: '보다 다채롭게 상태를 체크해보세요!',
-  ),
-];
-
-final appBarList = [
-  TaskAppBar(),
-  CalendarAppBar(),
-  HistoryAppBar(),
-  SettingAppBar(),
+  // PremiumBenefitClass(
+  //   svgName: 'premium-state-icon',
+  //   mainTitle: '다양한 상태 아이콘을 사용할 수 있어요',
+  //   subTitle: '보다 다채롭게 상태를 체크해보세요!',
+  // ),
 ];
 
 final filterItemList = [

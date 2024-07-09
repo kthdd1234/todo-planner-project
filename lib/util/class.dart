@@ -1,4 +1,5 @@
 import 'dart:ffi';
+import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 
@@ -139,17 +140,6 @@ class TaskClass {
 
   String type, name, dateTimeLabel, dateTimeType;
   List<DateTime> dateTimeList;
-}
-
-class DateTimeTypeClass {
-  DateTimeTypeClass({
-    required this.oneDay,
-    required this.manyDay,
-    required this.everyWeek,
-    required this.everyMonth,
-  });
-
-  String oneDay, manyDay, everyWeek, everyMonth;
 }
 
 class DateTimeInfoClass {
@@ -303,4 +293,30 @@ class StateIconClass {
 
   String title;
   List<String> iconList;
+}
+
+class SearchResultClass {
+  SearchResultClass({
+    required this.dateTime,
+    required this.taskList,
+    required this.imageList,
+    this.memo,
+  });
+
+  DateTime dateTime;
+  List<TodoClass>? taskList;
+  String? memo;
+  List<Uint8List>? imageList;
+}
+
+class TrakcerItemClass {
+  TrakcerItemClass({
+    required this.name,
+    required this.markList,
+    this.highlightColor,
+  });
+
+  String name;
+  List<String?> markList;
+  Color? highlightColor;
 }

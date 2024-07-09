@@ -5,8 +5,8 @@ import 'package:project/common/CommonText.dart';
 import 'package:project/util/final.dart';
 import 'package:project/util/func.dart';
 
-class HistoryTitle extends StatelessWidget {
-  HistoryTitle({super.key, required this.isLight, required this.dateTime});
+class SearchTitle extends StatelessWidget {
+  SearchTitle({super.key, required this.isLight, required this.dateTime});
 
   bool isLight;
   DateTime dateTime;

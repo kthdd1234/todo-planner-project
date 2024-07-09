@@ -121,13 +121,6 @@ class _CommonCalendarState extends State<CommonCalendar> {
       );
     }
 
-    if (!widget.shouldFillViewport) {
-      return Padding(
-        padding: const EdgeInsets.only(bottom: 20),
-        child: tableCalendar(),
-      );
-    }
-
     return Padding(
       padding: const EdgeInsets.only(bottom: 10),
       child: CommonContainer(

@@ -3,7 +3,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:multi_value_listenable_builder/multi_value_listenable_builder.dart';
-import 'package:project/common/CommonAppBar.dart';
 import 'package:project/common/CommonCalendar.dart';
 import 'package:project/common/CommonNull.dart';
 import 'package:project/common/CommonSpace.dart';
@@ -15,6 +14,7 @@ import 'package:project/util/constants.dart';
 import 'package:project/util/final.dart';
 import 'package:project/util/func.dart';
 import 'package:project/widget/ad/BannerAd.dart';
+import 'package:project/widget/appBar/CalendarAppBar.dart';
 import 'package:project/widget/border/VerticalBorder.dart';
 import 'package:provider/provider.dart';
 import 'package:table_calendar/table_calendar.dart';
@@ -29,7 +29,7 @@ class CalendarBody extends StatelessWidget {
       builder: (context, values, child) => Column(
         children: [
           const BannerAdWidget(),
-          const CommonAppBar(),
+          CalendarAppBar(),
           Expanded(child: SingleChildScrollView(child: ContentView())),
         ],
       ),
@@ -168,15 +168,18 @@ class _ContentViewState extends State<ContentView> {
     DateTime selectedDateTime =
         context.watch<SelectedDateTimeProvider>().seletedDateTime;
 
-    return CommonCalendar(
-      selectedDateTime: selectedDateTime,
-      calendarFormat: CalendarFormat.month,
-      shouldFillViewport: true,
-      markerBuilder: barBuilder,
-      todayBuilder: todayBuilder,
-      onPageChanged: onPageChanged,
-      onDaySelected: onDaySelected,
-      onFormatChanged: (_) {},
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 50),
+      child: CommonCalendar(
+        selectedDateTime: selectedDateTime,
+        calendarFormat: CalendarFormat.month,
+        shouldFillViewport: true,
+        markerBuilder: barBuilder,
+        todayBuilder: todayBuilder,
+        onPageChanged: onPageChanged,
+        onDaySelected: onDaySelected,
+        onFormatChanged: (_) {},
+      ),
     );
   }
 }

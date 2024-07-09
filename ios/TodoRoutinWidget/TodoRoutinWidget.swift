@@ -70,7 +70,7 @@ struct TodoRoutinWidget: Widget {
             TodoRoutinWidgetEntryView(entry: entry)
         }
         .configurationDisplayName("할 일, 루틴")
-        .description("오늘의 할 일과 루틴을 보여주는 위젯입니다.")
+        .description("오늘의 할 일을 보여주는 위젯입니다.")
     }
 }
 

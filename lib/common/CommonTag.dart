@@ -13,13 +13,15 @@ class CommonTag extends StatelessWidget {
     this.innerPadding,
     this.isBold,
     this.fontSize,
+    this.vertical,
   });
 
   String text;
   Color textColor, bgColor;
   bool? isBold;
-  double? fontSize;
+  double? fontSize, vertical;
   EdgeInsets? innerPadding;
+
   Function() onTap;
 
   @override
@@ -29,7 +31,7 @@ class CommonTag extends StatelessWidget {
       child: GestureDetector(
         onTap: onTap,
         child: Container(
-          padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 7),
+          padding: EdgeInsets.symmetric(vertical: vertical ?? 5, horizontal: 7),
           decoration: BoxDecoration(
             color: bgColor,
             borderRadius: BorderRadius.circular(5),

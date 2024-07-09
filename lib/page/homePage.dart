@@ -1,9 +1,10 @@
 // ignore_for_file: use_build_context_synchronously
 import 'package:flutter/material.dart';
 import 'package:project/body/CalendarBody.dart';
-import 'package:project/body/HistoryBody.dart';
+import 'package:project/body/SearchBody.dart';
 import 'package:project/body/SettingBody.dart';
 import 'package:project/body/TaskBody.dart';
+import 'package:project/body/TrackerBody.dart';
 import 'package:project/common/CommonBackground.dart';
 import 'package:project/common/CommonScaffold.dart';
 import 'package:project/model/user_box/user_box.dart';
@@ -82,7 +83,8 @@ class _HomePageState extends State<HomePage> {
     final bodyList = [
       const TaskBody(),
       const CalendarBody(),
-      const HistoryBody(),
+      // const SearchBody(),
+      const TrackerBody(),
       const SettingBody()
     ];
 

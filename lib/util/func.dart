@@ -278,8 +278,8 @@ Future<bool> isPurchasePremium() async {
     CustomerInfo customerInfo = await Purchases.getCustomerInfo();
     bool isActive =
         customerInfo.entitlements.all[entitlementIdentifier]?.isActive == true;
-    return true;
     // return isActive;
+    return true;
   } on PlatformException catch (e) {
     log('e =>> ${e.toString()}');
     return false;
@@ -299,7 +299,7 @@ Future<bool> isPurchaseRestore() async {
 }
 
 //
-bool isVisibleHistory(String? id) {
+bool isSearchCategory(String? id) {
   if (id == null) return false;
 
   UserBox? user = userRepository.user;
@@ -315,4 +315,22 @@ bool isEmptyRecord(RecordBox? record) {
   bool isEmptyImage = record?.imageList == null;
 
   return isEmptyMark && isEmptyMemo && isEmptyImage;
+}
+
+DateTime weeklyStartDateTime(DateTime dateTime) {
+  if (dateTime.weekday == 7) {
+    return dateTime;
+  }
+
+  return dateTime.subtract(Duration(days: dateTime.weekday));
+}
+
+DateTime weeklyEndDateTime(DateTime dateTime) {
+  if (dateTime.weekday == 7) {
+    return dateTime.add(const Duration(days: 6));
+  }
+
+  return dateTime.add(Duration(
+    days: DateTime.daysPerWeek - dateTime.weekday - 1,
+  ));
 }

@@ -6,8 +6,8 @@ import 'package:project/page/ImageSlidePage.dart';
 import 'package:project/page/MemoSettingPage.dart';
 import 'package:project/util/func.dart';
 
-class HistoryImage extends StatelessWidget {
-  HistoryImage({super.key, required this.uint8ListList});
+class SearchImage extends StatelessWidget {
+  SearchImage({super.key, required this.uint8ListList});
 
   List<Uint8List>? uint8ListList;
 
@@ -25,7 +25,7 @@ class HistoryImage extends StatelessWidget {
       );
     }
 
-    return uint8ListList != null && isVisibleHistory('image')
+    return uint8ListList != null && isSearchCategory('image')
         ? Padding(
             padding: const EdgeInsets.only(top: 10),
             child: ImageContainer(

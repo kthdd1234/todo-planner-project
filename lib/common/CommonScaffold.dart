@@ -8,7 +8,6 @@ import 'package:project/util/class.dart';
 import 'package:project/util/constants.dart';
 import 'package:project/util/final.dart';
 import 'package:project/util/func.dart';
-import 'package:project/widget/ad/BannerAd.dart';
 import 'package:project/widget/button/AddButton.dart';
 import 'package:project/widget/button/TodayButton.dart';
 import 'package:provider/provider.dart';
@@ -81,7 +80,6 @@ class Fab extends StatelessWidget {
                   context.watch<SelectedDateTimeProvider>().seletedDateTime;
               bool isToday =
                   dateTimeKey(DateTime.now()) == dateTimeKey(selectedDateTime);
-
               bool isNotMonth = userRepository.user.calendarFormat !=
                   CalendarFormat.month.toString();
 

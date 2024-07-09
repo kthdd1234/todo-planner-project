@@ -81,7 +81,7 @@ class _TaskTitleState extends State<TaskTitle> {
             isBold: true,
             fontSize: 10,
             textColor: Colors.white,
-            bgColor: isLight ? indigo.s200 : darkButtonColor,
+            bgColor: isLight ? indigo.s300 : darkButtonColor,
             onTap: onCalendarFormat,
           )
         ],

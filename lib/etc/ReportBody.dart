@@ -1,39 +1,38 @@
-import 'package:flutter/material.dart';
-import 'package:project/common/CommonAppBar.dart';
-import 'package:project/common/CommonContainer.dart';
-import 'package:project/common/CommonDivider.dart';
-import 'package:project/common/CommonText.dart';
-import 'package:project/util/constants.dart';
-import 'package:project/util/final.dart';
-import 'package:project/util/func.dart';
+// import 'package:flutter/material.dart';
+// import 'package:project/common/CommonContainer.dart';
+// import 'package:project/common/CommonDivider.dart';
+// import 'package:project/common/CommonText.dart';
+// import 'package:project/util/constants.dart';
+// import 'package:project/util/final.dart';
+// import 'package:project/util/func.dart';
 
-class ReportBody extends StatelessWidget {
-  const ReportBody({super.key});
+// class ReportBody extends StatelessWidget {
+//   const ReportBody({super.key});
 
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        CommonAppBar(),
-        ContentView(),
-      ],
-    );
-  }
-}
+//   @override
+//   Widget build(BuildContext context) {
+//     return Column(
+//       children: [
+//         CommonAppBar(),
+//         ContentView(),
+//       ],
+//     );
+//   }
+// }
 
-class ContentView extends StatelessWidget {
-  const ContentView({super.key});
+// class ContentView extends StatelessWidget {
+//   const ContentView({super.key});
 
-  @override
-  Widget build(BuildContext context) {
-    return CommonContainer(
-      outerPadding: const EdgeInsets.fromLTRB(7, 0, 7, 10),
-      child: Column(
-        children: [],
-      ),
-    );
-  }
-}
+//   @override
+//   Widget build(BuildContext context) {
+//     return CommonContainer(
+//       outerPadding: const EdgeInsets.fromLTRB(7, 0, 7, 10),
+//       child: Column(
+//         children: [],
+//       ),
+//     );
+//   }
+// }
 
 //
 // ReportTitle(),

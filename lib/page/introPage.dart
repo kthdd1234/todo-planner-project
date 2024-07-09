@@ -29,7 +29,7 @@ class _IntroPageState extends State<IntroPage> {
     String fontFamily = 'IM_Hyemin';
     String calendarFormat = CalendarFormat.week.toString();
     Map<String, dynamic> taskTitleInfo = {
-      'title': '할 일, 루틴 리스트',
+      'title': '할 일 리스트',
       'colorName': "남색"
     };
     Map<String, dynamic> memoTitleInfo = {
@@ -71,7 +71,7 @@ class _IntroPageState extends State<IntroPage> {
             CommonSpace(height: 20),
             CommonText(text: '반가워요! 투두 플래너와 함께', color: textColor),
             CommonSpace(height: 2),
-            CommonText(text: '오늘의 할 일, 루틴을 실천해봐요 :D', color: textColor),
+            CommonText(text: '오늘의 할 일을 실천해봐요 :D', color: textColor),
             const Spacer(),
             CommonButton(
               outerPadding: const EdgeInsets.symmetric(horizontal: 10),

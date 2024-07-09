@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:project/provider/KeywordProvider.dart';
 import 'package:project/provider/themeProvider.dart';
@@ -9,14 +10,14 @@ import 'package:project/util/func.dart';
 import 'package:project/widget/popup/AlertPopup.dart';
 import 'package:provider/provider.dart';
 
-class HistorySearch extends StatefulWidget {
-  const HistorySearch({super.key});
+class SearchItemBar extends StatefulWidget {
+  const SearchItemBar({super.key});
 
   @override
-  State<HistorySearch> createState() => _HistorySearchState();
+  State<SearchItemBar> createState() => _SearchItemBarState();
 }
 
-class _HistorySearchState extends State<HistorySearch> {
+class _SearchItemBarState extends State<SearchItemBar> {
   TextEditingController textEditingController = TextEditingController();
 
   onChanged(_) {
@@ -42,9 +43,10 @@ class _HistorySearchState extends State<HistorySearch> {
       showDialog(
         context: context,
         builder: (context) => AlertPopup(
-          desc: '미체크된 할 일, 루틴은 검색 되지 않아요',
+          desc:
+              '${ymdFullFormatter(locale: context.locale.toString(), dateTime: DateTime.now())}\n 이전 내역만 검색돼요.',
           buttonText: '확인',
-          height: 160,
+          height: 175,
           onTap: () => navigatorPop(context),
         ),
       );
@@ -71,7 +73,7 @@ class _HistorySearchState extends State<HistorySearch> {
           decoration: InputDecoration(
             isDense: true,
             contentPadding: const EdgeInsets.only(top: 5),
-            hintText: '할 일, 루틴 또는 메모 검색',
+            hintText: '이전의 할 일 또는 메모 검색',
             hintStyle: TextStyle(color: grey.s400, fontSize: 13),
             filled: true,
             fillColor: isLight ? Colors.white : const Color(0xff3D3E4B),

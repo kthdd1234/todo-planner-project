@@ -88,7 +88,7 @@ class HomeWidgetService {
 
     Map<String, String> entry = {
       "fontFamily": 'IM_Hyemin',
-      "emptyText": "할 일, 루틴이 없어요",
+      "emptyText": "할 일이 없어요",
       "header": jsonEncode(header),
       "taskList": jsonEncode(taskInfoList),
     };

@@ -10,8 +10,8 @@ import 'package:project/util/class.dart';
 import 'package:project/util/final.dart';
 import 'package:project/util/func.dart';
 
-class HistoryTask extends StatelessWidget {
-  HistoryTask({
+class SearchTask extends StatelessWidget {
+  SearchTask({
     super.key,
     required this.isLight,
     required this.taskMarkList,
@@ -22,7 +22,7 @@ class HistoryTask extends StatelessWidget {
   List<Map<String, dynamic>>? taskMarkList;
   List<String>? taskOrderList;
 
-  Widget wHistoryItem(Map<String, dynamic> taskMark, String? lastTaskId) {
+  Widget wSearchItem(Map<String, dynamic> taskMark, String? lastTaskId) {
     ColorClass color = getColorClass(taskMark['colorName']);
     Color? highlightColor = taskMark['isHighlighter'] == true
         ? isLight
@@ -30,7 +30,7 @@ class HistoryTask extends StatelessWidget {
             : color.s400
         : null;
 
-    return taskMark['mark'] != null && isVisibleHistory(taskMark['mark'])
+    return taskMark['mark'] != null && isSearchCategory(taskMark['mark'])
         ? Padding(
             padding:
                 EdgeInsets.only(bottom: taskMark['id'] == lastTaskId ? 5 : 10),
@@ -90,13 +90,17 @@ class HistoryTask extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     List<Map<String, dynamic>>? taskRenderList = taskMarkList?.map((taskMark) {
+          Map<String, dynamic> newTaskMark = {};
           TaskBox? taskItem = taskRepository.taskBox.get(taskMark['id']);
 
-          taskMark['name'] = taskItem?.name;
-          taskMark['colorName'] = taskItem?.colorName;
-          taskMark['isHighlighter'] = taskItem?.isHighlighter;
+          newTaskMark['id'] = taskMark['id'];
+          newTaskMark['name'] = taskItem?.name;
+          newTaskMark['colorName'] = taskItem?.colorName;
+          newTaskMark['mark'] = taskMark['mark'];
+          newTaskMark['memo'] = taskMark['memo'];
+          newTaskMark['isHighlighter'] = taskItem?.isHighlighter;
 
-          return taskMark;
+          return newTaskMark;
         }).toList() ??
         [];
 
@@ -119,7 +123,7 @@ class HistoryTask extends StatelessWidget {
               children: taskRenderList
                   .map(
                     (taskMark) => taskMark['name'] != null
-                        ? wHistoryItem(taskMark, taskRenderList.last['id'])
+                        ? wSearchItem(taskMark, taskRenderList.last['id'])
                         : const CommonNull(),
                   )
                   .toList(),

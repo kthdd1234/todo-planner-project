@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:project/common/CommonAppBar.dart';
 import 'dart:io';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:in_app_review/in_app_review.dart';
@@ -16,6 +15,7 @@ import 'package:project/util/constants.dart';
 import 'package:project/util/enum.dart';
 import 'package:project/util/final.dart';
 import 'package:project/util/func.dart';
+import 'package:project/widget/appBar/SettingAppBar.dart';
 import 'package:project/widget/button/ImageButton.dart';
 import 'package:project/widget/modalSheet/ThemeModalSheet.dart';
 import 'package:provider/provider.dart';
@@ -32,7 +32,7 @@ class SettingBody extends StatelessWidget {
     return SingleChildScrollView(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-        children: [const CommonAppBar(), ContentView(isLight: isLight)],
+        children: [SettingAppBar(), ContentView(isLight: isLight)],
       ),
     );
   }
@@ -210,12 +210,12 @@ class _ContentViewState extends State<ContentView> {
         value: onValue(widget.isLight ? '기본 테마' : '어두운 테마'),
         onTap: onTheme,
       ),
-      SettingItemClass(
-        name: '상태 아이콘',
-        svg: 'premium-state-icon',
-        value: onMarkIcon(),
-        onTap: onStateIcon,
-      ),
+      // SettingItemClass(
+      //   name: '상태 아이콘',
+      //   svg: 'premium-state-icon',
+      //   value: onMarkIcon(),
+      //   onTap: onStateIcon,
+      // ),
       // SettingItemClass(
       //   name: '한 주의 시작',
       //   svg: 'start-week',

@@ -27,6 +27,9 @@ const initFontFamily = 'IM_Hyemin';
 /// dayLabels
 const dayLabels = ['월', '화', '수', '목', '금', '토', '일'];
 
+///
+const days = ['일', '월', '화', '수', '목', '금', '토'];
+
 /// roundedRectangleBorder
 final roundedRectangleBorder =
     RoundedRectangleBorder(borderRadius: BorderRadius.circular(10));

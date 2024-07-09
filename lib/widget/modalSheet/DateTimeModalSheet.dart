@@ -379,9 +379,6 @@ class _SelectionDayState extends State<SelectionDay> {
   Widget build(BuildContext context) {
     String locale = context.locale.toString();
     bool isLight = context.watch<ThemeProvider>().isLight;
-    // bool isCompleted = dateTimeList.isNotEmpty;
-    // Color notCompletedBgColor = isLight ? grey.s300 : darkContainerColor;
-    // Color notCompletedTextColor = isLight ? grey.s400 : const Color(0xff616261);
 
     return Expanded(
       child: CommonContainer(
@@ -483,24 +480,33 @@ class WeekDay extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: weekDays
-          .map((item) => Expanded(
-                child: CommonButton(
-                  text: item.name,
-                  fontSize: 13,
-                  isBold: item.isVisible,
-                  textColor: textColor(item.isVisible),
-                  buttonColor: buttonColor(item.isVisible),
-                  verticalPadding: 10,
-                  outerPadding: EdgeInsets.only(
-                    right: item.id == weekDays.last.id ? 0 : 5,
-                  ),
-                  borderRadius: 7,
-                  onTap: () => onWeekDay(item),
-                ),
-              ))
-          .toList(),
+    return Expanded(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: [
+          Row(
+            children: weekDays
+                .map((item) => Expanded(
+                      child: CommonButton(
+                        text: item.name,
+                        fontSize: 13,
+                        isBold: item.isVisible,
+                        textColor: textColor(item.isVisible),
+                        buttonColor: buttonColor(item.isVisible),
+                        verticalPadding: 10,
+                        outerPadding: EdgeInsets.only(
+                          right: item.id == weekDays.last.id ? 0 : 5,
+                        ),
+                        borderRadius: 7,
+                        onTap: () => onWeekDay(item),
+                      ),
+                    ))
+                .toList(),
+          ),
+          Spacer(),
+          InfoText(text: '매주 선택 시 내일 할래요 기능을 사용할 수 없어요.')
+        ],
+      ),
     );
   }
 }
@@ -520,10 +526,9 @@ class MonthDay extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    bool isLight = context.watch<ThemeProvider>().isLight;
-
     return Expanded(
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.end,
         children: [
           CommonSpace(height: 5),
           GridView(
@@ -545,35 +550,38 @@ class MonthDay extends StatelessWidget {
                     ))
                 .toList(),
           ),
-          Spacer(),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(right: 3, top: 1),
-                child: Icon(Icons.info_outline, size: 12, color: grey.s400),
-              ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  CommonText(
-                    text: '30일, 31일을 선택할 경우 해당 일자가 없는 달에는',
-                    color: isLight ? grey.original : Colors.white,
-                    fontSize: 11,
-                  ),
-                  CommonText(
-                    text: '할 일 화면에 표시되지 않아요.',
-                    color: isLight ? grey.original : Colors.white,
-                    fontSize: 11,
-                    textAlign: TextAlign.end,
-                  )
-                ],
-              )
-            ],
-          )
+          const Spacer(),
+          InfoText(text: '매달 선택 시 내일 할래요 기능을 사용할 수 없어요.')
         ],
       ),
+    );
+  }
+}
+
+class InfoText extends StatelessWidget {
+  InfoText({super.key, required this.text});
+
+  String text;
+
+  @override
+  Widget build(BuildContext context) {
+    bool isLight = context.watch<ThemeProvider>().isLight;
+
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.end,
+      children: [
+        Icon(
+          Icons.info_outline,
+          size: 11,
+          color: isLight ? grey.s400 : Colors.white,
+        ),
+        CommonSpace(width: 5),
+        CommonText(
+          text: text,
+          color: isLight ? grey.original : Colors.white,
+          fontSize: 11,
+        ),
+      ],
     );
   }
 }

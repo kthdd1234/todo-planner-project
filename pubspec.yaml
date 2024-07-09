@@ -98,6 +98,9 @@ flutter:
     - assets/svg/setting-indigo.svg
     - assets/svg/dir-down.svg
     - assets/svg/dir-right.svg
+    - assets/svg/dir-right-s.svg
+    - assets/svg/dir-left.svg
+    - assets/svg/dir-left-s.svg
     - assets/svg/calendar-check.svg
     - assets/svg/pencil.svg
     - assets/svg/timeline.svg

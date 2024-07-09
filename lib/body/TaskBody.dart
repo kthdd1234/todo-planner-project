@@ -2,7 +2,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:multi_value_listenable_builder/multi_value_listenable_builder.dart';
-import 'package:project/common/CommonAppBar.dart';
 import 'package:project/model/record_box/record_box.dart';
 import 'package:project/model/user_box/user_box.dart';
 import 'package:project/provider/titleDateTimeProvider.dart';
@@ -51,7 +50,7 @@ class TaskBody extends StatelessWidget {
             return Column(
               children: [
                 BannerAdWidget(),
-                CommonAppBar(),
+                TaskAppBar(),
                 Expanded(
                   child: SingleChildScrollView(
                     child: ContentView(selectedDateTime: selectedDateTime),

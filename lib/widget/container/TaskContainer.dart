@@ -180,7 +180,7 @@ class _TaskContainerState extends State<TaskContainer> {
                 )
               : CommonEmpty(
                   height: 300,
-                  line_1: '할 일, 루틴이 없어요.',
+                  line_1: '추가된 할 일이 없어요.',
                   line_2: '+ 버튼을 눌러 추가해보세요.',
                   onTap: () => onAddTask(widget.selectedDateTime),
                 ),
