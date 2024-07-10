@@ -2,8 +2,10 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:multi_value_listenable_builder/multi_value_listenable_builder.dart';
+import 'package:project/common/CommonNull.dart';
 import 'package:project/model/record_box/record_box.dart';
 import 'package:project/model/user_box/user_box.dart';
+import 'package:project/provider/PremiumProvider.dart';
 import 'package:project/provider/titleDateTimeProvider.dart';
 import 'package:project/provider/selectedDateTimeProvider.dart';
 import 'package:project/util/final.dart';
@@ -22,6 +24,7 @@ class TaskBody extends StatelessWidget {
   Widget build(BuildContext context) {
     DateTime selectedDateTime =
         context.watch<SelectedDateTimeProvider>().seletedDateTime;
+    bool isPremium = context.watch<PremiumProvider>().isPremium;
 
     onHorizontalDragEnd(DragEndDetails dragEndDetails) {
       double? primaryVelocity = dragEndDetails.primaryVelocity;
@@ -49,7 +52,7 @@ class TaskBody extends StatelessWidget {
           builder: (btx, list, w) {
             return Column(
               children: [
-                BannerAdWidget(),
+                isPremium == false ? BannerAdWidget() : const CommonNull(),
                 TaskAppBar(),
                 Expanded(
                   child: SingleChildScrollView(

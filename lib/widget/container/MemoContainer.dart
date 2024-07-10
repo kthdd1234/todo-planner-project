@@ -10,6 +10,7 @@ import 'package:project/model/user_box/user_box.dart';
 import 'package:project/page/ImageSlidePage.dart';
 import 'package:project/page/MemoSettingPage.dart';
 import 'package:project/provider/themeProvider.dart';
+import 'package:project/util/class.dart';
 import 'package:project/util/constants.dart';
 import 'package:project/util/final.dart';
 import 'package:project/util/func.dart';
@@ -140,7 +141,7 @@ class _MemoContainerState extends State<MemoContainer> {
               children: [
                 HorizentalBorder(color: borderColor),
                 CustomPaint(
-                  painter: BacgroundPaint(isLight: isLight),
+                  painter: BacgroundPaint(isLight: isLight, color: orange.s50),
                   child: Padding(
                     padding: const EdgeInsets.symmetric(
                       vertical: 10,
@@ -183,9 +184,10 @@ class _MemoContainerState extends State<MemoContainer> {
 }
 
 class BacgroundPaint extends CustomPainter {
-  BacgroundPaint({required this.isLight});
+  BacgroundPaint({required this.isLight, required this.color});
 
   bool isLight;
+  Color color;
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -195,7 +197,7 @@ class BacgroundPaint extends CustomPainter {
 
     Path mainBackground = Path();
     mainBackground.addRect(Rect.fromLTRB(0, 0, width, height));
-    paint.color = isLight ? orange.s50 : const Color.fromARGB(255, 43, 43, 43);
+    paint.color = isLight ? color : const Color.fromARGB(255, 43, 43, 43);
 
     for (int i = 1; i < height; i++) {
       if (i % 15 == 0) {

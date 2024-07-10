@@ -202,7 +202,10 @@ class _MemoSettingPageState extends State<MemoSettingPage> {
                       child: Container(
                         color: containerColor,
                         child: CustomPaint(
-                          painter: BacgroundPaint(isLight: isLight),
+                          painter: BacgroundPaint(
+                            isLight: isLight,
+                            color: orange.s50,
+                          ),
                           child: Padding(
                             padding: const EdgeInsets.symmetric(
                               vertical: 10,

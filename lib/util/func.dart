@@ -278,8 +278,8 @@ Future<bool> isPurchasePremium() async {
     CustomerInfo customerInfo = await Purchases.getCustomerInfo();
     bool isActive =
         customerInfo.entitlements.all[entitlementIdentifier]?.isActive == true;
-    // return isActive;
-    return true;
+    return isActive;
+    // return true;
   } on PlatformException catch (e) {
     log('e =>> ${e.toString()}');
     return false;
@@ -333,4 +333,27 @@ DateTime weeklyEndDateTime(DateTime dateTime) {
   return dateTime.add(Duration(
     days: DateTime.daysPerWeek - dateTime.weekday - 1,
   ));
+}
+
+List<String?> getRecordValueList({
+  required String key,
+  required DateTime dateTime,
+  required String taskId,
+}) {
+  return List.generate(7, (index) {
+    Duration duration = Duration(days: index);
+    DateTime resultDateTime = dateTime.add(duration);
+    int recordKey = dateTimeKey(resultDateTime);
+    RecordBox? record = recordRepository.recordBox.get(recordKey);
+    List<Map<String, dynamic>>? taskMarkList = record?.taskMarkList;
+    String? value;
+
+    taskMarkList?.forEach((info) {
+      if (info['id'] == taskId) {
+        value = info[key];
+      }
+    });
+
+    return value;
+  });
 }

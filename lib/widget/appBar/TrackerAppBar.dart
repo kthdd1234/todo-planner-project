@@ -48,7 +48,7 @@ class _TrackerAppBarState extends State<TrackerAppBar> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          CommonText(text: '주간 트래커', fontSize: 18, isBold: !isLight),
+          CommonText(text: '일주일 트래커', fontSize: 18, isBold: !isLight),
           CommonTag(
             text: title,
             isBold: true,

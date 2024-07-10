@@ -2,11 +2,13 @@
 import 'package:flutter/material.dart';
 import 'package:multi_value_listenable_builder/multi_value_listenable_builder.dart';
 import 'package:project/common/CommonContainer.dart';
+import 'package:project/common/CommonNull.dart';
 import 'package:project/common/CommonText.dart';
 import 'package:project/model/record_box/record_box.dart';
 import 'package:project/model/task_box/task_box.dart';
 import 'package:project/provider/HistoryOrderProvider.dart';
 import 'package:project/provider/KeywordProvider.dart';
+import 'package:project/provider/PremiumProvider.dart';
 import 'package:project/provider/themeProvider.dart';
 import 'package:project/util/final.dart';
 import 'package:project/widget/ad/BannerAd.dart';
@@ -23,9 +25,11 @@ class SearchBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    bool isPremium = context.read<PremiumProvider>().isPremium;
+
     return Column(
       children: [
-        const BannerAdWidget(),
+        isPremium == false ? BannerAdWidget() : const CommonNull(),
         SearchAppBar(),
         const SearchItemBar(),
         Expanded(

@@ -1,9 +1,7 @@
 import 'dart:developer';
 
 import 'package:easy_localization/easy_localization.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:project/common/CommonContainer.dart';
 import 'package:project/common/CommonNull.dart';
 import 'package:project/common/CommonSpace.dart';
@@ -12,6 +10,7 @@ import 'package:project/common/CommonText.dart';
 import 'package:project/model/record_box/record_box.dart';
 import 'package:project/model/task_box/task_box.dart';
 import 'package:project/model/user_box/user_box.dart';
+import 'package:project/provider/PremiumProvider.dart';
 import 'package:project/provider/themeProvider.dart';
 import 'package:project/util/class.dart';
 import 'package:project/util/constants.dart';
@@ -20,6 +19,7 @@ import 'package:project/util/final.dart';
 import 'package:project/util/func.dart';
 import 'package:project/widget/ad/BannerAd.dart';
 import 'package:project/widget/appBar/TrackerAppBar.dart';
+import 'package:project/widget/container/MemoContainer.dart';
 import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 
@@ -68,9 +68,11 @@ class _TrackerBodyState extends State<TrackerBody> {
 
   @override
   Widget build(BuildContext context) {
+    bool isPremium = context.watch<PremiumProvider>().isPremium;
+
     return Column(
       children: [
-        const BannerAdWidget(),
+        isPremium == false ? BannerAdWidget() : const CommonNull(),
         TrackerAppBar(
           startDateTime: startDateTime,
           endDateTime: endDateTime,
@@ -80,7 +82,7 @@ class _TrackerBodyState extends State<TrackerBody> {
           startDateTime: startDateTime,
           endDateTime: endDateTime,
         ),
-        const Spacer(),
+        // const Spacer(),
         WeeklyArrowButton(
           startDateTime: startDateTime,
           endDateTime: endDateTime,
@@ -129,59 +131,56 @@ class _ContentViewState extends State<ContentView> {
 
     taskIdList = taskIdList.toSet().toList();
 
-    return SingleChildScrollView(
-      child: CommonContainer(
-        height: taskIdList.isNotEmpty ? null : 300,
-        innerPadding: const EdgeInsets.all(5),
-        outerPadding: const EdgeInsets.fromLTRB(7, 0, 7, 7),
-        child: taskIdList.isNotEmpty
-            ? Table(
-                border: TableBorder.symmetric(
-                  inside: BorderSide(
-                    width: 0.0,
-                    color: isLight ? grey.s300 : darkNotSelectedTextColor,
+    return Expanded(
+      child: SingleChildScrollView(
+        child: CommonContainer(
+          height: taskIdList.isNotEmpty ? null : 300,
+          innerPadding: const EdgeInsets.all(5),
+          outerPadding: const EdgeInsets.fromLTRB(7, 0, 7, 7),
+          child: taskIdList.isNotEmpty
+              ? Table(
+                  border: TableBorder.symmetric(
+                    inside: BorderSide(
+                      width: 0.0,
+                      color: isLight ? grey.s300 : darkNotSelectedTextColor,
+                    ),
                   ),
-                ),
-                columnWidths: const <int, TableColumnWidth>{
-                  0: IntrinsicColumnWidth(),
-                },
-                defaultVerticalAlignment: TableCellVerticalAlignment.middle,
-                children: <TableRow>[
-                  trackerTitle(),
-                  ...taskIdList.map((id) {
-                    TaskBox task = taskRepository.taskBox.get(id)!;
-                    List<String?> markList = List.generate(7, (index) {
-                      Duration duration = Duration(days: index);
-                      DateTime dateTime = widget.startDateTime.add(duration);
-                      int recordKey = dateTimeKey(dateTime);
-                      RecordBox? record =
-                          recordRepository.recordBox.get(recordKey);
-                      List<Map<String, dynamic>>? taskMarkList =
-                          record?.taskMarkList;
-                      String? taskMark;
-                      taskMarkList?.forEach(
-                        (info) =>
-                            info['id'] == id ? taskMark = info['mark'] : null,
+                  columnWidths: const <int, TableColumnWidth>{
+                    0: IntrinsicColumnWidth(),
+                  },
+                  defaultVerticalAlignment: TableCellVerticalAlignment.middle,
+                  children: <TableRow>[
+                    trackerTitle(),
+                    ...taskIdList.map((id) {
+                      TaskBox task = taskRepository.taskBox.get(id)!;
+                      List<String?> markList = getRecordValueList(
+                        key: 'mark',
+                        dateTime: widget.startDateTime,
+                        taskId: id,
+                      );
+                      List<String?> memoList = getRecordValueList(
+                        key: 'memo',
+                        dateTime: widget.startDateTime,
+                        taskId: id,
                       );
 
-                      return taskMark;
-                    });
-
-                    return trackerItem(
-                      text: task.name,
-                      isHighlight: task.isHighlighter == true,
-                      color: getColorClass(task.colorName),
-                      markList: markList,
-                    );
-                  }),
-                ],
-              )
-            : Center(
-                child: CommonText(
-                  text: '체크 내역이 없어요\n투두 화면에서 할 일의 상태를 체크해보세요',
-                  color: grey.original,
+                      return trackerItem(
+                        text: task.name,
+                        isHighlight: task.isHighlighter == true,
+                        color: getColorClass(task.colorName),
+                        memoList: memoList,
+                        markList: markList,
+                      );
+                    }),
+                  ],
+                )
+              : Center(
+                  child: CommonText(
+                    text: '체크 내역이 없어요\n투두 화면에서 할 일을 체크해보세요',
+                    color: isLight ? grey.original : darkTextColor,
+                  ),
                 ),
-              ),
+        ),
       ),
     );
   }
@@ -227,6 +226,7 @@ class _ContentViewState extends State<ContentView> {
   TableRow trackerItem({
     required String text,
     required List<String?> markList,
+    required List<String?> memoList,
     required ColorClass color,
     required bool isHighlight,
   }) {
@@ -252,18 +252,16 @@ class _ContentViewState extends State<ContentView> {
             ),
           ),
         ),
-        ...markList.map(
-          (mark) => Center(
-            child: SizedBox(
-              height: 32,
-              child: mark != null
-                  ? svgAsset(
-                      name: 'mark-$mark',
-                      width: 12,
-                      color: color.s400,
-                    )
-                  : const CommonNull(),
-            ),
+        ...List.generate(
+          7,
+          (index) => Center(
+            child: markList[index] != null
+                ? svgAsset(
+                    name: 'mark-${markList[index]}',
+                    width: 14,
+                    color: color.s400,
+                  )
+                : const CommonNull(),
           ),
         )
       ],
@@ -299,8 +297,8 @@ class WeeklyArrowButton extends StatelessWidget {
         child: CommonContainer(
             onTap: onTap,
             innerPadding: const EdgeInsets.all(0),
-            height: 30,
-            color: indigo.s200,
+            height: 35,
+            color: isLight ? indigo.s200 : darkButtonColor,
             child: Center(
               child: svgName != null
                   ? CommonSvgText(
@@ -330,7 +328,7 @@ class WeeklyArrowButton extends StatelessWidget {
       child: Row(
         children: [
           onButton(
-            text: '이전 주',
+            text: '지난 주',
             svgName: 'left',
             svgDirection: SvgDirectionEnum.left,
             onTap: onLeftWeek,

@@ -109,7 +109,13 @@ class _MarkPopupState extends State<MarkPopup> {
         selectedDateTime.month,
         selectedDateTime.day + 1,
       );
-      widget.taskBox.dateTimeList.add(tomorrowDateTime);
+      bool isContain = widget.taskBox.dateTimeList.any(
+          (dateTime) => dateTimeKey(dateTime) == dateTimeKey(tomorrowDateTime));
+
+      if (isContain == false) {
+        widget.taskBox.dateTimeList.add(tomorrowDateTime);
+      }
+
       await widget.taskBox.save();
     }
 

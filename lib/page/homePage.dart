@@ -28,7 +28,10 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   initializePremium() async {
     bool isPremium = await isPurchasePremium();
-    context.read<PremiumProvider>().setPremiumValue(isPremium);
+
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      context.read<PremiumProvider>().setPremiumValue(isPremium);
+    });
   }
 
   initializeHiveDB() async {

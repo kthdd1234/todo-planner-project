@@ -8,6 +8,7 @@ import 'package:project/common/CommonNull.dart';
 import 'package:project/common/CommonSpace.dart';
 import 'package:project/common/CommonText.dart';
 import 'package:project/model/task_box/task_box.dart';
+import 'package:project/provider/PremiumProvider.dart';
 import 'package:project/provider/titleDateTimeProvider.dart';
 import 'package:project/provider/selectedDateTimeProvider.dart';
 import 'package:project/util/constants.dart';
@@ -24,11 +25,13 @@ class CalendarBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    bool isPremium = context.watch<PremiumProvider>().isPremium;
+
     return MultiValueListenableBuilder(
       valueListenables: valueListenables,
       builder: (context, values, child) => Column(
         children: [
-          const BannerAdWidget(),
+          isPremium == false ? BannerAdWidget() : const CommonNull(),
           CalendarAppBar(),
           Expanded(child: SingleChildScrollView(child: ContentView())),
         ],
