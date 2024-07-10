@@ -15,6 +15,7 @@ import 'package:project/util/class.dart';
 import 'package:project/util/constants.dart';
 import 'package:project/util/final.dart';
 import 'package:purchases_flutter/purchases_flutter.dart';
+import 'package:table_calendar/table_calendar.dart';
 
 SvgPicture svgAsset({
   required String name,
@@ -356,4 +357,59 @@ List<String?> getRecordValueList({
 
     return value;
   });
+}
+
+calendarHeaderStyle(bool isLight) {
+  return HeaderStyle(
+    titleCentered: true,
+    titleTextStyle: TextStyle(
+      color: isLight ? Colors.black : Colors.white,
+      fontWeight: isLight ? null : FontWeight.bold,
+    ),
+    formatButtonVisible: false,
+    leftChevronIcon: Icon(
+      Icons.chevron_left,
+      color: isLight ? buttonColor : Colors.white,
+    ),
+    rightChevronIcon: Icon(
+      Icons.chevron_right,
+      color: isLight ? buttonColor : Colors.white,
+    ),
+  );
+}
+
+calendarDaysOfWeekStyle(bool isLight) {
+  return DaysOfWeekStyle(
+    weekdayStyle: TextStyle(
+      fontSize: 13,
+      color: isLight ? Colors.black : darkTextColor,
+      fontWeight: isLight ? null : FontWeight.bold,
+    ),
+    weekendStyle: TextStyle(
+      fontSize: 13,
+      color: red.s300,
+      fontWeight: isLight ? null : FontWeight.bold,
+    ),
+  );
+}
+
+calendarDetailStyle(bool isLight) {
+  return CalendarStyle(
+    defaultTextStyle: TextStyle(
+      color: isLight ? Colors.black : darkTextColor,
+      fontWeight: isLight ? null : FontWeight.bold,
+    ),
+    weekendTextStyle: TextStyle(
+      color: isLight ? Colors.black : red.s300,
+      fontWeight: isLight ? null : FontWeight.bold,
+    ),
+    todayDecoration: const BoxDecoration(
+      color: Colors.transparent,
+    ),
+    todayTextStyle: TextStyle(
+      color: isLight ? Colors.black : darkTextColor,
+      fontWeight: isLight ? null : FontWeight.bold,
+    ),
+    outsideDaysVisible: false,
+  );
 }

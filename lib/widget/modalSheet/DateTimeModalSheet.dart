@@ -13,6 +13,7 @@ import 'package:project/util/constants.dart';
 import 'package:project/util/final.dart';
 import 'package:project/util/func.dart';
 import 'package:project/widget/button/DateTimeButton.dart';
+import 'package:project/widget/calendar/calendarMarker.dart';
 import 'package:provider/provider.dart';
 import 'package:table_calendar/table_calendar.dart';
 
@@ -348,27 +349,11 @@ class _SelectionDayState extends State<SelectionDay> {
           targetDateTime: dateTime,
         ) !=
         -1) {
-      return Center(
-        child: Container(
-          width: 35,
-          height: 35,
-          decoration: BoxDecoration(
-            color: isLight ? widget.color.s200 : widget.color.s300,
-            borderRadius: BorderRadius.circular(100),
-          ),
-          child: Padding(
-            padding: const EdgeInsets.only(left: 0, top: 0),
-            child: Center(
-              child: CommonText(
-                fontSize: 13,
-                text: '${dateTime.day}',
-                color: isLight ? Colors.white : widget.color.s50,
-                isBold: true,
-                isNotTr: true,
-              ),
-            ),
-          ),
-        ),
+      return CalendarMarker(
+        size: 35,
+        day: '${dateTime.day}',
+        isLight: isLight,
+        color: widget.color,
       );
     }
 
@@ -388,52 +373,9 @@ class _SelectionDayState extends State<SelectionDay> {
           children: [
             TableCalendar(
               locale: locale,
-              headerStyle: HeaderStyle(
-                titleCentered: true,
-                titleTextStyle: TextStyle(
-                  color: isLight ? Colors.black : Colors.white,
-                  fontWeight: isLight ? null : FontWeight.bold,
-                ),
-                formatButtonVisible: false,
-                leftChevronIcon: Icon(
-                  Icons.chevron_left,
-                  color: isLight ? buttonColor : Colors.white,
-                ),
-                rightChevronIcon: Icon(
-                  Icons.chevron_right,
-                  color: isLight ? buttonColor : Colors.white,
-                ),
-              ),
-              calendarStyle: CalendarStyle(
-                defaultTextStyle: TextStyle(
-                  color: isLight ? Colors.black : darkTextColor,
-                  fontWeight: isLight ? null : FontWeight.bold,
-                ),
-                weekendTextStyle: TextStyle(
-                  color: isLight ? Colors.black : red.s300,
-                  fontWeight: isLight ? null : FontWeight.bold,
-                ),
-                todayDecoration: const BoxDecoration(
-                  color: Colors.transparent,
-                ),
-                todayTextStyle: TextStyle(
-                  color: isLight ? Colors.black : darkTextColor,
-                  fontWeight: isLight ? null : FontWeight.bold,
-                ),
-                outsideDaysVisible: false,
-              ),
-              daysOfWeekStyle: DaysOfWeekStyle(
-                weekdayStyle: TextStyle(
-                  fontSize: 13,
-                  color: isLight ? Colors.black : darkTextColor,
-                  fontWeight: isLight ? null : FontWeight.bold,
-                ),
-                weekendStyle: TextStyle(
-                  fontSize: 13,
-                  color: red.s300,
-                  fontWeight: isLight ? null : FontWeight.bold,
-                ),
-              ),
+              headerStyle: calendarHeaderStyle(isLight),
+              calendarStyle: calendarDetailStyle(isLight),
+              daysOfWeekStyle: calendarDaysOfWeekStyle(isLight),
               focusedDay: widget.focusedDay,
               firstDay: DateTime(2000, 1, 1),
               lastDay: DateTime(3000, 1, 1),
