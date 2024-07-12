@@ -168,11 +168,38 @@ isContainIdxDateTime({
   required String locale,
   required List<DateTime> selectionList,
   required DateTime targetDateTime,
+  String? dateTimeType,
 }) {
-  String targetYmd = ymdFormatter(dateTime: targetDateTime, locale: locale);
+  if (dateTimeType == taskDateTimeType.selection) {
+    String ymd = ymdFormatter(locale: locale, dateTime: targetDateTime);
+    return selectionList.indexWhere(
+      (dateTime) => ymdFormatter(locale: locale, dateTime: dateTime) == ymd,
+    );
+  } else if (dateTimeType == taskDateTimeType.everyWeek) {
+    String e = eFormatter(locale: locale, dateTime: targetDateTime);
+    return selectionList.indexWhere(
+      (dateTime) => eFormatter(locale: locale, dateTime: dateTime) == e,
+    );
+  } else {
+    DateTime now = DateTime.now();
+    String ymd = ymdFormatter(
+      locale: locale,
+      dateTime: DateTime(
+        now.year,
+        now.month,
+        targetDateTime.day,
+      ),
+    );
 
-  return selectionList.indexWhere((dateTime) =>
-      ymdFormatter(dateTime: dateTime, locale: locale) == targetYmd);
+    return selectionList.indexWhere(
+      (dateTime) =>
+          ymdFormatter(
+            locale: locale,
+            dateTime: DateTime(now.year, now.month, dateTime.day),
+          ) ==
+          ymd,
+    );
+  }
 }
 
 int ymdToInt(DateTime? dateTime) {

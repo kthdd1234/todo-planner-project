@@ -220,6 +220,12 @@ final taskDateTimeType = TaskDateTimeTypeClass(
   everyMonth: 'everyMonth',
 );
 
+final taskDateTimeLabel = {
+  'selection': '선택',
+  'everyWeek': '매주',
+  'everyMonth': '매달',
+};
+
 final tTodo = TaskClass(
   type: 'todo',
   name: '할 일',
@@ -281,11 +287,6 @@ final valueListenables = [
   taskRepository.taskBox.listenable(),
 ];
 
-final repeatText = {
-  'everyWeek': '매주',
-  'everyMonth': '매달',
-};
-
 final premiumBenefitList = [
   PremiumBenefitClass(
     svgName: 'premium-free',
@@ -322,3 +323,20 @@ final stateIconList = [
   StateIconClass(title: '덜 했어요', iconList: ['M']),
   StateIconClass(title: '내일 할래요', iconList: ['T']),
 ];
+
+final daysInfo = {
+  '일': 7,
+  '월': 1,
+  '화': 2,
+  '수': 3,
+  '목': 4,
+  '금': 5,
+  '토': 6,
+  0: 7,
+  1: 1,
+  2: 2,
+  3: 3,
+  4: 4,
+  5: 5,
+  6: 6,
+};

@@ -19,7 +19,6 @@ import 'package:project/util/final.dart';
 import 'package:project/util/func.dart';
 import 'package:project/widget/ad/BannerAd.dart';
 import 'package:project/widget/appBar/TrackerAppBar.dart';
-import 'package:project/widget/container/MemoContainer.dart';
 import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 
@@ -82,7 +81,6 @@ class _TrackerBodyState extends State<TrackerBody> {
           startDateTime: startDateTime,
           endDateTime: endDateTime,
         ),
-        // const Spacer(),
         WeeklyArrowButton(
           startDateTime: startDateTime,
           endDateTime: endDateTime,
@@ -190,6 +188,7 @@ class _ContentViewState extends State<ContentView> {
     String title = user.taskTitleInfo['title'];
     Color color = getColorClass(user.taskTitleInfo['colorName']).s400;
     bool isLight = context.watch<ThemeProvider>().isLight;
+    DateTime now = DateTime.now();
 
     return TableRow(
       children: <Widget>[
@@ -207,7 +206,8 @@ class _ContentViewState extends State<ContentView> {
           ),
         ),
         ...days.map(
-          (day) => SizedBox(
+          (day) => Container(
+            // color: daysInfo[day] == now.weekday ? tableHighlightColor : null,
             height: 32,
             child: Center(
               child: CommonText(
@@ -231,6 +231,12 @@ class _ContentViewState extends State<ContentView> {
     required bool isHighlight,
   }) {
     bool isLight = context.watch<ThemeProvider>().isLight;
+    Color? highlightColor = isHighlight
+        ? isLight
+            ? color.s50
+            : color.original
+        : null;
+    DateTime now = DateTime.now();
 
     return TableRow(
       children: <Widget>[
@@ -242,11 +248,7 @@ class _ContentViewState extends State<ContentView> {
             child: CommonText(
               text: text,
               fontSize: 12,
-              highlightColor: isHighlight
-                  ? isLight
-                      ? color.s50
-                      : color.original
-                  : null,
+              highlightColor: highlightColor,
               overflow: TextOverflow.ellipsis,
               isBold: !isLight,
             ),
@@ -254,14 +256,18 @@ class _ContentViewState extends State<ContentView> {
         ),
         ...List.generate(
           7,
-          (index) => Center(
-            child: markList[index] != null
-                ? svgAsset(
-                    name: 'mark-${markList[index]}',
-                    width: 14,
-                    color: color.s400,
-                  )
-                : const CommonNull(),
+          (index) => Container(
+            height: 32,
+            // color: daysInfo[index] == now.weekday ? tableHighlightColor : null,
+            child: Center(
+              child: markList[index] != null
+                  ? svgAsset(
+                      name: 'mark-${markList[index]}',
+                      width: 14,
+                      color: color.s400,
+                    )
+                  : const CommonNull(),
+            ),
           ),
         )
       ],

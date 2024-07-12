@@ -69,7 +69,7 @@ class _IntroPageState extends State<IntroPage> {
             const Spacer(),
             svgAsset(name: 'todo-planner-app-icon', width: 80),
             CommonSpace(height: 20),
-            CommonText(text: '반가워요! 투두 플래너와 함께', color: textColor),
+            CommonText(text: '반가워요! 투두 트래커와 함께', color: textColor),
             CommonSpace(height: 2),
             CommonText(text: '오늘의 할 일을 실천해봐요 :D', color: textColor),
             const Spacer(),

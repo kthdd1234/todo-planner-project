@@ -254,7 +254,9 @@ class _TaskItemState extends State<TaskItem> {
       locale: locale,
       selectionList: widget.taskBox.dateTimeList,
       targetDateTime: dateTime,
+      dateTimeType: widget.taskBox.dateTimeType,
     );
+
     ColorClass color = getColorClass(widget.taskBox.colorName);
     int key = dateTimeKey(dateTime);
     RecordBox? recordBox = recordRepository.recordBox.get(key);
@@ -288,6 +290,7 @@ class _TaskItemState extends State<TaskItem> {
 
   onMore(bool isLight) {
     String locale = context.locale.toString();
+    String title = yMFormatter(locale: locale, dateTime: DateTime.now());
     DateTime focusedDay =
         widget.taskBox.dateTimeType != taskDateTimeType.everyMonth
             ? widget.taskBox.dateTimeList[0]
@@ -296,6 +299,7 @@ class _TaskItemState extends State<TaskItem> {
                 widget.selectedDateTime.month,
                 widget.taskBox.dateTimeList[0].day,
               );
+    ColorClass color = getColorClass(widget.taskBox.colorName);
 
     showModalBottomSheet(
       isScrollControlled: true,
@@ -308,22 +312,44 @@ class _TaskItemState extends State<TaskItem> {
             CommonContainer(
               height: 420,
               innerPadding: const EdgeInsets.all(0),
-              child: TableCalendar(
-                locale: locale,
-                rowHeight: 55,
-                headerStyle: calendarHeaderStyle(isLight),
-                daysOfWeekStyle: calendarDaysOfWeekStyle(isLight),
-                calendarStyle: calendarDetailStyle(isLight),
-                focusedDay: focusedDay,
-                firstDay: DateTime(2000, 1, 1),
-                lastDay: DateTime(3000, 1, 1),
-                calendarBuilders: CalendarBuilders(
-                  markerBuilder: (btx, dateTime, _) => markerBuilder(
-                    locale,
-                    dateTime,
-                    isLight,
+              child: Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(20, 20, 20, 10),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        CommonText(text: title, fontSize: 16),
+                        CommonTag(
+                          text: taskDateTimeLabel[widget.taskBox.dateTimeType]!,
+                          isBold: true,
+                          textColor: Colors.white,
+                          bgColor: color.s200,
+                          fontSize: 11,
+                          onTap: () {},
+                        )
+                      ],
+                    ),
                   ),
-                ),
+                  TableCalendar(
+                    locale: locale,
+                    rowHeight: 55,
+                    headerVisible: false,
+                    // headerStyle: calendarHeaderStyle(isLight),
+                    daysOfWeekStyle: calendarDaysOfWeekStyle(isLight),
+                    calendarStyle: calendarDetailStyle(isLight),
+                    focusedDay: focusedDay,
+                    firstDay: DateTime(2000, 1, 1),
+                    lastDay: DateTime(3000, 1, 1),
+                    calendarBuilders: CalendarBuilders(
+                      markerBuilder: (btx, dateTime, _) => markerBuilder(
+                        locale,
+                        dateTime,
+                        isLight,
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
             CommonSpace(height: 10),

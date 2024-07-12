@@ -101,8 +101,8 @@ class _ContentViewState extends State<ContentView> {
 
   onShare() {
     Platform.isIOS
-        ? Share.share(APP_STORE_LINK, subject: '투두 플래너')
-        : Share.share('', subject: '투두 플래너');
+        ? Share.share(APP_STORE_LINK, subject: '투두트래커')
+        : Share.share('', subject: '투두트래커');
   }
 
   onInquire() async {

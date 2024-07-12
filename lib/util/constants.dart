@@ -15,6 +15,9 @@ final unTextColor = Colors.grey.shade600;
 /// whiteBgBtnColor
 const whiteBgBtnColor = Color(0xffF3F4F9);
 
+/// tableHighlightColor
+const tableHighlightColor = Color.fromARGB(255, 248, 248, 255);
+
 /// memoBgColor
 const memoBgColor = Color.fromARGB(255, 255, 251, 243);
 
