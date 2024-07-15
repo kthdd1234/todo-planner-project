@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:project/provider/themeProvider.dart';
 import 'package:project/util/constants.dart';
@@ -46,7 +47,7 @@ class CommonText extends StatelessWidget {
         color: highlightColor,
       ),
       child: Text(
-        text,
+        isNotTr == true ? text : text.tr(),
         textAlign: textAlign ?? TextAlign.center,
         softWrap: softWrap ?? true,
         style: TextStyle(

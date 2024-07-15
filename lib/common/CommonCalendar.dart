@@ -51,6 +51,7 @@ class _CommonCalendarState extends State<CommonCalendar> {
       color: color,
       fontSize: 13,
       isBold: !isLight,
+      isNotTr: true,
     );
   }
 
@@ -66,7 +67,12 @@ class _CommonCalendarState extends State<CommonCalendar> {
     return Column(
       children: [
         CommonSpace(height: 13.5),
-        CommonText(text: '${dateTime.day}', color: color, isBold: !isLight),
+        CommonText(
+          text: '${dateTime.day}',
+          color: color,
+          isBold: !isLight,
+          isNotTr: true,
+        ),
       ],
     );
   }

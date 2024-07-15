@@ -126,6 +126,7 @@ class _TaskContainerState extends State<TaskContainer> {
         children: [
           CommonTag(
             text: taskTitle,
+            isNotTr: true,
             isBold: !isLight,
             textColor: isLight
                 ? getColorClass(colorName).original
@@ -136,7 +137,6 @@ class _TaskContainerState extends State<TaskContainer> {
           ),
           taskFilterList.isNotEmpty
               ? ReorderableListView.builder(
-                  // proxyDecorator: proxyDecorator,
                   itemCount: taskFilterList.length,
                   shrinkWrap: true,
                   physics: const ClampingScrollPhysics(),
@@ -335,7 +335,6 @@ class _TaskItemState extends State<TaskItem> {
                     locale: locale,
                     rowHeight: 55,
                     headerVisible: false,
-                    // headerStyle: calendarHeaderStyle(isLight),
                     daysOfWeekStyle: calendarDaysOfWeekStyle(isLight),
                     calendarStyle: calendarDetailStyle(isLight),
                     focusedDay: focusedDay,

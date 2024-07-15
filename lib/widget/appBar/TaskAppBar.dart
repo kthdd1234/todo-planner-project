@@ -263,9 +263,6 @@ class _TitleDateTimeState extends State<TitleDateTime> {
               .changeSelectedDateTime(dateTime: args.value);
 
           navigatorPop(context);
-          // UserBox? user = userRepository.user;
-          // user.calendarFormat = CalendarFormat.month.toString();
-          // await user.save();
         },
       ),
     );
@@ -281,6 +278,7 @@ class _TitleDateTimeState extends State<TitleDateTime> {
     return CommonSvgText(
       text: yMFormatter(locale: locale, dateTime: titleDateTime),
       fontSize: 18,
+      isNotTr: true,
       isBold: !isLight,
       svgName: isLight ? 'dir-down' : 'dir-down-bold',
       svgWidth: 14,

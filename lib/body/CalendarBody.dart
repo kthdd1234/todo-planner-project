@@ -79,6 +79,7 @@ class _ContentViewState extends State<ContentView> {
               text: '${dateTime.day}',
               color: isLight ? Colors.white : calendarSelectedDateTimeTextColor,
               isBold: isLight,
+              isNotTr: true,
             )
           ],
         ),

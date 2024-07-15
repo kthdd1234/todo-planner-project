@@ -61,6 +61,7 @@ class _BannerAdWidgetState extends State<BannerAdWidget> {
                   textAlign: TextAlign.center,
                   isBold: !isLight,
                   color: isLight ? textColor : darkTextColor,
+                  isNotTr: true,
                 ),
               ),
       ),

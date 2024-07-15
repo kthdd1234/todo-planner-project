@@ -14,11 +14,12 @@ class CommonTag extends StatelessWidget {
     this.isBold,
     this.fontSize,
     this.vertical,
+    this.isNotTr,
   });
 
   String text;
   Color textColor, bgColor;
-  bool? isBold;
+  bool? isBold, isNotTr;
   double? fontSize, vertical;
   EdgeInsets? innerPadding;
 
@@ -41,6 +42,7 @@ class CommonTag extends StatelessWidget {
             color: textColor,
             isBold: isBold,
             fontSize: fontSize,
+            isNotTr: isNotTr,
           ),
         ),
       ),

@@ -483,6 +483,7 @@ class MonthDay extends StatelessWidget {
             children: monthDays
                 .map((monthDay) => CommonButton(
                       text: monthDay.id.toString(),
+                      isNotTr: true,
                       isBold: monthDay.isVisible,
                       textColor: textColor(monthDay.isVisible),
                       buttonColor: buttonColor(monthDay.isVisible),

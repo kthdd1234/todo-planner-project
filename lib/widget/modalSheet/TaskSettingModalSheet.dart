@@ -188,7 +188,7 @@ class _TaskSettingModalSheetState extends State<TaskSettingModalSheet> {
     setState(() {});
 
     Fluttertoast.showToast(
-      msg: "추가 되었습니다",
+      msg: "추가 되었습니다".tr(),
       toastLength: Toast.LENGTH_SHORT,
       gravity: ToastGravity.TOP,
       timeInSecForIosWeb: 2,
@@ -261,6 +261,7 @@ class _TaskSettingModalSheetState extends State<TaskSettingModalSheet> {
                 onTap: onDateTime,
                 child: CommonSvgText(
                   text: displayDateTime(locale),
+                  isNotTr: true,
                   fontSize: 14,
                   textColor: isLight ? textColor : Colors.white,
                   svgColor: grey.s400,

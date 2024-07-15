@@ -1,4 +1,5 @@
 // ignore_for_file: use_build_context_synchronously
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:project/body/CalendarBody.dart';
 import 'package:project/body/SearchBody.dart';
@@ -79,7 +80,7 @@ class _HomePageState extends State<HomePage> {
     List<BottomNavigationBarItem> items = bottomNavigationBarItemList
         .map((item) => BottomNavigationBarItem(
               icon: item.icon,
-              label: item.label,
+              label: item.label!.tr(),
             ))
         .toList();
 

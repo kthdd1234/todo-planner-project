@@ -1,5 +1,7 @@
 // ignore_for_file: use_build_context_synchronously
 
+import 'dart:developer';
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:project/common/CommonBackground.dart';
@@ -24,16 +26,18 @@ class IntroPage extends StatefulWidget {
 class _IntroPageState extends State<IntroPage> {
   onStart() async {
     String locale = context.locale.toString();
+
+    log('$locale');
     DateTime now = DateTime.now();
     String userId = UniqueKey().hashCode.toString();
     String fontFamily = 'IM_Hyemin';
     String calendarFormat = CalendarFormat.week.toString();
     Map<String, dynamic> taskTitleInfo = {
-      'title': '할 일 리스트',
+      'title': locale == 'ko' ? '할 일 리스트' : 'a to-do list',
       'colorName': "남색"
     };
     Map<String, dynamic> memoTitleInfo = {
-      'title': '메모',
+      'title': locale == 'ko' ? '메모' : 'memo',
       'colorName': "주황색",
     };
 

@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:project/provider/themeProvider.dart';
 import 'package:project/util/constants.dart';
@@ -41,7 +42,7 @@ class CommonOutlineInputField extends StatelessWidget {
         cursorColor: selectedColor,
         decoration: InputDecoration(
           contentPadding: const EdgeInsets.only(left: 25),
-          hintText: hintText,
+          hintText: hintText.tr(),
           hintStyle: TextStyle(color: grey.s400),
           filled: true,
           fillColor: isLight ? whiteBgBtnColor : const Color(0xff3D3E4B),
