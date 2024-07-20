@@ -1,15 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
-import 'package:project/common/CommonNull.dart';
 import 'package:project/common/CommonText.dart';
-import 'package:project/provider/PremiumProvider.dart';
 import 'package:project/provider/themeProvider.dart';
 import 'package:project/util/constants.dart';
 import 'package:project/util/func.dart';
 import 'package:provider/provider.dart';
 
 class BannerAdWidget extends StatefulWidget {
-  BannerAdWidget({super.key});
+  const BannerAdWidget({super.key});
 
   @override
   State<BannerAdWidget> createState() => _BannerAdWidgetState();

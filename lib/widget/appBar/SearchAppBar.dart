@@ -1,4 +1,3 @@
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:multi_value_listenable_builder/multi_value_listenable_builder.dart';
 import 'package:project/common/CommonSpace.dart';
@@ -16,7 +15,7 @@ import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 
 class SearchAppBar extends StatefulWidget {
-  SearchAppBar({super.key});
+  const SearchAppBar({super.key});
 
   @override
   State<SearchAppBar> createState() => _SearchAppBarState();

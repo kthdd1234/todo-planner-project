@@ -4,7 +4,7 @@ import 'package:project/provider/themeProvider.dart';
 import 'package:provider/provider.dart';
 
 class SettingAppBar extends StatelessWidget {
-  SettingAppBar({super.key});
+  const SettingAppBar({super.key});
 
   @override
   Widget build(BuildContext context) {

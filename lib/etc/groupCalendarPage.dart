@@ -14,7 +14,7 @@ class GroupCalendarPage extends StatelessWidget {
           title: '캘린더',
           actions: [],
         ),
-        body: Column(
+        body: const Column(
           children: [],
         ),
       ),

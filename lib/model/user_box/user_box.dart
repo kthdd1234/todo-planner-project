@@ -1,4 +1,3 @@
-import 'dart:typed_data';
 import 'package:hive/hive.dart';
 
 part 'user_box.g.dart';

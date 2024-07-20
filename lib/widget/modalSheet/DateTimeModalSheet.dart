@@ -445,7 +445,7 @@ class WeekDay extends StatelessWidget {
                     ))
                 .toList(),
           ),
-          Spacer(),
+          const Spacer(),
           InfoText(text: '매주 선택 시 내일 할래요 기능을 사용할 수 없어요.')
         ],
       ),

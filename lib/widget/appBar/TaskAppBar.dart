@@ -23,7 +23,7 @@ import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 class TaskAppBar extends StatelessWidget {
-  TaskAppBar({super.key});
+  const TaskAppBar({super.key});
 
   @override
   Widget build(BuildContext context) {

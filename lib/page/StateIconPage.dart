@@ -23,7 +23,7 @@ class StateIconPage extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           CommonText(text: state.title),
-                          Row(children: [
+                          const Row(children: [
                             //
                           ])
                         ],

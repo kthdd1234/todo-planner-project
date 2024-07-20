@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:project/common/CommonText.dart';
-import 'package:project/util/class.dart';
 
 class CommonTag extends StatelessWidget {
   CommonTag({

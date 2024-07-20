@@ -29,13 +29,13 @@ class SearchBody extends StatelessWidget {
 
     return Column(
       children: [
-        isPremium == false ? BannerAdWidget() : const CommonNull(),
-        SearchAppBar(),
+        isPremium == false ? const BannerAdWidget() : const CommonNull(),
+        const SearchAppBar(),
         const SearchItemBar(),
         Expanded(
           child: GestureDetector(
             onTap: () => FocusScope.of(context).unfocus(),
-            child: ContentView(),
+            child: const ContentView(),
           ),
         ),
       ],

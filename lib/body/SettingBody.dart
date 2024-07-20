@@ -32,7 +32,7 @@ class SettingBody extends StatelessWidget {
     return SingleChildScrollView(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-        children: [SettingAppBar(), ContentView(isLight: isLight)],
+        children: [const SettingAppBar(), ContentView(isLight: isLight)],
       ),
     );
   }

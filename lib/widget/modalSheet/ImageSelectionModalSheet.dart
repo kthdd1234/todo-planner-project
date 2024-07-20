@@ -2,8 +2,6 @@ import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:project/common/CommonButton.dart';
 import 'package:project/common/CommonImage.dart';
 import 'package:project/common/CommonModalSheet.dart';
 import 'package:project/common/CommonSpace.dart';

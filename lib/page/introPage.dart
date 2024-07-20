@@ -27,7 +27,7 @@ class _IntroPageState extends State<IntroPage> {
   onStart() async {
     String locale = context.locale.toString();
 
-    log('$locale');
+    log(locale);
     DateTime now = DateTime.now();
     String userId = UniqueKey().hashCode.toString();
     String fontFamily = 'IM_Hyemin';

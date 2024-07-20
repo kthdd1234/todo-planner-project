@@ -4,7 +4,6 @@ import 'package:project/common/CommonText.dart';
 import 'package:project/model/record_box/record_box.dart';
 import 'package:project/page/MemoSettingPage.dart';
 import 'package:project/provider/selectedDateTimeProvider.dart';
-import 'package:project/provider/themeProvider.dart';
 import 'package:project/util/class.dart';
 import 'package:project/util/constants.dart';
 import 'package:project/util/final.dart';

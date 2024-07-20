@@ -5,11 +5,6 @@ import 'package:project/repositories/task_repository.dart';
 import 'package:project/repositories/user_repository.dart';
 import 'package:project/util/class.dart';
 import 'package:project/util/enum.dart';
-import 'package:project/widget/appBar/CalendarAppBar.dart';
-import 'package:project/widget/appBar/SearchAppBar.dart';
-import 'package:project/widget/appBar/SettingAppBar.dart';
-import 'package:project/widget/appBar/TaskAppBar.dart';
-import 'package:project/widget/appBar/TrackerAppBar.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 final bottomNavigationBarItemList = [

@@ -1,4 +1,3 @@
-import 'dart:developer';
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
@@ -71,7 +70,7 @@ class _TrackerBodyState extends State<TrackerBody> {
 
     return Column(
       children: [
-        isPremium == false ? BannerAdWidget() : const CommonNull(),
+        isPremium == false ? const BannerAdWidget() : const CommonNull(),
         TrackerAppBar(
           startDateTime: startDateTime,
           endDateTime: endDateTime,

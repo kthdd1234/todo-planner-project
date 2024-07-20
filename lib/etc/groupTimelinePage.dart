@@ -11,7 +11,7 @@ class GroupTimelinePage extends StatelessWidget {
     return CommonBackground(
       child: CommonScaffold(
         appBarInfo: AppBarInfoClass(title: '타임라인'),
-        body: Column(
+        body: const Column(
           children: [],
         ),
       ),
