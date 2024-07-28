@@ -24,7 +24,7 @@ class CommonPopup extends StatelessWidget {
       shape: roundedRectangleBorder,
       content: Container(
         decoration: BoxDecoration(
-          color: isLight ? null : darkBgColor,
+          color: isLight ? Colors.white : darkBgColor,
           image: isLight
               ? const DecorationImage(
                   image: AssetImage('assets/image/CloudyApple.png'),

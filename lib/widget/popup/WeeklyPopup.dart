@@ -50,6 +50,7 @@ class _WeeklyPopupState extends State<WeeklyPopup> {
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
             SfDateRangePicker(
+              backgroundColor: Colors.transparent,
               monthViewSettings: DateRangePickerMonthViewSettings(
                 viewHeaderStyle: DateRangePickerViewHeaderStyle(
                   textStyle: TextStyle(
@@ -60,6 +61,7 @@ class _WeeklyPopupState extends State<WeeklyPopup> {
                 ),
               ),
               headerStyle: DateRangePickerHeaderStyle(
+                backgroundColor: Colors.transparent,
                 textStyle: TextStyle(
                   fontWeight: isLight ? null : FontWeight.bold,
                   color: isLight ? Colors.black : Colors.white,

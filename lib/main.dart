@@ -110,11 +110,12 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) async {
     UserBox? user = userBox?.get('userProfile');
+    String locale = context.locale.toString();
     bool isBackground = state == AppLifecycleState.paused ||
         state == AppLifecycleState.detached;
 
     if (isBackground && user != null) {
-      await HomeWidgetService().updateTodoRoutin();
+      await HomeWidgetService().updateTodoRoutin(locale);
     }
   }
 

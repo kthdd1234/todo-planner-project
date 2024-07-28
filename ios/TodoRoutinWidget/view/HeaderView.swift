@@ -5,13 +5,14 @@ struct HeaderView: View {
     let widgetFamily: WidgetFamily
     let fontFamily: String
     let header: HeaderModel
+    let widgetTheme: String
     
     var body: some View {
         HStack(alignment: .bottom) {
             TextView(text: header.title,
                      fontFamily: fontFamily,
                      fontSize: 13,
-                     isBold: false,
+                     isBold: widgetTheme == "dark",
                      textColor: color(rgb: header.textRGB),
                      lineThroughColor: nil)
             .padding(EdgeInsets(top: 5, leading: 7, bottom: 5, trailing: 7))
@@ -23,7 +24,7 @@ struct HeaderView: View {
                          fontFamily: fontFamily,
                          fontSize: 11,
                          isBold: true,
-                         textColor: .gray,
+                         textColor: widgetTheme == "dark"  ? .white : .gray,
                          lineThroughColor: nil)
             }
             

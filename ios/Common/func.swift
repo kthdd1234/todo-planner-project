@@ -49,3 +49,7 @@ func prefixList(widgetFamily: WidgetFamily, list: [ItemModel]) -> [ItemModel] {
 }
 
 
+
+func bgColor(theme: String?) -> Color? {
+    return theme == "dark" ? widgetDarkColor : Color.white
+}

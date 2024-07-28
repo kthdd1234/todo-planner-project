@@ -16,4 +16,8 @@ var bundle: URL {
 }
 
 // widgetBgColor
-public var widgetBgColor: Color = Color(red: 243/255, green: 244/255, blue: 249/255)
+public var widgetWhiteColor: Color = Color(red: 243/255, green: 244/255, blue: 249/255)
+
+
+// widgetDarkColor
+public var widgetDarkColor: Color = Color(red: 28/255, green: 28/255, blue: 30/255)

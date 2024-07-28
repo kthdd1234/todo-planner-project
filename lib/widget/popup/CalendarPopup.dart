@@ -27,7 +27,9 @@ class CalendarPopup extends StatelessWidget {
       height: 400,
       child: CommonContainer(
         child: SfDateRangePicker(
+          backgroundColor: Colors.transparent,
           headerStyle: DateRangePickerHeaderStyle(
+            backgroundColor: Colors.transparent,
             textStyle: TextStyle(
               fontWeight: isLight ? null : FontWeight.bold,
               color: isLight ? Colors.black : Colors.white,

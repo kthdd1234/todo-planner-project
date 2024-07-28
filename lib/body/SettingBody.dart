@@ -70,11 +70,19 @@ class _ContentViewState extends State<ContentView> {
     movePage(context: context, page: const PremiumPage());
   }
 
-  onTheme() {
+  onTheme(String theme) {
     showModalBottomSheet(
       context: context,
-      builder: (context) => const ThemeModalSheet(),
+      builder: (context) => ThemeModalSheet(title: '화면 테마', theme: theme),
     );
+  }
+
+  onWidgetTheme(String widgetTheme) async {
+    await showModalBottomSheet(
+      context: context,
+      builder: (context) => ThemeModalSheet(title: '위젯 테마', theme: widgetTheme),
+    );
+    setState(() {});
   }
 
   onPrivate() async {
@@ -180,6 +188,8 @@ class _ContentViewState extends State<ContentView> {
   @override
   Widget build(BuildContext context) {
     bool isPremium = context.watch<PremiumProvider>().isPremium;
+    String theme = context.watch<ThemeProvider>().theme;
+    String widgetTheme = userRepository.user.widgetTheme ?? 'light';
 
     List<SettingItemClass> settingItemList = [
       SettingItemClass(
@@ -207,8 +217,14 @@ class _ContentViewState extends State<ContentView> {
       SettingItemClass(
         name: '화면 테마',
         svg: 'theme',
-        value: onValue(widget.isLight ? '기본 테마' : '어두운 테마'),
-        onTap: onTheme,
+        value: onValue(widget.isLight ? '밝은 테마' : '어두운 테마'),
+        onTap: () => onTheme(theme),
+      ),
+      SettingItemClass(
+        name: '위젯 테마',
+        svg: 'widget',
+        value: onValue(widgetTheme == 'light' ? '밝은 테마' : '어두운 테마'),
+        onTap: () => onWidgetTheme(widgetTheme),
       ),
       // SettingItemClass(
       //   name: '상태 아이콘',

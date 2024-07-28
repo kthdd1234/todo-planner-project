@@ -3,7 +3,7 @@ import SwiftUI
 
 struct Provider: TimelineProvider {
     func placeholder(in context: Context) -> TodoRoutinEntry {
-        TodoRoutinEntry(date: Date(), header: "", taskList: "", fontFamily: "", emptyText: "")
+        TodoRoutinEntry(date: Date(), header: "", taskList: "", fontFamily: "", emptyText: "", widgetTheme: "")
     }
 
     func getSnapshot(in context: Context, completion: @escaping (TodoRoutinEntry) -> ()) {
@@ -12,9 +12,10 @@ struct Provider: TimelineProvider {
         let header = data?.string(forKey: "header") ?? ""
         let taskList = data?.string(forKey: "taskList") ?? ""
         let fontFamily = data?.string(forKey: "fontFamily") ?? "IM_Hyemin"
-        let emptyText = data?.string(forKey: "emptyText") ?? "할 일, 루틴이 없어요."
+        let emptyText = data?.string(forKey: "emptyText") ?? "추가된 할 일이 없어요."
+        let widgetTheme = data?.string(forKey: "widgetTheme") ?? "light"
         
-        let entry = TodoRoutinEntry(date: Date(), header: header, taskList: taskList, fontFamily: fontFamily, emptyText: emptyText)
+        let entry = TodoRoutinEntry(date: Date(), header: header, taskList: taskList, fontFamily: fontFamily, emptyText: emptyText, widgetTheme: widgetTheme)
         
         completion(entry)
     }
@@ -33,6 +34,7 @@ struct TodoRoutinEntry: TimelineEntry {
     let taskList: String
     let fontFamily: String
     let emptyText: String
+    let widgetTheme: String
 }
 
 struct TodoRoutinWidgetEntryView : View {
@@ -53,12 +55,13 @@ struct TodoRoutinWidgetEntryView : View {
 
     var body: some View {
         VStack {
-            HeaderView(widgetFamily: eWidgetFamily, fontFamily: entry.fontFamily, header: headerState)
-            ListView(widgetFamily: eWidgetFamily,emptyText: entry.emptyText != "" ? entry.emptyText : "할 일, 루틴이 없어요" , fontFamily: entry.fontFamily, itemList: itemListState
-            )
+            HeaderView(widgetFamily: eWidgetFamily, fontFamily: entry.fontFamily, header: headerState, widgetTheme: entry.widgetTheme)
+            ListView(widgetFamily: eWidgetFamily,emptyText: entry.emptyText != "" ? entry.emptyText : "추가된 할 일이 없어요." , fontFamily: entry.fontFamily, itemList: itemListState, widgetTheme: entry.widgetTheme)
         }
         .widgetURL(URL(string: "todoRoutin://message?message=task&homeWidget"))
-        .containerBackground(for: .widget) {}
+        .containerBackground(for: .widget) {
+            bgColor(theme: entry.widgetTheme)
+        }
     }
 }
 
@@ -77,5 +80,5 @@ struct TodoRoutinWidget: Widget {
 #Preview(as: .systemMedium) {
     TodoRoutinWidget()
 } timeline: {
-    TodoRoutinEntry(date: .now, header: "", taskList: "", fontFamily: "", emptyText: "")
+    TodoRoutinEntry(date: .now, header: "", taskList: "", fontFamily: "", emptyText: "", widgetTheme: "")
 }

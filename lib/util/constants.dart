@@ -46,6 +46,9 @@ const androidNativeTestId = 'ca-app-pub-3940256099942544/2247696110';
 /// androidAppOpeningTestId
 const androidAppOpeningTestId = 'ca-app-pub-3940256099942544/9257395921';
 
+/// androidInterstitialTestId
+const androidInterstitialTestId = 'ca-app-pub-3940256099942544/1033173712';
+
 /// androidBannerRealId
 const androidBannerRealId = 'ca-app-pub-6804308271128440/8694437458';
 
@@ -54,6 +57,9 @@ const androidNativeRealId = 'ca-app-pub-6804308271128440/2236361388';
 
 /// androidAppOpeningRealId
 const androidAppOpeningRealId = 'ca-app-pub-6804308271128440/4852568826';
+
+/// androidInterstitialRealId
+const androidInterstitialRealId = 'ca-app-pub-6804308271128440/8552912164';
 
 /// iOSBannerTestId
 const iOSBannerTestId = 'ca-app-pub-3940256099942544/2435281174';
@@ -64,6 +70,9 @@ const iOSNativeTestId = 'ca-app-pub-3940256099942544/3986624511';
 // iOSAppOpeningTestId
 const iOSAppOpeningTestId = 'ca-app-pub-3940256099942544/5575463023';
 
+/// iOSInterstitialTestId
+const iOSInterstitialTestId = 'ca-app-pub-3940256099942544/4411468910';
+
 /// iOSBannerRealId
 const iOSBannerRealId = 'ca-app-pub-6804308271128440/5521479208';
 
@@ -72,6 +81,9 @@ const iOSNativeRealId = 'ca-app-pub-6804308271128440/5985687094';
 
 // iOSAppOpeningRealId
 const iOSAppOpeningRealId = 'ca-app-pub-6804308271128440/3184263934';
+
+/// iOSInterstitialRealId
+const iOSInterstitialRealId = 'ca-app-pub-6804308271128440/2124434296';
 
 /// appleApiKey
 const appleApiKey = 'appl_pXSYpqBvTJABLdPrTuwNjLMeKTJ';
@@ -93,7 +105,7 @@ const APP_STORE_LINK =
 const PLAY_STORE_LINK = "";
 
 /// themeBgColor
-const darkBgColor = Color(0xff1C1C1E);
+const darkBgColor = Color(0xff1C1C1E); // 28, 28, 30
 
 /// darkTextColor
 const darkTextColor = Color(0xffDADDE0);

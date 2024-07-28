@@ -18,6 +18,8 @@ class UserBox extends HiveObject {
     this.googleDriveInfo,
     this.theme,
     this.filterIdList,
+    this.widgetTheme,
+    this.watchAdDateTime,
   });
 
   @HiveField(0)
@@ -59,8 +61,14 @@ class UserBox extends HiveObject {
   @HiveField(12)
   List<String>? filterIdList;
 
+  @HiveField(13)
+  String? widgetTheme;
+
+  @HiveField(14)
+  DateTime? watchAdDateTime;
+
   @override
   String toString() {
-    return '{id: $id, createDateTime: $createDateTime, alarmInfo: $alarmInfo, passwords: $passwords, calendarFormat: $calendarFormat, calendarMaker: $calendarMaker, language: $language, fontFamily: $fontFamily, googleDriveInfo: $googleDriveInfo, taskTitleInfo: $taskTitleInfo, memoTitleInfo: $memoTitleInfo, theme: $theme, filterIdList: $filterIdList}';
+    return '';
   }
 }

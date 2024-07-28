@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:ui';
 
+import 'package:flutter/cupertino.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:home_widget/home_widget.dart';
 import 'package:project/model/record_box/record_box.dart';
@@ -8,6 +9,7 @@ import 'package:project/model/task_box/task_box.dart';
 import 'package:project/model/user_box/user_box.dart';
 import 'package:project/repositories/task_repository.dart';
 import 'package:project/util/class.dart';
+import 'package:project/util/constants.dart';
 import 'package:project/util/final.dart';
 import 'package:project/util/func.dart';
 
@@ -23,17 +25,22 @@ class HomeWidgetService {
     return await HomeWidget.updateWidget(iOSName: widgetName);
   }
 
-  updateTodoRoutin() {
+  updateTodoRoutin(String locale) {
     DateTime now = DateTime.now();
     UserBox? user = userRepository.user;
     int recordKey = dateTimeKey(now);
     RecordBox? recordBox = recordRepository.recordBox.get(recordKey);
-    String today = mdeFormatter(locale: 'ko', dateTime: now); // 작업 필요!
+    String today = mdeFormatter(locale: locale, dateTime: now); // 작업 필요!
     Map<String, dynamic>? taskTitleInfo = user.taskTitleInfo;
+    String widgetTheme = user.widgetTheme ?? 'light';
+    bool isWidgetLight = widgetTheme == 'light';
     String taskTitle = taskTitleInfo['title'];
     String taskTitleColorName = taskTitleInfo['colorName'];
-    Color taskTitleTextColor = getColorClass(taskTitleColorName).original;
-    Color taskTitleBgColor = getColorClass(taskTitleColorName).s50;
+    ColorClass taskTitleColor = getColorClass(taskTitleColorName);
+    Color taskTitleTextColor =
+        isWidgetLight ? taskTitleColor.original : taskTitleColor.s200;
+    Color taskTitleBgColor =
+        isWidgetLight ? taskTitleColor.s50 : darkButtonColor;
     WidgetHeaderClass header = WidgetHeaderClass(
       taskTitle,
       today,
@@ -56,10 +63,10 @@ class HomeWidgetService {
     );
     List<WidgetItemClass> taskInfoList = taskList.map((task) {
       ColorClass color = getColorClass(task.colorName);
-      Color barColor = color.s100;
-      Color lineColor = color.s300;
-      Color markColor = color.s200;
-      Color highlightColor = color.s50;
+      Color barColor = isWidgetLight ? color.s100 : color.s400;
+      Color lineColor = isWidgetLight ? color.s300 : color.s200;
+      Color markColor = isWidgetLight ? color.s200 : color.s300;
+      Color highlightColor = isWidgetLight ? color.s50 : color.s400;
 
       String id = task.id;
       String name = task.name;
@@ -89,6 +96,7 @@ class HomeWidgetService {
       "emptyText": "추가된 할 일이 없어요",
       "header": jsonEncode(header),
       "taskList": jsonEncode(taskInfoList),
+      "widgetTheme": widgetTheme,
     };
 
     return updateWidget(data: entry, widgetName: 'TodoRoutinWidget');

@@ -39,6 +39,7 @@ class _HomePageState extends State<HomePage> {
 
     if (mounted) {
       user.theme ??= 'light';
+      user.widgetTheme ??= 'light';
       user.filterIdList ??= filterIdList;
 
       WidgetsBinding.instance.addPostFrameCallback((timeStamp) {

@@ -10,7 +10,9 @@ import 'package:project/widget/button/ModalButton.dart';
 import 'package:provider/provider.dart';
 
 class ThemeModalSheet extends StatefulWidget {
-  const ThemeModalSheet({super.key});
+  ThemeModalSheet({super.key, required this.title, required this.theme});
+
+  String title, theme;
 
   @override
   State<ThemeModalSheet> createState() => _ThemeModalSheetState();
@@ -18,34 +20,51 @@ class ThemeModalSheet extends StatefulWidget {
 
 class _ThemeModalSheetState extends State<ThemeModalSheet> {
   button({
+    required String id,
     required String theme,
-    required String target,
     required String name,
   }) {
-    bool isTarget = theme == target;
+    bool isSelected = theme == id;
     bool isLight = theme == 'light';
-
-    return ModalButton(
-      svgName: target,
-      actionText: name,
-      isBold: isTarget ? true : !isLight,
-      color: isTarget
+    bool isScreen = widget.title == '화면 테마';
+    Color buttonTextColor = {
+      '화면 테마': isSelected
           ? Colors.white
           : isLight
               ? textColor
               : grey.s400,
-      bgColor: isTarget
+      '위젯 테마': isSelected ? Colors.white : textColor,
+    }[widget.title]!;
+    Color buttonBgColor = {
+      '화면 테마': isSelected
           ? isLight
               ? indigo.s300
               : textColor
           : isLight
               ? Colors.white
               : darkContainerColor,
+      '위젯 테마': isSelected ? indigo.s300 : Colors.white,
+    }[widget.title]!;
+
+    return ModalButton(
+      svgName: id,
+      actionText: name,
+      isBold: isSelected
+          ? true
+          : isScreen
+              ? !isLight
+              : false,
+      color: buttonTextColor,
+      bgColor: buttonBgColor,
       onTap: () async {
         UserBox user = userRepository.user;
 
-        context.read<ThemeProvider>().setThemeValue(target);
-        user.theme = target;
+        if (isScreen) {
+          context.read<ThemeProvider>().setThemeValue(id);
+          user.theme = id;
+        } else {
+          user.widgetTheme = id;
+        }
 
         await user.save();
         navigatorPop(context);
@@ -55,16 +74,14 @@ class _ThemeModalSheetState extends State<ThemeModalSheet> {
 
   @override
   Widget build(BuildContext context) {
-    String theme = context.watch<ThemeProvider>().theme;
-
     return CommonModalSheet(
-      title: '화면 테마',
+      title: widget.title,
       height: 190,
       child: Row(
         children: [
-          button(theme: theme, target: 'light', name: '기본 테마'),
+          button(theme: widget.theme, id: 'light', name: '밝은 테마'),
           CommonSpace(width: 5),
-          button(theme: theme, target: 'dark', name: '어두운 테마'),
+          button(theme: widget.theme, id: 'dark', name: '어두운 테마'),
         ],
       ),
     );
