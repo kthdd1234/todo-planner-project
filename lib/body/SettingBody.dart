@@ -2,12 +2,15 @@ import 'package:flutter/material.dart';
 import 'dart:io';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:in_app_review/in_app_review.dart';
+import 'package:project/common/CommonModalSheet.dart';
 import 'package:project/common/CommonNull.dart';
 import 'package:project/common/CommonSpace.dart';
 import 'package:project/common/CommonSvgText.dart';
 import 'package:project/common/CommonText.dart';
+import 'package:project/model/user_box/user_box.dart';
+import 'package:project/page/FontPage.dart';
 import 'package:project/page/PremiumPage.dart';
-import 'package:project/page/StateIconPage.dart';
+import 'package:project/page/BackgroundPage.dart';
 import 'package:project/provider/PremiumProvider.dart';
 import 'package:project/provider/themeProvider.dart';
 import 'package:project/util/class.dart';
@@ -17,6 +20,7 @@ import 'package:project/util/final.dart';
 import 'package:project/util/func.dart';
 import 'package:project/widget/appBar/SettingAppBar.dart';
 import 'package:project/widget/button/ImageButton.dart';
+import 'package:project/widget/button/ModalButton.dart';
 import 'package:project/widget/modalSheet/ThemeModalSheet.dart';
 import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
@@ -173,23 +177,68 @@ class _ContentViewState extends State<ContentView> {
     );
   }
 
-  onStateWeek() {
-    //
+  onBackground() {
+    movePage(context: context, page: const BackgroundPage());
   }
 
-  onStateIcon() {
-    movePage(context: context, page: const StateIconPage());
+  onFont() {
+    movePage(context: context, page: const FontPage());
   }
 
-  onInputTask() {
-    //
+  onAppStart(int appStartIndex) {
+    showModalBottomSheet(
+      context: context,
+      builder: (context) => CommonModalSheet(
+        title: '앱 시작 화면',
+        height: 185,
+        child: Row(
+          children: bnList
+              .map(
+                (bn) => bn.index != 3
+                    ? ModalButton(
+                        innerPadding: const EdgeInsets.only(right: 5),
+                        icon: bn.icon,
+                        actionText: bn.name,
+                        color: bn.index == appStartIndex
+                            ? Colors.white
+                            : widget.isLight
+                                ? textColor
+                                : darkTextColor,
+                        isBold: bn.index == appStartIndex,
+                        bgColor: bn.index == appStartIndex
+                            ? widget.isLight
+                                ? indigo.s300
+                                : textColor
+                            : widget.isLight
+                                ? Colors.white
+                                : darkContainerColor,
+                        onTap: () async {
+                          UserBox? user = userRepository.user;
+                          user.appStartIndex = bn.index;
+
+                          await user.save();
+                          setState(() {});
+                          navigatorPop(context);
+                        },
+                      )
+                    : const CommonNull(),
+              )
+              .toList(),
+        ),
+      ),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
+    UserBox? user = userRepository.user;
+    String widgetTheme = user.widgetTheme ?? 'light';
+    String background = user.background ?? '1';
+    String fontFamily = user.fontFamily ?? initFontFamily;
+    int appStartIndex = user.appStartIndex ?? 0;
+
     bool isPremium = context.watch<PremiumProvider>().isPremium;
     String theme = context.watch<ThemeProvider>().theme;
-    String widgetTheme = userRepository.user.widgetTheme ?? 'light';
 
     List<SettingItemClass> settingItemList = [
       SettingItemClass(
@@ -207,7 +256,7 @@ class _ContentViewState extends State<ContentView> {
                 svgDirection: SvgDirectionEnum.left,
               )
             : ImageButton(
-                path: 't-23',
+                path: 't-4',
                 text: '광고 제거',
                 padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 7),
                 fontSize: 12,
@@ -226,33 +275,39 @@ class _ContentViewState extends State<ContentView> {
         value: onValue(widgetTheme == 'light' ? '밝은 테마' : '어두운 테마'),
         onTap: () => onWidgetTheme(widgetTheme),
       ),
-      // SettingItemClass(
-      //   name: '상태 아이콘',
-      //   svg: 'premium-state-icon',
-      //   value: onMarkIcon(),
-      //   onTap: onStateIcon,
-      // ),
-      // SettingItemClass(
-      //   name: '한 주의 시작',
-      //   svg: 'start-week',
-      //   value: onValue('일요일'),
-      //   onTap: onStatWeek,
-      // ),
-      // SettingItemClass(
-      //   name: '할 일, 루틴 입력 후 동작',
-      //   svg: 'input',
-      //   value: onValue('연속 입력'),
-      //   onTap: onInputTask,
-      // ),
       SettingItemClass(
-        name: '앱 리뷰 작성',
-        svg: 'review',
-        onTap: onReview,
+        name: '글씨체',
+        svg: 'font',
+        value: onValue(getFontName(fontFamily)),
+        onTap: onFont,
+      ),
+      SettingItemClass(
+        name: '앱 배경',
+        svg: 'background',
+        value: onValue(backroundClassList
+            .expand((list) => list)
+            .toList()
+            .firstWhere((item) => item.path == background)
+            .name),
+        onTap: onBackground,
+      ),
+      SettingItemClass(
+        name: '앱 시작 화면',
+        svg: 'app-start',
+        value: onValue(
+          bnList.firstWhere((bn) => bn.index == appStartIndex).name,
+        ),
+        onTap: () => onAppStart(appStartIndex),
       ),
       SettingItemClass(
         name: '앱 공유',
         svg: 'share',
         onTap: onShare,
+      ),
+      SettingItemClass(
+        name: '앱 리뷰',
+        svg: 'review',
+        onTap: onReview,
       ),
       SettingItemClass(
         name: '카카오톡 고객센터 문의',

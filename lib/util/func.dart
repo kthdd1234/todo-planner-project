@@ -440,3 +440,9 @@ calendarDetailStyle(bool isLight) {
     outsideDaysVisible: false,
   );
 }
+
+String getFontName(String fontFamily) {
+  int idx = fontFamilyList
+      .indexWhere((element) => element['fontFamily'] == fontFamily);
+  return idx != -1 ? fontFamilyList[idx]['name']! : initFontName;
+}

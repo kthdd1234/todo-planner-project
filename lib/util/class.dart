@@ -319,3 +319,24 @@ class TrakcerItemClass {
   List<String?> markList;
   Color? highlightColor;
 }
+
+class BackgroundClass {
+  BackgroundClass({
+    required this.path,
+    required this.name,
+  });
+
+  String path, name;
+}
+
+class BNClass {
+  BNClass({
+    required this.index,
+    required this.name,
+    required this.icon,
+  });
+
+  int index;
+  String name;
+  IconData icon;
+}

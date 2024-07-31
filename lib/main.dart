@@ -15,6 +15,7 @@ import 'package:project/page/IntroPage.dart';
 import 'package:project/provider/HistoryOrderProvider.dart';
 import 'package:project/provider/KeywordProvider.dart';
 import 'package:project/provider/PremiumProvider.dart';
+import 'package:project/provider/ReloadProvider.dart';
 import 'package:project/provider/YearDateTimeProvider.dart';
 import 'package:project/provider/bottomTabIndexProvider.dart';
 import 'package:project/provider/selectedDateTimeProvider.dart';
@@ -53,6 +54,7 @@ void main() async {
         ChangeNotifierProvider(create: (context) => YearDateTimeProvider()),
         ChangeNotifierProvider(create: (context) => HistoryOrderProvider()),
         ChangeNotifierProvider(create: (context) => KeywordProvider()),
+        ChangeNotifierProvider(create: (context) => ReloadProvider()),
       ],
       child: EasyLocalization(
         supportedLocales: const [Locale('ko'), Locale('en'), Locale('ja')],
@@ -98,9 +100,21 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
     }
   }
 
+  initializeBottomNavition() {
+    UserBox? user = userBox?.get('userProfile');
+
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      context
+          .read<BottomTabIndexProvider>()
+          .changeSeletedIdx(newIndex: user?.appStartIndex ?? 0);
+    });
+  }
+
   @override
   void initState() {
     userBox = Hive.box('userBox');
+
+    initializeBottomNavition();
     appTrackingTransparency();
 
     WidgetsBinding.instance.addObserver(this);
@@ -135,14 +149,20 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
 
   @override
   Widget build(BuildContext context) {
+    context.watch<ReloadProvider>().isReload;
+
     bool isUser = UserRepository().isUser;
     String initialRoute = isUser ? 'home-page' : 'intro-page';
+    UserBox? user = userBox?.get('userProfile');
+    String? fontFamily = user?.fontFamily ?? initFontFamily;
+    int appStartIndex = user?.appStartIndex ?? 0;
+    String locale = context.locale.toString();
 
     return MaterialApp(
       title: 'Todo Planner',
       theme: ThemeData(
         useMaterial3: true,
-        fontFamily: initFontFamily,
+        fontFamily: fontFamily,
         cupertinoOverrideTheme: const CupertinoThemeData(applyThemeToAll: true),
       ),
       localizationsDelegates: context.localizationDelegates,
@@ -151,7 +171,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
       debugShowCheckedModeBanner: false,
       initialRoute: initialRoute,
       routes: {
-        'home-page': (context) => const HomePage(),
+        'home-page': (context) => HomePage(locale: locale),
         'intro-page': (context) => const IntroPage()
       },
     );

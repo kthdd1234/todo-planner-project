@@ -7,28 +7,35 @@ import 'package:project/util/class.dart';
 import 'package:project/util/enum.dart';
 import 'package:table_calendar/table_calendar.dart';
 
-final bottomNavigationBarItemList = [
-  const BottomNavigationBarItem(
-    label: '투두',
-    icon: Icon(Icons.edit_rounded),
-  ),
-  const BottomNavigationBarItem(
-    label: '캘린더',
-    icon: Icon(Icons.calendar_month_outlined),
-  ),
-  // const BottomNavigationBarItem(
-  //   label: '검색',
-  //   icon: Icon(Icons.search_rounded),
-  // ),
-  const BottomNavigationBarItem(
-    label: '트래커',
-    icon: Icon(Icons.view_timeline_outlined),
-  ),
-  const BottomNavigationBarItem(
-    label: '더보기',
-    icon: Icon(Icons.more_horiz_rounded),
-  ),
+List<BNClass> bnList = [
+  BNClass(index: 0, name: '투두', icon: Icons.edit_rounded),
+  BNClass(index: 1, name: '캘린더', icon: Icons.calendar_month_outlined),
+  BNClass(index: 2, name: '트래커', icon: Icons.view_timeline_outlined),
+  BNClass(index: 3, name: '더보기', icon: Icons.more_horiz_rounded)
 ];
+
+final bottomNavigationBarItemList = bnList.map(
+  (bn) => BottomNavigationBarItem(label: bn.name, icon: Icon(bn.icon)),
+);
+
+// [
+//   const BottomNavigationBarItem(
+//     label: '투두',
+//     icon: Icon(Icons.edit_rounded),
+//   ),
+//   const BottomNavigationBarItem(
+//     label: '캘린더',
+//     icon: Icon(Icons.calendar_month_outlined),
+//   ),
+//   const BottomNavigationBarItem(
+//     label: '트래커',
+//     icon: Icon(Icons.view_timeline_outlined),
+//   ),
+//   const BottomNavigationBarItem(
+//     label: '더보기',
+//     icon: Icon(Icons.more_horiz_rounded),
+//   ),
+// ];
 
 final indigo = ColorClass(
   colorName: '남색',
@@ -293,11 +300,21 @@ final premiumBenefitList = [
     mainTitle: '모든 화면에서 광고가 나오지 않아요',
     subTitle: '광고없이 쾌적하게 앱을 사용해보세요!',
   ),
-  // PremiumBenefitClass(
-  //   svgName: 'premium-state-icon',
-  //   mainTitle: '다양한 상태 아이콘을 사용할 수 있어요',
-  //   subTitle: '보다 다채롭게 상태를 체크해보세요!',
-  // ),
+  PremiumBenefitClass(
+    svgName: 'background',
+    mainTitle: '다양한 배경들을 제공해드려요',
+    subTitle: '총 6종의 다채로운 배경들을 이용해보세요!',
+  ),
+  PremiumBenefitClass(
+    svgName: 'font',
+    mainTitle: '글씨체를 변경할 수 있어요',
+    subTitle: '예쁜 글씨체가 준비되어 있어요!',
+  ),
+  PremiumBenefitClass(
+    svgName: 'app-start',
+    mainTitle: '앱 시작 화면을 설정할 수 있어요',
+    subTitle: '투두, 캘린더, 트래커 화면 중 한 곳 선택!',
+  ),
 ];
 
 final filterItemList = [
@@ -335,3 +352,45 @@ final daysInfo = {
   5: 5,
   6: 6,
 };
+
+final backroundClassList = [
+  [
+    BackgroundClass(path: '1', name: 'Cloudy Apple'),
+    BackgroundClass(path: '2', name: 'Snow Again'),
+  ],
+  [
+    BackgroundClass(path: '3', name: 'Pastel Sky'),
+    BackgroundClass(path: '4', name: 'Winter Sky'),
+  ],
+  [
+    BackgroundClass(path: '5', name: 'Perfect White'),
+    BackgroundClass(path: '6', name: 'Kind Steel'),
+  ],
+];
+
+List<Map<String, String>> fontFamilyList = [
+  {
+    "fontFamily": "IM_Hyemin",
+    "name": "IM 혜민",
+  },
+  {
+    "fontFamily": "KyoboHandwriting2019",
+    "name": "교보 손글씨",
+  },
+  {
+    "fontFamily": "SingleDay",
+    "name": "싱글데이",
+  },
+  {
+    "fontFamily": "Cafe24Dongdong",
+    "name": "카페24 동동",
+  },
+  {
+    "fontFamily": "Cafe24Syongsyong",
+    "name": "카페24 숑숑",
+  },
+  {
+    "fontFamily": "Cafe24Ssukssuk",
+    "name": "카페24 쑥쑥",
+  },
+];

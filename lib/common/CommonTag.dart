@@ -11,6 +11,7 @@ class CommonTag extends StatelessWidget {
     required this.onTap,
     this.innerPadding,
     this.isBold,
+    this.isImage,
     this.fontSize,
     this.vertical,
     this.isNotTr,
@@ -21,7 +22,7 @@ class CommonTag extends StatelessWidget {
   bool? isBold, isNotTr;
   double? fontSize, vertical;
   EdgeInsets? innerPadding;
-
+  bool? isImage;
   Function() onTap;
 
   @override
@@ -33,6 +34,12 @@ class CommonTag extends StatelessWidget {
         child: Container(
           padding: EdgeInsets.symmetric(vertical: vertical ?? 5, horizontal: 7),
           decoration: BoxDecoration(
+            image: isImage == true
+                ? const DecorationImage(
+                    image: AssetImage('assets/image/t-4.png'),
+                    fit: BoxFit.cover,
+                  )
+                : null,
             color: bgColor,
             borderRadius: BorderRadius.circular(5),
           ),

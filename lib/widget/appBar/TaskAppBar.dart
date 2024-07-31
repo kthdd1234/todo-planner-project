@@ -9,6 +9,7 @@ import 'package:project/common/CommonSvgText.dart';
 import 'package:project/common/CommonTag.dart';
 import 'package:project/common/CommonText.dart';
 import 'package:project/model/task_box/task_box.dart';
+import 'package:project/page/PremiumPage.dart';
 import 'package:project/provider/selectedDateTimeProvider.dart';
 import 'package:project/provider/themeProvider.dart';
 import 'package:project/provider/titleDateTimeProvider.dart';
@@ -65,6 +66,10 @@ class _TaskTitleState extends State<TaskTitle> {
         .changeSelectedDateTime(dateTime: DateTime.now());
   }
 
+  onPremiumPage() {
+    movePage(context: context, page: const PremiumPage());
+  }
+
   @override
   Widget build(BuildContext context) {
     bool isWeek = availableCalendarFormats[widget.calendarFormat]! == 'week';
@@ -76,13 +81,27 @@ class _TaskTitleState extends State<TaskTitle> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           const TitleDateTime(),
-          CommonTag(
-            text: isWeek ? '일주일' : '한 달',
-            isBold: true,
-            fontSize: 10,
-            textColor: Colors.white,
-            bgColor: isLight ? indigo.s300 : darkButtonColor,
-            onTap: onCalendarFormat,
+          Row(
+            children: [
+              CommonTag(
+                isImage: true,
+                text: '광고 제거',
+                isBold: true,
+                fontSize: 10,
+                textColor: Colors.white,
+                bgColor: isLight ? indigo.s300 : darkButtonColor,
+                onTap: onPremiumPage,
+              ),
+              CommonSpace(width: 5),
+              CommonTag(
+                text: isWeek ? '일주일' : '한 달',
+                isBold: true,
+                fontSize: 10,
+                textColor: Colors.white,
+                bgColor: isLight ? indigo.s300 : darkButtonColor,
+                onTap: onCalendarFormat,
+              ),
+            ],
           )
         ],
       ),

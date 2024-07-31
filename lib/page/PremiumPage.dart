@@ -164,7 +164,7 @@ class _PremiumPageState extends State<PremiumPage> {
                           children: [
                             Expanded(
                               child: ImageButton(
-                                path: 't-23',
+                                path: 't-4',
                                 text:
                                     '구매하기 (${package?.storeProduct.priceString ?? '없음'})',
                                 fontSize: 14,

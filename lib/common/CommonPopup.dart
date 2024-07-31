@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:project/provider/themeProvider.dart';
 import 'package:project/util/constants.dart';
+import 'package:project/util/final.dart';
 import 'package:provider/provider.dart';
 
 class CommonPopup extends StatelessWidget {
@@ -17,6 +18,7 @@ class CommonPopup extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     bool isLight = context.watch<ThemeProvider>().isLight;
+    String background = userRepository.user.background ?? '1';
 
     return AlertDialog(
       contentPadding: const EdgeInsets.all(0),
@@ -26,8 +28,8 @@ class CommonPopup extends StatelessWidget {
         decoration: BoxDecoration(
           color: isLight ? Colors.white : darkBgColor,
           image: isLight
-              ? const DecorationImage(
-                  image: AssetImage('assets/image/CloudyApple.png'),
+              ? DecorationImage(
+                  image: AssetImage('assets/image/b-$background.png'),
                   fit: BoxFit.cover,
                 )
               : null,

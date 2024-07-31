@@ -19,7 +19,9 @@ import 'package:project/util/func.dart';
 import 'package:provider/provider.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+  HomePage({super.key, required this.locale});
+
+  String locale;
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -41,6 +43,8 @@ class _HomePageState extends State<HomePage> {
       user.theme ??= 'light';
       user.widgetTheme ??= 'light';
       user.filterIdList ??= filterIdList;
+      user.background ??= '1';
+      user.appStartIndex ??= 0;
 
       WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
         context.read<ThemeProvider>().setThemeValue(user.theme!);
@@ -77,6 +81,7 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     bool isLight = context.watch<ThemeProvider>().isLight;
     int seletedIdx = context.watch<BottomTabIndexProvider>().seletedIdx;
+
     List<BottomNavigationBarItem> items = bottomNavigationBarItemList
         .map((item) => BottomNavigationBarItem(
               icon: item.icon,
@@ -87,7 +92,6 @@ class _HomePageState extends State<HomePage> {
     final bodyList = [
       const TaskBody(),
       const CalendarBody(),
-      // const SearchBody(),
       const TrackerBody(),
       const SettingBody()
     ];
