@@ -42,6 +42,7 @@ class _ImageSlidePageState extends State<ImageSlidePage> {
               color: Colors.white,
               fontSize: 14,
               isBold: true,
+              isNotTr: true,
             ),
             backgroundColor: Colors.black,
             leading: IconButton(

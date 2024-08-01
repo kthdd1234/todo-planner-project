@@ -1,4 +1,3 @@
-
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:project/common/CommonContainer.dart';
@@ -187,7 +186,6 @@ class _ContentViewState extends State<ContentView> {
     String title = user.taskTitleInfo['title'];
     Color color = getColorClass(user.taskTitleInfo['colorName']).s400;
     bool isLight = context.watch<ThemeProvider>().isLight;
-    DateTime now = DateTime.now();
 
     return TableRow(
       children: <Widget>[
@@ -201,20 +199,17 @@ class _ContentViewState extends State<ContentView> {
               overflow: TextOverflow.ellipsis,
               color: color,
               isBold: !isLight,
+              isNotTr: true,
             ),
           ),
         ),
         ...days.map(
-          (day) => Container(
-            // color: daysInfo[day] == now.weekday ? tableHighlightColor : null,
-            height: 32,
-            child: Center(
-              child: CommonText(
-                text: day,
-                fontSize: 12,
-                color: grey.original,
-                isBold: !isLight,
-              ),
+          (day) => Center(
+            child: CommonText(
+              text: day,
+              fontSize: 12,
+              color: grey.original,
+              isBold: !isLight,
             ),
           ),
         )
@@ -235,8 +230,6 @@ class _ContentViewState extends State<ContentView> {
             ? color.s50
             : color.original
         : null;
-    DateTime now = DateTime.now();
-
     return TableRow(
       children: <Widget>[
         Container(
@@ -250,23 +243,20 @@ class _ContentViewState extends State<ContentView> {
               highlightColor: highlightColor,
               overflow: TextOverflow.ellipsis,
               isBold: !isLight,
+              isNotTr: true,
             ),
           ),
         ),
         ...List.generate(
           7,
-          (index) => Container(
-            height: 32,
-            // color: daysInfo[index] == now.weekday ? tableHighlightColor : null,
-            child: Center(
-              child: markList[index] != null
-                  ? svgAsset(
-                      name: 'mark-${markList[index]}',
-                      width: 14,
-                      color: color.s400,
-                    )
-                  : const CommonNull(),
-            ),
+          (index) => Center(
+            child: markList[index] != null
+                ? svgAsset(
+                    name: 'mark-${markList[index]}',
+                    width: 14,
+                    color: color.s400,
+                  )
+                : const CommonNull(),
           ),
         )
       ],

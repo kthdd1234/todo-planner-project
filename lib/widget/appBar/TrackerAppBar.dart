@@ -52,6 +52,7 @@ class _TrackerAppBarState extends State<TrackerAppBar> {
           CommonTag(
             text: title,
             isBold: true,
+            isNotTr: true,
             fontSize: 10,
             textColor: Colors.white,
             bgColor: isLight ? indigo.s300 : darkButtonColor,

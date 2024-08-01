@@ -300,15 +300,25 @@ final premiumBenefitList = [
     mainTitle: '모든 화면에서 광고가 나오지 않아요',
     subTitle: '광고없이 쾌적하게 앱을 사용해보세요!',
   ),
-  PremiumBenefitClass(
-    svgName: 'background',
-    mainTitle: '다양한 배경들을 제공해드려요',
-    subTitle: '총 6종의 다채로운 배경들을 이용해보세요!',
-  ),
+  // PremiumBenefitClass(
+  //   svgName: 'premium-photos-four',
+  //   mainTitle: '사진을 최대 6장까지 추가 할 수 있어요',
+  //   subTitle: '보다 많은 메모 사진을 추가해보세요!',
+  // ),
+  // PremiumBenefitClass(
+  //   svgName: 'hand',
+  //   mainTitle: '이모지로 체크 표시 할 수 있어요',
+  //   subTitle: '원하는 이모지로 체크 표시 해보세요!',
+  // ),
   PremiumBenefitClass(
     svgName: 'font',
     mainTitle: '글씨체를 변경할 수 있어요',
     subTitle: '예쁜 글씨체가 준비되어 있어요!',
+  ),
+  PremiumBenefitClass(
+    svgName: 'background',
+    mainTitle: '다양한 배경들을 제공해드려요',
+    subTitle: '총 6종의 다채로운 배경들을 이용해보세요!',
   ),
   PremiumBenefitClass(
     svgName: 'app-start',

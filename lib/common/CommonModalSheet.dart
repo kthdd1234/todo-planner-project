@@ -12,13 +12,14 @@ class CommonModalSheet extends StatelessWidget {
     super.key,
     this.title,
     this.isBack,
+    this.isNotTr,
     required this.height,
     required this.child,
   });
 
   String? title;
   double height;
-  bool? isBack;
+  bool? isBack, isNotTr;
   Widget child;
 
   @override
@@ -65,6 +66,7 @@ class CommonModalSheet extends StatelessWidget {
                               textAlign: TextAlign.center,
                               overflow: TextOverflow.ellipsis,
                               isBold: !isLight,
+                              isNotTr: isNotTr,
                             ),
                           ),
                         ),

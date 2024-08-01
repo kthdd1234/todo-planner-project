@@ -9,11 +9,13 @@ class ImageButton extends StatelessWidget {
     required this.fontSize,
     required this.padding,
     required this.onTap,
+    this.nameArgs,
   });
 
   String path, text;
   EdgeInsets padding;
   double fontSize;
+  Map<String, String>? nameArgs;
   Function() onTap;
 
   @override
@@ -33,6 +35,7 @@ class ImageButton extends StatelessWidget {
           text: text,
           color: Colors.white,
           fontSize: fontSize,
+          nameArgs: nameArgs,
           isBold: true,
         ),
       ),

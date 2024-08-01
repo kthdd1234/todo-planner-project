@@ -157,6 +157,7 @@ class _MemoContainerState extends State<MemoContainer> {
                                     text: widget.recordBox!.memo!,
                                     textAlign: TextAlign.start,
                                     isBold: !isLight,
+                                    isNotTr: true,
                                   ),
                                 ),
                               )

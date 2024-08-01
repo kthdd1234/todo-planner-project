@@ -185,6 +185,7 @@ class _MemoSettingPageState extends State<MemoSettingPage> {
                   dateTime: widget.initDateTime,
                 ),
                 isBold: !isLight,
+                isNotTr: true,
               ),
             )
           ],

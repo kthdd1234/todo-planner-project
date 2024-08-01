@@ -27,7 +27,7 @@ class BackgroundPage extends StatelessWidget {
       builder: (context, values, child) {
         return CommonBackground(
           child: CommonScaffold(
-            appBarInfo: AppBarInfoClass(title: '배경'),
+            appBarInfo: AppBarInfoClass(title: '앱 배경'),
             body: CommonContainer(
               child: SingleChildScrollView(
                 child: Column(

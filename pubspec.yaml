@@ -151,6 +151,8 @@ flutter:
     - assets/svg/background.svg
     - assets/svg/lock.svg
     - assets/svg/app-start.svg
+    - assets/svg/hand.svg
+    - assets/svg/premium-photos-four.svg
     - assets/image/b-1.png
     - assets/image/b-2.png
     - assets/image/b-3.png

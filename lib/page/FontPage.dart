@@ -35,9 +35,7 @@ class _FontPageState extends State<FontPage> {
     String fontName = getFontName(fontFamily);
 
     List<String> fontPreviewList = [
-      "글씨체 미리보기입니다.".tr(namedArgs: {'fontName': fontName.tr()}),
       "가나다라마바사아자차카타파하",
-      "체중, 사진, 식단, 운동, 습관, 일기".tr(),
       "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
       "abcdefghijklnmopqrstuvwxyz",
       "0123456789!@#%^&*()",

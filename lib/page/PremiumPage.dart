@@ -106,7 +106,7 @@ class _PremiumPageState extends State<PremiumPage> {
                           color: isLight ? textColor : darkTextColor,
                         ),
                         CommonText(
-                          text: '구매 복원하기',
+                          text: '구매 내역 가져오기',
                           color: grey.original,
                           fontSize: 12,
                           isBold: !isLight,
@@ -165,8 +165,11 @@ class _PremiumPageState extends State<PremiumPage> {
                             Expanded(
                               child: ImageButton(
                                 path: 't-4',
-                                text:
-                                    '구매하기 (${package?.storeProduct.priceString ?? '없음'})',
+                                text: '구매하기',
+                                nameArgs: {
+                                  "price": package?.storeProduct.priceString ??
+                                      'None'
+                                },
                                 fontSize: 14,
                                 padding:
                                     const EdgeInsets.symmetric(vertical: 15),

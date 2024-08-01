@@ -34,6 +34,7 @@ class CalendarMarker extends StatelessWidget {
               text: day,
               color: isLight ? Colors.white : color.s50,
               isBold: true,
+              isNotTr: true,
             ),
           ),
         ),

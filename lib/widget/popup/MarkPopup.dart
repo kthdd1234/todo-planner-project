@@ -179,6 +179,7 @@ class _MarkPopupState extends State<MarkPopup> {
           color: Colors.grey,
           fontSize: 11,
           isBold: !isLight,
+          isNotTr: text == '|',
         ),
       ),
     );
@@ -277,6 +278,7 @@ class _MarkPopupState extends State<MarkPopup> {
                           text: memoController.text,
                           textAlign: TextAlign.start,
                           isBold: !isLight,
+                          isNotTr: true,
                         ),
                         CommonSpace(height: 5),
                         Row(

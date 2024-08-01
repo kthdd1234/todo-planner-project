@@ -1,4 +1,3 @@
-
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
@@ -269,7 +268,7 @@ class _TaskItemState extends State<TaskItem> {
       return Column(
         children: [
           Padding(
-            padding: const EdgeInsets.only(top: 10, bottom: 7),
+            padding: const EdgeInsets.only(top: 15, bottom: 7),
             child: CalendarMarker(
               size: 26,
               day: '${dateTime.day}',
@@ -305,6 +304,7 @@ class _TaskItemState extends State<TaskItem> {
       context: context,
       builder: (context) => CommonModalSheet(
         title: widget.taskItem.name,
+        isNotTr: true,
         height: 620,
         child: Column(
           children: [
@@ -318,7 +318,7 @@ class _TaskItemState extends State<TaskItem> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        CommonText(text: title, fontSize: 16),
+                        CommonText(text: title, fontSize: 16, isNotTr: true),
                         CommonTag(
                           text: taskDateTimeLabel[widget.taskBox.dateTimeType]!,
                           isBold: true,
@@ -332,7 +332,7 @@ class _TaskItemState extends State<TaskItem> {
                   ),
                   TableCalendar(
                     locale: locale,
-                    rowHeight: 55,
+                    rowHeight: 60,
                     headerVisible: false,
                     daysOfWeekStyle: calendarDaysOfWeekStyle(isLight),
                     calendarStyle: calendarDetailStyle(isLight),
@@ -443,6 +443,7 @@ class _TaskItemState extends State<TaskItem> {
                         decorationColor:
                             isMark ? widget.taskItem.color.s300 : null,
                         isBold: !isLight,
+                        isNotTr: true,
                       ),
                       widget.taskItem.memo != null
                           ? Padding(
@@ -454,6 +455,7 @@ class _TaskItemState extends State<TaskItem> {
                                 overflow: TextOverflow.ellipsis,
                                 textAlign: TextAlign.start,
                                 isBold: !isLight,
+                                isNotTr: true,
                               ),
                             )
                           : const CommonNull()

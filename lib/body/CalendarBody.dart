@@ -151,6 +151,7 @@ class _ContentViewState extends State<ContentView> {
                                       fontSize: 9,
                                       softWrap: false,
                                       textAlign: TextAlign.start,
+                                      isNotTr: true,
                                     ),
                                   ),
                                 ],
