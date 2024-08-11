@@ -1,3 +1,6 @@
+import 'dart:developer';
+
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'dart:io';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -12,6 +15,7 @@ import 'package:project/page/FontPage.dart';
 import 'package:project/page/PremiumPage.dart';
 import 'package:project/page/BackgroundPage.dart';
 import 'package:project/provider/PremiumProvider.dart';
+import 'package:project/provider/ReloadProvider.dart';
 import 'package:project/provider/themeProvider.dart';
 import 'package:project/util/class.dart';
 import 'package:project/util/constants.dart';
@@ -21,6 +25,8 @@ import 'package:project/util/func.dart';
 import 'package:project/widget/appBar/SettingAppBar.dart';
 import 'package:project/widget/button/ImageButton.dart';
 import 'package:project/widget/button/ModalButton.dart';
+import 'package:project/widget/modalSheet/AppStartIndexModalSheet.dart';
+import 'package:project/widget/modalSheet/LanguageModalSheet.dart';
 import 'package:project/widget/modalSheet/ThemeModalSheet.dart';
 import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
@@ -138,7 +144,7 @@ class _ContentViewState extends State<ContentView> {
     await canLaunchUrl(url) ? await launchUrl(url) : print('err');
   }
 
-  onValue(text) {
+  onValue(String text, bool? isNotTr) {
     return CommonSvgText(
       text: text,
       fontSize: 13,
@@ -147,6 +153,7 @@ class _ContentViewState extends State<ContentView> {
       svgName: 'dir-right',
       svgWidth: 6,
       svgLeft: 6,
+      isNotTr: isNotTr,
       svgDirection: SvgDirectionEnum.right,
     );
   }
@@ -185,48 +192,21 @@ class _ContentViewState extends State<ContentView> {
     movePage(context: context, page: const FontPage());
   }
 
-  onAppStart(int appStartIndex) {
-    showModalBottomSheet(
+  onAppStart(int appStartIndex) async {
+    await showModalBottomSheet(
       context: context,
-      builder: (context) => CommonModalSheet(
-        title: '앱 시작 화면',
-        height: 185,
-        child: Row(
-          children: bnList
-              .map(
-                (bn) => bn.index != 3
-                    ? ModalButton(
-                        innerPadding: const EdgeInsets.only(right: 5),
-                        icon: bn.icon,
-                        actionText: bn.name,
-                        color: bn.index == appStartIndex
-                            ? Colors.white
-                            : widget.isLight
-                                ? textColor
-                                : darkTextColor,
-                        isBold: bn.index == appStartIndex,
-                        bgColor: bn.index == appStartIndex
-                            ? widget.isLight
-                                ? indigo.s300
-                                : textColor
-                            : widget.isLight
-                                ? Colors.white
-                                : darkContainerColor,
-                        onTap: () async {
-                          UserBox? user = userRepository.user;
-                          user.appStartIndex = bn.index;
-
-                          await user.save();
-                          setState(() {});
-                          navigatorPop(context);
-                        },
-                      )
-                    : const CommonNull(),
-              )
-              .toList(),
-        ),
-      ),
+      builder: (context) =>
+          AppStartIndexModalSheet(appStartIndex: appStartIndex),
     );
+    setState(() {});
+  }
+
+  onLanguage() async {
+    await showModalBottomSheet(
+      context: context,
+      builder: (context) => LanguageModalSheet(),
+    );
+    setState(() {});
   }
 
   @override
@@ -239,6 +219,8 @@ class _ContentViewState extends State<ContentView> {
 
     bool isPremium = context.watch<PremiumProvider>().isPremium;
     String theme = context.watch<ThemeProvider>().theme;
+
+    String locale = context.locale.toString();
 
     List<SettingItemClass> settingItemList = [
       SettingItemClass(
@@ -265,38 +247,45 @@ class _ContentViewState extends State<ContentView> {
       ),
       SettingItemClass(
         name: '화면 테마',
-        svg: 'theme',
-        value: onValue(widget.isLight ? '밝은 테마' : '어두운 테마'),
+        svg: 'mode',
+        value: onValue(widget.isLight ? '밝은 테마' : '어두운 테마', null),
         onTap: () => onTheme(theme),
       ),
       SettingItemClass(
         name: '위젯 테마',
         svg: 'widget',
-        value: onValue(widgetTheme == 'light' ? '밝은 테마' : '어두운 테마'),
+        value: onValue(widgetTheme == 'light' ? '밝은 테마' : '어두운 테마', null),
         onTap: () => onWidgetTheme(widgetTheme),
       ),
       SettingItemClass(
         name: '글씨체',
         svg: 'font',
-        value: onValue(getFontName(fontFamily)),
+        value: onValue(getFontName(fontFamily), null),
         onTap: onFont,
       ),
       SettingItemClass(
+        name: '언어',
+        svg: 'language',
+        value: onValue(getLocaleName(locale), true),
+        onTap: onLanguage,
+      ),
+      SettingItemClass(
         name: '앱 배경',
-        svg: 'background',
-        value: onValue(backroundClassList
-            .expand((list) => list)
-            .toList()
-            .firstWhere((item) => item.path == background)
-            .name),
+        svg: 'theme',
+        value: onValue(
+            backroundClassList
+                .expand((list) => list)
+                .toList()
+                .firstWhere((item) => item.path == background)
+                .name,
+            null),
         onTap: onBackground,
       ),
       SettingItemClass(
         name: '앱 시작 화면',
         svg: 'app-start',
         value: onValue(
-          bnList.firstWhere((bn) => bn.index == appStartIndex).name,
-        ),
+            bnList.firstWhere((bn) => bn.index == appStartIndex).name, null),
         onTap: () => onAppStart(appStartIndex),
       ),
       SettingItemClass(
@@ -308,11 +297,6 @@ class _ContentViewState extends State<ContentView> {
         name: '앱 리뷰',
         svg: 'review',
         onTap: onReview,
-      ),
-      SettingItemClass(
-        name: '카카오톡 고객센터 문의',
-        svg: 'inquire',
-        onTap: onInquire,
       ),
       SettingItemClass(
         name: '개인정보처리방침',
@@ -327,6 +311,7 @@ class _ContentViewState extends State<ContentView> {
           text: '$appVerstion ($appBuildNumber)',
           color: widget.isLight ? grey.original : darkTextColor,
           isBold: !widget.isLight,
+          isNotTr: true,
         ),
       ),
     ];

@@ -446,3 +446,13 @@ String getFontName(String fontFamily) {
       .indexWhere((element) => element['fontFamily'] == fontFamily);
   return idx != -1 ? fontFamilyList[idx]['name']! : initFontName;
 }
+
+String getLocaleName(String locale) {
+  if (locale == 'ko') {
+    return '한국어';
+  } else if (locale == 'ja') {
+    return '日本語';
+  } else {
+    return 'English';
+  }
+}

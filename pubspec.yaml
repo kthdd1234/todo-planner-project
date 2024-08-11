@@ -16,7 +16,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
 # In Windows, build-name is used as the major, minor, and patch parts
 # of the product and file versions while build-number is used as the build suffix.
-version: 1.0.4+5
+version: 1.0.6+7
 
 environment:
   sdk: '>=3.3.3 <4.0.0'
@@ -45,7 +45,10 @@ dependencies:
   hive_flutter: ^1.1.0
   hive_generator: ^2.0.1
   build_runner: ^2.4.9
-  carousel_slider: ^4.2.1
+  carousel_slider:
+    git:
+      url: https://github.com/sampaio96/flutter_carousel_slider.git
+      ref: master
   shimmer: ^3.0.0
   flutter_speed_dial: ^7.0.0
   image_picker: ^1.1.2
@@ -153,6 +156,7 @@ flutter:
     - assets/svg/app-start.svg
     - assets/svg/hand.svg
     - assets/svg/premium-photos-four.svg
+    - assets/svg/language.svg
     - assets/image/b-1.png
     - assets/image/b-2.png
     - assets/image/b-3.png
@@ -164,6 +168,10 @@ flutter:
     - assets/image/t-3.png
     - assets/image/t-4.png
     - assets/image/t-5.png
+    - assets/svg/Korea.svg
+    - assets/svg/Japan.svg
+    - assets/svg/Usa.svg
+    - assets/svg/mode.svg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

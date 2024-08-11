@@ -17,6 +17,8 @@ class ModalButton extends StatelessWidget {
     this.bgColor,
     this.isBold,
     this.innerPadding,
+    this.isNotSvgColor,
+    this.isNotTr,
   });
 
   String? svgName;
@@ -24,7 +26,7 @@ class ModalButton extends StatelessWidget {
   String actionText;
   Color color;
   Color? bgColor;
-  bool? isBold;
+  bool? isBold, isNotTr, isNotSvgColor;
   EdgeInsets? innerPadding;
   Function() onTap;
 
@@ -41,13 +43,22 @@ class ModalButton extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               svgName != null
-                  ? svgAsset(name: svgName!, width: 25, color: color)
+                  ? svgAsset(
+                      name: svgName!,
+                      width: 25,
+                      color: isNotSvgColor == true ? null : color,
+                    )
                   : const CommonNull(),
               icon != null
                   ? Icon(icon!, size: 25, color: color)
                   : const CommonNull(),
               CommonSpace(height: 10),
-              CommonText(text: actionText, color: color, isBold: isBold)
+              CommonText(
+                text: actionText,
+                color: color,
+                isBold: isBold,
+                isNotTr: isNotTr,
+              )
             ],
           ),
         ),

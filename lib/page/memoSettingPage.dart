@@ -344,7 +344,7 @@ class MemoField extends StatelessWidget {
             const EdgeInsets.symmetric(horizontal: 0, vertical: 0),
         isDense: true,
         border: InputBorder.none,
-        hintText: hintText ?? '메모를 입력해주세요 :D',
+        hintText: hintText ?? '메모를 입력해주세요 :D'.tr(),
         hintStyle: TextStyle(color: grey.s400),
       ),
       onChanged: onChanged,

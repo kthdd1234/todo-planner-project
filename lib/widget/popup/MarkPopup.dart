@@ -1,4 +1,5 @@
 // ignore_for_file: use_build_context_synchronously
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:project/common/CommonContainer.dart';
 import 'package:project/common/CommonDivider.dart';
@@ -7,6 +8,7 @@ import 'package:project/common/CommonSpace.dart';
 import 'package:project/common/CommonText.dart';
 import 'package:project/model/record_box/record_box.dart';
 import 'package:project/model/task_box/task_box.dart';
+import 'package:project/page/HomePage.dart';
 import 'package:project/page/MemoSettingPage.dart';
 import 'package:project/provider/themeProvider.dart';
 import 'package:project/util/class.dart';
@@ -257,7 +259,7 @@ class _MarkPopupState extends State<MarkPopup> {
                         borderRadius: BorderRadius.circular(5),
                       ),
                       child: MemoField(
-                        hintText: '메모 입력하기',
+                        hintText: '메모 입력하기'.tr(),
                         fontSize: 15,
                         cursorColor: cursorColor,
                         autofocus: isAutoFocus,

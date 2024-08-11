@@ -155,7 +155,6 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
     String initialRoute = isUser ? 'home-page' : 'intro-page';
     UserBox? user = userBox?.get('userProfile');
     String? fontFamily = user?.fontFamily ?? initFontFamily;
-    int appStartIndex = user?.appStartIndex ?? 0;
     String locale = context.locale.toString();
 
     return MaterialApp(

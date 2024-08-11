@@ -316,7 +316,7 @@ final premiumBenefitList = [
     subTitle: '예쁜 글씨체가 준비되어 있어요!',
   ),
   PremiumBenefitClass(
-    svgName: 'background',
+    svgName: 'theme',
     mainTitle: '다양한 배경들을 제공해드려요',
     subTitle: '총 6종의 다채로운 배경들을 이용해보세요!',
   ),
@@ -403,4 +403,10 @@ List<Map<String, String>> fontFamilyList = [
     "fontFamily": "Cafe24Ssukssuk",
     "name": "카페24 쑥쑥",
   },
+];
+
+final languageList = [
+  {'svgName': 'Korea', 'lang': 'ko', 'name': '한국어'},
+  {'svgName': 'Usa', 'lang': 'en', 'name': 'English'},
+  {'svgName': 'Japan', 'lang': 'ja', 'name': '日本語'},
 ];
