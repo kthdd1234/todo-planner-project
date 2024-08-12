@@ -1,0 +1,5 @@
+"CFBundleDisplayName" = "todo tracker";
+"CFBundleName" = "todo tracker";
+"NSCameraUsageDescription" = "Camera access is required for taking memo photos.";
+"NSPhotoLibraryUsageDescription" = "Gallery access is required to add eye body, diet, and exercise photos.";
+"NSUserTrackingUsageDescription" = "We collect advertising activity information to provide personalized advertising.";

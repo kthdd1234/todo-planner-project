@@ -1,0 +1,5 @@
+"CFBundleDisplayName" = "todo tracker";
+"CFBundleName" = "todo tracker";
+"NSCameraUsageDescription" = "メモの写真を撮影するためにカメラ アクセス権が必要です。";
+"NSPhotoLibraryUsageDescription" = "メモの写真をインポートするには、ギャラリーへのアクセス権が必要です。";
+"NSUserTrackingUsageDescription" = "個人に最適化された広告を提供するために広告活動情報を収集します。";
