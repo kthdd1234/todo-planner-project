@@ -33,7 +33,7 @@ class _IntroPageState extends State<IntroPage> {
     String fontFamily = 'IM_Hyemin';
     String calendarFormat = CalendarFormat.week.toString();
     Map<String, dynamic> taskTitleInfo = {
-      'title': locale == 'ko' ? '할 일 리스트' : 'a to-do list',
+      'title': locale == 'ko' ? '할 일 리스트' : 'Todo list',
       'colorName': "남색"
     };
     Map<String, dynamic> memoTitleInfo = {

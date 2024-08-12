@@ -1,5 +1,7 @@
 // ignore_for_file: use_build_context_synchronously
 
+import 'dart:developer';
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -150,7 +152,7 @@ class _TaskSettingModalSheetState extends State<TaskSettingModalSheet> {
     }
   }
 
-  Future<bool> onSaveTask(String id) async {
+  onSaveTask(String id) async {
     if (widget.taskBox == null) {
       await taskRepository.taskBox.put(
         id,
@@ -174,27 +176,9 @@ class _TaskSettingModalSheetState extends State<TaskSettingModalSheet> {
       taskBox.name = controller.text;
 
       await taskBox.save();
-      navigatorPop(context);
     }
 
-    return true;
-  }
-
-  onInitState() {
-    Color backgroundColor = getColorClass(selectedColorName).s200;
-    controller.text = '';
-
-    setState(() {});
-
-    Fluttertoast.showToast(
-      msg: "추가 되었습니다".tr(),
-      toastLength: Toast.LENGTH_SHORT,
-      gravity: ToastGravity.TOP,
-      timeInSecForIosWeb: 2,
-      backgroundColor: backgroundColor,
-      textColor: Colors.white,
-      fontSize: 16.0,
-    );
+    navigatorPop(context);
   }
 
   onEditingComplete() async {
@@ -209,9 +193,19 @@ class _TaskSettingModalSheetState extends State<TaskSettingModalSheet> {
         ),
       );
     } else {
-      await onSaveTask(uuid());
+      String uid = uuid();
+      Color backgroundColor = getColorClass(selectedColorName).s300;
+      Fluttertoast.showToast(
+        msg: "추가 되었습니다".tr(),
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.TOP,
+        timeInSecForIosWeb: 2,
+        backgroundColor: backgroundColor,
+        textColor: Colors.white,
+        fontSize: 16.0,
+      );
 
-      if (widget.taskBox == null) onInitState();
+      await onSaveTask(uid);
     }
   }
 

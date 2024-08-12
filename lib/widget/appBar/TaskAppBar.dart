@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:multi_value_listenable_builder/multi_value_listenable_builder.dart';
 import 'package:project/common/CommonCalendar.dart';
+import 'package:project/common/CommonNull.dart';
 import 'package:project/model/user_box/user_box.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:project/common/CommonCircle.dart';
@@ -10,6 +11,7 @@ import 'package:project/common/CommonTag.dart';
 import 'package:project/common/CommonText.dart';
 import 'package:project/model/task_box/task_box.dart';
 import 'package:project/page/PremiumPage.dart';
+import 'package:project/provider/PremiumProvider.dart';
 import 'package:project/provider/selectedDateTimeProvider.dart';
 import 'package:project/provider/themeProvider.dart';
 import 'package:project/provider/titleDateTimeProvider.dart';
@@ -74,6 +76,7 @@ class _TaskTitleState extends State<TaskTitle> {
   Widget build(BuildContext context) {
     bool isWeek = availableCalendarFormats[widget.calendarFormat]! == 'week';
     bool isLight = context.watch<ThemeProvider>().isLight;
+    bool isPremium = context.watch<PremiumProvider>().isPremium;
 
     return Padding(
       padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
@@ -83,16 +86,20 @@ class _TaskTitleState extends State<TaskTitle> {
           const TitleDateTime(),
           Row(
             children: [
-              CommonTag(
-                isImage: true,
-                text: '광고 제거',
-                isBold: true,
-                fontSize: 10,
-                textColor: Colors.white,
-                bgColor: isLight ? indigo.s300 : darkButtonColor,
-                onTap: onPremiumPage,
-              ),
-              CommonSpace(width: 5),
+              !isPremium
+                  ? Padding(
+                      padding: const EdgeInsets.only(right: 5),
+                      child: CommonTag(
+                        isImage: true,
+                        text: '광고 제거',
+                        isBold: true,
+                        fontSize: 10,
+                        textColor: Colors.white,
+                        bgColor: isLight ? indigo.s300 : darkButtonColor,
+                        onTap: onPremiumPage,
+                      ),
+                    )
+                  : const CommonNull(),
               CommonTag(
                 text: isWeek ? '일주일' : '한 달',
                 isBold: true,

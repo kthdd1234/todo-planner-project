@@ -1,4 +1,6 @@
 // ignore_for_file: use_build_context_synchronously
+import 'dart:developer';
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:project/common/CommonContainer.dart';
@@ -62,6 +64,8 @@ class _MarkPopupState extends State<MarkPopup> {
   }
 
   onMark(String selectedMark) async {
+    log('onMark $selectedMark');
+
     String taskId = widget.taskBox.id;
     Map<String, dynamic> taskMark = TaskMarkClass(
       id: taskId,
@@ -92,6 +96,7 @@ class _MarkPopupState extends State<MarkPopup> {
 
       if (idx == -1) {
         widget.recordBox!.taskMarkList!.add(taskMark);
+        log('add $taskMark');
       } else {
         int index = taskMarkList.indexWhere(
           (task) => task['id'] == taskMark['id'],
@@ -103,7 +108,9 @@ class _MarkPopupState extends State<MarkPopup> {
       }
     }
 
-    // 내일 할래요 기능 체크
+    await widget.recordBox?.save();
+
+    // 내일 할래요
     if (selectedMark == mark.T) {
       DateTime selectedDateTime = widget.selectedDateTime;
       DateTime tomorrowDateTime = DateTime(
@@ -111,17 +118,21 @@ class _MarkPopupState extends State<MarkPopup> {
         selectedDateTime.month,
         selectedDateTime.day + 1,
       );
-      bool isContain = widget.taskBox.dateTimeList.any(
-          (dateTime) => dateTimeKey(dateTime) == dateTimeKey(tomorrowDateTime));
+      TaskBox? task = taskRepository.taskBox.get(taskId);
+      int? index = task?.dateTimeList.indexWhere(
+        (dateTime) => dateTimeKey(dateTime) == dateTimeKey(tomorrowDateTime),
+      );
 
-      if (isContain == false) {
-        widget.taskBox.dateTimeList.add(tomorrowDateTime);
+      if (index == -1) {
+        TaskBox? task = taskRepository.taskBox.get(taskId);
+        task?.dateTimeList.add(tomorrowDateTime);
+      } else if (index != null) {
+        task?.dateTimeList.removeAt(index);
       }
 
       await widget.taskBox.save();
     }
 
-    await widget.recordBox?.save();
     navigatorPop(context);
   }
 
