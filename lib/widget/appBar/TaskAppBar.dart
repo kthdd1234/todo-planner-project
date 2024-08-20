@@ -84,31 +84,13 @@ class _TaskTitleState extends State<TaskTitle> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           const TitleDateTime(),
-          Row(
-            children: [
-              !isPremium
-                  ? Padding(
-                      padding: const EdgeInsets.only(right: 5),
-                      child: CommonTag(
-                        isImage: true,
-                        text: '광고 제거',
-                        isBold: true,
-                        fontSize: 10,
-                        textColor: Colors.white,
-                        bgColor: isLight ? indigo.s300 : darkButtonColor,
-                        onTap: onPremiumPage,
-                      ),
-                    )
-                  : const CommonNull(),
-              CommonTag(
-                text: isWeek ? '일주일' : '한 달',
-                isBold: true,
-                fontSize: 10,
-                textColor: Colors.white,
-                bgColor: isLight ? indigo.s300 : darkButtonColor,
-                onTap: onCalendarFormat,
-              ),
-            ],
+          CommonTag(
+            text: isWeek ? '일주일' : '한 달',
+            isBold: true,
+            fontSize: 10,
+            textColor: Colors.white,
+            bgColor: isLight ? indigo.s300 : darkButtonColor,
+            onTap: onCalendarFormat,
           )
         ],
       ),

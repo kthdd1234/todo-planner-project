@@ -31,7 +31,6 @@ class CalendarBody extends StatelessWidget {
       valueListenables: valueListenables,
       builder: (context, values, child) => Column(
         children: [
-          isPremium == false ? BannerAdWidget() : const CommonNull(),
           CalendarAppBar(),
           Expanded(child: SingleChildScrollView(child: ContentView())),
         ],

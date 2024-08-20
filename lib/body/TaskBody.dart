@@ -52,7 +52,6 @@ class TaskBody extends StatelessWidget {
           builder: (btx, list, w) {
             return Column(
               children: [
-                isPremium == false ? BannerAdWidget() : const CommonNull(),
                 TaskAppBar(),
                 Expanded(
                   child: SingleChildScrollView(

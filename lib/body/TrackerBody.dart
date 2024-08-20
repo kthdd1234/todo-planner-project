@@ -69,7 +69,6 @@ class _TrackerBodyState extends State<TrackerBody> {
 
     return Column(
       children: [
-        isPremium == false ? const BannerAdWidget() : const CommonNull(),
         TrackerAppBar(
           startDateTime: startDateTime,
           endDateTime: endDateTime,

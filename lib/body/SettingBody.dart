@@ -239,7 +239,7 @@ class _ContentViewState extends State<ContentView> {
               )
             : ImageButton(
                 path: 't-4',
-                text: '광고 제거',
+                text: 'Upgrade',
                 padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 7),
                 fontSize: 12,
                 onTap: onPremium,
