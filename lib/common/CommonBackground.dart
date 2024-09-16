@@ -25,7 +25,7 @@ class CommonBackground extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     bool isLight = context.watch<ThemeProvider>().isLight;
-    String path = background ?? userRepository.user.background ?? '1';
+    String path = background ?? userRepository.user.background ?? '2';
 
     return Container(
       height: height ?? MediaQuery.of(context).size.height,

@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:project/repositories/record_repository.dart';
@@ -5,37 +6,87 @@ import 'package:project/repositories/task_repository.dart';
 import 'package:project/repositories/user_repository.dart';
 import 'package:project/util/class.dart';
 import 'package:project/util/enum.dart';
+import 'package:project/util/func.dart';
 import 'package:table_calendar/table_calendar.dart';
 
-List<BNClass> bnList = [
-  BNClass(index: 0, name: '투두', icon: Icons.edit_rounded),
-  BNClass(index: 1, name: '캘린더', icon: Icons.calendar_month_outlined),
-  BNClass(index: 2, name: '트래커', icon: Icons.view_timeline_outlined),
-  BNClass(index: 3, name: '더보기', icon: Icons.more_horiz_rounded)
-];
+List<BNClass> getBnClassList(bool isLight, int seletedIdx) {
+  svg(int idx, String name) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 5),
+      child: svgAsset(
+        name: name,
+        width: 22,
+        color: idx == seletedIdx
+            ? null
+            : isLight
+                ? grey.s400
+                : grey.original,
+      ),
+    );
+  }
 
-final bottomNavigationBarItemList = bnList.map(
-  (bn) => BottomNavigationBarItem(label: bn.name, icon: Icon(bn.icon)),
-);
+  List<BNClass> bnClassList = [
+    BNClass(
+      index: 0,
+      name: '홈',
+      icon: svg(
+        0,
+        seletedIdx == 0
+            ? 'bnb-home-filled-${isLight ? 'light' : 'dark'}'
+            : 'bnb-home',
+      ),
+      svgName: seletedIdx == 0 ? 'bnb-home-filled-light' : 'bnb-home',
+    ),
+    BNClass(
+      index: 1,
+      name: '캘린더',
+      icon: svg(
+        1,
+        seletedIdx == 1
+            ? 'bnb-calendar-filled-${isLight ? 'light' : 'dark'}'
+            : 'bnb-calendar',
+      ),
+      svgName: 'bnb-calendar',
+    ),
+    BNClass(
+      index: 2,
+      name: '트래커',
+      icon: svg(
+        2,
+        seletedIdx == 2
+            ? 'bnb-tracker-filled-${isLight ? 'light' : 'dark'}'
+            : 'bnb-tracker',
+      ),
+      svgName: 'bnb-tracker',
+    ),
+    BNClass(
+      index: 3,
+      name: '설정',
+      icon: svg(
+        3,
+        seletedIdx == 3
+            ? 'bnb-setting-filled-${isLight ? 'light' : 'dark'}'
+            : 'bnb-setting',
+      ),
+      svgName: 'bnb-setting',
+    )
+  ];
 
-// [
-//   const BottomNavigationBarItem(
-//     label: '투두',
-//     icon: Icon(Icons.edit_rounded),
-//   ),
-//   const BottomNavigationBarItem(
-//     label: '캘린더',
-//     icon: Icon(Icons.calendar_month_outlined),
-//   ),
-//   const BottomNavigationBarItem(
-//     label: '트래커',
-//     icon: Icon(Icons.view_timeline_outlined),
-//   ),
-//   const BottomNavigationBarItem(
-//     label: '더보기',
-//     icon: Icon(Icons.more_horiz_rounded),
-//   ),
-// ];
+  return bnClassList;
+}
+
+List<BottomNavigationBarItem> getBnbiList(bool isLight, int seletedIdx) {
+  List<BottomNavigationBarItem> bnbList = getBnClassList(
+    isLight,
+    seletedIdx,
+  )
+      .map(
+        (bn) => BottomNavigationBarItem(label: bn.name.tr(), icon: bn.icon),
+      )
+      .toList();
+
+  return bnbList;
+}
 
 final indigo = ColorClass(
   colorName: '남색',
@@ -257,13 +308,6 @@ final weekMonthMarkList = [
   {'mark': mark.M, 'name': mark.markName(mark.M)},
 ];
 
-// final dateTimeType = DateTimeTypeClass(
-//   oneDay: "oneDay",
-//   manyDay: "manyDay",
-//   everyWeek: "everyWeek",
-//   everyMonth: "everyMonth",
-// );
-
 final calendarFormatInfo = {
   CalendarFormat.week.toString(): CalendarFormat.week,
   CalendarFormat.month.toString(): CalendarFormat.month,
@@ -364,6 +408,10 @@ final daysInfo = {
 };
 
 final backroundClassList = [
+  [
+    BackgroundClass(path: '0', name: 'Defalut'),
+    BackgroundClass(path: '0', name: 'Defalut'),
+  ],
   [
     BackgroundClass(path: '1', name: 'Cloudy Apple'),
     BackgroundClass(path: '2', name: 'Snow Again'),

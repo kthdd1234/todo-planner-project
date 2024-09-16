@@ -14,6 +14,7 @@ import 'package:project/provider/titleDateTimeProvider.dart';
 import 'package:project/provider/bottomTabIndexProvider.dart';
 import 'package:project/provider/selectedDateTimeProvider.dart';
 import 'package:project/provider/themeProvider.dart';
+import 'package:project/util/class.dart';
 import 'package:project/util/final.dart';
 import 'package:project/util/func.dart';
 import 'package:project/util/service.dart';
@@ -46,7 +47,7 @@ class _HomePageState extends State<HomePage> {
       user.theme ??= 'light';
       user.widgetTheme ??= 'light';
       user.filterIdList ??= filterIdList;
-      user.background ??= '1';
+      user.background ??= '0';
       user.appStartIndex ??= 0;
 
       WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
@@ -85,42 +86,26 @@ class _HomePageState extends State<HomePage> {
     bool isLight = context.watch<ThemeProvider>().isLight;
     int seletedIdx = context.watch<BottomTabIndexProvider>().seletedIdx;
 
-    List<BottomNavigationBarItem> items = bottomNavigationBarItemList
-        .map((item) => BottomNavigationBarItem(
-              icon: item.icon,
-              label: item.label!.tr(),
-            ))
-        .toList();
-
-    final bodyList = [
+    Widget body = [
       const TaskBody(),
       const CalendarBody(),
       const TrackerBody(),
       const SettingBody()
-    ];
+    ][seletedIdx];
 
     return CommonBackground(
       child: CommonScaffold(
-        body: bodyList[seletedIdx],
-        isFab: seletedIdx == 0 || seletedIdx == 1,
+        body: body,
+        // isFab: seletedIdx == 0 || seletedIdx == 1,
         bottomNavigationBar: Theme(
           data: Theme.of(context).copyWith(
             canvasColor: Colors.transparent,
           ),
           child: BottomNavigationBar(
-            items: items,
+            items: getBnbiList(isLight, seletedIdx),
             elevation: 0,
-            selectedItemColor: isLight ? indigo.s300 : Colors.white,
-            selectedLabelStyle: TextStyle(
-              color: isLight ? indigo.s200 : Colors.white,
-              fontWeight: isLight ? null : FontWeight.bold,
-            ),
-            unselectedItemColor: // const Color(0xffA2A7B2)
-                isLight
-                    ? const Color.fromARGB(255, 115, 120, 139)
-                    : const Color(0xff616261),
-            unselectedLabelStyle:
-                TextStyle(fontWeight: isLight ? null : FontWeight.bold),
+            showSelectedLabels: false,
+            showUnselectedLabels: false,
             currentIndex: seletedIdx,
             onTap: onBottomNavigation,
           ),

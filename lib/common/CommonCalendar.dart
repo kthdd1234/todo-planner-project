@@ -87,7 +87,7 @@ class _CommonCalendarState extends State<CommonCalendar> {
         locale: locale,
         shouldFillViewport: widget.shouldFillViewport,
         calendarStyle: CalendarStyle(
-          cellMargin: const EdgeInsets.all(14),
+          cellMargin: const EdgeInsets.all(13),
           cellAlignment: widget.shouldFillViewport
               ? Alignment.topCenter
               : Alignment.center,

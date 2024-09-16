@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
+import 'package:project/common/CommonText.dart';
+import 'package:project/util/constants.dart';
 
 class SpeedDialButton extends StatelessWidget {
   SpeedDialButton({
@@ -23,7 +25,8 @@ class SpeedDialButton extends StatelessWidget {
       buttonSize: const Size(47, 47),
       childrenButtonSize: const Size(47, 47),
       spaceBetweenChildren: 7,
-      iconTheme: const IconThemeData(color: Colors.white, size: 30),
+      label: CommonText(text: '할 일 추가'),
+      iconTheme: const IconThemeData(color: darkButtonColor, size: 30),
       activeIcon: Icons.close,
       activeBackgroundColor: activeBackgroundColor,
       elevation: 0,

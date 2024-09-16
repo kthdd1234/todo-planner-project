@@ -220,7 +220,7 @@ class _TaskSettingModalSheetState extends State<TaskSettingModalSheet> {
       child: CommonModalSheet(
         title:
             '${widget.initTask.name} ${widget.taskBox == null ? '추가' : '수정'}',
-        height: 330,
+        height: 270,
         child: CommonContainer(
           innerPadding: const EdgeInsets.only(
             left: 15,
@@ -240,14 +240,6 @@ class _TaskSettingModalSheetState extends State<TaskSettingModalSheet> {
                   value: isHighlighter,
                   onChanged: onHighlighter,
                 ),
-              ),
-              CommonModalItem(
-                title: '색상',
-                onTap: () {},
-                child: ColorListView(
-                  selectedColorName: selectedColorName,
-                  onColor: onColor,
-                ), //
               ),
               CommonModalItem(
                 title: '날짜',

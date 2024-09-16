@@ -198,7 +198,7 @@ class _MemoSettingPageState extends State<MemoSettingPage> {
                 outerPadding: const EdgeInsets.fromLTRB(7, 0, 7, 7),
                 child: Column(
                   children: [
-                    HorizentalBorder(color: borderColor),
+                    HorizentalBorder(colorName: '회색'),
                     Expanded(
                       child: Container(
                         color: containerColor,
@@ -232,7 +232,7 @@ class _MemoSettingPageState extends State<MemoSettingPage> {
                         ),
                       ),
                     ),
-                    HorizentalBorder(color: borderColor),
+                    HorizentalBorder(colorName: '회색'),
                   ],
                 ),
               ),

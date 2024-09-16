@@ -157,6 +157,7 @@ flutter:
     - assets/svg/hand.svg
     - assets/svg/premium-photos-four.svg
     - assets/svg/language.svg
+    - assets/image/b-0.png
     - assets/image/b-1.png
     - assets/image/b-2.png
     - assets/image/b-3.png
@@ -172,6 +173,22 @@ flutter:
     - assets/svg/Japan.svg
     - assets/svg/Usa.svg
     - assets/svg/mode.svg
+    - assets/svg/mark-d.svg
+    - assets/svg/bnb-home.svg
+    - assets/svg/bnb-home-filled-light.svg
+    - assets/svg/bnb-home-filled-dark.svg
+    - assets/svg/bnb-calendar.svg
+    - assets/svg/bnb-calendar-filled-light.svg
+    - assets/svg/bnb-calendar-filled-dark.svg
+    - assets/svg/bnb-tracker.svg
+    - assets/svg/bnb-tracker-filled-light.svg
+    - assets/svg/bnb-tracker-filled-dark.svg
+    - assets/svg/bnb-setting.svg
+    - assets/svg/bnb-setting-filled-light.svg
+    - assets/svg/bnb-setting-filled-dark.svg
+    - assets/svg/top-group.svg
+    - assets/svg/top-calendar-week.svg
+    - assets/svg/group-light.svg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

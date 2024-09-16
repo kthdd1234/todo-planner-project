@@ -4,6 +4,7 @@ import 'package:project/common/CommonNull.dart';
 import 'package:project/model/user_box/user_box.dart';
 import 'package:project/page/PremiumPage.dart';
 import 'package:project/provider/PremiumProvider.dart';
+import 'package:project/provider/bottomTabIndexProvider.dart';
 import 'package:project/provider/themeProvider.dart';
 import 'package:project/util/constants.dart';
 import 'package:project/util/final.dart';
@@ -19,6 +20,7 @@ class AppStartIndexModalSheet extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    int seletedIdx = context.watch<BottomTabIndexProvider>().seletedIdx;
     bool isLight = context.watch<ThemeProvider>().isLight;
     bool isPremium = context.watch<PremiumProvider>().isPremium;
 
@@ -26,12 +28,12 @@ class AppStartIndexModalSheet extends StatelessWidget {
       title: '앱 시작 화면',
       height: 185,
       child: Row(
-        children: bnList
+        children: getBnClassList(isLight, seletedIdx)
             .map(
               (bn) => bn.index != 3
                   ? ModalButton(
                       innerPadding: const EdgeInsets.only(right: 5),
-                      icon: bn.icon,
+                      svgName: bn.svgName,
                       actionText: bn.name,
                       color: bn.index == appStartIndex
                           ? Colors.white

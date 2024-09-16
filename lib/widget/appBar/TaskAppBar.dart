@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:multi_value_listenable_builder/multi_value_listenable_builder.dart';
 import 'package:project/common/CommonCalendar.dart';
-import 'package:project/common/CommonNull.dart';
 import 'package:project/model/user_box/user_box.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:project/common/CommonCircle.dart';
@@ -72,6 +71,10 @@ class _TaskTitleState extends State<TaskTitle> {
     movePage(context: context, page: const PremiumPage());
   }
 
+  onGroup() {
+    //
+  }
+
   @override
   Widget build(BuildContext context) {
     bool isWeek = availableCalendarFormats[widget.calendarFormat]! == 'week';
@@ -84,13 +87,9 @@ class _TaskTitleState extends State<TaskTitle> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           const TitleDateTime(),
-          CommonTag(
-            text: isWeek ? '일주일' : '한 달',
-            isBold: true,
-            fontSize: 10,
-            textColor: Colors.white,
-            bgColor: isLight ? indigo.s300 : darkButtonColor,
-            onTap: onCalendarFormat,
+          InkWell(
+            onTap: onGroup,
+            child: svgAsset(name: 'group-light', width: 22),
           )
         ],
       ),

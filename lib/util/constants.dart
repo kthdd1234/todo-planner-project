@@ -133,3 +133,6 @@ const darkNotSelectedTextColor = Color(0xff616261);
 
 /// darkSvgBgColor
 const darkSvgBgColor = Color(0xff2C2C35);
+
+/// selectedColor
+const selectedColor = Color(0xffB0B9C2);

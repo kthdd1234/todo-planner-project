@@ -16,6 +16,7 @@ import 'package:project/page/PremiumPage.dart';
 import 'package:project/page/BackgroundPage.dart';
 import 'package:project/provider/PremiumProvider.dart';
 import 'package:project/provider/ReloadProvider.dart';
+import 'package:project/provider/bottomTabIndexProvider.dart';
 import 'package:project/provider/themeProvider.dart';
 import 'package:project/util/class.dart';
 import 'package:project/util/constants.dart';
@@ -211,6 +212,8 @@ class _ContentViewState extends State<ContentView> {
 
   @override
   Widget build(BuildContext context) {
+    String locale = context.locale.toString();
+
     UserBox? user = userRepository.user;
     String widgetTheme = user.widgetTheme ?? 'light';
     String background = user.background ?? '1';
@@ -219,8 +222,8 @@ class _ContentViewState extends State<ContentView> {
 
     bool isPremium = context.watch<PremiumProvider>().isPremium;
     String theme = context.watch<ThemeProvider>().theme;
-
-    String locale = context.locale.toString();
+    int seletedIdx = context.watch<BottomTabIndexProvider>().seletedIdx;
+    bool isLight = context.watch<ThemeProvider>().isLight;
 
     List<SettingItemClass> settingItemList = [
       SettingItemClass(
@@ -285,7 +288,10 @@ class _ContentViewState extends State<ContentView> {
         name: '앱 시작 화면',
         svg: 'app-start',
         value: onValue(
-            bnList.firstWhere((bn) => bn.index == appStartIndex).name, null),
+            getBnClassList(isLight, seletedIdx)
+                .firstWhere((bn) => bn.index == appStartIndex)
+                .name,
+            null),
         onTap: () => onAppStart(appStartIndex),
       ),
       SettingItemClass(
@@ -328,9 +334,8 @@ class _ContentViewState extends State<ContentView> {
                       children: [
                         Container(
                           decoration: BoxDecoration(
-                            color: widget.isLight
-                                ? whiteBgBtnColor
-                                : darkSvgBgColor,
+                            color:
+                                widget.isLight ? Colors.white : darkSvgBgColor,
                             borderRadius: const BorderRadius.all(
                               Radius.circular(5),
                             ),

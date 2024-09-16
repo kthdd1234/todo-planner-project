@@ -66,7 +66,7 @@ class _IntroPageState extends State<IntroPage> {
   @override
   Widget build(BuildContext context) {
     return CommonBackground(
-      background: '1',
+      background: '0',
       child: CommonScaffold(
         body: Column(
           mainAxisAlignment: MainAxisAlignment.center,

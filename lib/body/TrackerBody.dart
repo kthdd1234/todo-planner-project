@@ -292,7 +292,7 @@ class WeeklyArrowButton extends StatelessWidget {
             onTap: onTap,
             innerPadding: const EdgeInsets.all(0),
             height: 35,
-            color: isLight ? indigo.s200 : darkButtonColor,
+            color: isLight ? Colors.white : darkButtonColor,
             child: Center(
               child: svgName != null
                   ? CommonSvgText(
@@ -303,14 +303,14 @@ class WeeklyArrowButton extends StatelessWidget {
                       svgDirection: svgDirection!,
                       svgRight: 7,
                       svgLeft: 7,
-                      svgColor: isLight ? Colors.white : darkTextColor,
-                      textColor: isLight ? Colors.white : darkTextColor,
+                      svgColor: isLight ? darkButtonColor : darkTextColor,
+                      textColor: isLight ? darkButtonColor : darkTextColor,
                       isBold: true,
                     )
                   : CommonText(
                       text: text,
                       fontSize: 12,
-                      color: isLight ? Colors.white : darkTextColor,
+                      color: isLight ? darkButtonColor : darkTextColor,
                       isBold: true,
                     ),
             )),

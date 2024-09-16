@@ -329,6 +329,7 @@ class MarkItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     bool isLight = context.watch<ThemeProvider>().isLight;
+    ColorClass color = getColorClass(colorName);
 
     return InkWell(
       onTap: () => onTap(mark),
@@ -340,8 +341,8 @@ class MarkItem extends StatelessWidget {
             decoration: BoxDecoration(
               color: isSelected
                   ? isLight
-                      ? getColorClass(colorName).s50
-                      : getColorClass(colorName).s300
+                      ? color.s50
+                      : color.s300
                   : null,
               borderRadius: BorderRadius.circular(7),
             ),
@@ -353,27 +354,26 @@ class MarkItem extends StatelessWidget {
                   child: svgAsset(
                     name: 'mark-$mark',
                     width: 15,
-                    color: isSelected
-                        ? isLight
-                            ? getColorClass(colorName).s300
-                            : darkTextColor
-                        : getColorClass(colorName).s300,
+                    color: isLight ? color.original : darkTextColor,
                   ),
                 ),
                 CommonSpace(width: 10),
                 CommonText(
                   text: name,
-                  fontSize: 15,
-                  color: isLight ? textColor : darkTextColor,
+                  color: isLight
+                      ? isSelected
+                          ? color.original
+                          : textColor
+                      : isSelected
+                          ? color.s50
+                          : darkTextColor,
                   isBold: !isLight,
                 )
               ],
             ),
           ),
           CommonSpace(height: 10),
-          CommonDivider(
-            color: isLight ? getColorClass(colorName).s50 : Colors.white12,
-          ),
+          CommonDivider(color: isLight ? color.s50 : Colors.white12),
         ],
       ),
     );

@@ -90,7 +90,7 @@ class _AddButtonState extends State<AddButton> {
     return SpeedDialButton(
       icon: Icons.add,
       activeBackgroundColor: widget.isLight ? red.s200 : darkButtonColor,
-      backgroundColor: widget.isLight ? indigo.s200 : darkButtonColor,
+      backgroundColor: widget.isLight ? Colors.white : darkButtonColor,
       children: [
         speedDialChildButton(
           svg: 'plus',
@@ -98,12 +98,6 @@ class _AddButtonState extends State<AddButton> {
           color: indigo,
           onTap: () => onAddTodo(selectedDateTime),
         ),
-        // speedDialChildButton(
-        //   svg: 'routin',
-        //   lable: '루틴 추가',
-        //   color: teal,
-        //   onTap: () => onAddRoutin(selectedDateTime),
-        // ),
         speedDialChildButton(
           svg: 'pencil',
           lable: '메모 추가',

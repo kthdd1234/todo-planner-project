@@ -334,9 +334,10 @@ class BNClass {
     required this.index,
     required this.name,
     required this.icon,
+    required this.svgName,
   });
 
   int index;
-  String name;
-  IconData icon;
+  String name, svgName;
+  Widget icon;
 }

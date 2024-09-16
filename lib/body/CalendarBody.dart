@@ -8,13 +8,11 @@ import 'package:project/common/CommonNull.dart';
 import 'package:project/common/CommonSpace.dart';
 import 'package:project/common/CommonText.dart';
 import 'package:project/model/task_box/task_box.dart';
-import 'package:project/provider/PremiumProvider.dart';
 import 'package:project/provider/titleDateTimeProvider.dart';
 import 'package:project/provider/selectedDateTimeProvider.dart';
 import 'package:project/util/constants.dart';
 import 'package:project/util/final.dart';
 import 'package:project/util/func.dart';
-import 'package:project/widget/ad/BannerAd.dart';
 import 'package:project/widget/appBar/CalendarAppBar.dart';
 import 'package:project/widget/border/VerticalBorder.dart';
 import 'package:provider/provider.dart';
@@ -25,28 +23,26 @@ class CalendarBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    bool isPremium = context.watch<PremiumProvider>().isPremium;
-
     return MultiValueListenableBuilder(
       valueListenables: valueListenables,
       builder: (context, values, child) => Column(
         children: [
           CalendarAppBar(),
-          Expanded(child: SingleChildScrollView(child: ContentView())),
+          Expanded(child: SingleChildScrollView(child: CalendarView())),
         ],
       ),
     );
   }
 }
 
-class ContentView extends StatefulWidget {
-  const ContentView({super.key});
+class CalendarView extends StatefulWidget {
+  const CalendarView({super.key});
 
   @override
-  State<ContentView> createState() => _ContentViewState();
+  State<CalendarView> createState() => _CalendarViewState();
 }
 
-class _ContentViewState extends State<ContentView> {
+class _CalendarViewState extends State<CalendarView> {
   onDaySelected(DateTime dateTime) {
     context
         .read<SelectedDateTimeProvider>()

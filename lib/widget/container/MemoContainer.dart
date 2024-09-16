@@ -137,7 +137,9 @@ class _MemoContainerState extends State<MemoContainer> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                HorizentalBorder(color: borderColor),
+                HorizentalBorder(
+                  colorName: '주황색',
+                ),
                 CustomPaint(
                   painter: BacgroundPaint(isLight: isLight, color: orange.s50),
                   child: Padding(
@@ -174,7 +176,7 @@ class _MemoContainerState extends State<MemoContainer> {
                     ),
                   ),
                 ),
-                HorizentalBorder(color: borderColor),
+                HorizentalBorder(colorName: '주황색'),
               ],
             ),
           )
