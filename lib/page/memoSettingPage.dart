@@ -165,11 +165,11 @@ class _MemoSettingPageState extends State<MemoSettingPage> {
 
   @override
   Widget build(BuildContext context) {
+    String locale = context.locale.toString();
     bool isLight = context.watch<ThemeProvider>().isLight;
     Color containerColor = isLight ? memoBgColor : darkContainerColor;
     Color borderColor = isLight ? orange.s50 : Colors.white10;
     Color cursorColor = isLight ? orange.s300 : darkTextColor;
-    String locale = context.locale.toString();
 
     return CommonBackground(
       child: CommonScaffold(
@@ -198,7 +198,7 @@ class _MemoSettingPageState extends State<MemoSettingPage> {
                 outerPadding: const EdgeInsets.fromLTRB(7, 0, 7, 7),
                 child: Column(
                   children: [
-                    HorizentalBorder(colorName: '회색'),
+                    HorizentalBorder(colorName: '주황색'),
                     Expanded(
                       child: Container(
                         color: containerColor,
@@ -232,7 +232,7 @@ class _MemoSettingPageState extends State<MemoSettingPage> {
                         ),
                       ),
                     ),
-                    HorizentalBorder(colorName: '회색'),
+                    HorizentalBorder(colorName: '주황색'),
                   ],
                 ),
               ),

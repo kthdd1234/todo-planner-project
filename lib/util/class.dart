@@ -130,6 +130,7 @@ class CategoryClass {
 
 class TaskClass {
   TaskClass({
+    required this.groupId,
     required this.type,
     required this.name,
     required this.dateTimeType,
@@ -137,7 +138,7 @@ class TaskClass {
     required this.dateTimeLabel,
   });
 
-  String type, name, dateTimeLabel, dateTimeType;
+  String groupId, type, name, dateTimeLabel, dateTimeType;
   List<DateTime> dateTimeList;
 }
 
@@ -167,10 +168,11 @@ class TaskItemClass {
     required this.isHighlight,
     required this.task,
     required this.color,
+    required this.groupId,
   });
 
   String id, name;
-  String? mark, memo;
+  String? mark, memo, groupId;
   bool? isHighlight;
   TaskClass task;
   ColorClass color;

@@ -3,6 +3,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:multi_value_listenable_builder/multi_value_listenable_builder.dart';
 import 'package:project/common/CommonNull.dart';
+import 'package:project/model/group_box/group_box.dart';
 import 'package:project/model/record_box/record_box.dart';
 import 'package:project/model/user_box/user_box.dart';
 import 'package:project/provider/PremiumProvider.dart';
@@ -10,7 +11,6 @@ import 'package:project/provider/titleDateTimeProvider.dart';
 import 'package:project/provider/selectedDateTimeProvider.dart';
 import 'package:project/util/final.dart';
 import 'package:project/util/func.dart';
-import 'package:project/widget/ad/BannerAd.dart';
 import 'package:project/widget/appBar/TaskAppBar.dart';
 import 'package:project/widget/container/MemoContainer.dart';
 import 'package:project/widget/container/TaskContainer.dart';
@@ -24,7 +24,6 @@ class TaskBody extends StatelessWidget {
   Widget build(BuildContext context) {
     DateTime selectedDateTime =
         context.watch<SelectedDateTimeProvider>().seletedDateTime;
-    bool isPremium = context.watch<PremiumProvider>().isPremium;
 
     onHorizontalDragEnd(DragEndDetails dragEndDetails) {
       double? primaryVelocity = dragEndDetails.primaryVelocity;
@@ -48,27 +47,17 @@ class TaskBody extends StatelessWidget {
     return GestureDetector(
       onHorizontalDragEnd: onHorizontalDragEnd,
       child: MultiValueListenableBuilder(
-          valueListenables: valueListenables,
-          builder: (btx, list, w) {
-            return Column(
-              children: [
-                TaskAppBar(),
-                Expanded(
-                  child: SingleChildScrollView(
-                    child: ContentView(selectedDateTime: selectedDateTime),
-                  ),
-                ),
-              ],
-            );
-          }),
+        valueListenables: valueListenables,
+        builder: (btx, list, w) {
+          return Column(children: [TaskAppBar(), ContentView()]);
+        },
+      ),
     );
   }
 }
 
 class ContentView extends StatefulWidget {
-  ContentView({super.key, required this.selectedDateTime});
-
-  DateTime selectedDateTime;
+  ContentView({super.key});
 
   @override
   State<ContentView> createState() => _ContentViewState();
@@ -77,25 +66,37 @@ class ContentView extends StatefulWidget {
 class _ContentViewState extends State<ContentView> {
   @override
   Widget build(BuildContext context) {
-    UserBox? user = userRepository.user;
     String locale = context.locale.toString();
-    int recordKey = dateTimeKey(widget.selectedDateTime);
+    UserBox? user = userRepository.user;
+    DateTime selectedDateTime =
+        context.watch<SelectedDateTimeProvider>().seletedDateTime;
+    int recordKey = dateTimeKey(selectedDateTime);
     RecordBox? recordBox = recordRepository.recordBox.get(recordKey);
     CalendarFormat calendarFormat = calendarFormatInfo[user.calendarFormat]!;
 
-    return Column(
-      children: [
-        TaskCalendar(locale: locale, calendarFormat: calendarFormat),
-        MemoContainer(
-          recordBox: recordBox,
-          selectedDateTime: widget.selectedDateTime,
+    List<GroupBox> groupList = groupRepository.groupList;
+
+    return Expanded(
+      child: SingleChildScrollView(
+        child: Column(
+          children: [
+            TaskCalendar(calendarFormat: calendarFormat),
+            MemoContainer(
+              recordBox: recordBox,
+              selectedDateTime: selectedDateTime,
+            ),
+            Column(
+              children: groupList
+                  .map((groupBox) => TaskContainer(
+                        groupBox: groupBox,
+                        recordBox: recordBox,
+                        selectedDateTime: selectedDateTime,
+                      ))
+                  .toList(),
+            ),
+          ],
         ),
-        TaskContainer(
-          locale: locale,
-          recordBox: recordBox,
-          selectedDateTime: widget.selectedDateTime,
-        ),
-      ],
+      ),
     );
   }
 }

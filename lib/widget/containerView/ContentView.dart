@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:project/model/group_box/group_box.dart';
 import 'package:project/model/record_box/record_box.dart';
 import 'package:project/model/task_box/task_box.dart';
 import 'package:project/util/class.dart';
@@ -8,6 +9,7 @@ import 'package:project/widget/containerView/ItemView.dart';
 class ContentView extends StatelessWidget {
   ContentView({
     super.key,
+    required this.groupBox,
     required this.recordBox,
     required this.selectedDateTime,
     required this.taskFilterList,
@@ -16,6 +18,7 @@ class ContentView extends StatelessWidget {
 
   List<TaskBox> taskFilterList;
   DateTime selectedDateTime;
+  GroupBox groupBox;
   RecordBox? recordBox;
   Function(int, int, List<TaskBox>) onReorder;
 
@@ -33,6 +36,7 @@ class ContentView extends StatelessWidget {
           recordBox: recordBox,
           taskBox: taskBox,
           taskItem: TaskItemClass(
+            groupId: groupBox.id,
             id: taskBox.id,
             name: taskBox.name,
             mark: getTaskInfo(
@@ -47,6 +51,7 @@ class ContentView extends StatelessWidget {
             ),
             isHighlight: taskBox.isHighlighter == true,
             task: TaskClass(
+              groupId: groupBox.id,
               type: taskBox.taskType,
               name: getTaskClass(taskBox.taskType).name,
               dateTimeType: taskBox.dateTimeType,

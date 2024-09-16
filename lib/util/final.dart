@@ -1,6 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:project/repositories/group_repository.dart';
 import 'package:project/repositories/record_repository.dart';
 import 'package:project/repositories/task_repository.dart';
 import 'package:project/repositories/user_repository.dart';
@@ -280,6 +281,7 @@ final taskDateTimeLabel = {
 };
 
 final tTodo = TaskClass(
+  groupId: '',
   type: 'todo',
   name: '할 일',
   dateTimeType: taskDateTimeType.selection,
@@ -288,6 +290,7 @@ final tTodo = TaskClass(
 );
 
 final tRoutin = TaskClass(
+  groupId: '',
   type: 'routin',
   name: '루틴',
   dateTimeType: taskDateTimeType.everyWeek,
@@ -326,11 +329,13 @@ const nextCalendarFormats = {
 UserRepository userRepository = UserRepository();
 RecordRepository recordRepository = RecordRepository();
 TaskRepository taskRepository = TaskRepository();
+GroupRepository groupRepository = GroupRepository();
 
 final valueListenables = [
   userRepository.userBox.listenable(),
   recordRepository.recordBox.listenable(),
   taskRepository.taskBox.listenable(),
+  groupRepository.groupBox.listenable()
 ];
 
 final premiumBenefitList = [

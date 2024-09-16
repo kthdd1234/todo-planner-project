@@ -12,6 +12,8 @@ import 'package:project/common/CommonOutlineInputField.dart';
 import 'package:project/common/CommonSpace.dart';
 import 'package:project/common/CommonSvgText.dart';
 import 'package:project/common/CommonSwitch.dart';
+import 'package:project/common/CommonTag.dart';
+import 'package:project/model/group_box/group_box.dart';
 import 'package:project/model/task_box/task_box.dart';
 import 'package:project/provider/themeProvider.dart';
 import 'package:project/util/class.dart';
@@ -157,6 +159,7 @@ class _TaskSettingModalSheetState extends State<TaskSettingModalSheet> {
       await taskRepository.taskBox.put(
         id,
         TaskBox(
+          groupId: widget.initTask.groupId,
           id: id,
           name: controller.text,
           taskType: widget.initTask.type,
@@ -169,6 +172,7 @@ class _TaskSettingModalSheetState extends State<TaskSettingModalSheet> {
     } else {
       TaskBox taskBox = widget.taskBox!;
 
+      taskBox.groupId = widget.initTask.groupId;
       taskBox.isHighlighter = isHighlighter;
       taskBox.colorName = selectedColorName;
       taskBox.dateTimeType = taskDateTimeInfo.type;
@@ -179,6 +183,10 @@ class _TaskSettingModalSheetState extends State<TaskSettingModalSheet> {
     }
 
     navigatorPop(context);
+  }
+
+  onGroup() {
+    //
   }
 
   onEditingComplete() async {
@@ -215,19 +223,17 @@ class _TaskSettingModalSheetState extends State<TaskSettingModalSheet> {
     double bottom = MediaQuery.of(context).viewInsets.bottom;
     bool isLight = context.watch<ThemeProvider>().isLight;
 
+    GroupBox? groupBox = groupRepository.groupBox.get(widget.initTask.groupId);
+    ColorClass groupColor = getColorClass(groupBox?.colorName);
+
     return Padding(
       padding: EdgeInsets.only(bottom: bottom),
       child: CommonModalSheet(
         title:
             '${widget.initTask.name} ${widget.taskBox == null ? '추가' : '수정'}',
-        height: 270,
+        height: 325,
         child: CommonContainer(
-          innerPadding: const EdgeInsets.only(
-            left: 15,
-            top: 0,
-            right: 15,
-            bottom: 0,
-          ),
+          innerPadding: const EdgeInsets.symmetric(vertical: 0, horizontal: 20),
           child: ListView(
             children: [
               CommonModalItem(
@@ -250,11 +256,22 @@ class _TaskSettingModalSheetState extends State<TaskSettingModalSheet> {
                   fontSize: 14,
                   textColor: isLight ? textColor : Colors.white,
                   svgColor: grey.s400,
-                  svgName: 'dir-right',
+                  // svgName: 'dir-right',
                   svgWidth: 7,
                   svgLeft: 7,
                   svgDirection: SvgDirectionEnum.right,
                   onTap: onDateTime,
+                ),
+              ),
+              CommonModalItem(
+                title: '그룹',
+                onTap: onGroup,
+                child: CommonTag(
+                  text: groupBox?.name ?? '',
+                  textColor: groupColor.original,
+                  bgColor: groupColor.s50,
+                  fontSize: 12,
+                  onTap: onGroup,
                 ),
               ),
               CommonSpace(height: 17.5),

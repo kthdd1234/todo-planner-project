@@ -34,13 +34,14 @@ class UserBoxAdapter extends TypeAdapter<UserBox> {
       watchAdDateTime: fields[14] as DateTime?,
       background: fields[15] as String?,
       appStartIndex: fields[16] as int?,
+      groupOrderList: (fields[17] as List?)?.cast<String>(),
     );
   }
 
   @override
   void write(BinaryWriter writer, UserBox obj) {
     writer
-      ..writeByte(17)
+      ..writeByte(18)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
@@ -74,7 +75,9 @@ class UserBoxAdapter extends TypeAdapter<UserBox> {
       ..writeByte(15)
       ..write(obj.background)
       ..writeByte(16)
-      ..write(obj.appStartIndex);
+      ..write(obj.appStartIndex)
+      ..writeByte(17)
+      ..write(obj.groupOrderList);
   }
 
   @override

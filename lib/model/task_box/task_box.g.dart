@@ -24,13 +24,14 @@ class TaskBoxAdapter extends TypeAdapter<TaskBox> {
       dateTimeType: fields[5] as String,
       dateTimeList: (fields[6] as List).cast<DateTime>(),
       isHighlighter: fields[7] as bool?,
+      groupId: fields[8] as String?,
     );
   }
 
   @override
   void write(BinaryWriter writer, TaskBox obj) {
     writer
-      ..writeByte(7)
+      ..writeByte(8)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
@@ -44,7 +45,9 @@ class TaskBoxAdapter extends TypeAdapter<TaskBox> {
       ..writeByte(6)
       ..write(obj.dateTimeList)
       ..writeByte(7)
-      ..write(obj.isHighlighter);
+      ..write(obj.isHighlighter)
+      ..writeByte(8)
+      ..write(obj.groupId);
   }
 
   @override

@@ -9,6 +9,7 @@ import 'package:project/common/CommonButton.dart';
 import 'package:project/common/CommonScaffold.dart';
 import 'package:project/common/CommonSpace.dart';
 import 'package:project/common/CommonText.dart';
+import 'package:project/model/group_box/group_box.dart';
 import 'package:project/model/user_box/user_box.dart';
 import 'package:project/repositories/user_repository.dart';
 import 'package:project/util/constants.dart';
@@ -27,35 +28,38 @@ class _IntroPageState extends State<IntroPage> {
   onStart() async {
     String locale = context.locale.toString();
 
-    log(locale);
     DateTime now = DateTime.now();
-    String userId = UniqueKey().hashCode.toString();
+    String userId = uuid();
+    String groupId = uuid();
     String fontFamily = 'IM_Hyemin';
     String calendarFormat = CalendarFormat.week.toString();
-    Map<String, dynamic> taskTitleInfo = {
-      'title': locale == 'ko' ? '할 일 리스트' : 'Todo list',
-      'colorName': "남색"
-    };
-    Map<String, dynamic> memoTitleInfo = {
-      'title': locale == 'ko' ? '메모' : 'memo',
-      'colorName': "주황색",
-    };
 
-    UserRepository().updateUser(
+    groupRepository.updateGroup(
+      key: groupId,
+      group: GroupBox(
+        createDateTime: now,
+        id: groupId,
+        name: getGroupName(locale),
+        colorName: '남색',
+        isOpen: true,
+      ),
+    );
+
+    userRepository.updateUser(
       UserBox(
         id: userId,
         createDateTime: now,
         calendarFormat: calendarFormat,
         language: locale,
         fontFamily: fontFamily,
-        taskTitleInfo: taskTitleInfo,
-        memoTitleInfo: memoTitleInfo,
+        taskTitleInfo: {},
+        memoTitleInfo: {},
         theme: 'light',
         filterIdList: filterIdList,
+        groupOrderList: [groupId],
       ),
     );
 
-    await UserRepository().user.save();
     await Navigator.pushNamedAndRemoveUntil(
       context,
       'home-page',

@@ -34,7 +34,7 @@ class TitleView extends StatelessWidget {
                 isNotTr: true,
                 isBold: !isLight,
                 textColor: isLight ? color.original : color.s200,
-                bgColor: isLight ? color.s50.withOpacity(0.5) : darkButtonColor,
+                bgColor: isLight ? color.s50 : darkButtonColor,
                 innerPadding: const EdgeInsets.only(bottom: 5),
                 onTap: () => onTitle(title, colorName),
               ),

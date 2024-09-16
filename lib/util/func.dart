@@ -456,3 +456,11 @@ String getLocaleName(String locale) {
     return 'English';
   }
 }
+
+String getGroupName(String locale) {
+  return {
+    'ko': '할 일 리스트',
+    'en': 'To Do List',
+    'ja': 'やることリスト',
+  }[locale]!;
+}

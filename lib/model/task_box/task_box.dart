@@ -12,6 +12,7 @@ class TaskBox extends HiveObject {
     required this.dateTimeType,
     required this.dateTimeList,
     this.isHighlighter,
+    this.groupId,
   });
 
   @HiveField(0)
@@ -34,4 +35,7 @@ class TaskBox extends HiveObject {
 
   @HiveField(7)
   bool? isHighlighter;
+
+  @HiveField(8)
+  String? groupId;
 }

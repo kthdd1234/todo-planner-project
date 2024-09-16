@@ -1,5 +1,4 @@
 // ignore_for_file: use_build_context_synchronously
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:project/body/CalendarBody.dart';
 import 'package:project/body/SettingBody.dart';
@@ -7,6 +6,7 @@ import 'package:project/body/TaskBody.dart';
 import 'package:project/body/TrackerBody.dart';
 import 'package:project/common/CommonBackground.dart';
 import 'package:project/common/CommonScaffold.dart';
+import 'package:project/model/group_box/group_box.dart';
 import 'package:project/model/user_box/user_box.dart';
 import 'package:project/provider/KeywordProvider.dart';
 import 'package:project/provider/PremiumProvider.dart';
@@ -14,7 +14,6 @@ import 'package:project/provider/titleDateTimeProvider.dart';
 import 'package:project/provider/bottomTabIndexProvider.dart';
 import 'package:project/provider/selectedDateTimeProvider.dart';
 import 'package:project/provider/themeProvider.dart';
-import 'package:project/util/class.dart';
 import 'package:project/util/final.dart';
 import 'package:project/util/func.dart';
 import 'package:project/util/service.dart';
@@ -42,6 +41,20 @@ class _HomePageState extends State<HomePage> {
 
   initializeHiveDB() async {
     UserBox? user = userRepository.user;
+    List<GroupBox> groupList = groupRepository.groupList;
+    String newGroupId = uuid();
+
+    if (groupList.isEmpty) {
+      groupRepository.addGroup(
+        GroupBox(
+          createDateTime: DateTime.now(),
+          id: newGroupId,
+          name: getGroupName(widget.locale),
+          colorName: '남색',
+          isOpen: true,
+        ),
+      );
+    }
 
     if (mounted) {
       user.theme ??= 'light';
@@ -49,6 +62,7 @@ class _HomePageState extends State<HomePage> {
       user.filterIdList ??= filterIdList;
       user.background ??= '0';
       user.appStartIndex ??= 0;
+      user.groupOrderList ??= [newGroupId];
 
       WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
         context.read<ThemeProvider>().setThemeValue(user.theme!);
@@ -96,7 +110,6 @@ class _HomePageState extends State<HomePage> {
     return CommonBackground(
       child: CommonScaffold(
         body: body,
-        // isFab: seletedIdx == 0 || seletedIdx == 1,
         bottomNavigationBar: Theme(
           data: Theme.of(context).copyWith(
             canvasColor: Colors.transparent,

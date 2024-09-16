@@ -186,8 +186,7 @@ flutter:
     - assets/svg/bnb-setting.svg
     - assets/svg/bnb-setting-filled-light.svg
     - assets/svg/bnb-setting-filled-dark.svg
-    - assets/svg/top-group.svg
-    - assets/svg/top-calendar-week.svg
+    - assets/svg/memo-light.svg
     - assets/svg/group-light.svg
 
   # An image asset can refer to one or more resolution-specific "variants", see

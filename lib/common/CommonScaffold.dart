@@ -19,7 +19,7 @@ class CommonScaffold extends StatelessWidget {
     required this.body,
     this.appBarInfo,
     this.bottomNavigationBar,
-    this.isFab,
+    this.floatingActionButton,
     this.resizeToAvoidBottomInset,
     this.backgroundColor,
   });
@@ -27,7 +27,8 @@ class CommonScaffold extends StatelessWidget {
   Widget? bottomNavigationBar;
   Widget body;
   AppBarInfoClass? appBarInfo;
-  bool? resizeToAvoidBottomInset, isFab;
+  bool? resizeToAvoidBottomInset;
+  Widget? floatingActionButton;
   Color? backgroundColor;
 
   @override
@@ -57,47 +58,47 @@ class CommonScaffold extends StatelessWidget {
           child: body,
         ),
       ),
-      floatingActionButton: Fab(isFab: isFab),
+      floatingActionButton: floatingActionButton,
       bottomNavigationBar: bottomNavigationBar,
     );
   }
 }
 
-class Fab extends StatelessWidget {
-  Fab({super.key, required this.isFab});
+// class Fab extends StatelessWidget {
+//   Fab({super.key, required this.isFab});
 
-  bool? isFab;
+//   bool? isFab;
 
-  @override
-  Widget build(BuildContext context) {
-    bool isLight = context.watch<ThemeProvider>().isLight;
+//   @override
+//   Widget build(BuildContext context) {
+//     bool isLight = context.watch<ThemeProvider>().isLight;
 
-    return isFab == true
-        ? MultiValueListenableBuilder(
-            valueListenables: valueListenables,
-            builder: (context, values, child) {
-              DateTime selectedDateTime =
-                  context.watch<SelectedDateTimeProvider>().seletedDateTime;
-              bool isToday =
-                  dateTimeKey(DateTime.now()) == dateTimeKey(selectedDateTime);
-              bool isNotMonth = userRepository.user.calendarFormat !=
-                  CalendarFormat.month.toString();
+//     return isFab == true
+//         ? MultiValueListenableBuilder(
+//             valueListenables: valueListenables,
+//             builder: (context, values, child) {
+//               DateTime selectedDateTime =
+//                   context.watch<SelectedDateTimeProvider>().seletedDateTime;
+//               bool isToday =
+//                   dateTimeKey(DateTime.now()) == dateTimeKey(selectedDateTime);
+//               bool isNotMonth = userRepository.user.calendarFormat !=
+//                   CalendarFormat.month.toString();
 
-              return Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  isNotMonth
-                      ? isToday
-                          ? const CommonNull()
-                          : const TodayButton()
-                      : const CommonNull(),
-                  AddButton(isLight: isLight),
-                ],
-              );
-            })
-        : const CommonNull();
-  }
-}
+//               return Row(
+//                 mainAxisAlignment: MainAxisAlignment.end,
+//                 children: [
+//                   isNotMonth
+//                       ? isToday
+//                           ? const CommonNull()
+//                           : const TodayButton()
+//                       : const CommonNull(),
+//                   AddButton(isLight: isLight),
+//                 ],
+//               );
+//             })
+//         : const CommonNull();
+//   }
+// }
 
 // class Bnb extends StatelessWidget {
 //   Bnb({super.key, this.bnb});

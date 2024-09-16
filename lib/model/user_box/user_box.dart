@@ -22,6 +22,7 @@ class UserBox extends HiveObject {
     this.watchAdDateTime,
     this.background,
     this.appStartIndex,
+    this.groupOrderList,
   });
 
   @HiveField(0)
@@ -74,6 +75,9 @@ class UserBox extends HiveObject {
 
   @HiveField(16)
   int? appStartIndex;
+
+  @HiveField(17)
+  List<String>? groupOrderList;
 
   @override
   String toString() {

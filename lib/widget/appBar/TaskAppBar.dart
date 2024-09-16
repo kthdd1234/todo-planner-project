@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:multi_value_listenable_builder/multi_value_listenable_builder.dart';
 import 'package:project/common/CommonCalendar.dart';
+import 'package:project/model/record_box/record_box.dart';
 import 'package:project/model/user_box/user_box.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:project/common/CommonCircle.dart';
@@ -9,6 +10,8 @@ import 'package:project/common/CommonSvgText.dart';
 import 'package:project/common/CommonTag.dart';
 import 'package:project/common/CommonText.dart';
 import 'package:project/model/task_box/task_box.dart';
+import 'package:project/page/GroupPage.dart';
+import 'package:project/page/MemoSettingPage.dart';
 import 'package:project/page/PremiumPage.dart';
 import 'package:project/provider/PremiumProvider.dart';
 import 'package:project/provider/selectedDateTimeProvider.dart';
@@ -72,21 +75,38 @@ class _TaskTitleState extends State<TaskTitle> {
   }
 
   onGroup() {
-    //
+    movePage(context: context, page: const GroupPage());
   }
 
   @override
   Widget build(BuildContext context) {
-    bool isWeek = availableCalendarFormats[widget.calendarFormat]! == 'week';
-    bool isLight = context.watch<ThemeProvider>().isLight;
-    bool isPremium = context.watch<PremiumProvider>().isPremium;
+    // bool isWeek = availableCalendarFormats[widget.calendarFormat]! == 'week';
+    DateTime selectedDateTime =
+        context.watch<SelectedDateTimeProvider>().seletedDateTime;
+    RecordBox? recordBox =
+        recordRepository.recordBox.get(dateTimeKey(selectedDateTime));
+
+    onMemo() {
+      movePage(
+        context: context,
+        page: MemoSettingPage(
+          recordBox: recordBox,
+          initDateTime: selectedDateTime,
+        ),
+      );
+    }
 
     return Padding(
       padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           const TitleDateTime(),
+          const Spacer(),
+          InkWell(
+            onTap: onMemo,
+            child: svgAsset(name: 'memo-light', width: 20),
+          ),
+          CommonSpace(width: 12.5),
           InkWell(
             onTap: onGroup,
             child: svgAsset(name: 'group-light', width: 22),
@@ -98,13 +118,8 @@ class _TaskTitleState extends State<TaskTitle> {
 }
 
 class TaskCalendar extends StatefulWidget {
-  TaskCalendar({
-    super.key,
-    required this.locale,
-    required this.calendarFormat,
-  });
+  TaskCalendar({super.key, required this.calendarFormat});
 
-  String locale;
   CalendarFormat calendarFormat;
 
   @override
