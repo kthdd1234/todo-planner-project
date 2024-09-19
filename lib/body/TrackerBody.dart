@@ -112,14 +112,11 @@ class _ContentViewState extends State<ContentView> {
     for (var day = 0; day < 7; day++) {
       Duration duration = Duration(days: day);
       DateTime targetDateTime = widget.startDateTime.add(duration);
-      int recordKey = dateTimeKey(targetDateTime);
-      RecordBox? record = recordRepository.recordBox.get(recordKey);
-      List<String>? orderList = record?.taskOrderList;
       List<TaskBox> taskList = getTaskList(
+        groupId: '',
         locale: context.locale.toString(),
         taskList: taskRepository.taskList,
         targetDateTime: targetDateTime,
-        orderList: orderList,
       );
       taskIdList.addAll(taskList.map((task) => task.id));
     }

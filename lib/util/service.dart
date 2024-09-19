@@ -56,11 +56,12 @@ class HomeWidgetService {
       ],
     );
     List<TaskBox> taskList = getTaskList(
-      locale: 'ko',
+      groupId: '',
+      locale: locale,
       taskList: TaskRepository().taskList,
       targetDateTime: now,
-      orderList: recordBox?.taskOrderList,
     );
+
     List<WidgetItemClass> taskInfoList = taskList.map((task) {
       ColorClass color = getColorClass(task.colorName);
       Color barColor = isWidgetLight ? color.s100 : color.s400;

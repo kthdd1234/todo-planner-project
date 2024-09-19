@@ -4,21 +4,17 @@ import 'package:project/common/CommonModalItem.dart';
 import 'package:project/common/CommonModalSheet.dart';
 import 'package:project/common/CommonOutlineInputField.dart';
 import 'package:project/common/CommonSpace.dart';
+import 'package:project/model/group_box/group_box.dart';
 import 'package:project/provider/themeProvider.dart';
+import 'package:project/util/final.dart';
 import 'package:project/util/func.dart';
 import 'package:project/widget/listView/ColorListView.dart';
 import 'package:provider/provider.dart';
 
 class TitleSettingModalSheet extends StatefulWidget {
-  TitleSettingModalSheet({
-    super.key,
-    required this.title,
-    required this.colorName,
-    required this.onCompleted,
-  });
+  TitleSettingModalSheet({super.key, this.groupBox});
 
-  String title, colorName;
-  Function(String title, String colorName) onCompleted;
+  GroupBox? groupBox;
 
   @override
   State<TitleSettingModalSheet> createState() => _TitleSettingModalSheetState();
@@ -30,8 +26,10 @@ class _TitleSettingModalSheetState extends State<TitleSettingModalSheet> {
 
   @override
   void initState() {
-    controller.text = widget.title;
-    selectedColorName = widget.colorName;
+    if (widget.groupBox != null) {
+      controller.text = widget.groupBox!.name;
+      selectedColorName = widget.groupBox!.colorName;
+    }
 
     super.initState();
   }
@@ -40,8 +38,32 @@ class _TitleSettingModalSheetState extends State<TitleSettingModalSheet> {
     setState(() => selectedColorName = colorName);
   }
 
-  onEditingComplete() {
-    widget.onCompleted(controller.text, selectedColorName);
+  onEditingComplete() async {
+    DateTime now = DateTime.now();
+
+    if (widget.groupBox == null) {
+      String newGroupId = uuid();
+
+      groupRepository.updateGroup(
+        key: newGroupId,
+        group: GroupBox(
+          createDateTime: now,
+          id: newGroupId,
+          name: controller.text,
+          colorName: selectedColorName,
+          isOpen: true,
+        ),
+      );
+
+      // userRepository.user.groupOrderList?.add({'id': newGroupId, 'list': []});
+    } else {
+      widget.groupBox!.name = controller.text;
+      widget.groupBox!.colorName = selectedColorName;
+
+      await widget.groupBox!.save();
+    }
+
+    navigatorPop(context);
   }
 
   @override
@@ -53,7 +75,7 @@ class _TitleSettingModalSheetState extends State<TitleSettingModalSheet> {
         bottom: MediaQuery.of(context).viewInsets.bottom,
       ),
       child: CommonModalSheet(
-        title: '제목 수정',
+        title: '그룹 ${widget.groupBox == null ? '추가' : '수정'}',
         height: 210,
         child: CommonContainer(
           innerPadding: const EdgeInsets.only(

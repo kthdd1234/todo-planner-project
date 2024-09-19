@@ -11,11 +11,11 @@ class CommonOutlineInputField extends StatelessWidget {
     required this.hintText,
     required this.controller,
     required this.onEditingComplete,
-    required this.onSuffixIcon,
     required this.selectedColor,
     this.autofocus,
     this.outerPadding,
     this.onChanged,
+    this.onSuffixIcon,
   });
 
   String hintText;
@@ -23,8 +23,9 @@ class CommonOutlineInputField extends StatelessWidget {
   bool? autofocus;
   EdgeInsets? outerPadding;
   Color selectedColor;
-  Function() onEditingComplete, onSuffixIcon;
+  Function() onEditingComplete;
   Function(String)? onChanged;
+  Function()? onSuffixIcon;
 
   @override
   Widget build(BuildContext context) {

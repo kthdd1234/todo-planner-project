@@ -42,13 +42,13 @@ class _HomePageState extends State<HomePage> {
   initializeHiveDB() async {
     UserBox? user = userRepository.user;
     List<GroupBox> groupList = groupRepository.groupList;
-    String newGroupId = uuid();
+    String groupId = uuid();
 
     if (groupList.isEmpty) {
       groupRepository.addGroup(
         GroupBox(
           createDateTime: DateTime.now(),
-          id: newGroupId,
+          id: groupId,
           name: getGroupName(widget.locale),
           colorName: '남색',
           isOpen: true,
@@ -62,7 +62,7 @@ class _HomePageState extends State<HomePage> {
       user.filterIdList ??= filterIdList;
       user.background ??= '0';
       user.appStartIndex ??= 0;
-      user.groupOrderList ??= [newGroupId];
+      user.groupOrderList ??= [groupId];
 
       WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
         context.read<ThemeProvider>().setThemeValue(user.theme!);

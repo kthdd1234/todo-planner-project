@@ -19,11 +19,14 @@ class CommonSwitch extends StatelessWidget {
   Widget build(BuildContext context) {
     bool isLight = context.watch<ThemeProvider>().isLight;
 
-    return CupertinoSwitch(
-      trackColor: isLight ? null : darkNotSelectedBgColor,
-      activeColor: activeColor,
-      value: value,
-      onChanged: onChanged,
+    return SizedBox(
+      height: 25,
+      child: CupertinoSwitch(
+        trackColor: isLight ? null : darkNotSelectedBgColor,
+        activeColor: activeColor,
+        value: value,
+        onChanged: onChanged,
+      ),
     );
   }
 }

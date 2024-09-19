@@ -158,7 +158,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
     String locale = context.locale.toString();
 
     return MaterialApp(
-      title: 'Todo Planner',
+      title: 'Todo Tracker',
       theme: ThemeData(
         useMaterial3: true,
         fontFamily: fontFamily,

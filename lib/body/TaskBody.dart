@@ -77,25 +77,23 @@ class _ContentViewState extends State<ContentView> {
     List<GroupBox> groupList = groupRepository.groupList;
 
     return Expanded(
-      child: SingleChildScrollView(
-        child: Column(
-          children: [
-            TaskCalendar(calendarFormat: calendarFormat),
-            MemoContainer(
-              recordBox: recordBox,
-              selectedDateTime: selectedDateTime,
-            ),
-            Column(
-              children: groupList
-                  .map((groupBox) => TaskContainer(
-                        groupBox: groupBox,
-                        recordBox: recordBox,
-                        selectedDateTime: selectedDateTime,
-                      ))
-                  .toList(),
-            ),
-          ],
-        ),
+      child: ListView(
+        children: [
+          TaskCalendar(calendarFormat: calendarFormat),
+          MemoContainer(
+            recordBox: recordBox,
+            selectedDateTime: selectedDateTime,
+          ),
+          Column(
+            children: groupList
+                .map((groupBox) => TaskContainer(
+                      groupBox: groupBox,
+                      recordBox: recordBox,
+                      selectedDateTime: selectedDateTime,
+                    ))
+                .toList(),
+          ),
+        ],
       ),
     );
   }

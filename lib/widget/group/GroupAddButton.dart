@@ -20,8 +20,8 @@ class GroupAddButton extends StatelessWidget {
         foregroundColor: isLight ? Colors.black : Colors.white,
         backgroundColor: isLight ? Colors.white : darkContainerColor,
         onPressed: onAdd,
-        icon: const Icon(Icons.add_rounded, size: 20),
-        label: CommonText(text: '그룹 추가', fontSize: 14),
+        icon: const Icon(Icons.add_rounded, size: 18),
+        label: CommonText(text: '그룹 추가', fontSize: 15),
       ),
     );
   }

@@ -1,27 +1,13 @@
 // ignore_for_file: use_build_context_synchronously
-
-import 'dart:developer';
-
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:project/common/CommonContainer.dart';
-import 'package:project/common/CommonModalItem.dart';
 import 'package:project/common/CommonModalSheet.dart';
-import 'package:project/common/CommonOutlineInputField.dart';
-import 'package:project/common/CommonSpace.dart';
-import 'package:project/common/CommonSvgText.dart';
-import 'package:project/common/CommonSwitch.dart';
-import 'package:project/common/CommonTag.dart';
 import 'package:project/model/group_box/group_box.dart';
 import 'package:project/model/task_box/task_box.dart';
 import 'package:project/provider/themeProvider.dart';
 import 'package:project/util/class.dart';
-import 'package:project/util/constants.dart';
-import 'package:project/util/enum.dart';
 import 'package:project/util/final.dart';
 import 'package:project/util/func.dart';
-import 'package:project/widget/listView/ColorListView.dart';
 import 'package:project/widget/modalSheet/DateTimeModalSheet.dart';
 import 'package:project/widget/popup/AlertPopup.dart';
 import 'package:provider/provider.dart';
@@ -41,9 +27,6 @@ class TaskSettingModalSheet extends StatefulWidget {
 }
 
 class _TaskSettingModalSheetState extends State<TaskSettingModalSheet> {
-  // 형광색
-  bool isHighlighter = false;
-
   // 색상
   String selectedColorName = '남색';
 
@@ -56,34 +39,17 @@ class _TaskSettingModalSheetState extends State<TaskSettingModalSheet> {
   // 할 일
   TextEditingController controller = TextEditingController();
 
+  // 그룹
+  GroupBox? groupBox;
+
   @override
   void initState() {
     TaskBox? taskBox = widget.taskBox;
 
-    if (taskBox != null) {
-      isHighlighter = taskBox.isHighlighter == true;
-      selectedColorName = taskBox.colorName;
-      taskDateTimeInfo.type = taskBox.dateTimeType;
-      taskDateTimeInfo.dateTimeList = taskBox.dateTimeList;
-      controller.text = taskBox.name;
-    } else {
-      taskDateTimeInfo.dateTimeList = widget.initTask.dateTimeList;
-    }
+    controller.text = taskBox?.name ?? '';
+    selectedColorName = groupBox?.colorName ?? '남색';
 
     super.initState();
-  }
-
-  onHighlighter(bool newValue) {
-    setState(() => isHighlighter = newValue);
-  }
-
-  onColor(String colorName) {
-    setState(() => selectedColorName = colorName);
-  }
-
-  onClose() {
-    setState(() {});
-    navigatorPop(context);
   }
 
   onDateTime() {
@@ -98,8 +64,6 @@ class _TaskSettingModalSheetState extends State<TaskSettingModalSheet> {
         onSelection: (selectionDays) {
           taskDateTimeInfo.type = taskDateTimeType.selection;
           taskDateTimeInfo.dateTimeList = selectionDays;
-
-          onClose();
         },
         onWeek: (weekDays) {
           taskDateTimeInfo.type = taskDateTimeType.everyWeek;
@@ -108,8 +72,6 @@ class _TaskSettingModalSheetState extends State<TaskSettingModalSheet> {
               .map((weekday) =>
                   now.subtract(Duration(days: now.weekday - weekday.id)))
               .toList();
-
-          onClose();
         },
         onMonth: (monthDays) {
           taskDateTimeInfo.type = taskDateTimeType.everyMonth;
@@ -117,8 +79,6 @@ class _TaskSettingModalSheetState extends State<TaskSettingModalSheet> {
               .where((monthDay) => monthDay.isVisible)
               .map((monthDay) => DateTime(now.year, 1, monthDay.id))
               .toList();
-
-          onClose();
         },
       ),
     );
@@ -154,41 +114,6 @@ class _TaskSettingModalSheetState extends State<TaskSettingModalSheet> {
     }
   }
 
-  onSaveTask(String id) async {
-    if (widget.taskBox == null) {
-      await taskRepository.taskBox.put(
-        id,
-        TaskBox(
-          groupId: widget.initTask.groupId,
-          id: id,
-          name: controller.text,
-          taskType: widget.initTask.type,
-          isHighlighter: isHighlighter,
-          colorName: selectedColorName,
-          dateTimeType: taskDateTimeInfo.type,
-          dateTimeList: taskDateTimeInfo.dateTimeList,
-        ),
-      );
-    } else {
-      TaskBox taskBox = widget.taskBox!;
-
-      taskBox.groupId = widget.initTask.groupId;
-      taskBox.isHighlighter = isHighlighter;
-      taskBox.colorName = selectedColorName;
-      taskBox.dateTimeType = taskDateTimeInfo.type;
-      taskBox.dateTimeList = taskDateTimeInfo.dateTimeList;
-      taskBox.name = controller.text;
-
-      await taskBox.save();
-    }
-
-    navigatorPop(context);
-  }
-
-  onGroup() {
-    //
-  }
-
   onEditingComplete() async {
     if (controller.text == '') {
       showDialog(
@@ -201,29 +126,17 @@ class _TaskSettingModalSheetState extends State<TaskSettingModalSheet> {
         ),
       );
     } else {
-      String uid = uuid();
-      Color backgroundColor = getColorClass(selectedColorName).s300;
-      Fluttertoast.showToast(
-        msg: "추가 되었습니다".tr(),
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.TOP,
-        timeInSecForIosWeb: 2,
-        backgroundColor: backgroundColor,
-        textColor: Colors.white,
-        fontSize: 16.0,
-      );
-
-      await onSaveTask(uid);
+      widget.taskBox?.name = controller.text;
+      await widget.taskBox?.save();
     }
+
+    navigatorPop(context);
   }
 
   @override
   Widget build(BuildContext context) {
-    String locale = context.locale.toString();
     double bottom = MediaQuery.of(context).viewInsets.bottom;
     bool isLight = context.watch<ThemeProvider>().isLight;
-
-    GroupBox? groupBox = groupRepository.groupBox.get(widget.initTask.groupId);
     ColorClass groupColor = getColorClass(groupBox?.colorName);
 
     return Padding(
@@ -231,64 +144,75 @@ class _TaskSettingModalSheetState extends State<TaskSettingModalSheet> {
       child: CommonModalSheet(
         title:
             '${widget.initTask.name} ${widget.taskBox == null ? '추가' : '수정'}',
-        height: 325,
+        height: 120,
         child: CommonContainer(
-          innerPadding: const EdgeInsets.symmetric(vertical: 0, horizontal: 20),
-          child: ListView(
-            children: [
-              CommonModalItem(
-                title: '형광색',
-                onTap: () => onHighlighter(!isHighlighter),
-                child: CommonSwitch(
-                  activeColor: isLight
-                      ? getColorClass(selectedColorName).s200
-                      : getColorClass(selectedColorName).s300,
-                  value: isHighlighter,
-                  onChanged: onHighlighter,
-                ),
+          outerPadding: const EdgeInsets.only(bottom: 5),
+          child: TextFormField(
+            controller: controller,
+            autofocus: true,
+            cursorColor: groupColor.s400,
+            style: const TextStyle(fontSize: 14),
+            decoration: InputDecoration(
+              hintText: '할 일을 입력해주세요.',
+              hintStyle: TextStyle(fontSize: 14, color: grey.s400),
+              contentPadding: const EdgeInsets.all(0),
+              border: const OutlineInputBorder(
+                borderSide: BorderSide(width: 0, style: BorderStyle.none),
               ),
-              CommonModalItem(
-                title: '날짜',
-                onTap: onDateTime,
-                child: CommonSvgText(
-                  text: displayDateTime(locale),
-                  isNotTr: true,
-                  fontSize: 14,
-                  textColor: isLight ? textColor : Colors.white,
-                  svgColor: grey.s400,
-                  // svgName: 'dir-right',
-                  svgWidth: 7,
-                  svgLeft: 7,
-                  svgDirection: SvgDirectionEnum.right,
-                  onTap: onDateTime,
-                ),
-              ),
-              CommonModalItem(
-                title: '그룹',
-                onTap: onGroup,
-                child: CommonTag(
-                  text: groupBox?.name ?? '',
-                  textColor: groupColor.original,
-                  bgColor: groupColor.s50,
-                  fontSize: 12,
-                  onTap: onGroup,
-                ),
-              ),
-              CommonSpace(height: 17.5),
-              CommonOutlineInputField(
-                controller: controller,
-                hintText: '할 일을 입력해주세요',
-                selectedColor: isLight
-                    ? getColorClass(selectedColorName).s200
-                    : getColorClass(selectedColorName).s300,
-                onSuffixIcon: onEditingComplete,
-                onEditingComplete: onEditingComplete,
-                onChanged: (_) => setState(() {}),
-              )
-            ],
+            ),
+            onEditingComplete: onEditingComplete,
           ),
         ),
       ),
     );
   }
 }
+
+  // CommonModalItem(
+              //   title: '형광색',
+              //   onTap: () => onHighlighter(!isHighlighter),
+              //   child: CommonSwitch(
+              //     activeColor: isLight ? groupColor.s200 : groupColor.s300,
+              //     value: isHighlighter,
+              //     onChanged: onHighlighter,
+              //   ),
+              // ),
+              // CommonModalItem(
+              //   title: '날짜',
+              //   onTap: onDateTime,
+              //   child: CommonSvgText(
+              //     text: displayDateTime(locale),
+              //     isNotTr: true,
+              //     fontSize: 14,
+              //     textColor: isLight ? textColor : Colors.white,
+              //     svgColor: grey.s400,
+              //     // svgName: 'dir-right',
+              //     svgWidth: 7,
+              //     svgLeft: 7,
+              //     svgDirection: SvgDirectionEnum.right,
+              //     onTap: onDateTime,
+              //   ),
+              // ),
+              // CommonModalItem(
+              //   title: '그룹',
+              //   onTap: onGroup,
+              //   child: CommonTag(
+              //     text: groupBox?.name ?? '',
+              //     textColor: groupColor.original,
+              //     bgColor: groupColor.s50,
+              //     fontSize: 12,
+              //     onTap: onGroup,
+              //   ),
+              // ),
+              // CommonSpace(height: 17.5),
+
+
+
+          // CommonOutlineInputField(
+          //   controller: controller,
+          //   hintText: '할 일을 입력해주세요',
+          //   selectedColor: isLight ? groupColor.s200 : groupColor.s300,
+          //   // onSuffixIcon: onEditingComplete,
+          //   onEditingComplete: onEditingComplete,
+          //   onChanged: (_) => setState(() {}),
+          // ),

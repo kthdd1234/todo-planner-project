@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:project/common/CommonNull.dart';
+import 'package:project/common/CommonSpace.dart';
 import 'package:project/common/CommonTag.dart';
 import 'package:project/provider/themeProvider.dart';
 import 'package:project/util/class.dart';
@@ -12,11 +14,15 @@ class TitleView extends StatelessWidget {
     super.key,
     required this.title,
     required this.colorName,
+    required this.isOpen,
     required this.onTitle,
+    required this.onOpen,
   });
 
   String title, colorName;
+  bool isOpen;
   Function(String, String) onTitle;
+  Function() onOpen;
 
   @override
   Widget build(BuildContext context) {
@@ -25,29 +31,42 @@ class TitleView extends StatelessWidget {
 
     return Column(
       children: [
-        Padding(
-          padding: const EdgeInsets.only(bottom: 10),
-          child: Row(
-            children: [
-              CommonTag(
-                text: title,
-                isNotTr: true,
-                isBold: !isLight,
-                textColor: isLight ? color.original : color.s200,
-                bgColor: isLight ? color.s50 : darkButtonColor,
-                innerPadding: const EdgeInsets.only(bottom: 5),
-                onTap: () => onTitle(title, colorName),
+        Row(
+          children: [
+            CommonTag(
+              text: title,
+              isNotTr: true,
+              isBold: !isLight,
+              textColor: isLight ? color.original : color.s200,
+              bgColor: isLight ? color.s50 : darkButtonColor,
+              onTap: () => onTitle(title, colorName),
+            ),
+            const Spacer(),
+            // InkWell(
+            //   onTap: onOpen,
+            //   child: svgAsset(
+            //     name: 'task-add',
+            //     width: 21,
+            //     color: color.s200,
+            //   ),
+            // ),
+            // CommonSpace(width: 10),
+            InkWell(
+              onTap: onOpen,
+              child: svgAsset(
+                name: '${isOpen ? 'open' : 'close'}-light',
+                width: 20,
+                color: color.s200,
               ),
-              const Spacer(),
-              Icon(
-                Icons.keyboard_arrow_down_rounded,
-                size: 30,
-                color: color.s100,
-              )
-            ],
-          ),
+            ),
+          ],
         ),
-        HorizentalBorder(colorName: '남색'),
+        isOpen
+            ? Padding(
+                padding: const EdgeInsets.only(top: 10),
+                child: HorizentalBorder(colorName: colorName),
+              )
+            : const CommonNull(),
       ],
     );
   }

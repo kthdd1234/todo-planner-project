@@ -8,6 +8,7 @@ import 'package:project/common/CommonDivider.dart';
 import 'package:project/common/CommonPopup.dart';
 import 'package:project/common/CommonSpace.dart';
 import 'package:project/common/CommonText.dart';
+import 'package:project/model/group_box/group_box.dart';
 import 'package:project/model/record_box/record_box.dart';
 import 'package:project/model/task_box/task_box.dart';
 import 'package:project/page/HomePage.dart';
@@ -23,11 +24,13 @@ import 'package:provider/provider.dart';
 class MarkPopup extends StatefulWidget {
   MarkPopup({
     super.key,
+    required this.groupBox,
     required this.taskBox,
     required this.recordBox,
     required this.selectedDateTime,
   });
 
+  GroupBox groupBox;
   TaskBox taskBox;
   RecordBox? recordBox;
   DateTime selectedDateTime;
@@ -253,7 +256,7 @@ class _MarkPopupState extends State<MarkPopup> {
                         isSelected: info['mark'] == selectedMark,
                         mark: info['mark'],
                         name: info['name'],
-                        colorName: widget.taskBox.colorName,
+                        colorName: widget.groupBox.colorName,
                         onTap: onMark,
                       ))
                   .toList(),
@@ -354,7 +357,7 @@ class MarkItem extends StatelessWidget {
                   child: svgAsset(
                     name: 'mark-$mark',
                     width: 15,
-                    color: isLight ? color.original : darkTextColor,
+                    color: isLight ? color.s300 : darkTextColor,
                   ),
                 ),
                 CommonSpace(width: 10),

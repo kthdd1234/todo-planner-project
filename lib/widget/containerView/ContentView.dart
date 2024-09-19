@@ -33,6 +33,7 @@ class ContentView extends StatelessWidget {
 
         return ItemView(
           key: Key(taskBox.id),
+          groupBox: groupBox,
           recordBox: recordBox,
           taskBox: taskBox,
           taskItem: TaskItemClass(
@@ -58,7 +59,7 @@ class ContentView extends StatelessWidget {
               dateTimeList: taskBox.dateTimeList,
               dateTimeLabel: getTaskClass(taskBox.taskType).dateTimeLabel,
             ),
-            color: getColorClass(taskBox.colorName),
+            color: getColorClass(groupBox.colorName),
           ),
           selectedDateTime: selectedDateTime,
         );

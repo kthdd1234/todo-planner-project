@@ -82,22 +82,13 @@ class _CalendarViewState extends State<CalendarView> {
     );
   }
 
-  List<TaskBox> onTaskList(DateTime calendarDateTime) {
-    int recordKey = dateTimeKey(calendarDateTime);
-    List<String>? taskOrderList =
-        recordRepository.recordBox.get(recordKey)?.taskOrderList;
+  Widget? barBuilder(bool isLight, DateTime dateTime) {
     List<TaskBox> taskList = getTaskList(
+      groupId: '',
       locale: context.locale.toString(),
       taskList: taskRepository.taskBox.values.toList(),
-      targetDateTime: calendarDateTime,
-      orderList: taskOrderList,
+      targetDateTime: dateTime,
     );
-
-    return taskList;
-  }
-
-  Widget? barBuilder(bool isLight, DateTime dateTime) {
-    List<TaskBox> taskList = onTaskList(dateTime);
 
     Color? highlighterColor(TaskBox task) {
       bool isHighlighter = task.isHighlighter == true;

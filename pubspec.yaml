@@ -188,6 +188,11 @@ flutter:
     - assets/svg/bnb-setting-filled-dark.svg
     - assets/svg/memo-light.svg
     - assets/svg/group-light.svg
+    - assets/svg/setting-light.svg
+    - assets/svg/open-light.svg
+    - assets/svg/close-light.svg
+    - assets/svg/task-add.svg
+    - assets/svg/repeat.svg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

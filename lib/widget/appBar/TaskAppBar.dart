@@ -110,7 +110,7 @@ class _TaskTitleState extends State<TaskTitle> {
           InkWell(
             onTap: onGroup,
             child: svgAsset(name: 'group-light', width: 22),
-          )
+          ),
         ],
       ),
     );
@@ -155,59 +155,64 @@ class _TaskCalendarState extends State<TaskCalendar> {
     await user.save();
   }
 
-  List<TaskBox> onTaskList(DateTime calendarDateTime) {
-    int recordKey = dateTimeKey(calendarDateTime);
-    List<String>? taskOrderList =
-        recordRepository.recordBox.get(recordKey)?.taskOrderList;
-    List<TaskBox> taskList = getTaskList(
-      locale: context.locale.toString(),
-      taskList: taskRepository.taskBox.values.toList(),
-      targetDateTime: calendarDateTime,
-      orderList: taskOrderList,
-    );
+  // List<TaskBox> onTaskList(DateTime calendarDateTime) {
+  //   int recordKey = dateTimeKey(calendarDateTime);
+  //   List<String>? taskOrderList =
+  //       recordRepository.recordBox.get(recordKey)?.taskOrderList;
+  //   List<TaskBox> taskList = getTaskList(
+  //     groupId: ,
+  //     locale: context.locale.toString(),
+  //     taskList: taskRepository.taskBox.values.toList(),
+  //     targetDateTime: calendarDateTime,
+  //     orderList: taskOrderList,
+  //   );
 
-    return taskList;
-  }
+  //   return taskList;
+  // }
 
-  Widget? stickerBuilder(bool isLight, DateTime dateTime) {
-    List<ColorClass?> colorList = [];
+  // Widget? stickerBuilder(bool isLight, DateTime dateTime) {
+  //   List<ColorClass?> colorList = [];
 
-    for (var taskBox in onTaskList(dateTime)) {
-      if (colorList.length == 9) break;
-      colorList.add(getColorClass(taskBox.colorName));
-    }
+  //   for (var taskBox in onTaskList(dateTime)) {
+  //     if (colorList.length == 9) break;
+  //     colorList.add(getColorClass(taskBox.colorName));
+  //   }
 
-    while (colorList.length < 9) {
-      colorList.add(null);
-    }
+  //   while (colorList.length < 9) {
+  //     colorList.add(null);
+  //   }
 
-    wCircle(ColorClass? color) {
-      return CommonCircle(
-        color: (isLight ? color?.s200 : color?.s300) ?? Colors.transparent,
-        size: 5,
-        padding: const EdgeInsets.symmetric(horizontal: 1),
-      );
-    }
+  //   wCircle(ColorClass? color) {
+  //     return CommonCircle(
+  //       color: (isLight ? color?.s200 : color?.s300) ?? Colors.transparent,
+  //       size: 5,
+  //       padding: const EdgeInsets.symmetric(horizontal: 1),
+  //     );
+  //   }
 
-    wRow(List<ColorClass?> list) {
-      return Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: list.map((color) => wCircle(color)).toList(),
-      );
-    }
+  //   wRow(List<ColorClass?> list) {
+  //     return Row(
+  //       mainAxisAlignment: MainAxisAlignment.center,
+  //       children: list.map((color) => wCircle(color)).toList(),
+  //     );
+  //   }
 
-    return Padding(
-      padding: const EdgeInsets.only(top: 40),
-      child: ListView(
-        children: [
-          wRow(colorList.sublist(0, 3)),
-          CommonSpace(height: 2),
-          wRow(colorList.sublist(3, 6)),
-          CommonSpace(height: 2),
-          wRow(colorList.sublist(6, 9)),
-        ],
-      ),
-    );
+  //   return Padding(
+  //     padding: const EdgeInsets.only(top: 40),
+  //     child: ListView(
+  //       children: [
+  //         wRow(colorList.sublist(0, 3)),
+  //         CommonSpace(height: 2),
+  //         wRow(colorList.sublist(3, 6)),
+  //         CommonSpace(height: 2),
+  //         wRow(colorList.sublist(6, 9)),
+  //       ],
+  //     ),
+  //   );
+  // }
+
+  stickerBuilder(bool isLight, DateTime dateTime) {
+    //
   }
 
   Widget? dowBuilder(bool isLight, DateTime dateTime) {

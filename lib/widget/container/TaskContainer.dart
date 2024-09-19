@@ -1,7 +1,10 @@
+import 'dart:math';
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:project/common/CommonContainer.dart';
+import 'package:project/common/CommonNull.dart';
 import 'package:project/model/group_box/group_box.dart';
 import 'package:project/model/record_box/record_box.dart';
 import 'package:project/model/task_box/task_box.dart';
@@ -9,7 +12,7 @@ import 'package:project/model/user_box/user_box.dart';
 import 'package:project/util/final.dart';
 import 'package:project/util/func.dart';
 import 'package:project/widget/containerView/ContentView.dart';
-import 'package:project/widget/containerView/EmptyView.dart';
+import 'package:project/widget/containerView/AddView.dart';
 import 'package:project/widget/containerView/TitleView.dart';
 import 'package:project/widget/modalSheet/TaskSettingModalSheet.dart';
 import 'package:project/widget/modalSheet/TitleSettingModalSheet.dart';
@@ -34,91 +37,126 @@ class _TaskContainerState extends State<TaskContainer> {
   UserBox user = userRepository.user;
   Box<TaskBox> taskBox = taskRepository.taskBox;
 
-  onGroupTitle(String taskTitle, String taskColorName) {
+  onTitle(String taskTitle, String taskColorName) {
     showModalBottomSheet(
       isScrollControlled: true,
       context: context,
-      builder: (context) => TitleSettingModalSheet(
-        title: taskTitle,
-        colorName: taskColorName,
-        onCompleted: (String title_, String colorName_) async {
-          //
-
-          navigatorPop(context);
-        },
-      ),
+      builder: (context) => TitleSettingModalSheet(groupBox: widget.groupBox),
     );
   }
 
+  onOpen() async {
+    bool isOpen = widget.groupBox.isOpen;
+    widget.groupBox.isOpen = !isOpen;
+
+    await widget.groupBox.save();
+  }
+
   onReorder(int oldIdx, int newIdx, List<TaskBox> taskFilterList) async {
-    RecordBox? recordBox = widget.recordBox;
+    String groupId = widget.groupBox.id;
+    int recordKey = dateTimeKey(widget.selectedDateTime);
+    RecordBox? recordBox = recordRepository.recordBox.get(recordKey);
+    List<Map<String, dynamic>> recordOrderList =
+        recordBox?.recordOrderList ?? [];
     List<String> taskFilterIdList =
         taskFilterList.map((task) => task.id).toList();
 
-    if (oldIdx < newIdx) {
-      newIdx -= 1;
-    }
+    print('0번째 => $taskFilterIdList');
+
+    if (oldIdx < newIdx) newIdx -= 1;
 
     String id = taskFilterIdList.removeAt(oldIdx);
     taskFilterIdList.insert(newIdx, id);
 
+    List<Map<String, Object>> newRecordOrderList = [
+      {'id': groupId, 'list': taskFilterIdList}
+    ];
+
     if (recordBox == null) {
       recordRepository.updateRecord(
-        key: dateTimeKey(widget.selectedDateTime),
+        key: recordKey,
         record: RecordBox(
           createDateTime: widget.selectedDateTime,
-          taskOrderList: taskFilterIdList,
+          recordOrderList: newRecordOrderList,
         ),
       );
     } else {
-      widget.recordBox!.taskOrderList = taskFilterIdList;
-    }
+      int index = recordOrderList
+          .indexWhere((recordOrder) => recordOrder['id'] == groupId);
 
-    await widget.recordBox?.save();
-    setState(() {});
+      recordOrderList.isEmpty
+          ? recordBox.recordOrderList = newRecordOrderList
+          : recordBox.recordOrderList![index]['list'] = taskFilterIdList;
+
+      await recordBox.save();
+    }
   }
 
-  onAddTask() {
-    tTodo.dateTimeList = [widget.selectedDateTime];
-    tTodo.groupId = widget.groupBox.id;
+  onText(TaskBox? taskBox, String text) async {
+    UserBox user = userRepository.user;
+    String newTaskId = uuid();
 
-    showModalBottomSheet(
-      isScrollControlled: true,
-      context: context,
-      builder: (context) => TaskSettingModalSheet(initTask: tTodo),
-    );
+    if (taskBox == null) {
+      await taskRepository.taskBox.put(
+        newTaskId,
+        TaskBox(
+          groupId: widget.groupBox.id,
+          id: newTaskId,
+          name: text,
+          taskType: tTodo.type,
+          isHighlighter: false,
+          colorName: widget.groupBox.colorName,
+          dateTimeType: taskDateTimeType.selection,
+          dateTimeList: [widget.selectedDateTime],
+        ),
+      );
+
+      await user.save();
+    } else {
+      taskBox.name = text;
+      await taskBox.save();
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    // List<TaskBox> taskFilterList = getTaskList(
-    //   locale: locale,
-    //   taskList: taskBox.values.toList(),
-    //   targetDateTime: widget.selectedDateTime,
-    //   orderList: widget.recordBox?.taskOrderList,
-    // );
+    String locale = context.locale.toString();
+    bool isOpen = widget.groupBox.isOpen;
+    List<TaskBox> taskFilterList = getTaskList(
+      groupId: widget.groupBox.id,
+      locale: locale,
+      taskList: taskBox.values.toList(),
+      targetDateTime: widget.selectedDateTime,
+    );
 
     return CommonContainer(
-      outerPadding: const EdgeInsets.fromLTRB(7, 0, 7, 60),
+      outerPadding: const EdgeInsets.fromLTRB(7, 0, 7, 10),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           TitleView(
             title: widget.groupBox.name,
             colorName: widget.groupBox.colorName,
-            onTitle: onGroupTitle,
+            isOpen: isOpen,
+            onTitle: onTitle,
+            onOpen: onOpen,
           ),
-          ContentView(
-            groupBox: widget.groupBox,
-            recordBox: widget.recordBox,
-            selectedDateTime: widget.selectedDateTime,
-            taskFilterList: [],
-            onReorder: onReorder,
-          ),
-          AddView(
-            colorName: widget.groupBox.colorName,
-            onTap: onAddTask,
-          )
+          isOpen
+              ? Column(
+                  children: [
+                    ContentView(
+                      groupBox: widget.groupBox,
+                      recordBox: widget.recordBox,
+                      selectedDateTime: widget.selectedDateTime,
+                      taskFilterList: taskFilterList,
+                      onReorder: onReorder,
+                    ),
+                    AddView(
+                      colorName: widget.groupBox.colorName,
+                      onText: onText,
+                    )
+                  ],
+                )
+              : const CommonNull(),
         ],
       ),
     );

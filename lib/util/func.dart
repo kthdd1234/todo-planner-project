@@ -117,38 +117,49 @@ String? getTaskInfo({
 }
 
 List<TaskBox> getTaskList({
+  required String groupId,
   required String locale,
   required List<TaskBox> taskList,
   required DateTime targetDateTime,
-  required List<String>? orderList,
 }) {
   List<TaskBox> taskFilterList = taskList.where((task) {
     List<DateTime> dateTimeList = task.dateTimeList;
 
-    if (task.dateTimeType == taskDateTimeType.selection) {
-      return dateTimeList.any(
-          (dateTime) => dateTimeKey(dateTime) == dateTimeKey(targetDateTime));
-    } else {
-      return dateTimeList.any((dateTime) {
-        if (task.dateTimeType == taskDateTimeType.everyWeek) {
-          return eFormatter(locale: locale, dateTime: dateTime) ==
-              eFormatter(
-                locale: locale,
-                dateTime: targetDateTime,
-              );
-        } else if (task.dateTimeType == taskDateTimeType.everyMonth) {
-          return dateTime.day == targetDateTime.day;
-        }
+    if (groupId == task.groupId) {
+      if (task.dateTimeType == taskDateTimeType.selection) {
+        return dateTimeList.any(
+          (dateTime) => dateTimeKey(dateTime) == dateTimeKey(targetDateTime),
+        );
+      } else {
+        return dateTimeList.any((dateTime) {
+          if (task.dateTimeType == taskDateTimeType.everyWeek) {
+            return eFormatter(locale: locale, dateTime: dateTime) ==
+                eFormatter(locale: locale, dateTime: targetDateTime);
+          } else if (task.dateTimeType == taskDateTimeType.everyMonth) {
+            return dateTime.day == targetDateTime.day;
+          }
 
-        return false;
-      });
+          return false;
+        });
+      }
     }
+
+    return false;
   }).toList();
 
-  if (orderList != null) {
+  int recordKey = dateTimeKey(targetDateTime);
+  RecordBox? recordBox = recordRepository.recordBox.get(recordKey);
+  List<Map<String, dynamic>> recordOrderList = recordBox?.recordOrderList ?? [];
+  int index = recordOrderList.indexWhere(
+    (recordOrder) => recordOrder['id'] == groupId,
+  );
+
+  if (index != -1) {
+    final orderIdList = recordOrderList[index]['list'];
+
     taskFilterList.sort((taskA, taskB) {
-      int indexA = orderList.indexOf(taskA.id);
-      int indexB = orderList.indexOf(taskB.id);
+      int indexA = orderIdList.indexOf(taskA.id);
+      int indexB = orderIdList.indexOf(taskB.id);
 
       indexA = indexA == -1 ? 999999 : indexA;
       indexB = indexB == -1 ? 999999 : indexB;
@@ -422,14 +433,6 @@ calendarDaysOfWeekStyle(bool isLight) {
 
 calendarDetailStyle(bool isLight) {
   return CalendarStyle(
-    defaultTextStyle: TextStyle(
-      color: isLight ? Colors.black : darkTextColor,
-      fontWeight: isLight ? null : FontWeight.bold,
-    ),
-    weekendTextStyle: TextStyle(
-      color: isLight ? Colors.black : red.s300,
-      fontWeight: isLight ? null : FontWeight.bold,
-    ),
     todayDecoration: const BoxDecoration(
       color: Colors.transparent,
     ),
@@ -437,7 +440,6 @@ calendarDetailStyle(bool isLight) {
       color: isLight ? Colors.black : darkTextColor,
       fontWeight: isLight ? null : FontWeight.bold,
     ),
-    outsideDaysVisible: false,
   );
 }
 
@@ -464,3 +466,5 @@ String getGroupName(String locale) {
     'ja': 'やることリスト',
   }[locale]!;
 }
+
+getRecordOrderIdList() {}

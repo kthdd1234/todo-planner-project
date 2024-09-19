@@ -164,7 +164,7 @@ class _DateTimeModalSheetState extends State<DateTimeModalSheet> {
     Color notBgColor = isLight ? whiteBgBtnColor : darkNotSelectedBgColor;
 
     textColor(bool isVisible) {
-      return isVisible ? widget.color.s50 : notTextColor;
+      return isVisible ? Colors.white : notTextColor;
     }
 
     buttonColor(bool isVisible) {
@@ -235,7 +235,7 @@ class _DateTimeModalSheetState extends State<DateTimeModalSheet> {
     }[selectedType]!;
 
     return CommonModalSheet(
-      title: '날짜',
+      title: '반복 설정',
       isBack: true,
       height: height,
       child: Column(
@@ -260,6 +260,7 @@ class _DateTimeModalSheetState extends State<DateTimeModalSheet> {
             buttonColor: buttonCompletedColor(),
             outerPadding: const EdgeInsets.only(top: 15),
             verticalPadding: 15,
+            isBold: true,
             borderRadius: 100,
             onTap: onCompleted,
           )

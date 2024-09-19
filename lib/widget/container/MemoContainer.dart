@@ -35,22 +35,6 @@ class MemoContainer extends StatefulWidget {
 class _MemoContainerState extends State<MemoContainer> {
   UserBox user = userRepository.user;
 
-  onMemoTitle(String memoTitle, String memoColorName) {
-    showModalBottomSheet(
-      isScrollControlled: true,
-      context: context,
-      builder: (context) => TitleSettingModalSheet(
-        title: memoTitle,
-        colorName: memoColorName,
-        onCompleted: (String title_, String colorName_) async {
-          user.memoTitleInfo = {'title': title_, 'colorName': colorName_};
-          await user.save();
-          navigatorPop(context);
-        },
-      ),
-    );
-  }
-
   onMemoText() {
     showModalBottomSheet(
       context: context,

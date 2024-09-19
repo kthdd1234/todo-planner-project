@@ -28,7 +28,7 @@ class DateTimeButton extends StatelessWidget {
     Color notTextColor = isLight ? grey.s400 : Colors.white;
     Color notBgColor = isLight ? whiteBgBtnColor : darkNotSelectedBgColor;
 
-    Color textColor = isSelectedType ? color.s50 : notTextColor;
+    Color textColor = isSelectedType ? Colors.white : notTextColor;
     Color buttonColor = isSelectedType
         ? isLight
             ? color.s200

@@ -21,7 +21,7 @@ class ColorListView extends StatelessWidget {
     bool isLight = context.watch<ThemeProvider>().isLight;
 
     return SizedBox(
-      width: MediaQuery.of(context).size.width / 2,
+      width: MediaQuery.of(context).size.width / 1.7,
       height: 30,
       child: ListView(
           shrinkWrap: true,
@@ -41,8 +41,8 @@ class ColorListView extends StatelessWidget {
                         ),
                         selectedColorName == color.colorName
                             ? svgAsset(
-                                name: 'mark-V',
-                                width: 15,
+                                name: 'mark-O',
+                                width: 16,
                                 color: isLight ? color.s300 : color.s50,
                               )
                             : const CommonNull(),

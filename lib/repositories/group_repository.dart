@@ -28,7 +28,7 @@ class GroupRepository {
     log('[updateGroup] update (key:$key) $group');
   }
 
-  void deleteGroup(int key) async {
+  void deleteGroup(String key) async {
     await groupBox.delete(key);
 
     log('[deleteGroup] delete (key:$key)');

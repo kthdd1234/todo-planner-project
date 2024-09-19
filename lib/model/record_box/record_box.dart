@@ -11,6 +11,7 @@ class RecordBox extends HiveObject {
     this.taskMarkList,
     this.memo,
     this.imageList,
+    this.recordOrderList,
   });
 
   @HiveField(0)
@@ -27,4 +28,7 @@ class RecordBox extends HiveObject {
 
   @HiveField(4)
   List<String>? taskOrderList;
+
+  @HiveField(5)
+  List<Map<String, dynamic>>? recordOrderList;
 }
