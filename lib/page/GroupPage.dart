@@ -142,7 +142,8 @@ class _GroupPageState extends State<GroupPage> {
         body: MultiValueListenableBuilder(
           valueListenables: valueListenables,
           builder: (context, values, child) {
-            List<GroupBox> groupList = groupRepository.groupList;
+            List<GroupBox> groupList =
+                getGroupOrderList(groupRepository.groupList);
 
             return ReorderableListView.builder(
               physics: const ClampingScrollPhysics(),

@@ -40,19 +40,13 @@ class _AddViewState extends State<AddView> {
       setState(() => isShowInput = isShow);
     }
 
-    onInitText() {
-      setState(() {
-        controller.text = '';
-      });
-    }
-
     onCompleted() {
       onInput(false);
       FocusScope.of(context).unfocus();
 
       if (controller.text != '') {
         widget.onText(widget.taskBox, controller.text);
-        onInitText();
+        setState(() => controller.text = '');
       }
     }
 
@@ -60,6 +54,7 @@ class _AddViewState extends State<AddView> {
       children: [
         isShowInput
             ? TextFormField(
+                scrollController: scrollController,
                 controller: controller,
                 autofocus: true,
                 cursorColor: color.s400,
@@ -73,7 +68,7 @@ class _AddViewState extends State<AddView> {
                   ),
                 ),
                 onEditingComplete: onCompleted,
-                onTapOutside: (_) => onCompleted,
+                onTapOutside: (_) => onCompleted(),
               )
             : InkWell(
                 onTap: () => onInput(true),

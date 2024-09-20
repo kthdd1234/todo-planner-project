@@ -74,7 +74,7 @@ class _ContentViewState extends State<ContentView> {
     RecordBox? recordBox = recordRepository.recordBox.get(recordKey);
     CalendarFormat calendarFormat = calendarFormatInfo[user.calendarFormat]!;
 
-    List<GroupBox> groupList = groupRepository.groupList;
+    List<GroupBox> groupList = getGroupOrderList(groupRepository.groupList);
 
     return Expanded(
       child: ListView(

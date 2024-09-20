@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:package_info_plus/package_info_plus.dart';
+import 'package:project/model/group_box/group_box.dart';
 import 'package:project/model/record_box/record_box.dart';
 import 'package:project/model/task_box/task_box.dart';
 import 'package:project/model/user_box/user_box.dart';
@@ -467,4 +468,15 @@ String getGroupName(String locale) {
   }[locale]!;
 }
 
-getRecordOrderIdList() {}
+getGroupOrderList(List<GroupBox> groupList) {
+  List<String> groupOrderList = userRepository.user.groupOrderList ?? [];
+
+  groupList.sort((groupA, groupB) {
+    int indexA = groupOrderList.indexOf(groupA.id);
+    int indexB = groupOrderList.indexOf(groupB.id);
+
+    return indexA.compareTo(indexB);
+  });
+
+  return groupList;
+}

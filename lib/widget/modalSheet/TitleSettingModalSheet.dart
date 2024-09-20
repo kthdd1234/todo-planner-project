@@ -5,6 +5,7 @@ import 'package:project/common/CommonModalSheet.dart';
 import 'package:project/common/CommonOutlineInputField.dart';
 import 'package:project/common/CommonSpace.dart';
 import 'package:project/model/group_box/group_box.dart';
+import 'package:project/model/user_box/user_box.dart';
 import 'package:project/provider/themeProvider.dart';
 import 'package:project/util/final.dart';
 import 'package:project/util/func.dart';
@@ -21,6 +22,7 @@ class TitleSettingModalSheet extends StatefulWidget {
 }
 
 class _TitleSettingModalSheetState extends State<TitleSettingModalSheet> {
+  UserBox user = userRepository.user;
   String selectedColorName = '남색';
   TextEditingController controller = TextEditingController();
 
@@ -55,7 +57,8 @@ class _TitleSettingModalSheetState extends State<TitleSettingModalSheet> {
         ),
       );
 
-      // userRepository.user.groupOrderList?.add({'id': newGroupId, 'list': []});
+      user.groupOrderList?.add(newGroupId);
+      await user.save();
     } else {
       widget.groupBox!.name = controller.text;
       widget.groupBox!.colorName = selectedColorName;

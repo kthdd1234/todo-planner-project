@@ -154,27 +154,24 @@ class _TaskMoreModalSheetState extends State<TaskMoreModalSheet> {
   }
 
   onRemove() async {
-    UserBox user = userRepository.user;
+    String groupId = widget.groupBox.id;
+    String taskId = widget.taskBox.id;
 
-    widget.recordBox?.taskMarkList?.removeWhere(
-      (taskMark) => taskMark['id'] == widget.taskItem.id,
-    );
-    // taskItem.task.dateTimeList = [];
+    recordRepository.recordList.forEach((record) async {
+      int index = record.recordOrderList
+              ?.indexWhere((recordOrder) => recordOrder['id'] == groupId) ??
+          -1;
 
-    // user.groupOrderList?.forEach((groupInfo) {
-    //   if (groupInfo['id'] == groupBox.id) {
-    //     groupInfo['list'].remove(taskBox.id);
-    //   }
-    // });
+      if (index != -1) {
+        record.recordOrderList![index]['list'].remove(taskId);
+        await record.save();
+      }
+    });
 
-    await taskRepository.taskBox.delete(widget.taskBox.id);
-    await widget.recordBox?.save();
+    widget.recordBox?.taskMarkList
+        ?.removeWhere((taskMark) => taskMark['id'] == taskId);
 
-    // if (isEmptyRecord(recordBox)) {
-    //   await recordRepository.recordBox
-    //       .delete(dateTimeKey(selectedDateTime));
-    // }
-
+    await taskRepository.taskBox.delete(taskId);
     navigatorPop(context);
   }
 

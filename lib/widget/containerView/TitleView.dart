@@ -42,15 +42,6 @@ class TitleView extends StatelessWidget {
               onTap: () => onTitle(title, colorName),
             ),
             const Spacer(),
-            // InkWell(
-            //   onTap: onOpen,
-            //   child: svgAsset(
-            //     name: 'task-add',
-            //     width: 21,
-            //     color: color.s200,
-            //   ),
-            // ),
-            // CommonSpace(width: 10),
             InkWell(
               onTap: onOpen,
               child: svgAsset(
@@ -59,6 +50,7 @@ class TitleView extends StatelessWidget {
                 color: color.s200,
               ),
             ),
+            CommonSpace(width: 2)
           ],
         ),
         isOpen

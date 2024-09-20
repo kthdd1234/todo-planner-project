@@ -1,11 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:easy_localization/easy_localization.dart';
-import 'package:project/common/CommonContainer.dart';
-import 'package:project/common/CommonModalSheet.dart';
 import 'package:project/common/CommonNull.dart';
 import 'package:project/common/CommonSpace.dart';
 import 'package:project/common/CommonSvgButton.dart';
-import 'package:project/common/CommonTag.dart';
 import 'package:project/common/CommonText.dart';
 import 'package:project/model/group_box/group_box.dart';
 import 'package:project/model/record_box/record_box.dart';
@@ -16,13 +12,9 @@ import 'package:project/util/constants.dart';
 import 'package:project/util/final.dart';
 import 'package:project/util/func.dart';
 import 'package:project/widget/border/HorizentalBorder.dart';
-import 'package:project/widget/button/ModalButton.dart';
-import 'package:project/widget/calendar/calendarMarker.dart';
 import 'package:project/widget/modalSheet/TaskMoreModalSheet.dart';
-import 'package:project/widget/modalSheet/TaskSettingModalSheet.dart';
 import 'package:project/widget/popup/MarkPopup.dart';
 import 'package:provider/provider.dart';
-import 'package:table_calendar/table_calendar.dart';
 
 class ItemView extends StatefulWidget {
   ItemView({
@@ -56,7 +48,7 @@ class _ItemViewState extends State<ItemView> {
       child: InkWell(
         onTap: onTap,
         child: Padding(
-          padding: const EdgeInsets.only(left: 15),
+          padding: const EdgeInsets.only(left: 15, right: 3),
           child: CommonSvgButton(
             width: width,
             name: svgName,
@@ -114,45 +106,47 @@ class _ItemViewState extends State<ItemView> {
               padding: const EdgeInsets.symmetric(vertical: 15),
               child: Row(
                 children: [
-                  CommonSpace(width: 3),
                   Expanded(
                     flex: 1,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        CommonText(
-                          text: widget.taskItem.name,
-                          textAlign: TextAlign.start,
-                          highlightColor: widget.taskItem.isHighlight == true
-                              ? isLight
-                                  ? widget.taskItem.color.s50
-                                  : widget.taskItem.color.s400
-                              : null,
-                          decoration:
-                              isMark ? TextDecoration.lineThrough : null,
-                          decorationColor:
-                              isMark ? widget.taskItem.color.s300 : null,
-                          isBold: !isLight,
-                          isNotTr: true,
-                        ),
-                        widget.taskItem.memo != null
-                            ? Padding(
-                                padding: const EdgeInsets.only(top: 2),
-                                child: CommonText(
-                                  text: widget.taskItem.memo!,
-                                  color: grey.original,
-                                  fontSize: 12,
-                                  overflow: TextOverflow.ellipsis,
-                                  textAlign: TextAlign.start,
-                                  isBold: !isLight,
-                                  isNotTr: true,
-                                ),
-                              )
-                            : const CommonNull()
-                      ],
+                    child: Container(
+                      padding: EdgeInsets.symmetric(vertical: 3, horizontal: 3),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(3),
+                        color: isMark
+                            ? isLight
+                                ? widget.taskItem.color.s50
+                                : widget.taskItem.color.s400
+                            : null,
+                      ),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          CommonText(
+                            text: widget.taskItem.name,
+                            textAlign: TextAlign.start,
+                            isBold: !isLight,
+                            isNotTr: true,
+                          ),
+                          widget.taskItem.memo != null
+                              ? Padding(
+                                  padding: const EdgeInsets.only(top: 2),
+                                  child: CommonText(
+                                    text: widget.taskItem.memo!,
+                                    color: grey.original,
+                                    fontSize: 12,
+                                    overflow: TextOverflow.ellipsis,
+                                    textAlign: TextAlign.start,
+                                    isBold: !isLight,
+                                    isNotTr: true,
+                                  ),
+                                )
+                              : const CommonNull()
+                        ],
+                      ),
                     ),
                   ),
+                  CommonSpace(width: 15),
                   wAction(
                     svgName: 'mark-${widget.taskItem.mark ?? 'E'}',
                     width: 20,

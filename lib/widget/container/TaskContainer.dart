@@ -61,31 +61,30 @@ class _TaskContainerState extends State<TaskContainer> {
     List<String> taskFilterIdList =
         taskFilterList.map((task) => task.id).toList();
 
-    print('0번째 => $taskFilterIdList');
-
     if (oldIdx < newIdx) newIdx -= 1;
 
     String id = taskFilterIdList.removeAt(oldIdx);
     taskFilterIdList.insert(newIdx, id);
 
-    List<Map<String, Object>> newRecordOrderList = [
-      {'id': groupId, 'list': taskFilterIdList}
-    ];
+    Map<String, Object> newRecordOrder = {
+      'id': groupId,
+      'list': taskFilterIdList
+    };
 
     if (recordBox == null) {
       recordRepository.updateRecord(
         key: recordKey,
         record: RecordBox(
           createDateTime: widget.selectedDateTime,
-          recordOrderList: newRecordOrderList,
+          recordOrderList: [newRecordOrder],
         ),
       );
     } else {
       int index = recordOrderList
           .indexWhere((recordOrder) => recordOrder['id'] == groupId);
 
-      recordOrderList.isEmpty
-          ? recordBox.recordOrderList = newRecordOrderList
+      index == -1
+          ? recordBox.recordOrderList!.add(newRecordOrder)
           : recordBox.recordOrderList![index]['list'] = taskFilterIdList;
 
       await recordBox.save();
@@ -130,7 +129,7 @@ class _TaskContainerState extends State<TaskContainer> {
     );
 
     return CommonContainer(
-      outerPadding: const EdgeInsets.fromLTRB(7, 0, 7, 10),
+      outerPadding: EdgeInsets.fromLTRB(7, 0, 7, isOpen ? 30 : 10),
       child: Column(
         children: [
           TitleView(
