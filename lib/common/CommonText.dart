@@ -40,23 +40,26 @@ class CommonText extends StatelessWidget {
     bool isLight = context.watch<ThemeProvider>().isLight;
     Color defaultColor = isLight ? Colors.black : darkTextColor;
 
-    return Container(
-      padding: EdgeInsets.all(highlightColor != null ? 3 : 0),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(3),
-        color: highlightColor,
-      ),
-      child: Text(
-        isNotTr == true ? text : text.tr(namedArgs: nameArgs),
-        textAlign: textAlign ?? TextAlign.center,
-        softWrap: softWrap ?? true,
-        style: TextStyle(
-          color: color ?? defaultColor,
-          fontSize: fontSize,
-          fontWeight: isBold == true ? FontWeight.bold : FontWeight.w400,
-          overflow: overflow,
-          decoration: decoration,
-          decorationColor: decorationColor,
+    return InkWell(
+      onTap: onTap,
+      child: Container(
+        padding: EdgeInsets.all(highlightColor != null ? 3 : 0),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(3),
+          color: highlightColor,
+        ),
+        child: Text(
+          isNotTr == true ? text : text.tr(namedArgs: nameArgs),
+          textAlign: textAlign ?? TextAlign.center,
+          softWrap: softWrap ?? true,
+          style: TextStyle(
+            color: color ?? defaultColor,
+            fontSize: fontSize,
+            fontWeight: isBold == true ? FontWeight.bold : FontWeight.w400,
+            overflow: overflow,
+            decoration: decoration,
+            decorationColor: decorationColor,
+          ),
         ),
       ),
     );

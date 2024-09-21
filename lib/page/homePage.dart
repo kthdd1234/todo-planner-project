@@ -102,8 +102,8 @@ class _HomePageState extends State<HomePage> {
 
     Widget body = [
       const TaskBody(),
+      // const TrackerBody(),
       const CalendarBody(),
-      const TrackerBody(),
       const SettingBody()
     ][seletedIdx];
 

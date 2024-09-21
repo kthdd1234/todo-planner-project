@@ -1,4 +1,3 @@
-
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:project/common/CommonButton.dart';
@@ -198,19 +197,19 @@ class _SelectedDayModalSheetState extends State<SelectedDayModalSheet> {
                       ),
                     ),
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      CommonText(text: '여러 날짜 선택하기', isBold: !isLight),
-                      CommonSpace(width: 10),
-                      CommonSwitch(
-                        activeColor:
-                            isLight ? widget.color.s200 : widget.color.s300,
-                        value: isMultiSelection,
-                        onChanged: onChanged,
-                      )
-                    ],
-                  )
+                  // Row(
+                  //   mainAxisAlignment: MainAxisAlignment.end,
+                  //   children: [
+                  //     CommonText(text: '여러 날짜 선택하기', isBold: !isLight),
+                  //     CommonSpace(width: 10),
+                  //     CommonSwitch(
+                  //       activeColor:
+                  //           isLight ? widget.color.s200 : widget.color.s300,
+                  //       value: isMultiSelection,
+                  //       onChanged: onChanged,
+                  //     )
+                  //   ],
+                  // )
                 ],
               ),
             ),

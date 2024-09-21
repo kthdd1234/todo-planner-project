@@ -9,12 +9,14 @@ class CalendarMarker extends StatelessWidget {
     required this.isLight,
     required this.color,
     required this.size,
+    this.borderRadius,
   });
 
   String day;
   bool isLight;
   ColorClass color;
   double size;
+  double? borderRadius;
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +26,7 @@ class CalendarMarker extends StatelessWidget {
         height: size,
         decoration: BoxDecoration(
           color: isLight ? color.s200 : color.s300,
-          borderRadius: BorderRadius.circular(100),
+          borderRadius: BorderRadius.circular(borderRadius ?? 100),
         ),
         child: Padding(
           padding: const EdgeInsets.only(left: 0, top: 0),

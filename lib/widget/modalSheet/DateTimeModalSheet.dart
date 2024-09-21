@@ -389,18 +389,18 @@ class _SelectionDayState extends State<SelectionDay> {
                 ),
               ),
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                CommonText(text: '여러 날짜 선택하기', isBold: !isLight),
-                CommonSpace(width: 10),
-                CommonSwitch(
-                  activeColor: isLight ? widget.color.s200 : widget.color.s300,
-                  value: widget.isMultiSelection,
-                  onChanged: widget.onChangeMultiSelection,
-                )
-              ],
-            )
+            // Row(
+            //   mainAxisAlignment: MainAxisAlignment.end,
+            //   children: [
+            //     CommonText(text: '여러 날짜 선택하기', isBold: !isLight),
+            //     CommonSpace(width: 10),
+            //     CommonSwitch(
+            //       activeColor: isLight ? widget.color.s200 : widget.color.s300,
+            //       value: widget.isMultiSelection,
+            //       onChanged: widget.onChangeMultiSelection,
+            //     )
+            //   ],
+            // )
           ],
         ),
       ),

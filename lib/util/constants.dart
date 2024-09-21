@@ -22,7 +22,7 @@ const tableHighlightColor = Color.fromARGB(255, 248, 248, 255);
 const memoBgColor = Color.fromARGB(255, 255, 251, 243);
 
 /// buttonColor
-final buttonColor = indigo.s200;
+final buttonColor = Color(0xff3182F7);
 
 /// initFontFamily
 const initFontFamily = 'IM_Hyemin';
@@ -135,4 +135,4 @@ const darkNotSelectedTextColor = Color(0xff616261);
 const darkSvgBgColor = Color(0xff2C2C35);
 
 /// selectedColor
-const selectedColor = Color(0xffB0B9C2);
+const selectedColor = Color(0xffF3F7FE);

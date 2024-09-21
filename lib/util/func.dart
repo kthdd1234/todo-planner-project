@@ -8,12 +8,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:package_info_plus/package_info_plus.dart';
+import 'package:project/common/CommonText.dart';
 import 'package:project/model/group_box/group_box.dart';
 import 'package:project/model/record_box/record_box.dart';
 import 'package:project/model/task_box/task_box.dart';
 import 'package:project/model/user_box/user_box.dart';
 import 'package:project/util/class.dart';
 import 'package:project/util/constants.dart';
+import 'package:project/util/enum.dart';
 import 'package:project/util/final.dart';
 import 'package:purchases_flutter/purchases_flutter.dart';
 import 'package:table_calendar/table_calendar.dart';
@@ -479,4 +481,35 @@ getGroupOrderList(List<GroupBox> groupList) {
   });
 
   return groupList;
+}
+
+onSegmentedWidget({
+  required String title,
+  required SegmentedTypeEnum type,
+  required SegmentedTypeEnum selected,
+  Map<String, String>? nameArgs,
+}) {
+  return CommonText(
+    text: title,
+    fontSize: 12,
+    nameArgs: nameArgs,
+    color: selected == type ? Colors.black : grey.original,
+  );
+}
+
+categorySegmented(SegmentedTypeEnum segmented) {
+  Map<SegmentedTypeEnum, Widget> segmentedData = {
+    SegmentedTypeEnum.todo: onSegmentedWidget(
+      title: '할 일',
+      type: SegmentedTypeEnum.todo,
+      selected: segmented,
+    ),
+    SegmentedTypeEnum.memo: onSegmentedWidget(
+      title: '메모',
+      type: SegmentedTypeEnum.memo,
+      selected: segmented,
+    ),
+  };
+
+  return segmentedData;
 }

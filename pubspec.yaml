@@ -67,6 +67,7 @@ dependencies:
   in_app_review: ^2.0.9
   purchases_flutter: ^6.29.4
   syncfusion_flutter_datagrid: ^26.1.42
+  scrollable_positioned_list: ^0.3.8
 
 dev_dependencies:
   flutter_test:

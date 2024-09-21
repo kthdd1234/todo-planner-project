@@ -38,6 +38,17 @@ List<BNClass> getBnClassList(bool isLight, int seletedIdx) {
       ),
       svgName: seletedIdx == 0 ? 'bnb-home-filled-light' : 'bnb-home',
     ),
+    // BNClass(
+    //   index: 1,
+    //   name: '트래커',
+    //   icon: svg(
+    //     1,
+    //     seletedIdx == 1
+    //         ? 'bnb-tracker-filled-${isLight ? 'light' : 'dark'}'
+    //         : 'bnb-tracker',
+    //   ),
+    //   svgName: 'bnb-tracker',
+    // ),
     BNClass(
       index: 1,
       name: '캘린더',
@@ -51,21 +62,10 @@ List<BNClass> getBnClassList(bool isLight, int seletedIdx) {
     ),
     BNClass(
       index: 2,
-      name: '트래커',
+      name: '설정',
       icon: svg(
         2,
         seletedIdx == 2
-            ? 'bnb-tracker-filled-${isLight ? 'light' : 'dark'}'
-            : 'bnb-tracker',
-      ),
-      svgName: 'bnb-tracker',
-    ),
-    BNClass(
-      index: 3,
-      name: '설정',
-      icon: svg(
-        3,
-        seletedIdx == 3
             ? 'bnb-setting-filled-${isLight ? 'light' : 'dark'}'
             : 'bnb-setting',
       ),
@@ -313,16 +313,19 @@ final weekMonthMarkList = [
 
 final calendarFormatInfo = {
   CalendarFormat.week.toString(): CalendarFormat.week,
+  CalendarFormat.twoWeeks.toString(): CalendarFormat.month,
   CalendarFormat.month.toString(): CalendarFormat.month,
 };
 
 final availableCalendarFormats = {
   CalendarFormat.week: 'week',
+  CalendarFormat.twoWeeks: 'twoWeeks',
   CalendarFormat.month: 'month',
 };
 
 const nextCalendarFormats = {
-  CalendarFormat.week: CalendarFormat.month,
+  CalendarFormat.week: CalendarFormat.twoWeeks,
+  CalendarFormat.twoWeeks: CalendarFormat.month,
   CalendarFormat.month: CalendarFormat.week
 };
 

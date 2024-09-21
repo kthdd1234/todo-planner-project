@@ -48,7 +48,12 @@ class _ItemViewState extends State<ItemView> {
       child: InkWell(
         onTap: onTap,
         child: Padding(
-          padding: const EdgeInsets.only(left: 15, right: 3),
+          padding: const EdgeInsets.only(
+            left: 15,
+            right: 3,
+            top: 10,
+            bottom: 10,
+          ),
           child: CommonSvgButton(
             width: width,
             name: svgName,
@@ -96,18 +101,18 @@ class _ItemViewState extends State<ItemView> {
         ) !=
         null;
 
-    return InkWell(
-      onTap: () => onMore(isLight),
-      child: Container(
-        color: isLight ? Colors.white : darkContainerColor,
-        child: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 15),
-              child: Row(
-                children: [
-                  Expanded(
-                    flex: 1,
+    return Container(
+      color: isLight ? Colors.white : darkContainerColor,
+      child: Column(
+        children: [
+          Row(
+            children: [
+              Expanded(
+                flex: 1,
+                child: InkWell(
+                  onTap: () => onMore(isLight),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 10),
                     child: Container(
                       padding: EdgeInsets.symmetric(vertical: 3, horizontal: 3),
                       decoration: BoxDecoration(
@@ -146,19 +151,19 @@ class _ItemViewState extends State<ItemView> {
                       ),
                     ),
                   ),
-                  CommonSpace(width: 15),
-                  wAction(
-                    svgName: 'mark-${widget.taskItem.mark ?? 'E'}',
-                    width: 20,
-                    actionColor: widget.taskItem.color.s200,
-                    onTap: onMark,
-                  ),
-                ],
+                ),
               ),
-            ),
-            HorizentalBorder(colorName: widget.groupBox.colorName)
-          ],
-        ),
+              CommonSpace(width: 15),
+              wAction(
+                svgName: 'mark-${widget.taskItem.mark ?? 'E'}',
+                width: 20,
+                actionColor: widget.taskItem.color.s200,
+                onTap: onMark,
+              ),
+            ],
+          ),
+          HorizentalBorder(colorName: widget.groupBox.colorName)
+        ],
       ),
     );
   }

@@ -124,7 +124,7 @@ class _TaskContainerState extends State<TaskContainer> {
     List<TaskBox> taskFilterList = getTaskList(
       groupId: widget.groupBox.id,
       locale: locale,
-      taskList: taskBox.values.toList(),
+      taskList: taskRepository.taskList,
       targetDateTime: widget.selectedDateTime,
     );
 

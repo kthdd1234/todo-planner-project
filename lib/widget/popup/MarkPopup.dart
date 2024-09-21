@@ -40,7 +40,7 @@ class MarkPopup extends StatefulWidget {
 }
 
 class _MarkPopupState extends State<MarkPopup> {
-  String selectedMark = '';
+  String currentMark = '';
   bool isShowInput = true;
   bool isAutoFocus = false;
   TextEditingController memoController = TextEditingController();
@@ -53,7 +53,7 @@ class _MarkPopupState extends State<MarkPopup> {
       if (recordBox.taskMarkList != null) {
         for (var element in recordBox.taskMarkList!) {
           if (element['id'] == widget.taskBox.id) {
-            selectedMark = element['mark'] ?? '';
+            currentMark = element['mark'] ?? '';
             memoController.text = element['memo'] ?? '';
 
             if (element['memo'] != null) isShowInput = false;
@@ -67,8 +67,6 @@ class _MarkPopupState extends State<MarkPopup> {
   }
 
   onMark(String selectedMark) async {
-    log('onMark $selectedMark');
-
     String taskId = widget.taskBox.id;
     Map<String, dynamic> taskMark = TaskMarkClass(
       id: taskId,
@@ -99,41 +97,40 @@ class _MarkPopupState extends State<MarkPopup> {
 
       if (idx == -1) {
         widget.recordBox!.taskMarkList!.add(taskMark);
-        log('add $taskMark');
       } else {
         int index = taskMarkList.indexWhere(
           (task) => task['id'] == taskMark['id'],
         );
 
-        taskMarkList[index]['mark'] == taskMark['mark']
-            ? widget.recordBox!.taskMarkList!.removeAt(index)
-            : widget.recordBox!.taskMarkList![index]['mark'] = taskMark['mark'];
+        widget.recordBox!.taskMarkList![index]['mark'] =
+            taskMarkList[index]['mark'] == taskMark['mark']
+                ? null
+                : taskMark['mark'];
       }
     }
 
     await widget.recordBox?.save();
 
     // 내일 할래요
-    if (selectedMark == mark.T) {
-      DateTime selectedDateTime = widget.selectedDateTime;
-      DateTime tomorrowDateTime = DateTime(
-        selectedDateTime.year,
-        selectedDateTime.month,
-        selectedDateTime.day + 1,
-      );
-      TaskBox? task = taskRepository.taskBox.get(taskId);
-      int? index = task?.dateTimeList.indexWhere(
-        (dateTime) => dateTimeKey(dateTime) == dateTimeKey(tomorrowDateTime),
-      );
+    DateTime selectedDateTime = widget.selectedDateTime;
+    DateTime tomorrowDateTime = DateTime(
+      selectedDateTime.year,
+      selectedDateTime.month,
+      selectedDateTime.day + 1,
+    );
+    List<DateTime> dateTimeList = widget.taskBox.dateTimeList;
+    int tomorrowDateTimeIndex = dateTimeList.indexWhere(
+      (dateTime) => dateTimeKey(dateTime) == dateTimeKey(tomorrowDateTime),
+    );
 
-      if (index == -1) {
-        TaskBox? task = taskRepository.taskBox.get(taskId);
-        task?.dateTimeList.add(tomorrowDateTime);
-      } else if (index != null) {
-        task?.dateTimeList.removeAt(index);
-      }
+    if (selectedMark == mark.T) {
+      tomorrowDateTimeIndex == -1
+          ? dateTimeList.add(tomorrowDateTime)
+          : dateTimeList.removeAt(tomorrowDateTimeIndex);
 
       await widget.taskBox.save();
+    } else if (currentMark == mark.T && selectedMark != mark.T) {
+      dateTimeList.removeAt(tomorrowDateTimeIndex);
     }
 
     navigatorPop(context);
@@ -170,8 +167,8 @@ class _MarkPopupState extends State<MarkPopup> {
           (taksMark) => taksMark['id'] == taskId,
         );
 
-        if (selectedMark != '') {
-          taskMark['mark'] = selectedMark;
+        if (currentMark != '') {
+          taskMark['mark'] = currentMark;
         }
 
         idx == -1
@@ -253,7 +250,7 @@ class _MarkPopupState extends State<MarkPopup> {
             Column(
               children: markList
                   .map((info) => MarkItem(
-                        isSelected: info['mark'] == selectedMark,
+                        isSelected: info['mark'] == currentMark,
                         mark: info['mark'],
                         name: info['name'],
                         colorName: widget.groupBox.colorName,

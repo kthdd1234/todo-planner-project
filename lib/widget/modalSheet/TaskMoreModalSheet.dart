@@ -9,14 +9,13 @@ import 'package:project/common/CommonText.dart';
 import 'package:project/model/group_box/group_box.dart';
 import 'package:project/model/record_box/record_box.dart';
 import 'package:project/model/task_box/task_box.dart';
-import 'package:project/model/user_box/user_box.dart';
 import 'package:project/provider/themeProvider.dart';
 import 'package:project/util/class.dart';
 import 'package:project/util/constants.dart';
 import 'package:project/util/final.dart';
 import 'package:project/util/func.dart';
 import 'package:project/widget/button/ModalButton.dart';
-import 'package:project/widget/calendar/calendarMarker.dart';
+import 'package:project/widget/calendar/CalendarMarker.dart';
 import 'package:project/widget/modalSheet/DateTimeModalSheet.dart';
 import 'package:project/widget/modalSheet/TaskSettingModalSheet.dart';
 import 'package:provider/provider.dart';
@@ -68,12 +67,13 @@ class _TaskMoreModalSheetState extends State<TaskMoreModalSheet> {
       return Column(
         children: [
           Padding(
-            padding: const EdgeInsets.only(top: 18, bottom: 3),
+            padding: const EdgeInsets.only(top: 20, bottom: 3),
             child: CalendarMarker(
               size: 25,
               day: '${dateTime.day}',
               isLight: isLight,
               color: color,
+              borderRadius: 5,
             ),
           ),
           mark != null

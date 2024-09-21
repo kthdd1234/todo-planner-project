@@ -83,7 +83,11 @@ class _AddViewState extends State<AddView> {
                         color: isLight ? color.original : grey.s300,
                       ),
                       const Spacer(),
-                      svgAsset(name: 'mark-d', width: 20, color: color.s100),
+                      Padding(
+                        padding: const EdgeInsets.only(right: 3),
+                        child: svgAsset(
+                            name: 'mark-d', width: 20, color: color.s100),
+                      ),
                     ],
                   ),
                 ),
