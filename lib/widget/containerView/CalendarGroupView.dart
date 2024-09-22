@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:project/common/CommonContainer.dart';
 import 'package:project/common/CommonTag.dart';
 import 'package:project/model/group_box/group_box.dart';
 import 'package:project/provider/themeProvider.dart';
@@ -25,9 +26,10 @@ class CalendarGroupView extends StatelessWidget {
     List<GroupBox> groupList = groupRepository.groupList;
 
     return Padding(
-      padding: const EdgeInsets.only(top: 10, left: 10),
-      child: SizedBox(
-        height: 30,
+      padding: const EdgeInsets.only(top: 7),
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 7),
+        height: 35,
         child: ScrollablePositionedList.builder(
             physics: const ClampingScrollPhysics(),
             itemCount: groupList.length,
@@ -36,26 +38,28 @@ class CalendarGroupView extends StatelessWidget {
               GroupBox group = groupList[index];
               ColorClass color = getColorClass(group.colorName);
 
-              Color selectedTextColor = isLight ? color.original : color.s200;
-              Color selectedBgColor = isLight ? color.s50 : darkButtonColor;
+              Color selectedTextColor = isLight ? Colors.white : color.s200;
+              Color selectedBgColor = isLight ? color.s200 : darkButtonColor;
 
-              Color notTextColor = isLight ? grey.original : Colors.white;
-              Color notBgColor = isLight ? Colors.white : darkButtonColor;
+              Color notSelectedTextColor =
+                  isLight ? grey.original : Colors.white;
+              Color notSelectedBgColor =
+                  isLight ? Colors.white : darkButtonColor;
 
               return Padding(
                 padding: const EdgeInsets.only(right: 7),
                 child: Center(
                   child: CommonTag(
                     text: group.name,
-                    isNotTr: true,
-                    fontSize: 13,
-                    onTap: () => onSelectedGroupId(group.id),
+                    fontSize: 14,
+                    isBold: selectedGroupId == group.id,
                     textColor: selectedGroupId == group.id
                         ? selectedTextColor
-                        : notTextColor,
+                        : notSelectedTextColor,
                     bgColor: selectedGroupId == group.id
                         ? selectedBgColor
-                        : notBgColor,
+                        : notSelectedBgColor,
+                    onTap: () => onSelectedGroupId(group.id),
                   ),
                 ),
               );

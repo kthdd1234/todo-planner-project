@@ -79,7 +79,7 @@ class _TaskAppBarState extends State<TaskAppBar> {
             fontSize: 16,
             isNotTr: true,
             isBold: true,
-            textColor: isLight ? Color(0xffB0B9C2) : Colors.white,
+            textColor: isLight ? darkButtonColor : Colors.white,
             svgWidth: 11,
             svgColor: isLight ? grey.s400 : Colors.white,
             svgDirection: SvgDirectionEnum.right,
@@ -88,12 +88,20 @@ class _TaskAppBarState extends State<TaskAppBar> {
           const Spacer(),
           InkWell(
             onTap: onMemo,
-            child: svgAsset(name: 'memo-light', width: 20),
+            child: svgAsset(
+              name: 'memo-light',
+              width: 21,
+              color: grey.original,
+            ),
           ),
           CommonSpace(width: 12.5),
           InkWell(
             onTap: onGroup,
-            child: svgAsset(name: 'group-light', width: 22),
+            child: svgAsset(
+              name: 'group-light',
+              width: 23,
+              color: grey.original,
+            ),
           ),
         ],
       ),

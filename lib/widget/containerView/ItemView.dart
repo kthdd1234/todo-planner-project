@@ -114,7 +114,7 @@ class _ItemViewState extends State<ItemView> {
                   child: Padding(
                     padding: const EdgeInsets.symmetric(vertical: 10),
                     child: Container(
-                      padding: EdgeInsets.symmetric(vertical: 3, horizontal: 3),
+                      padding: const EdgeInsets.all(3),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(3),
                         color: isMark

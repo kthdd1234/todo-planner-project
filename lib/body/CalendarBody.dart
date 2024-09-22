@@ -23,6 +23,12 @@ class _CalendarBodyState extends State<CalendarBody> {
   SegmentedTypeEnum selectedSegment = SegmentedTypeEnum.todo;
   String selectedGroupId = '';
 
+  @override
+  void initState() {
+    selectedGroupId = groupRepository.groupList[0].id;
+    super.initState();
+  }
+
   onCalendar(DateTime dateTime) {
     showDialog(
       context: context,

@@ -84,7 +84,7 @@ class _TaskContainerState extends State<TaskContainer> {
           .indexWhere((recordOrder) => recordOrder['id'] == groupId);
 
       index == -1
-          ? recordBox.recordOrderList!.add(newRecordOrder)
+          ? recordBox.recordOrderList = [newRecordOrder]
           : recordBox.recordOrderList![index]['list'] = taskFilterIdList;
 
       await recordBox.save();
@@ -129,7 +129,7 @@ class _TaskContainerState extends State<TaskContainer> {
     );
 
     return CommonContainer(
-      outerPadding: EdgeInsets.fromLTRB(7, 0, 7, isOpen ? 30 : 10),
+      outerPadding: const EdgeInsets.fromLTRB(7, 0, 7, 10),
       child: Column(
         children: [
           TitleView(

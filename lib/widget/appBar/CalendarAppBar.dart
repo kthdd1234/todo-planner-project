@@ -6,6 +6,7 @@ import 'package:project/model/record_box/record_box.dart';
 import 'package:project/provider/selectedDateTimeProvider.dart';
 import 'package:project/provider/themeProvider.dart';
 import 'package:project/provider/titleDateTimeProvider.dart';
+import 'package:project/util/constants.dart';
 import 'package:project/util/enum.dart';
 import 'package:project/util/final.dart';
 import 'package:project/util/func.dart';
@@ -40,14 +41,13 @@ class CalendarAppBar extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
       child: Row(
-        crossAxisAlignment: CrossAxisAlignment.end,
         children: [
           CommonText(
             text: yMFormatter(locale: locale, dateTime: titleDateTime),
             fontSize: 16,
             isNotTr: true,
             isBold: true,
-            color: isLight ? const Color(0xffB0B9C2) : Colors.white,
+            color: isLight ? darkButtonColor : Colors.white,
             onTap: () => onCalendar(titleDateTime),
           ),
           const Spacer(),

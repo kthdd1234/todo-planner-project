@@ -1,12 +1,20 @@
+import 'dart:developer';
+import 'dart:typed_data';
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:project/common/CommonCalendar.dart';
+import 'package:project/common/CommonImage.dart';
+import 'package:project/common/CommonMask.dart';
 import 'package:project/common/CommonNull.dart';
 import 'package:project/common/CommonSpace.dart';
 import 'package:project/common/CommonText.dart';
+import 'package:project/model/group_box/group_box.dart';
+import 'package:project/model/record_box/record_box.dart';
 import 'package:project/model/task_box/task_box.dart';
 import 'package:project/provider/titleDateTimeProvider.dart';
 import 'package:project/provider/selectedDateTimeProvider.dart';
+import 'package:project/util/class.dart';
 import 'package:project/util/constants.dart';
 import 'package:project/util/enum.dart';
 import 'package:project/util/final.dart';
@@ -20,10 +28,12 @@ class CalendarView extends StatefulWidget {
     super.key,
     required this.selectedSegment,
     required this.selectedGroupId,
+    this.todayColor,
   });
 
   SegmentedTypeEnum selectedSegment;
   String selectedGroupId;
+  Color? todayColor;
 
   @override
   State<CalendarView> createState() => _CalendarViewState();
@@ -43,6 +53,10 @@ class _CalendarViewState extends State<CalendarView> {
   }
 
   Widget? todayBuilder(bool isLight, DateTime dateTime) {
+    GroupBox? selectedGroup =
+        groupRepository.groupBox.get(widget.selectedGroupId);
+    Color todayColor = getColorClass(selectedGroup?.colorName ?? '남색').s200;
+
     return Column(
       children: [
         CommonSpace(height: 10),
@@ -53,7 +67,7 @@ class _CalendarViewState extends State<CalendarView> {
               width: 27.5,
               height: 27.5,
               decoration: BoxDecoration(
-                color: isLight ? indigo.s200 : calendarSelectedDateTimeBgColor,
+                color: isLight ? todayColor : calendarSelectedDateTimeBgColor,
                 borderRadius: BorderRadius.circular(100),
               ),
             ),
@@ -70,20 +84,28 @@ class _CalendarViewState extends State<CalendarView> {
   }
 
   Widget? barBuilder(bool isLight, DateTime dateTime) {
+    String locale = context.locale.toString();
+    int recordKey = dateTimeKey(dateTime);
+    RecordBox? recordBox = recordRepository.recordBox.get(recordKey);
     List<TaskBox> taskList = getTaskList(
-      groupId: '',
-      locale: context.locale.toString(),
-      taskList: taskRepository.taskBox.values.toList(),
+      groupId: widget.selectedGroupId,
+      locale: locale,
+      taskList: taskRepository.taskList,
       targetDateTime: dateTime,
     );
 
-    Color? highlighterColor(TaskBox task) {
-      bool isHighlighter = task.isHighlighter == true;
+    Color? highlighterColor(TaskBox taskBox) {
+      ColorClass color = getColorClass(taskBox.colorName);
+      String? markInfo = getTaskInfo(
+        key: 'mark',
+        recordBox: recordBox,
+        taskId: taskBox.id,
+      );
 
-      return isHighlighter
+      return markInfo != null && markInfo != mark.E
           ? isLight
-              ? getColorClass(task.colorName).s50
-              : getColorClass(task.colorName).original
+              ? color.s50
+              : color.original
           : null;
     }
 
@@ -141,10 +163,55 @@ class _CalendarViewState extends State<CalendarView> {
         : const CommonNull();
   }
 
+  Widget? memoBuilder(bool isLight, DateTime dateTime) {
+    int recordKey = dateTimeKey(dateTime);
+    RecordBox? recordBox = recordRepository.recordBox.get(recordKey);
+    List<Uint8List>? imageList = recordBox?.imageList ?? [];
+
+    if (imageList.isNotEmpty) {
+      return Padding(
+        padding: const EdgeInsets.only(top: 30),
+        child: Stack(
+          alignment: AlignmentDirectional.bottomEnd,
+          children: [
+            Center(
+              child: CommonImage(
+                uint8List: imageList[0],
+                radious: 3,
+                width: 35,
+                height: 50,
+                onTap: (_) {},
+              ),
+            ),
+            Center(child: CommonMask(width: 35, height: 50, opacity: 0.2)),
+            CommonText(text: '')
+            // Center(
+            //   child: Container(
+            //     padding: const EdgeInsets.all(3),
+            //     decoration: BoxDecoration(
+            //       borderRadius: BorderRadius.circular(100),
+            //     ),
+            //     child: CommonText(
+            //       text: '${dateTime.day}',
+            //       isNotTr: true,
+            //       color: Colors.white,
+            //       isBold: true,
+            //     ),
+            //   ),
+            // ),
+          ],
+        ),
+      );
+    }
+
+    return const CommonNull();
+  }
+
   @override
   Widget build(BuildContext context) {
     DateTime selectedDateTime =
         context.watch<SelectedDateTimeProvider>().seletedDateTime;
+    bool isTodo = widget.selectedSegment == SegmentedTypeEnum.todo;
 
     return Expanded(
       child: SingleChildScrollView(
@@ -154,7 +221,7 @@ class _CalendarViewState extends State<CalendarView> {
             selectedDateTime: selectedDateTime,
             calendarFormat: CalendarFormat.month,
             shouldFillViewport: true,
-            markerBuilder: barBuilder,
+            markerBuilder: isTodo ? barBuilder : memoBuilder,
             todayBuilder: todayBuilder,
             onPageChanged: onPageChanged,
             onDaySelected: onDaySelected,

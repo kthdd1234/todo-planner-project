@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:project/common/CommonText.dart';
+import 'package:project/util/final.dart';
 
 class CommonTag extends StatelessWidget {
   CommonTag({
@@ -15,14 +16,14 @@ class CommonTag extends StatelessWidget {
     this.fontSize,
     this.vertical,
     this.isNotTr,
+    this.isOutlined,
   });
 
   String text;
   Color textColor, bgColor;
-  bool? isBold, isNotTr;
+  bool? isBold, isNotTr, isImage, isOutlined;
   double? fontSize, vertical;
   EdgeInsets? innerPadding;
-  bool? isImage;
   Function() onTap;
 
   @override
@@ -42,6 +43,9 @@ class CommonTag extends StatelessWidget {
                 : null,
             color: bgColor,
             borderRadius: BorderRadius.circular(5),
+            border: isOutlined == true
+                ? Border.all(width: 0.5, color: grey.s300)
+                : null,
           ),
           child: CommonText(
             text: text,

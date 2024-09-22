@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "328765857346",
+    "project_id": "todo-tracker-project",
+    "storage_bucket": "todo-tracker-project.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:328765857346:android:a4d20fcce3e75bec17d7db",
+        "android_client_info": {
+          "package_name": "com.kthdd.todoPlanner"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD7n9QDC9jyPOYd8Dbz4pvYCfggfeLuv8Y"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

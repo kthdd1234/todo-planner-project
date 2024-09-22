@@ -14,6 +14,7 @@
 		97C146FC1CF9000F007C117D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FA1CF9000F007C117D /* Main.storyboard */; };
 		97C146FE1CF9000F007C117D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FD1CF9000F007C117D /* Assets.xcassets */; };
 		97C147011CF9000F007C117D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FF1CF9000F007C117D /* LaunchScreen.storyboard */; };
+		B294C61B2D03DD76DAB1BE2E /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = E6CE4CED739340C98EEC91FC /* GoogleService-Info.plist */; };
 		D3058C612C285230009DEFB3 /* variable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3058C602C285230009DEFB3 /* variable.swift */; };
 		D3058C622C285230009DEFB3 /* variable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3058C602C285230009DEFB3 /* variable.swift */; };
 		D3058C642C2915D0009DEFB3 /* view.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3058C632C2915D0009DEFB3 /* view.swift */; };
@@ -116,6 +117,7 @@
 		D3B48CFF2C2817AB00441F60 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		D3B48D012C2817AB00441F60 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D3B48D0A2C2819AF00441F60 /* Runner.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Runner.entitlements; sourceTree = "<group>"; };
+		E6CE4CED739340C98EEC91FC /* GoogleService-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "Runner/GoogleService-Info.plist"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -188,6 +190,7 @@
 				331C8082294A63A400263BE5 /* RunnerTests */,
 				95239A035CCCEF8BA1BDA23B /* Pods */,
 				A228078D2615DACE37FCCDCC /* Frameworks */,
+				E6CE4CED739340C98EEC91FC /* GoogleService-Info.plist */,
 			);
 			sourceTree = "<group>";
 		};
@@ -385,6 +388,7 @@
 				97C146FE1CF9000F007C117D /* Assets.xcassets in Resources */,
 				97C146FC1CF9000F007C117D /* Main.storyboard in Resources */,
 				D3563A2D2C6A4D6F004006AC /* InfoPlist.strings in Resources */,
+				B294C61B2D03DD76DAB1BE2E /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

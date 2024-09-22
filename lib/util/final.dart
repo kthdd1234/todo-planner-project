@@ -16,11 +16,11 @@ List<BNClass> getBnClassList(bool isLight, int seletedIdx) {
       padding: const EdgeInsets.only(bottom: 5),
       child: svgAsset(
         name: name,
-        width: 22,
+        width: 23,
         color: idx == seletedIdx
             ? null
             : isLight
-                ? grey.s400
+                ? grey.original
                 : grey.original,
       ),
     );
@@ -38,17 +38,6 @@ List<BNClass> getBnClassList(bool isLight, int seletedIdx) {
       ),
       svgName: seletedIdx == 0 ? 'bnb-home-filled-light' : 'bnb-home',
     ),
-    // BNClass(
-    //   index: 1,
-    //   name: '트래커',
-    //   icon: svg(
-    //     1,
-    //     seletedIdx == 1
-    //         ? 'bnb-tracker-filled-${isLight ? 'light' : 'dark'}'
-    //         : 'bnb-tracker',
-    //   ),
-    //   svgName: 'bnb-tracker',
-    // ),
     BNClass(
       index: 1,
       name: '캘린더',
