@@ -15,7 +15,6 @@ import 'package:project/util/func.dart';
 import 'package:project/widget/border/HorizentalBorder.dart';
 import 'package:project/widget/modalSheet/ImageSelectionModalSheet.dart';
 import 'package:project/widget/modalSheet/MemoModalSheet.dart';
-import 'package:project/widget/modalSheet/TitleSettingModalSheet.dart';
 import 'package:provider/provider.dart';
 
 class MemoContainer extends StatefulWidget {

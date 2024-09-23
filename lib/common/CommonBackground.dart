@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:project/provider/themeProvider.dart';
 import 'package:project/util/constants.dart';

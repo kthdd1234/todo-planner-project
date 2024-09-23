@@ -205,7 +205,7 @@ class _ContentViewState extends State<ContentView> {
   onLanguage() async {
     await showModalBottomSheet(
       context: context,
-      builder: (context) => LanguageModalSheet(),
+      builder: (context) => const LanguageModalSheet(),
     );
     setState(() {});
   }

@@ -9,7 +9,7 @@ class SearchBody extends StatelessWidget {
   Widget build(BuildContext context) {
     return CommonBackground(
       child: CommonScaffold(
-        body: Column(
+        body: const Column(
           children: [],
         ),
       ),

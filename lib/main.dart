@@ -10,6 +10,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:hive/hive.dart';
 import 'package:home_widget/home_widget.dart';
 import 'package:intl/date_symbol_data_local.dart';
+import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
 import 'package:project/model/user_box/user_box.dart';
 import 'package:project/page/HomePage.dart';
 import 'package:project/page/IntroPage.dart';
@@ -25,7 +26,6 @@ import 'package:project/provider/titleDateTimeProvider.dart';
 import 'package:project/repositories/init_hive.dart';
 import 'package:project/repositories/user_repository.dart';
 import 'package:project/util/constants.dart';
-import 'package:project/util/service.dart';
 import 'package:provider/provider.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:purchases_flutter/purchases_flutter.dart';
@@ -37,10 +37,7 @@ PurchasesConfiguration _configuration =
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
-
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   await Purchases.configure(_configuration);
   await MobileAds.instance.initialize();
   await initializeDateFormatting();
@@ -48,6 +45,12 @@ void main() async {
   await InitHive().initializeHive();
   await HomeWidget.setAppGroupId('group.todo-planner-widget');
   await dotenv.load(fileName: ".env");
+  KakaoSdk.init(
+    nativeAppKey: '958cf1ab1b9ab22445351f1b6181c38f',
+    javaScriptAppKey: '6c33a55f2e1fc0d920781f3dc1b4a8a4',
+  );
+
+  log('안드로이드 카카오 로그인 구현 시 릴리즈 키 해시 등록 필요!!');
 
   runApp(
     MultiProvider(
@@ -134,9 +137,9 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
     bool isBackground = state == AppLifecycleState.paused ||
         state == AppLifecycleState.detached;
 
-    if (isBackground && user != null) {
-      await HomeWidgetService().updateTodoRoutin(locale);
-    }
+    // if (isBackground && user != null) {
+    //   await HomeWidgetService().updateTodoRoutin(locale);
+    // }
   }
 
   @override
@@ -174,7 +177,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
       supportedLocales: context.supportedLocales,
       locale: context.locale,
       debugShowCheckedModeBanner: false,
-      initialRoute: initialRoute,
+      initialRoute: 'intro-page',
       routes: {
         'home-page': (context) => HomePage(locale: locale),
         'intro-page': (context) => const IntroPage()

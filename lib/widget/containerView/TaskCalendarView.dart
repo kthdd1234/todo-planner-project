@@ -62,7 +62,7 @@ class _TaskCalendarViewState extends State<TaskCalendarView> {
     RecordBox? recordBox = recordRepository.recordBox.get(recordKey);
     List<GroupBox> groupList = getGroupOrderList(groupRepository.groupList);
 
-    groupList.forEach((group) {
+    for (var group in groupList) {
       List<TaskBox> taskList = getTaskList(
         groupId: group.id,
         locale: locale,
@@ -83,7 +83,7 @@ class _TaskCalendarViewState extends State<TaskCalendarView> {
       if (colorList.length != 9 && filterMarkList.isNotEmpty) {
         colorList.add(getColorClass(group.colorName));
       }
-    });
+    }
 
     while (colorList.length < 9) {
       colorList.add(null);

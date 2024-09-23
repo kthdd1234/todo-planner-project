@@ -82,12 +82,12 @@ class _GroupPageState extends State<GroupPage> {
             user.groupOrderList?.remove(groupId);
 
             // task 삭제
-            taskRepository.taskList.forEach((task) {
+            for (var task in taskRepository.taskList) {
               if (task.id == groupId) task.delete();
-            });
+            }
 
             // mark 기록 제거
-            recordRepository.recordList.forEach((record) {
+            for (var record in recordRepository.recordList) {
               record.taskMarkList = record.taskMarkList
                   ?.where(
                     (taskMark) => !taskRemoveIdList.contains(taskMark['id']),
@@ -95,7 +95,7 @@ class _GroupPageState extends State<GroupPage> {
                   .toList();
 
               record.taskOrderList;
-            });
+            }
 
             // record order 그룹 & 할 일 삭제
             recordRepository.recordList.forEach((record) async {

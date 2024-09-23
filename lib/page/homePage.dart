@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:project/body/CalendarBody.dart';
 import 'package:project/body/SettingBody.dart';
 import 'package:project/body/TaskBody.dart';
-import 'package:project/body/TrackerBody.dart';
 import 'package:project/common/CommonBackground.dart';
 import 'package:project/common/CommonScaffold.dart';
 import 'package:project/model/group_box/group_box.dart';
@@ -14,9 +13,9 @@ import 'package:project/provider/titleDateTimeProvider.dart';
 import 'package:project/provider/bottomTabIndexProvider.dart';
 import 'package:project/provider/selectedDateTimeProvider.dart';
 import 'package:project/provider/themeProvider.dart';
+import 'package:project/service/AppLifecycleService.dart';
 import 'package:project/util/final.dart';
 import 'package:project/util/func.dart';
-import 'package:project/util/service.dart';
 import 'package:provider/provider.dart';
 
 class HomePage extends StatefulWidget {

@@ -63,12 +63,16 @@ dependencies:
   permission_handler: ^11.3.1
   home_widget: ^0.6.0
   flutter_dotenv: ^5.1.0
-  share_plus: ^9.0.0
+  share_plus: ^10.0.2
   in_app_review: ^2.0.9
   purchases_flutter: ^6.29.4
   syncfusion_flutter_datagrid: ^26.1.42
   scrollable_positioned_list: ^0.3.8
   firebase_core: ^3.4.0
+  google_sign_in: ^6.2.1
+  firebase_auth: ^5.2.0
+  cloud_firestore: ^5.4.2
+  kakao_flutter_sdk_user: ^1.9.6
 
 dev_dependencies:
   flutter_test:
@@ -195,6 +199,9 @@ flutter:
     - assets/svg/close-light.svg
     - assets/svg/task-add.svg
     - assets/svg/repeat.svg
+    - assets/svg/apple-logo.svg
+    - assets/svg/google-logo.svg
+    - assets/svg/kakao-logo.svg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

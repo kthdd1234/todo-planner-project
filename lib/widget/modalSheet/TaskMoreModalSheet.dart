@@ -255,7 +255,7 @@ class _TaskMoreModalSheetState extends State<TaskMoreModalSheet> {
       child: Column(
         children: [
           CommonContainer(
-            innerPadding: EdgeInsets.all(5),
+            innerPadding: const EdgeInsets.all(5),
             height: 480,
             child: Column(
               children: [
@@ -284,7 +284,8 @@ class _TaskMoreModalSheetState extends State<TaskMoreModalSheet> {
                   focusedDay: focusedDay,
                   firstDay: DateTime(2000, 1, 1),
                   lastDay: DateTime(3000, 1, 1),
-                  calendarStyle: CalendarStyle(cellAlignment: Alignment.center),
+                  calendarStyle:
+                      const CalendarStyle(cellAlignment: Alignment.center),
                   calendarBuilders: CalendarBuilders(
                     markerBuilder: (btx, dateTime, _) => markerBuilder(
                       locale,

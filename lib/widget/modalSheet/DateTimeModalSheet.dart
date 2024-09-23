@@ -5,7 +5,6 @@ import 'package:project/common/CommonButton.dart';
 import 'package:project/common/CommonContainer.dart';
 import 'package:project/common/CommonModalSheet.dart';
 import 'package:project/common/CommonSpace.dart';
-import 'package:project/common/CommonSwitch.dart';
 import 'package:project/common/CommonText.dart';
 import 'package:project/provider/themeProvider.dart';
 import 'package:project/util/class.dart';

@@ -33,7 +33,7 @@ class _TrackerBodyState extends State<TrackerBody> {
         TaskCalendarView(calendarFormat: calendarFormat),
         CommonContainer(
           outerPadding: const EdgeInsets.fromLTRB(7, 0, 7, 7),
-          child: Column(
+          child: const Column(
             children: [],
           ),
         )

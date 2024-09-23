@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
@@ -14,7 +12,6 @@ import 'package:project/util/func.dart';
 import 'package:project/widget/containerView/ContentView.dart';
 import 'package:project/widget/containerView/AddView.dart';
 import 'package:project/widget/containerView/TitleView.dart';
-import 'package:project/widget/modalSheet/TaskSettingModalSheet.dart';
 import 'package:project/widget/modalSheet/TitleSettingModalSheet.dart';
 
 class TaskContainer extends StatefulWidget {

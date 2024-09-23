@@ -156,7 +156,6 @@ class _BackgroundItemState extends State<BackgroundItem> {
         ),
       ),
     );
-    ;
   }
 }
 

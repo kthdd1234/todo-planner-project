@@ -1,9 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:project/common/CommonText.dart';
 import 'package:project/util/constants.dart';
 import 'package:project/util/enum.dart';
-import 'package:project/util/final.dart';
 
 class CommonSegmented extends StatelessWidget {
   CommonSegmented({
