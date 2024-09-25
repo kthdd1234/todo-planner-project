@@ -136,3 +136,15 @@ const darkSvgBgColor = Color(0xff2C2C35);
 
 /// selectedColor
 const selectedColor = Color(0xffF3F7FE);
+
+/// usersCollection
+String usersCollection = 'users';
+
+/// groupsCollection
+String groupsCollection = 'groups';
+
+/// tasksCollection
+String tasksCollection = 'tasks';
+
+/// recordsCollection
+String recordsCollection = 'records';

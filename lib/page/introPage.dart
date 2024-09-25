@@ -1,6 +1,5 @@
 // ignore_for_file: use_build_context_synchronously
 
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:project/common/CommonBackground.dart';
 import 'package:project/common/CommonButton.dart';
@@ -10,7 +9,6 @@ import 'package:project/common/CommonText.dart';
 import 'package:project/service/AuthService.dart';
 import 'package:project/util/class.dart';
 import 'package:project/util/constants.dart';
-import 'package:project/util/func.dart';
 
 class IntroPage extends StatefulWidget {
   const IntroPage({super.key});
@@ -27,11 +25,11 @@ class _IntroPageState extends State<IntroPage> {
   }
 
   onAppleLogin() {
-    authService.signInWithApple();
+    authService.signInWithApple(context);
   }
 
   onkakaoLogin() {
-    authService.signInWithKakao();
+    authService.signInWithKakao(context);
   }
 
   @override
@@ -46,9 +44,9 @@ class _IntroPageState extends State<IntroPage> {
             const Spacer(),
             // svgAsset(name: 'todo-planner-app-icon', width: 80),
             // CommonSpace(height: 20),
-            CommonText(text: '반가워요! 투두 트래커와 함께', color: textColor),
+            CommonText(text: '반가워요! 투두 트래커와 함께'),
             CommonSpace(height: 2),
-            CommonText(text: '오늘의 할 일을 실천해봐요 :D', color: textColor),
+            CommonText(text: '오늘의 할 일을 실천해봐요 :D'),
             const Spacer(),
             CommonButton(
               svg: 'kakao-logo',

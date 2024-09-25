@@ -1,6 +1,7 @@
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
+import 'package:project/util/func.dart';
 
 class AppBarInfoClass {
   AppBarInfoClass({
@@ -342,4 +343,153 @@ class BNClass {
   int index;
   String name, svgName;
   Widget icon;
+}
+
+class FadePageRoute extends PageRouteBuilder {
+  final Widget page;
+
+  FadePageRoute({required this.page})
+      : super(
+          pageBuilder: (context, animation, secondaryAnimation) => page,
+          transitionsBuilder: (context, animation, secondaryAnimation, child) =>
+              FadeTransition(opacity: animation, child: child),
+        );
+}
+
+//ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ파이어스토어 데이터 모델링ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ//
+
+class UserInfoClass {
+  UserInfoClass({
+    required this.uid,
+    required this.loginType,
+    required this.createDateTime,
+    required this.fontFamily,
+    required this.background,
+    required this.theme,
+    required this.widgetTheme,
+    this.passwords,
+    this.email,
+    this.displayName,
+    this.imgUrl,
+  });
+
+  String uid, loginType, fontFamily, background, theme, widgetTheme;
+  DateTime createDateTime;
+  String? email, displayName, imgUrl, passwords;
+
+  UserInfoClass.fromJson(Map<String, dynamic> json)
+      : uid = json['uid'] as String,
+        loginType = json['loginType'] as String,
+        createDateTime = json['createDateTime'] as DateTime,
+        fontFamily = json['fontFamily'] as String,
+        background = json['background'] as String,
+        theme = json['theme'] as String,
+        widgetTheme = json['widgetTheme'] as String,
+        passwords = json['passwords'] as String?,
+        email = json['email'] as String?,
+        displayName = json['displayName'] as String?,
+        imgUrl = json['imgUrl'] as String?;
+
+  Map<String, dynamic> toJson() => {
+        'uid': uid,
+        'loginType': loginType,
+        'createDateTime': createDateTime,
+        'fontFamily': fontFamily,
+        'background': background,
+        'theme': theme,
+        'widgetTheme': widgetTheme,
+        'passwords': passwords,
+        'email': email,
+        'displayName': displayName,
+        'imgUrl': imgUrl,
+      };
+}
+
+class GroupInfoClass {
+  GroupInfoClass({
+    required this.gid,
+    required this.name,
+    required this.colorName,
+    required this.createDateTime,
+    required this.isOpen,
+  });
+
+  String gid, name, colorName;
+  DateTime createDateTime;
+  bool isOpen;
+
+  GroupInfoClass.fromJson(Map<String, dynamic> json)
+      : gid = json['gid'] as String,
+        name = json['name'] as String,
+        colorName = json['colorName'] as String,
+        createDateTime =
+            timestampToDateTime(json['createDateTime']) as DateTime,
+        isOpen = json['isOpen'] as bool;
+
+  Map<String, dynamic> toJson() => {
+        'gid': gid,
+        'name': name,
+        'colorName': colorName,
+        'createDateTime': createDateTime,
+        'isOpen': isOpen,
+      };
+}
+
+class TaskInfoClass {
+  TaskInfoClass({
+    required this.createDateTime,
+    required this.tid,
+    required this.name,
+    required this.dateTimeType,
+    required this.dateTimeList,
+  });
+
+  DateTime createDateTime;
+  String tid, name, dateTimeType;
+  List<DateTime> dateTimeList;
+
+  TaskInfoClass.fromJson(Map<String, dynamic> json)
+      : createDateTime = json['createDateTime'] as DateTime,
+        tid = json['tid'] as String,
+        name = json['name'] as String,
+        dateTimeType = json['dateTimeType'] as String,
+        dateTimeList = json['dateTimeList'] as List<DateTime>;
+
+  Map<String, dynamic> toJson() => {
+        'createDateTime': createDateTime,
+        'tid': tid,
+        'name': name,
+        'dateTimeType': dateTimeType,
+        'dateTimeList': dateTimeList,
+      };
+}
+
+class RecordInfoClass {
+  RecordInfoClass({
+    required this.createDateTime,
+    required this.rid,
+    this.memo,
+    this.imageUrlList,
+    this.mark,
+  });
+
+  DateTime createDateTime;
+  String rid;
+  String? memo, mark;
+  List<String>? imageUrlList;
+
+  RecordInfoClass.fromJson(Map<String, dynamic> json)
+      : createDateTime = json['createDateTime'] as DateTime,
+        rid = json['tid'] as String,
+        memo = json['memo'] as String?,
+        imageUrlList = json['imageUrlList'] as List<String>?,
+        mark = json['mark'] as String?;
+
+  Map<String, dynamic> toJson() => {
+        'createDateTime': createDateTime,
+        'rid': rid,
+        'memo': memo,
+        'imageUrlList': imageUrlList,
+        'mark': mark,
+      };
 }

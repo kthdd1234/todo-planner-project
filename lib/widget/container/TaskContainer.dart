@@ -7,6 +7,7 @@ import 'package:project/model/group_box/group_box.dart';
 import 'package:project/model/record_box/record_box.dart';
 import 'package:project/model/task_box/task_box.dart';
 import 'package:project/model/user_box/user_box.dart';
+import 'package:project/util/class.dart';
 import 'package:project/util/final.dart';
 import 'package:project/util/func.dart';
 import 'package:project/widget/containerView/ContentView.dart';
@@ -17,139 +18,112 @@ import 'package:project/widget/modalSheet/TitleSettingModalSheet.dart';
 class TaskContainer extends StatefulWidget {
   TaskContainer({
     super.key,
-    required this.groupBox,
-    required this.recordBox,
+    required this.groupInfo,
     required this.selectedDateTime,
   });
 
   DateTime selectedDateTime;
-  GroupBox groupBox;
-  RecordBox? recordBox;
+  GroupInfoClass groupInfo;
 
   @override
   State<TaskContainer> createState() => _TaskContainerState();
 }
 
 class _TaskContainerState extends State<TaskContainer> {
-  UserBox user = userRepository.user;
-  Box<TaskBox> taskBox = taskRepository.taskBox;
+  // Box<TaskBox> taskBox = taskRepository.taskBox;
 
   onTitle(String taskTitle, String taskColorName) {
     showModalBottomSheet(
       isScrollControlled: true,
       context: context,
-      builder: (context) => TitleSettingModalSheet(groupBox: widget.groupBox),
+      builder: (context) => TitleSettingModalSheet(groupInfo: widget.groupInfo),
     );
   }
 
   onOpen() async {
-    bool isOpen = widget.groupBox.isOpen;
-    widget.groupBox.isOpen = !isOpen;
+    bool isOpen = widget.groupInfo.isOpen;
+    // widget.groupBox.isOpen = !isOpen;
 
-    await widget.groupBox.save();
+    // await widget.groupBox.save();
   }
 
   onReorder(int oldIdx, int newIdx, List<TaskBox> taskFilterList) async {
-    String groupId = widget.groupBox.id;
-    int recordKey = dateTimeKey(widget.selectedDateTime);
-    RecordBox? recordBox = recordRepository.recordBox.get(recordKey);
-    List<Map<String, dynamic>> recordOrderList =
-        recordBox?.recordOrderList ?? [];
-    List<String> taskFilterIdList =
-        taskFilterList.map((task) => task.id).toList();
+    // String groupId = widget.groupBox.id;
+    // int recordKey = dateTimeKey(widget.selectedDateTime);
+    // RecordBox? recordBox = recordRepository.recordBox.get(recordKey);
+    // List<Map<String, dynamic>> recordOrderList =
+    //     recordBox?.recordOrderList ?? [];
+    // List<String> taskFilterIdList =
+    //     taskFilterList.map((task) => task.id).toList();
 
-    if (oldIdx < newIdx) newIdx -= 1;
+    // if (oldIdx < newIdx) newIdx -= 1;
 
-    String id = taskFilterIdList.removeAt(oldIdx);
-    taskFilterIdList.insert(newIdx, id);
+    // String id = taskFilterIdList.removeAt(oldIdx);
+    // taskFilterIdList.insert(newIdx, id);
 
-    Map<String, Object> newRecordOrder = {
-      'id': groupId,
-      'list': taskFilterIdList
-    };
+    // Map<String, Object> newRecordOrder = {
+    //   'id': groupId,
+    //   'list': taskFilterIdList
+    // };
 
-    if (recordBox == null) {
-      recordRepository.updateRecord(
-        key: recordKey,
-        record: RecordBox(
-          createDateTime: widget.selectedDateTime,
-          recordOrderList: [newRecordOrder],
-        ),
-      );
-    } else {
-      int index = recordOrderList
-          .indexWhere((recordOrder) => recordOrder['id'] == groupId);
+    // if (recordBox == null) {
+    //   recordRepository.updateRecord(
+    //     key: recordKey,
+    //     record: RecordBox(
+    //       createDateTime: widget.selectedDateTime,
+    //       recordOrderList: [newRecordOrder],
+    //     ),
+    //   );
+    // } else {
+    //   int index = recordOrderList
+    //       .indexWhere((recordOrder) => recordOrder['id'] == groupId);
 
-      index == -1
-          ? recordBox.recordOrderList = [newRecordOrder]
-          : recordBox.recordOrderList![index]['list'] = taskFilterIdList;
+    //   index == -1
+    //       ? recordBox.recordOrderList = [newRecordOrder]
+    //       : recordBox.recordOrderList![index]['list'] = taskFilterIdList;
 
-      await recordBox.save();
-    }
+    //   await recordBox.save();
+    // }
   }
 
   onText(TaskBox? taskBox, String text) async {
-    UserBox user = userRepository.user;
     String newTaskId = uuid();
 
     if (taskBox == null) {
-      await taskRepository.taskBox.put(
-        newTaskId,
-        TaskBox(
-          groupId: widget.groupBox.id,
-          id: newTaskId,
-          name: text,
-          taskType: tTodo.type,
-          isHighlighter: false,
-          colorName: widget.groupBox.colorName,
-          dateTimeType: taskDateTimeType.selection,
-          dateTimeList: [widget.selectedDateTime],
-        ),
-      );
-
-      await user.save();
+      // await taskRepository.taskBox.put(
+      //   newTaskId,
+      //   TaskBox(
+      //     groupId: widget.groupBox.id,
+      //     id: newTaskId,
+      //     name: text,
+      //     taskType: tTodo.type,
+      //     isHighlighter: false,
+      //     colorName: widget.groupBox.colorName,
+      //     dateTimeType: taskDateTimeType.selection,
+      //     dateTimeList: [widget.selectedDateTime],
+      //   ),
+      // );
     } else {
-      taskBox.name = text;
-      await taskBox.save();
+      // taskBox.name = text;
+      // await taskBox.save();
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    String locale = context.locale.toString();
-    bool isOpen = widget.groupBox.isOpen;
-    List<TaskBox> taskFilterList = getTaskList(
-      groupId: widget.groupBox.id,
-      locale: locale,
-      taskList: taskRepository.taskList,
-      targetDateTime: widget.selectedDateTime,
-    );
-
     return CommonContainer(
       outerPadding: const EdgeInsets.fromLTRB(7, 0, 7, 10),
       child: Column(
         children: [
-          TitleView(
-            title: widget.groupBox.name,
-            colorName: widget.groupBox.colorName,
-            isOpen: isOpen,
-            onTitle: onTitle,
-            onOpen: onOpen,
-          ),
-          isOpen
+          TitleView(groupInfo: widget.groupInfo),
+          widget.groupInfo.isOpen
               ? Column(
                   children: [
-                    ContentView(
-                      groupBox: widget.groupBox,
-                      recordBox: widget.recordBox,
-                      selectedDateTime: widget.selectedDateTime,
-                      taskFilterList: taskFilterList,
-                      onReorder: onReorder,
-                    ),
-                    AddView(
-                      colorName: widget.groupBox.colorName,
-                      onText: onText,
-                    )
+                    // ContentView(
+                    //   groupInfo: widget.groupInfo,
+                    //   selectedDateTime: widget.selectedDateTime,
+                    // ),
+                    AddView(groupInfo: widget.groupInfo),
                   ],
                 )
               : const CommonNull(),

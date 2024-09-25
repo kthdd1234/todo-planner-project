@@ -1,7 +1,9 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:multi_value_listenable_builder/multi_value_listenable_builder.dart';
 import 'package:project/common/CommonBackground.dart';
 import 'package:project/common/CommonScaffold.dart';
+import 'package:project/main.dart';
 import 'package:project/model/group_box/group_box.dart';
 import 'package:project/model/record_box/record_box.dart';
 import 'package:project/model/task_box/task_box.dart';
@@ -28,11 +30,11 @@ class GroupPage extends StatefulWidget {
 class _GroupPageState extends State<GroupPage> {
   bool isEdit = false;
 
-  onItem(GroupBox groupBox) {
+  onItem(GroupInfoClass groupInfo) {
     showModalBottomSheet(
       isScrollControlled: true,
       context: context,
-      builder: (context) => TitleSettingModalSheet(groupBox: groupBox),
+      builder: (context) => TitleSettingModalSheet(groupInfo: groupInfo),
     );
   }
 
@@ -48,7 +50,7 @@ class _GroupPageState extends State<GroupPage> {
     setState(() => isEdit = !isEdit);
   }
 
-  onRemove(GroupBox groupBox) {
+  onRemove(GroupInfoClass groupInfo) {
     if (groupRepository.groupList.length == 1) {
       showDialog(
         context: context,
@@ -68,49 +70,49 @@ class _GroupPageState extends State<GroupPage> {
           isCancel: true,
           height: 155,
           onTap: () async {
-            UserBox user = userRepository.user;
-            String groupId = groupBox.id;
-            List<String> taskRemoveIdList = taskRepository.taskList
-                .where((task) => task.id == groupBox.id)
-                .map((task) => task.id)
-                .toList();
+            // UserBox user = userRepository.user;
+            // String groupId = groupBox.id;
+            // List<String> taskRemoveIdList = taskRepository.taskList
+            //     .where((task) => task.id == groupBox.id)
+            //     .map((task) => task.id)
+            //     .toList();
 
-            // group 제거
-            groupRepository.deleteGroup(groupId);
+            // // group 제거
+            // groupRepository.deleteGroup(groupId);
 
-            // group 순서 id 제거
-            user.groupOrderList?.remove(groupId);
+            // // group 순서 id 제거
+            // user.groupOrderList?.remove(groupId);
 
-            // task 삭제
-            for (var task in taskRepository.taskList) {
-              if (task.id == groupId) task.delete();
-            }
+            // // task 삭제
+            // for (var task in taskRepository.taskList) {
+            //   if (task.id == groupId) task.delete();
+            // }
 
-            // mark 기록 제거
-            for (var record in recordRepository.recordList) {
-              record.taskMarkList = record.taskMarkList
-                  ?.where(
-                    (taskMark) => !taskRemoveIdList.contains(taskMark['id']),
-                  )
-                  .toList();
+            // // mark 기록 제거
+            // for (var record in recordRepository.recordList) {
+            //   record.taskMarkList = record.taskMarkList
+            //       ?.where(
+            //         (taskMark) => !taskRemoveIdList.contains(taskMark['id']),
+            //       )
+            //       .toList();
 
-              record.taskOrderList;
-            }
+            //   record.taskOrderList;
+            // }
 
-            // record order 그룹 & 할 일 삭제
-            recordRepository.recordList.forEach((record) async {
-              int index = record.recordOrderList?.indexWhere(
-                      (recordOrder) => recordOrder['id'] == groupId) ??
-                  -1;
+            // // record order 그룹 & 할 일 삭제
+            // recordRepository.recordList.forEach((record) async {
+            //   int index = record.recordOrderList?.indexWhere(
+            //           (recordOrder) => recordOrder['id'] == groupId) ??
+            //       -1;
 
-              if (index != -1) {
-                record.recordOrderList!.removeAt(index);
-                await record.save();
-              }
-            });
+            //   if (index != -1) {
+            //     record.recordOrderList!.removeAt(index);
+            //     await record.save();
+            //   }
+            // });
 
-            await user.save();
-            navigatorPop(context);
+            // await user.save();
+            // navigatorPop(context);
           },
         ),
       );
@@ -139,34 +141,68 @@ class _GroupPageState extends State<GroupPage> {
         appBarInfo: AppBarInfoClass(title: '그룹 관리', actions: [
           GroupEditButton(isEdit: isEdit, isLight: isLight, onEdit: onEdit)
         ]),
-        body: MultiValueListenableBuilder(
-          valueListenables: valueListenables,
-          builder: (context, values, child) {
-            List<GroupBox> groupList =
-                getGroupOrderList(groupRepository.groupList);
+        body: StreamBuilder<QuerySnapshot>(
+          stream: groupMethod.stream(),
+          builder: (context, snapshot) {
+            if (!snapshot.hasData) return CircularProgressIndicator();
 
-            return ReorderableListView.builder(
-              physics: const ClampingScrollPhysics(),
-              itemCount: groupList.length,
-              onReorder: onReorder,
+            List<GroupInfoClass> groupInfoList =
+                groupMethod.getGroupInfoList(snapshot);
+
+            return ListView.builder(
+              itemCount: groupInfoList.length,
               itemBuilder: (context, index) {
-                return Padding(
-                  key: Key(groupList[index].id),
-                  padding: const EdgeInsets.symmetric(
-                    vertical: 5,
-                    horizontal: 10,
-                  ),
-                  child: GroupItemButton(
-                    groupBox: groupList[index],
-                    isEdit: isEdit,
-                    onItem: onItem,
-                    onRemove: onRemove,
-                  ),
+                return ReorderableListView.builder(
+                  physics: const ClampingScrollPhysics(),
+                  itemCount: groupInfoList.length,
+                  onReorder: onReorder,
+                  itemBuilder: (context, index) {
+                    return Padding(
+                      key: Key(groupInfoList[index].gid),
+                      padding: const EdgeInsets.symmetric(
+                        vertical: 5,
+                        horizontal: 10,
+                      ),
+                      child: GroupItemButton(
+                        groupInfo: groupInfoList[index],
+                        isEdit: isEdit,
+                        onItem: onItem,
+                        onRemove: onRemove,
+                      ),
+                    );
+                  },
                 );
               },
             );
           },
         ),
+        // MultiValueListenableBuilder(
+        //   builder: (context, values, child) {
+        //     List<GroupBox> groupList =
+        //         getGroupOrderList(groupRepository.groupList);
+
+        //     return ReorderableListView.builder(
+        //       physics: const ClampingScrollPhysics(),
+        //       itemCount: groupList.length,
+        //       onReorder: onReorder,
+        //       itemBuilder: (context, index) {
+        //         return Padding(
+        //           key: Key(groupList[index].id),
+        //           padding: const EdgeInsets.symmetric(
+        //             vertical: 5,
+        //             horizontal: 10,
+        //           ),
+        //           child: GroupItemButton(
+        //             groupBox: groupList[index],
+        //             isEdit: isEdit,
+        //             onItem: onItem,
+        //             onRemove: onRemove,
+        //           ),
+        //         );
+        //       },
+        //     );
+        //   },
+        // ),
         floatingActionButton: GroupAddButton(isLight: isLight, onAdd: onAdd),
       ),
     );

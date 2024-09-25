@@ -10,23 +10,25 @@ import 'package:project/widget/border/HorizentalBorder.dart';
 import 'package:provider/provider.dart';
 
 class TitleView extends StatelessWidget {
-  TitleView({
-    super.key,
-    required this.title,
-    required this.colorName,
-    required this.isOpen,
-    required this.onTitle,
-    required this.onOpen,
-  });
+  TitleView({super.key, required this.groupInfo});
 
-  String title, colorName;
-  bool isOpen;
-  Function(String, String) onTitle;
-  Function() onOpen;
+  GroupInfoClass groupInfo;
+
+  onTitle() {
+    //
+  }
+
+  onOpen() {
+    //
+  }
 
   @override
   Widget build(BuildContext context) {
     bool isLight = context.watch<ThemeProvider>().isLight;
+
+    String title = groupInfo.name;
+    bool isOpen = groupInfo.isOpen;
+    String colorName = groupInfo.colorName;
     ColorClass color = getColorClass(colorName);
 
     return Column(
@@ -39,7 +41,7 @@ class TitleView extends StatelessWidget {
               isBold: !isLight,
               textColor: isLight ? color.original : color.s200,
               bgColor: isLight ? color.s50 : darkButtonColor,
-              onTap: () => onTitle(title, colorName),
+              onTap: onTitle,
             ),
             const Spacer(),
             InkWell(

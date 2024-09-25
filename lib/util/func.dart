@@ -2,6 +2,7 @@
 
 import 'dart:developer';
 import 'dart:io';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -512,4 +513,8 @@ categorySegmented(SegmentedTypeEnum segmented) {
   };
 
   return segmentedData;
+}
+
+timestampToDateTime(Timestamp timestamp) {
+  return DateTime.parse(timestamp.toDate().toString());
 }

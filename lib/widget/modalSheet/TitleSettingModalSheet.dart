@@ -4,18 +4,20 @@ import 'package:project/common/CommonModalItem.dart';
 import 'package:project/common/CommonModalSheet.dart';
 import 'package:project/common/CommonOutlineInputField.dart';
 import 'package:project/common/CommonSpace.dart';
+import 'package:project/main.dart';
 import 'package:project/model/group_box/group_box.dart';
 import 'package:project/model/user_box/user_box.dart';
 import 'package:project/provider/themeProvider.dart';
+import 'package:project/util/class.dart';
 import 'package:project/util/final.dart';
 import 'package:project/util/func.dart';
 import 'package:project/widget/listView/ColorListView.dart';
 import 'package:provider/provider.dart';
 
 class TitleSettingModalSheet extends StatefulWidget {
-  TitleSettingModalSheet({super.key, this.groupBox});
+  TitleSettingModalSheet({super.key, this.groupInfo});
 
-  GroupBox? groupBox;
+  GroupInfoClass? groupInfo;
 
   @override
   State<TitleSettingModalSheet> createState() => _TitleSettingModalSheetState();
@@ -28,9 +30,9 @@ class _TitleSettingModalSheetState extends State<TitleSettingModalSheet> {
 
   @override
   void initState() {
-    if (widget.groupBox != null) {
-      controller.text = widget.groupBox!.name;
-      selectedColorName = widget.groupBox!.colorName;
+    if (widget.groupInfo != null) {
+      controller.text = widget.groupInfo!.name;
+      selectedColorName = widget.groupInfo!.colorName;
     }
 
     super.initState();
@@ -43,27 +45,24 @@ class _TitleSettingModalSheetState extends State<TitleSettingModalSheet> {
   onEditingComplete() async {
     DateTime now = DateTime.now();
 
-    if (widget.groupBox == null) {
-      String newGroupId = uuid();
+    if (widget.groupInfo == null) {
+      String newGid = uuid();
 
-      groupRepository.updateGroup(
-        key: newGroupId,
-        group: GroupBox(
-          createDateTime: now,
-          id: newGroupId,
+      await groupMethod.addGroup(
+        newGid,
+        GroupInfoClass(
+          gid: newGid,
           name: controller.text,
           colorName: selectedColorName,
+          createDateTime: now,
           isOpen: true,
         ),
       );
-
-      user.groupOrderList?.add(newGroupId);
-      await user.save();
     } else {
-      widget.groupBox!.name = controller.text;
-      widget.groupBox!.colorName = selectedColorName;
+      // widget.groupBox!.name = controller.text;
+      // widget.groupBox!.colorName = selectedColorName;
 
-      await widget.groupBox!.save();
+      // await widget.groupBox!.save();
     }
 
     navigatorPop(context);
@@ -78,7 +77,7 @@ class _TitleSettingModalSheetState extends State<TitleSettingModalSheet> {
         bottom: MediaQuery.of(context).viewInsets.bottom,
       ),
       child: CommonModalSheet(
-        title: '그룹 ${widget.groupBox == null ? '추가' : '수정'}',
+        title: '그룹 ${widget.groupInfo == null ? '추가' : '수정'}',
         height: 210,
         child: CommonContainer(
           innerPadding: const EdgeInsets.only(

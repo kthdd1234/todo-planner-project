@@ -1,17 +1,20 @@
 import 'dart:developer';
 import 'dart:io';
 import 'package:app_tracking_transparency/app_tracking_transparency.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:hive/hive.dart';
 import 'package:home_widget/home_widget.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
-import 'package:project/model/user_box/user_box.dart';
+import 'package:project/method/GroupMethod.dart';
+import 'package:project/method/TaskMethod.dart';
+import 'package:project/method/UserMethod.dart';
 import 'package:project/page/HomePage.dart';
 import 'package:project/page/IntroPage.dart';
 import 'package:project/provider/HistoryOrderProvider.dart';
@@ -24,7 +27,6 @@ import 'package:project/provider/selectedDateTimeProvider.dart';
 import 'package:project/provider/themeProvider.dart';
 import 'package:project/provider/titleDateTimeProvider.dart';
 import 'package:project/repositories/init_hive.dart';
-import 'package:project/repositories/user_repository.dart';
 import 'package:project/util/constants.dart';
 import 'package:provider/provider.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
@@ -33,6 +35,12 @@ import 'firebase_options.dart';
 
 PurchasesConfiguration _configuration =
     PurchasesConfiguration(Platform.isIOS ? appleApiKey : googleApiKey);
+FirebaseFirestore firestore = FirebaseFirestore.instance;
+FirebaseAuth auth = FirebaseAuth.instance;
+
+UserMethod userMethod = UserMethod();
+GroupMethod groupMethod = GroupMethod();
+TaskMethod taskMethod = TaskMethod();
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -83,7 +91,15 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
-  Box<UserBox>? userBox;
+  // Box<UserBox>? userBox;
+  bool isLogin = false;
+
+  onLogin() {
+    auth.authStateChanges().listen((user) {
+      if (user != null && mounted) setState(() => isLogin = true);
+      // log('${auth.currentUser}');
+    });
+  }
 
   appTrackingTransparency() async {
     try {
@@ -110,21 +126,22 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
   }
 
   initializeBottomNavition() {
-    UserBox? user = userBox?.get('userProfile');
+    // UserBox? user = userBox?.get('userProfile');
 
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      context
-          .read<BottomTabIndexProvider>()
-          .changeSeletedIdx(newIndex: user?.appStartIndex ?? 0);
-    });
+    // WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+    //   context
+    //       .read<BottomTabIndexProvider>()
+    //       .changeSeletedIdx(newIndex: user?.appStartIndex ?? 0);
+    // });
   }
 
   @override
   void initState() {
-    userBox = Hive.box('userBox');
+    // userBox = Hive.box('userBox');
 
     initializeBottomNavition();
     appTrackingTransparency();
+    onLogin();
 
     WidgetsBinding.instance.addObserver(this);
     super.initState();
@@ -132,10 +149,10 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) async {
-    UserBox? user = userBox?.get('userProfile');
-    String locale = context.locale.toString();
-    bool isBackground = state == AppLifecycleState.paused ||
-        state == AppLifecycleState.detached;
+    // UserBox? user = userBox?.get('userProfile');
+    // String locale = context.locale.toString();
+    // bool isBackground = state == AppLifecycleState.paused ||
+    //     state == AppLifecycleState.detached;
 
     // if (isBackground && user != null) {
     //   await HomeWidgetService().updateTodoRoutin(locale);
@@ -158,30 +175,32 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
 
   @override
   Widget build(BuildContext context) {
+    String locale = context.locale.toString();
     context.watch<ReloadProvider>().isReload;
 
-    bool isUser = UserRepository().isUser;
-    String initialRoute = isUser ? 'home-page' : 'intro-page';
-    UserBox? user = userBox?.get('userProfile');
-    String? fontFamily = user?.fontFamily ?? initFontFamily;
-    String locale = context.locale.toString();
+    log('isLogin => $isLogin');
 
     return MaterialApp(
       title: 'Todo Tracker',
       theme: ThemeData(
         useMaterial3: true,
-        fontFamily: fontFamily,
+        fontFamily: initFontFamily,
         cupertinoOverrideTheme: const CupertinoThemeData(applyThemeToAll: true),
       ),
       localizationsDelegates: context.localizationDelegates,
       supportedLocales: context.supportedLocales,
       locale: context.locale,
       debugShowCheckedModeBanner: false,
-      initialRoute: 'intro-page',
-      routes: {
-        'home-page': (context) => HomePage(locale: locale),
-        'intro-page': (context) => const IntroPage()
-      },
+      home: isLogin ? HomePage(locale: locale) : const IntroPage(),
+      // routes: {
+      //   'home-page': (context) => HomePage(locale: locale),
+      //   'intro-page': (context) => const IntroPage()
+      // },
     );
   }
 }
+
+
+    // bool isUser = UserRepository().isUser;
+    // UserBox? user = userBox?.get('userProfile');
+    // String? fontFamily = user?.fontFamily ?? initFontFamily;

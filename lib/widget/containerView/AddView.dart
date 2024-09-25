@@ -9,16 +9,9 @@ import 'package:project/widget/border/HorizentalBorder.dart';
 import 'package:provider/provider.dart';
 
 class AddView extends StatefulWidget {
-  AddView({
-    super.key,
-    this.taskBox,
-    required this.colorName,
-    required this.onText,
-  });
+  AddView({super.key, required this.groupInfo});
 
-  TaskBox? taskBox;
-  String colorName;
-  Function(TaskBox?, String) onText;
+  GroupInfoClass groupInfo;
 
   @override
   State<AddView> createState() => _AddViewState();
@@ -32,7 +25,8 @@ class _AddViewState extends State<AddView> {
   @override
   Widget build(BuildContext context) {
     bool isLight = context.watch<ThemeProvider>().isLight;
-    ColorClass color = getColorClass(widget.colorName);
+    String colorName = widget.groupInfo.colorName;
+    ColorClass color = getColorClass(colorName);
 
     onInput(bool isShow) {
       setState(() => isShowInput = isShow);
@@ -43,7 +37,7 @@ class _AddViewState extends State<AddView> {
       FocusScope.of(context).unfocus();
 
       if (controller.text != '') {
-        widget.onText(widget.taskBox, controller.text);
+        // widget.onText(widget.taskBox, controller.text);
         setState(() => controller.text = '');
       }
     }
@@ -90,7 +84,7 @@ class _AddViewState extends State<AddView> {
                   ),
                 ),
               ),
-        HorizentalBorder(colorName: widget.colorName),
+        HorizentalBorder(colorName: colorName),
       ],
     );
   }

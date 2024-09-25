@@ -1,10 +1,18 @@
 // ignore_for_file: prefer_const_constructors
+import 'dart:developer';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:multi_value_listenable_builder/multi_value_listenable_builder.dart';
+import 'package:project/common/CommonNull.dart';
+import 'package:project/main.dart';
+import 'package:project/method/GroupMethod.dart';
 import 'package:project/model/group_box/group_box.dart';
 import 'package:project/model/record_box/record_box.dart';
 import 'package:project/provider/titleDateTimeProvider.dart';
 import 'package:project/provider/selectedDateTimeProvider.dart';
+import 'package:project/util/class.dart';
 import 'package:project/util/final.dart';
 import 'package:project/util/func.dart';
 import 'package:project/widget/appBar/TaskAppBar.dart';
@@ -89,7 +97,7 @@ class _ContentViewState extends State<ContentView> {
     int recordKey = dateTimeKey(selectedDateTime);
     RecordBox? recordBox = recordRepository.recordBox.get(recordKey);
 
-    List<GroupBox> groupList = getGroupOrderList(groupRepository.groupList);
+    // List<GroupBox> groupList = getGroupOrderList(groupRepository.groupList);
 
     return Expanded(
       child: ListView(
@@ -99,14 +107,23 @@ class _ContentViewState extends State<ContentView> {
             recordBox: recordBox,
             selectedDateTime: selectedDateTime,
           ),
-          Column(
-            children: groupList
-                .map((groupBox) => TaskContainer(
-                      groupBox: groupBox,
-                      recordBox: recordBox,
-                      selectedDateTime: selectedDateTime,
-                    ))
-                .toList(),
+          StreamBuilder<QuerySnapshot>(
+            stream: groupMethod.stream(),
+            builder: (context, snapshot) {
+              if (!snapshot.hasData) return CircularProgressIndicator();
+
+              List<GroupInfoClass> groupInfoList =
+                  groupMethod.getGroupInfoList(snapshot);
+
+              return Column(
+                children: groupInfoList
+                    .map((groupInfo) => TaskContainer(
+                          groupInfo: groupInfo,
+                          selectedDateTime: selectedDateTime,
+                        ))
+                    .toList(),
+              );
+            },
           ),
         ],
       ),
