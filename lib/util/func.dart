@@ -100,70 +100,51 @@ ColorClass getColorClass(String? name) {
   return colorList.firstWhere((info) => info.colorName == name);
 }
 
-TaskClass getTaskClass(String type) {
-  return {'todo': tTodo, 'routin': tRoutin}[type]!;
-}
+// String? getRecordInfo({required String key, required String taskId}) {
+//   return null;
+// int? idx = recordBox?.taskMarkList?.indexWhere(
+//   (element) => element['id'] == taskId,
+// );
 
-String? getTaskInfo({
-  required String key,
-  required RecordBox? recordBox,
-  required String taskId,
-}) {
-  int? idx = recordBox?.taskMarkList?.indexWhere(
-    (element) => element['id'] == taskId,
-  );
+// if (idx == null || idx == -1) {
+//   return null;
+// }
 
-  if (idx == null || idx == -1) {
-    return null;
-  }
+// return recordBox!.taskMarkList![idx][key];
+// }
 
-  return recordBox!.taskMarkList![idx][key];
-}
-
-List<TaskBox> getTaskList({
+List<TaskInfoClass> getTaskList({
   required String groupId,
   required String locale,
-  required List<TaskBox> taskList,
+  required List<TaskInfoClass> taskInfoList,
   required DateTime targetDateTime,
+  required List<String>? taskOrderList,
 }) {
-  List<TaskBox> taskFilterList = taskList.where((task) {
+  List<TaskInfoClass> taskFilterList = taskInfoList.where((task) {
     List<DateTime> dateTimeList = task.dateTimeList;
 
-    if (groupId == task.groupId) {
-      if (task.dateTimeType == taskDateTimeType.selection) {
-        return dateTimeList.any(
-          (dateTime) => dateTimeKey(dateTime) == dateTimeKey(targetDateTime),
-        );
-      } else {
-        return dateTimeList.any((dateTime) {
-          if (task.dateTimeType == taskDateTimeType.everyWeek) {
-            return eFormatter(locale: locale, dateTime: dateTime) ==
-                eFormatter(locale: locale, dateTime: targetDateTime);
-          } else if (task.dateTimeType == taskDateTimeType.everyMonth) {
-            return dateTime.day == targetDateTime.day;
-          }
+    if (task.dateTimeType == taskDateTimeType.selection) {
+      return dateTimeList.any(
+        (dateTime) => dateTimeKey(dateTime) == dateTimeKey(targetDateTime),
+      );
+    } else {
+      return dateTimeList.any((dateTime) {
+        if (task.dateTimeType == taskDateTimeType.everyWeek) {
+          return eFormatter(locale: locale, dateTime: dateTime) ==
+              eFormatter(locale: locale, dateTime: targetDateTime);
+        } else if (task.dateTimeType == taskDateTimeType.everyMonth) {
+          return dateTime.day == targetDateTime.day;
+        }
 
-          return false;
-        });
-      }
+        return false;
+      });
     }
-
-    return false;
   }).toList();
 
-  int recordKey = dateTimeKey(targetDateTime);
-  RecordBox? recordBox = recordRepository.recordBox.get(recordKey);
-  List<Map<String, dynamic>> recordOrderList = recordBox?.recordOrderList ?? [];
-  int index = recordOrderList.indexWhere(
-    (recordOrder) => recordOrder['id'] == groupId,
-  );
-
-  if (index != -1) {
-    final orderIdList = recordOrderList[index]['list'];
-
+  if (taskOrderList != null) {
     taskFilterList.sort((taskA, taskB) {
-      int indexA = orderIdList.indexOf(taskA.id);
-      int indexB = orderIdList.indexOf(taskB.id);
+      int indexA = taskOrderList.indexOf(taskA.tid);
+      int indexB = taskOrderList.indexOf(taskB.tid);
 
       indexA = indexA == -1 ? 999999 : indexA;
       indexB = indexB == -1 ? 999999 : indexB;
@@ -187,6 +168,7 @@ isContainIdxDateTime({
 }) {
   if (dateTimeType == taskDateTimeType.selection) {
     String ymd = ymdFormatter(locale: locale, dateTime: targetDateTime);
+
     return selectionList.indexWhere(
       (dateTime) => ymdFormatter(locale: locale, dateTime: dateTime) == ymd,
     );
@@ -444,6 +426,7 @@ calendarDetailStyle(bool isLight) {
       color: isLight ? Colors.black : darkTextColor,
       fontWeight: isLight ? null : FontWeight.bold,
     ),
+    outsideDaysVisible: false,
   );
 }
 
@@ -471,17 +454,18 @@ String getGroupName(String locale) {
   }[locale]!;
 }
 
-getGroupOrderList(List<GroupBox> groupList) {
-  List<String> groupOrderList = userRepository.user.groupOrderList ?? [];
-
-  groupList.sort((groupA, groupB) {
-    int indexA = groupOrderList.indexOf(groupA.id);
-    int indexB = groupOrderList.indexOf(groupB.id);
+getGroupInfoOrderList(
+  List<String> groupOrderList,
+  List<GroupInfoClass> groupInfoList,
+) {
+  groupInfoList.sort((groupA, groupB) {
+    int indexA = groupOrderList.indexOf(groupA.gid);
+    int indexB = groupOrderList.indexOf(groupB.gid);
 
     return indexA.compareTo(indexB);
   });
 
-  return groupList;
+  return groupInfoList;
 }
 
 onSegmentedWidget({
@@ -515,6 +499,59 @@ categorySegmented(SegmentedTypeEnum segmented) {
   return segmentedData;
 }
 
-timestampToDateTime(Timestamp timestamp) {
+DateTime timestampToDateTime(Timestamp timestamp) {
   return DateTime.parse(timestamp.toDate().toString());
+}
+
+List<DateTime> timestampToDateTimeList(List<dynamic> timestampList) {
+  return timestampList
+      .map((timestamp) => timestampToDateTime(timestamp))
+      .toList();
+}
+
+List<String> dynamicToIdList(List<dynamic> dynamicList) {
+  return dynamicList.map((id) => id.toString()).toList();
+}
+
+List<Map<String, dynamic>> dynamicToTaskOrderList(List<dynamic> dynamicList) {
+  return dynamicList
+      .map((info) => {
+            'dateTimeKey': info['dateTimeKey'],
+            'list': dynamicToIdList(info['list'])
+          })
+      .toList();
+}
+
+List<String> dynamicToGroupOrderList(List<dynamic> dynamicList) {
+  return dynamicList.map((id) => id.toString()).toList();
+}
+
+List<Map<String, dynamic>> dynamicToRecordList(List<dynamic> dynamicList) {
+  return dynamicList
+      .map((info) => {
+            'dateTimeKey': info['dateTimeKey'],
+            'mark': info['mark'],
+            'memo': info['memo'],
+          })
+      .toList();
+}
+
+int getRecordIndex({
+  required List<Map<String, dynamic>> recordList,
+  required DateTime targetDateTime,
+}) {
+  return recordList.indexWhere(
+    (record) => record['dateTimeKey'] == dateTimeKey(targetDateTime),
+  );
+}
+
+RecordInfoClass? getRecordInfo({
+  required List<Map<String, dynamic>> recordList,
+  required DateTime targetDateTime,
+}) {
+  int index = getRecordIndex(
+    recordList: recordList,
+    targetDateTime: targetDateTime,
+  );
+  return index != -1 ? RecordInfoClass.fromJson(recordList[index]) : null;
 }

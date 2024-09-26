@@ -84,38 +84,35 @@ class _CalendarViewState extends State<CalendarView> {
 
   Widget? barBuilder(bool isLight, DateTime dateTime) {
     String locale = context.locale.toString();
-    int recordKey = dateTimeKey(dateTime);
-    RecordBox? recordBox = recordRepository.recordBox.get(recordKey);
-    List<TaskBox> taskList = getTaskList(
-      groupId: widget.selectedGroupId,
-      locale: locale,
-      taskList: taskRepository.taskList,
-      targetDateTime: dateTime,
-    );
+    // int recordKey = dateTimeKey(dateTime);
+    // RecordBox? recordBox = recordRepository.recordBox.get(recordKey);
+    // List<TaskBox> taskList = getTaskList(
+    //   groupId: widget.selectedGroupId,
+    //   locale: locale,
+    //   taskList: taskRepository.taskList,
+    //   targetDateTime: dateTime,
+    // );
 
     Color? highlighterColor(TaskBox taskBox) {
       ColorClass color = getColorClass(taskBox.colorName);
-      String? markInfo = getTaskInfo(
-        key: 'mark',
-        recordBox: recordBox,
-        taskId: taskBox.id,
-      );
+      String? mark =
+          getRecordInfo(recordList: [], targetDateTime: dateTime)?.mark;
 
-      return markInfo != null && markInfo != mark.E
+      return mark != null && mark != 'E'
           ? isLight
               ? color.s50
               : color.original
           : null;
     }
 
-    return taskList.isNotEmpty
+    return [].isNotEmpty
         ? Padding(
             padding: const EdgeInsets.only(top: 40, right: 5, left: 5),
             child: Container(
               alignment: Alignment.topCenter,
               child: SingleChildScrollView(
                 child: Column(
-                  children: taskList
+                  children: []
                       .map(
                         (task) => IntrinsicHeight(
                           child: Padding(

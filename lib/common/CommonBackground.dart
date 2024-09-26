@@ -23,7 +23,7 @@ class CommonBackground extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     bool isLight = context.watch<ThemeProvider>().isLight;
-    String path = background ?? userRepository.user.background ?? '2';
+    // String path = background ?? userRepository.user.background ?? '2';
 
     return Container(
       height: height ?? MediaQuery.of(context).size.height,
@@ -33,7 +33,7 @@ class CommonBackground extends StatelessWidget {
             BorderRadius.circular(isRadius == true ? 10.0 : 0.0),
         image: isLight
             ? DecorationImage(
-                image: AssetImage('assets/image/b-$path.png'),
+                image: AssetImage('assets/image/b-0.png'),
                 fit: BoxFit.cover,
               )
             : null,

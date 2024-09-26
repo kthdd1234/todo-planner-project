@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:project/common/CommonText.dart';
-import 'package:project/model/task_box/task_box.dart';
+import 'package:project/main.dart';
+import 'package:project/provider/selectedDateTimeProvider.dart';
 import 'package:project/provider/themeProvider.dart';
 import 'package:project/util/class.dart';
 import 'package:project/util/final.dart';
@@ -24,6 +25,8 @@ class _AddViewState extends State<AddView> {
 
   @override
   Widget build(BuildContext context) {
+    DateTime selectedDateTime =
+        context.watch<SelectedDateTimeProvider>().seletedDateTime;
     bool isLight = context.watch<ThemeProvider>().isLight;
     String colorName = widget.groupInfo.colorName;
     ColorClass color = getColorClass(colorName);
@@ -32,12 +35,27 @@ class _AddViewState extends State<AddView> {
       setState(() => isShowInput = isShow);
     }
 
-    onCompleted() {
+    onCompleted() async {
       onInput(false);
       FocusScope.of(context).unfocus();
 
       if (controller.text != '') {
-        // widget.onText(widget.taskBox, controller.text);
+        String newTid = uuid();
+        DateTime now = DateTime.now();
+
+        await taskMethod.addTask(
+          gid: widget.groupInfo.gid,
+          tid: newTid,
+          taskInfo: TaskInfoClass(
+            createDateTime: now,
+            tid: newTid,
+            name: controller.text,
+            dateTimeType: taskDateTimeType.selection,
+            dateTimeList: [selectedDateTime],
+            recordList: [],
+          ),
+        );
+
         setState(() => controller.text = '');
       }
     }

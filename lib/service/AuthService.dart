@@ -5,8 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
-import 'package:project/method/GroupMethod.dart';
-import 'package:project/method/UserMethod.dart';
+import 'package:project/main.dart';
 import 'package:project/page/HomePage.dart';
 import 'package:project/util/class.dart';
 import 'package:project/util/constants.dart';
@@ -22,6 +21,7 @@ class AuthService {
     DateTime createDateTime = DateTime.now();
     FadePageRoute fadePageRoute = FadePageRoute(page: HomePage(locale: locale));
     String uid = userDetails.uid;
+    String gid = uuid();
     UserInfoClass userInfo = UserInfoClass(
       uid: uid,
       loginType: loginType,
@@ -29,23 +29,24 @@ class AuthService {
       email: userDetails.email,
       displayName: userDetails.displayName,
       imgUrl: userDetails.photoURL,
+      groupOrderList: [gid],
       fontFamily: initFontFamily,
       background: '0',
       theme: 'light',
       widgetTheme: 'light',
     );
-    String gid = uuid();
     GroupInfoClass groupInfo = GroupInfoClass(
       gid: gid,
       name: getGroupName(locale),
       colorName: '남색',
       createDateTime: createDateTime,
       isOpen: true,
+      taskOrderList: [],
     );
 
     try {
-      await UserMethod().addUser(userInfo);
-      await GroupMethod().addGroup(gid, groupInfo);
+      await userMethod.addUser(userInfo: userInfo);
+      await groupMethod.addGroup(gid: gid, groupInfo: groupInfo);
       await Navigator.pushAndRemoveUntil(context, fadePageRoute, (_) => false);
     } catch (err) {
       log('$err');

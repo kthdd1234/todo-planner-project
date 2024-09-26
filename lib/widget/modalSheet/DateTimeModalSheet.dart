@@ -1,4 +1,6 @@
 // ignore_for_file: avoid_function_literals_in_foreach_calls
+import 'dart:developer';
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:project/common/CommonButton.dart';
@@ -102,21 +104,13 @@ class _DateTimeModalSheetState extends State<DateTimeModalSheet> {
   }
 
   onSelectionDay(DateTime dateTime) {
-    int idx = isContainIdxDateTime(
-      locale: context.locale.toString(),
-      selectionList: selectionDays,
-      targetDateTime: dateTime,
-    );
-
     setState(() {
       focusedDay = dateTime;
 
-      if (isMultiSelection) {
-        idx != -1 ? selectionDays.removeAt(idx) : selectionDays.add(dateTime);
-      } else {
-        selectionDays = [];
-        selectionDays.add(dateTime);
-      }
+      selectionDays = [];
+      selectionDays.add(dateTime);
+
+      log('+++>>>  $selectionDays');
     });
   }
 
@@ -228,8 +222,8 @@ class _DateTimeModalSheetState extends State<DateTimeModalSheet> {
     }[selectedType]!;
 
     double height = {
-      taskDateTimeType.selection: 675.0,
-      taskDateTimeType.everyWeek: 350.0,
+      taskDateTimeType.selection: 636.0,
+      taskDateTimeType.everyWeek: 330.0,
       taskDateTimeType.everyMonth: 560.0,
     }[selectedType]!;
 
@@ -360,6 +354,47 @@ class _SelectionDayState extends State<SelectionDay> {
     return null;
   }
 
+  Widget? dowBuilder(bool isLight, DateTime dateTime) {
+    String locale = context.locale.toString();
+    Color color = dateTime.weekday == 6
+        ? blue.original
+        : dateTime.weekday == 7
+            ? red.original
+            : isLight
+                ? textColor
+                : Colors.white;
+
+    return CommonText(
+      text: eFormatter(locale: locale, dateTime: dateTime),
+      color: color,
+      fontSize: 13,
+      isBold: !isLight,
+      isNotTr: true,
+    );
+  }
+
+  Widget? defaultBuilder(bool isLight, DateTime dateTime) {
+    Color color = dateTime.weekday == 6
+        ? blue.original
+        : dateTime.weekday == 7
+            ? red.original
+            : isLight
+                ? textColor
+                : Colors.white;
+
+    return Column(
+      children: [
+        CommonSpace(height: 13.5),
+        CommonText(
+          text: '${dateTime.day}',
+          color: color,
+          isBold: !isLight,
+          isNotTr: true,
+        ),
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     String locale = context.locale.toString();
@@ -368,39 +403,24 @@ class _SelectionDayState extends State<SelectionDay> {
     return Expanded(
       child: CommonContainer(
         innerPadding: const EdgeInsets.all(0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            TableCalendar(
-              locale: locale,
-              headerStyle: calendarHeaderStyle(isLight),
-              calendarStyle: calendarDetailStyle(isLight),
-              daysOfWeekStyle: calendarDaysOfWeekStyle(isLight),
-              focusedDay: widget.focusedDay,
-              firstDay: DateTime(2000, 1, 1),
-              lastDay: DateTime(3000, 1, 1),
-              onDaySelected: (dateTime, _) => widget.onSelectionDay(dateTime),
-              calendarBuilders: CalendarBuilders(
-                markerBuilder: (btx, dateTime, _) => markerBuilder(
-                  locale,
-                  dateTime,
-                  isLight,
-                ),
-              ),
+        child: TableCalendar(
+          locale: locale,
+          headerStyle: calendarHeaderStyle(isLight),
+          calendarStyle: calendarDetailStyle(isLight),
+          focusedDay: widget.focusedDay,
+          firstDay: DateTime(2000, 1, 1),
+          lastDay: DateTime(3000, 1, 1),
+          onDaySelected: (dateTime, _) => widget.onSelectionDay(dateTime),
+          calendarBuilders: CalendarBuilders(
+            defaultBuilder: (cx, dateTime, _) =>
+                defaultBuilder(isLight, dateTime),
+            dowBuilder: (cx, dateTime) => dowBuilder(isLight, dateTime),
+            markerBuilder: (btx, dateTime, _) => markerBuilder(
+              locale,
+              dateTime,
+              isLight,
             ),
-            // Row(
-            //   mainAxisAlignment: MainAxisAlignment.end,
-            //   children: [
-            //     CommonText(text: '여러 날짜 선택하기', isBold: !isLight),
-            //     CommonSpace(width: 10),
-            //     CommonSwitch(
-            //       activeColor: isLight ? widget.color.s200 : widget.color.s300,
-            //       value: widget.isMultiSelection,
-            //       onChanged: widget.onChangeMultiSelection,
-            //     )
-            //   ],
-            // )
-          ],
+          ),
         ),
       ),
     );

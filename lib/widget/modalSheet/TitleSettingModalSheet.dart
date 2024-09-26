@@ -5,11 +5,8 @@ import 'package:project/common/CommonModalSheet.dart';
 import 'package:project/common/CommonOutlineInputField.dart';
 import 'package:project/common/CommonSpace.dart';
 import 'package:project/main.dart';
-import 'package:project/model/group_box/group_box.dart';
-import 'package:project/model/user_box/user_box.dart';
 import 'package:project/provider/themeProvider.dart';
 import 'package:project/util/class.dart';
-import 'package:project/util/final.dart';
 import 'package:project/util/func.dart';
 import 'package:project/widget/listView/ColorListView.dart';
 import 'package:provider/provider.dart';
@@ -24,7 +21,6 @@ class TitleSettingModalSheet extends StatefulWidget {
 }
 
 class _TitleSettingModalSheetState extends State<TitleSettingModalSheet> {
-  UserBox user = userRepository.user;
   String selectedColorName = '남색';
   TextEditingController controller = TextEditingController();
 
@@ -49,20 +45,23 @@ class _TitleSettingModalSheetState extends State<TitleSettingModalSheet> {
       String newGid = uuid();
 
       await groupMethod.addGroup(
-        newGid,
-        GroupInfoClass(
+        gid: newGid,
+        groupInfo: GroupInfoClass(
           gid: newGid,
           name: controller.text,
           colorName: selectedColorName,
           createDateTime: now,
           isOpen: true,
+          taskOrderList: [],
         ),
       );
     } else {
-      // widget.groupBox!.name = controller.text;
-      // widget.groupBox!.colorName = selectedColorName;
+      GroupInfoClass groupInfo = widget.groupInfo!;
 
-      // await widget.groupBox!.save();
+      groupInfo.name = controller.text;
+      groupInfo.colorName = selectedColorName;
+
+      await groupMethod.updateGroup(gid: groupInfo.gid, groupInfo: groupInfo);
     }
 
     navigatorPop(context);

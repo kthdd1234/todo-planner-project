@@ -18,7 +18,6 @@ class CommonPopup extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     bool isLight = context.watch<ThemeProvider>().isLight;
-    String background = userRepository.user.background ?? '1';
 
     return AlertDialog(
       contentPadding: const EdgeInsets.all(0),
@@ -29,7 +28,7 @@ class CommonPopup extends StatelessWidget {
           color: isLight ? Colors.white : darkBgColor,
           image: isLight
               ? DecorationImage(
-                  image: AssetImage('assets/image/b-$background.png'),
+                  image: AssetImage('assets/image/b-0.png'),
                   fit: BoxFit.cover,
                 )
               : null,

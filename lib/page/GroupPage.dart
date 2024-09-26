@@ -1,12 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:multi_value_listenable_builder/multi_value_listenable_builder.dart';
 import 'package:project/common/CommonBackground.dart';
 import 'package:project/common/CommonScaffold.dart';
 import 'package:project/main.dart';
-import 'package:project/model/group_box/group_box.dart';
-import 'package:project/model/record_box/record_box.dart';
-import 'package:project/model/task_box/task_box.dart';
 import 'package:project/model/user_box/user_box.dart';
 import 'package:project/provider/PremiumProvider.dart';
 import 'package:project/provider/themeProvider.dart';
@@ -147,62 +143,30 @@ class _GroupPageState extends State<GroupPage> {
             if (!snapshot.hasData) return CircularProgressIndicator();
 
             List<GroupInfoClass> groupInfoList =
-                groupMethod.getGroupInfoList(snapshot);
+                groupMethod.getGroupInfoList(snapshot: snapshot);
 
-            return ListView.builder(
+            return ReorderableListView.builder(
+              physics: const ClampingScrollPhysics(),
               itemCount: groupInfoList.length,
+              onReorder: onReorder,
               itemBuilder: (context, index) {
-                return ReorderableListView.builder(
-                  physics: const ClampingScrollPhysics(),
-                  itemCount: groupInfoList.length,
-                  onReorder: onReorder,
-                  itemBuilder: (context, index) {
-                    return Padding(
-                      key: Key(groupInfoList[index].gid),
-                      padding: const EdgeInsets.symmetric(
-                        vertical: 5,
-                        horizontal: 10,
-                      ),
-                      child: GroupItemButton(
-                        groupInfo: groupInfoList[index],
-                        isEdit: isEdit,
-                        onItem: onItem,
-                        onRemove: onRemove,
-                      ),
-                    );
-                  },
+                return Padding(
+                  key: Key(groupInfoList[index].gid),
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 5,
+                    horizontal: 10,
+                  ),
+                  child: GroupItemButton(
+                    groupInfo: groupInfoList[index],
+                    isEdit: isEdit,
+                    onItem: onItem,
+                    onRemove: onRemove,
+                  ),
                 );
               },
             );
           },
         ),
-        // MultiValueListenableBuilder(
-        //   builder: (context, values, child) {
-        //     List<GroupBox> groupList =
-        //         getGroupOrderList(groupRepository.groupList);
-
-        //     return ReorderableListView.builder(
-        //       physics: const ClampingScrollPhysics(),
-        //       itemCount: groupList.length,
-        //       onReorder: onReorder,
-        //       itemBuilder: (context, index) {
-        //         return Padding(
-        //           key: Key(groupList[index].id),
-        //           padding: const EdgeInsets.symmetric(
-        //             vertical: 5,
-        //             horizontal: 10,
-        //           ),
-        //           child: GroupItemButton(
-        //             groupBox: groupList[index],
-        //             isEdit: isEdit,
-        //             onItem: onItem,
-        //             onRemove: onRemove,
-        //           ),
-        //         );
-        //       },
-        //     );
-        //   },
-        // ),
         floatingActionButton: GroupAddButton(isLight: isLight, onAdd: onAdd),
       ),
     );

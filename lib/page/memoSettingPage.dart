@@ -11,7 +11,7 @@ import 'package:project/model/record_box/record_box.dart';
 import 'package:project/provider/themeProvider.dart';
 import 'package:project/util/constants.dart';
 import 'package:project/widget/border/HorizentalBorder.dart';
-import 'package:project/widget/container/MemoContainer.dart';
+import 'package:project/widget/containerView/MemoView.dart';
 import 'package:project/widget/popup/AlertPopup.dart';
 import 'package:project/common/CommonScaffold.dart';
 import 'package:project/common/CommonSpace.dart';

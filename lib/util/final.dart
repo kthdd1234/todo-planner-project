@@ -228,7 +228,7 @@ final lightBlue = ColorClass(
   s400: Colors.lightBlue.shade400,
 );
 
-final mark = MarkClass(
+final markInfo = MarkClass(
   E: 'E',
   O: 'O',
   X: 'X',
@@ -288,16 +288,16 @@ final tRoutin = TaskClass(
 );
 
 final selectionMarkList = [
-  {'mark': mark.O, 'name': mark.markName(mark.O)},
-  {'mark': mark.X, 'name': mark.markName(mark.X)},
-  {'mark': mark.M, 'name': mark.markName(mark.M)},
-  {'mark': mark.T, 'name': mark.markName(mark.T)},
+  {'mark': markInfo.O, 'name': markInfo.markName(markInfo.O)},
+  {'mark': markInfo.X, 'name': markInfo.markName(markInfo.X)},
+  {'mark': markInfo.M, 'name': markInfo.markName(markInfo.M)},
+  {'mark': markInfo.T, 'name': markInfo.markName(markInfo.T)},
 ];
 
 final weekMonthMarkList = [
-  {'mark': mark.O, 'name': mark.markName(mark.O)},
-  {'mark': mark.X, 'name': mark.markName(mark.X)},
-  {'mark': mark.M, 'name': mark.markName(mark.M)},
+  {'mark': markInfo.O, 'name': markInfo.markName(markInfo.O)},
+  {'mark': markInfo.X, 'name': markInfo.markName(markInfo.X)},
+  {'mark': markInfo.M, 'name': markInfo.markName(markInfo.M)},
 ];
 
 final calendarFormatInfo = {
@@ -459,3 +459,14 @@ final languageList = [
   {'svgName': 'Usa', 'lang': 'en', 'name': 'English'},
   {'svgName': 'Japan', 'lang': 'ja', 'name': '日本語'},
 ];
+
+final initUserInfo = UserInfoClass(
+  uid: '',
+  loginType: '',
+  createDateTime: DateTime.now(),
+  fontFamily: '',
+  background: '',
+  theme: '',
+  widgetTheme: '',
+  groupOrderList: [],
+);

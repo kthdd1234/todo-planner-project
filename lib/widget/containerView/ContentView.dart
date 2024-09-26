@@ -1,74 +1,104 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:project/model/group_box/group_box.dart';
-import 'package:project/model/record_box/record_box.dart';
-import 'package:project/model/task_box/task_box.dart';
+import 'package:project/common/CommonNull.dart';
+import 'package:project/main.dart';
+import 'package:project/provider/selectedDateTimeProvider.dart';
 import 'package:project/util/class.dart';
 import 'package:project/util/func.dart';
-import 'package:project/widget/containerView/ItemView.dart';
+import 'package:project/widget/containerView/TaskView.dart';
+import 'package:provider/provider.dart';
 
 class ContentView extends StatelessWidget {
-  ContentView({
-    super.key,
-    required this.groupBox,
-    required this.recordBox,
-    required this.selectedDateTime,
-    required this.taskFilterList,
-    required this.onReorder,
-  });
+  ContentView({super.key, required this.groupInfo});
 
-  List<TaskBox> taskFilterList;
-  DateTime selectedDateTime;
-  GroupBox groupBox;
-  RecordBox? recordBox;
-  Function(int, int, List<TaskBox>) onReorder;
+  GroupInfoClass groupInfo;
+
+  onReorder({
+    required int oldIndex,
+    required int newIndex,
+    required List<TaskInfoClass> taskInfoList,
+    required DateTime selectedDateTime,
+  }) async {
+    List<String> taskInfoIdList =
+        taskInfoList.map((taskInfo) => taskInfo.tid).toList();
+
+    if (oldIndex < newIndex) newIndex -= 1;
+
+    String id = taskInfoIdList.removeAt(oldIndex);
+    taskInfoIdList.insert(newIndex, id);
+
+    Map<String, dynamic> newTaskOrder = {
+      'dateTimeKey': dateTimeKey(selectedDateTime),
+      'list': taskInfoIdList
+    };
+
+    if (groupInfo.taskOrderList.isEmpty) {
+      groupInfo.taskOrderList.add(newTaskOrder);
+    } else {
+      int index = groupInfo.taskOrderList.indexWhere((taskOrder) =>
+          taskOrder['dateTimeKey'] == dateTimeKey(selectedDateTime));
+
+      index == -1
+          ? groupInfo.taskOrderList.add(newTaskOrder)
+          : groupInfo.taskOrderList[index]['list'] = taskInfoIdList;
+    }
+
+    await groupMethod.updateGroup(gid: groupInfo.gid, groupInfo: groupInfo);
+  }
 
   @override
   Widget build(BuildContext context) {
-    return ReorderableListView.builder(
-      itemCount: taskFilterList.length,
-      shrinkWrap: true,
-      physics: const ClampingScrollPhysics(),
-      itemBuilder: (context, index) {
-        TaskBox taskBox = taskFilterList[index];
+    String locale = context.locale.toString();
+    DateTime selectedDateTime =
+        context.watch<SelectedDateTimeProvider>().seletedDateTime;
+    int index = groupInfo.taskOrderList.indexWhere(
+      (taskOrder) => taskOrder['dateTimeKey'] == dateTimeKey(selectedDateTime),
+    );
 
-        return ItemView(
-          key: Key(taskBox.id),
-          groupBox: groupBox,
-          recordBox: recordBox,
-          taskBox: taskBox,
-          taskItem: TaskItemClass(
-            groupId: groupBox.id,
-            id: taskBox.id,
-            name: taskBox.name,
-            mark: getTaskInfo(
-              key: 'mark',
-              recordBox: recordBox,
-              taskId: taskBox.id,
-            ),
-            memo: getTaskInfo(
-              key: 'memo',
-              recordBox: recordBox,
-              taskId: taskBox.id,
-            ),
-            isHighlight: taskBox.isHighlighter == true,
-            task: TaskClass(
-              groupId: groupBox.id,
-              type: taskBox.taskType,
-              name: getTaskClass(taskBox.taskType).name,
-              dateTimeType: taskBox.dateTimeType,
-              dateTimeList: taskBox.dateTimeList,
-              dateTimeLabel: getTaskClass(taskBox.taskType).dateTimeLabel,
-            ),
-            color: getColorClass(groupBox.colorName),
+    List<String>? taskOrderList =
+        index != -1 ? groupInfo.taskOrderList[index]['list'] : null;
+
+    return StreamBuilder<QuerySnapshot>(
+      stream: taskMethod.stream(gid: groupInfo.gid),
+      builder: (context, snapshot) {
+        if (!snapshot.hasData) return const CommonNull();
+
+        List<TaskInfoClass> taskInfoList = taskMethod.getTaskInfoList(
+          gid: groupInfo.gid,
+          snapshot: snapshot,
+        );
+
+        taskInfoList = getTaskList(
+          locale: locale,
+          groupId: groupInfo.gid,
+          taskInfoList: taskInfoList,
+          targetDateTime: selectedDateTime,
+          taskOrderList: taskOrderList,
+        );
+
+        return ReorderableListView.builder(
+          itemCount: taskInfoList.length,
+          shrinkWrap: true,
+          physics: const ClampingScrollPhysics(),
+          onReorder: (oldIndex, newIndex) => onReorder(
+            oldIndex: oldIndex,
+            newIndex: newIndex,
+            taskInfoList: taskInfoList,
+            selectedDateTime: selectedDateTime,
           ),
-          selectedDateTime: selectedDateTime,
+          itemBuilder: (context, index) {
+            TaskInfoClass taskInfo = taskInfoList[index];
+
+            return TaskView(
+              key: Key(taskInfo.tid),
+              selectedDateTime: selectedDateTime,
+              groupInfo: groupInfo,
+              taskInfo: taskInfo,
+            );
+          },
         );
       },
-      onReorder: (oldIdx, newIdx) => onReorder(
-        oldIdx,
-        newIdx,
-        taskFilterList,
-      ),
     );
   }
 }

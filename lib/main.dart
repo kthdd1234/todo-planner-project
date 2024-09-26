@@ -17,11 +17,9 @@ import 'package:project/method/TaskMethod.dart';
 import 'package:project/method/UserMethod.dart';
 import 'package:project/page/HomePage.dart';
 import 'package:project/page/IntroPage.dart';
-import 'package:project/provider/HistoryOrderProvider.dart';
-import 'package:project/provider/KeywordProvider.dart';
 import 'package:project/provider/PremiumProvider.dart';
 import 'package:project/provider/ReloadProvider.dart';
-import 'package:project/provider/YearDateTimeProvider.dart';
+import 'package:project/provider/UserInfoProvider.dart';
 import 'package:project/provider/bottomTabIndexProvider.dart';
 import 'package:project/provider/selectedDateTimeProvider.dart';
 import 'package:project/provider/themeProvider.dart';
@@ -68,10 +66,8 @@ void main() async {
         ChangeNotifierProvider(create: (context) => TitleDateTimeProvider()),
         ChangeNotifierProvider(create: (context) => PremiumProvider()),
         ChangeNotifierProvider(create: (context) => ThemeProvider()),
-        ChangeNotifierProvider(create: (context) => YearDateTimeProvider()),
-        ChangeNotifierProvider(create: (context) => HistoryOrderProvider()),
-        ChangeNotifierProvider(create: (context) => KeywordProvider()),
         ChangeNotifierProvider(create: (context) => ReloadProvider()),
+        ChangeNotifierProvider(create: (context) => UserInfoProvider()),
       ],
       child: EasyLocalization(
         supportedLocales: const [Locale('ko'), Locale('en'), Locale('ja')],
@@ -178,8 +174,6 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
     String locale = context.locale.toString();
     context.watch<ReloadProvider>().isReload;
 
-    log('isLogin => $isLogin');
-
     return MaterialApp(
       title: 'Todo Tracker',
       theme: ThemeData(
@@ -192,10 +186,6 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
       locale: context.locale,
       debugShowCheckedModeBanner: false,
       home: isLogin ? HomePage(locale: locale) : const IntroPage(),
-      // routes: {
-      //   'home-page': (context) => HomePage(locale: locale),
-      //   'intro-page': (context) => const IntroPage()
-      // },
     );
   }
 }

@@ -3,9 +3,6 @@ import 'package:project/common/CommonNull.dart';
 import 'package:project/common/CommonSpace.dart';
 import 'package:project/common/CommonSvgButton.dart';
 import 'package:project/common/CommonText.dart';
-import 'package:project/model/group_box/group_box.dart';
-import 'package:project/model/record_box/record_box.dart';
-import 'package:project/model/task_box/task_box.dart';
 import 'package:project/provider/themeProvider.dart';
 import 'package:project/util/class.dart';
 import 'package:project/util/constants.dart';
@@ -16,27 +13,23 @@ import 'package:project/widget/modalSheet/TaskMoreModalSheet.dart';
 import 'package:project/widget/popup/MarkPopup.dart';
 import 'package:provider/provider.dart';
 
-class ItemView extends StatefulWidget {
-  ItemView({
+class TaskView extends StatefulWidget {
+  TaskView({
     super.key,
-    required this.recordBox,
-    required this.groupBox,
-    required this.taskBox,
-    required this.taskItem,
+    required this.groupInfo,
+    required this.taskInfo,
     required this.selectedDateTime,
   });
 
-  RecordBox? recordBox;
-  GroupBox groupBox;
-  TaskBox taskBox;
-  TaskItemClass taskItem;
+  GroupInfoClass groupInfo;
+  TaskInfoClass taskInfo;
   DateTime selectedDateTime;
 
   @override
-  State<ItemView> createState() => _ItemViewState();
+  State<TaskView> createState() => _TaskViewState();
 }
 
-class _ItemViewState extends State<ItemView> {
+class _TaskViewState extends State<TaskView> {
   wAction({
     required String svgName,
     required Color actionColor,
@@ -69,24 +62,21 @@ class _ItemViewState extends State<ItemView> {
     showDialog(
       context: context,
       builder: (context) => MarkPopup(
-        groupBox: widget.groupBox,
-        taskBox: widget.taskBox,
-        recordBox: widget.recordBox,
+        groupInfo: widget.groupInfo,
+        taskInfo: widget.taskInfo,
         selectedDateTime: widget.selectedDateTime,
       ),
     );
   }
 
-  onMore(bool isLight) {
+  onMore() {
     showModalBottomSheet(
       isScrollControlled: true,
       context: context,
       builder: (context) => TaskMoreModalSheet(
-        groupBox: widget.groupBox,
-        taskBox: widget.taskBox,
-        recordBox: widget.recordBox,
+        groupInfo: widget.groupInfo,
+        taskInfo: widget.taskInfo,
         selectedDateTime: widget.selectedDateTime,
-        taskItem: widget.taskItem,
       ),
     );
   }
@@ -94,12 +84,12 @@ class _ItemViewState extends State<ItemView> {
   @override
   Widget build(BuildContext context) {
     bool isLight = context.watch<ThemeProvider>().isLight;
-    bool isMark = getTaskInfo(
-          key: 'mark',
-          recordBox: widget.recordBox,
-          taskId: widget.taskBox.id,
-        ) !=
-        null;
+    String colorName = widget.groupInfo.colorName;
+    ColorClass color = getColorClass(colorName);
+    RecordInfoClass? recordInfo = getRecordInfo(
+      recordList: widget.taskInfo.recordList,
+      targetDateTime: widget.selectedDateTime,
+    );
 
     return Container(
       color: isLight ? Colors.white : darkContainerColor,
@@ -110,17 +100,17 @@ class _ItemViewState extends State<ItemView> {
               Expanded(
                 flex: 1,
                 child: InkWell(
-                  onTap: () => onMore(isLight),
+                  onTap: onMore,
                   child: Padding(
                     padding: const EdgeInsets.symmetric(vertical: 10),
                     child: Container(
                       padding: const EdgeInsets.all(3),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(3),
-                        color: isMark
+                        color: recordInfo?.mark != null
                             ? isLight
-                                ? widget.taskItem.color.s50
-                                : widget.taskItem.color.s400
+                                ? color.s50
+                                : color.s400
                             : null,
                       ),
                       child: Column(
@@ -128,16 +118,16 @@ class _ItemViewState extends State<ItemView> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           CommonText(
-                            text: widget.taskItem.name,
+                            text: widget.taskInfo.name,
                             textAlign: TextAlign.start,
                             isBold: !isLight,
                             isNotTr: true,
                           ),
-                          widget.taskItem.memo != null
+                          recordInfo?.memo != null
                               ? Padding(
                                   padding: const EdgeInsets.only(top: 2),
                                   child: CommonText(
-                                    text: widget.taskItem.memo!,
+                                    text: recordInfo!.memo!,
                                     color: grey.original,
                                     fontSize: 12,
                                     overflow: TextOverflow.ellipsis,
@@ -155,14 +145,14 @@ class _ItemViewState extends State<ItemView> {
               ),
               CommonSpace(width: 15),
               wAction(
-                svgName: 'mark-${widget.taskItem.mark ?? 'E'}',
+                svgName: 'mark-${recordInfo?.mark ?? 'E'}',
                 width: 20,
-                actionColor: widget.taskItem.color.s200,
+                actionColor: color.s200,
                 onTap: onMark,
               ),
             ],
           ),
-          HorizentalBorder(colorName: widget.groupBox.colorName)
+          HorizentalBorder(colorName: colorName)
         ],
       ),
     );

@@ -1,5 +1,7 @@
 // ignore_for_file: use_build_context_synchronously
 
+import 'dart:developer';
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:project/common/CommonContainer.dart';
@@ -7,9 +9,7 @@ import 'package:project/common/CommonDivider.dart';
 import 'package:project/common/CommonPopup.dart';
 import 'package:project/common/CommonSpace.dart';
 import 'package:project/common/CommonText.dart';
-import 'package:project/model/group_box/group_box.dart';
-import 'package:project/model/record_box/record_box.dart';
-import 'package:project/model/task_box/task_box.dart';
+import 'package:project/main.dart';
 import 'package:project/page/MemoSettingPage.dart';
 import 'package:project/provider/themeProvider.dart';
 import 'package:project/util/class.dart';
@@ -22,15 +22,13 @@ import 'package:provider/provider.dart';
 class MarkPopup extends StatefulWidget {
   MarkPopup({
     super.key,
-    required this.groupBox,
-    required this.taskBox,
-    required this.recordBox,
+    required this.groupInfo,
+    required this.taskInfo,
     required this.selectedDateTime,
   });
 
-  GroupBox groupBox;
-  TaskBox taskBox;
-  RecordBox? recordBox;
+  GroupInfoClass groupInfo;
+  TaskInfoClass taskInfo;
   DateTime selectedDateTime;
 
   @override
@@ -39,106 +37,87 @@ class MarkPopup extends StatefulWidget {
 
 class _MarkPopupState extends State<MarkPopup> {
   String currentMark = '';
+  TextEditingController memoController = TextEditingController();
   bool isShowInput = true;
   bool isAutoFocus = false;
-  TextEditingController memoController = TextEditingController();
 
   @override
   void initState() {
-    RecordBox? recordBox = widget.recordBox;
+    RecordInfoClass? recordInfo = getRecordInfo(
+      recordList: widget.taskInfo.recordList,
+      targetDateTime: widget.selectedDateTime,
+    );
 
-    if (recordBox != null) {
-      if (recordBox.taskMarkList != null) {
-        for (var element in recordBox.taskMarkList!) {
-          if (element['id'] == widget.taskBox.id) {
-            currentMark = element['mark'] ?? '';
-            memoController.text = element['memo'] ?? '';
+    if (recordInfo != null) {
+      currentMark = recordInfo.mark ?? '';
+      memoController.text = recordInfo.memo ?? '';
 
-            if (element['memo'] != null) isShowInput = false;
-            break;
-          }
-        }
-      }
+      log('initState, recordInfo.memo => ${recordInfo.memo}');
+
+      if (recordInfo.memo != null) isShowInput = false;
     }
 
     super.initState();
   }
 
   onMark(String selectedMark) async {
-    String taskId = widget.taskBox.id;
-    Map<String, dynamic> taskMark = TaskMarkClass(
-      id: taskId,
-      mark: selectedMark,
-    ).toMap();
+    String groupId = widget.groupInfo.gid;
+    String taskId = widget.taskInfo.tid;
 
-    // 메모가 있으면 같이 추가
-    if (memoController.text != '') {
-      taskMark['memo'] = memoController.text;
-    }
+    DateTime selectedDateTime = widget.selectedDateTime;
+
+    Map<String, dynamic> newRecord = {
+      'dateTimeKey': dateTimeKey(selectedDateTime),
+      'mark': currentMark != selectedMark ? selectedMark : null,
+      "memo": memoController.text != '' ? memoController.text : null,
+    };
+
+    RecordInfoClass? recordInfo = getRecordInfo(
+      recordList: widget.taskInfo.recordList,
+      targetDateTime: selectedDateTime,
+    );
 
     // 기록 리스트에 추가
-    if (widget.recordBox == null) {
-      recordRepository.updateRecord(
-        key: dateTimeKey(widget.selectedDateTime),
-        record: RecordBox(
-          createDateTime: widget.selectedDateTime,
-          taskMarkList: [taskMark],
-        ),
-      );
-    } else if (widget.recordBox?.taskMarkList == null) {
-      widget.recordBox!.taskMarkList = [taskMark];
+    if (recordInfo == null) {
+      widget.taskInfo.recordList.add(newRecord);
     } else {
-      List<Map<String, dynamic>> taskMarkList = widget.recordBox!.taskMarkList!;
-      int idx = widget.recordBox!.taskMarkList!.indexWhere(
-        (taksMark) => taksMark['id'] == taskId,
+      int index = getRecordIndex(
+        recordList: widget.taskInfo.recordList,
+        targetDateTime: selectedDateTime,
       );
 
-      if (idx == -1) {
-        widget.recordBox!.taskMarkList!.add(taskMark);
-      } else {
-        int index = taskMarkList.indexWhere(
-          (task) => task['id'] == taskMark['id'],
-        );
-
-        widget.recordBox!.taskMarkList![index]['mark'] =
-            taskMarkList[index]['mark'] == taskMark['mark']
-                ? null
-                : taskMark['mark'];
-      }
+      widget.taskInfo.recordList[index] = newRecord;
     }
 
-    await widget.recordBox?.save();
-
     // 내일 할래요
-    DateTime selectedDateTime = widget.selectedDateTime;
     DateTime tomorrowDateTime = DateTime(
       selectedDateTime.year,
       selectedDateTime.month,
       selectedDateTime.day + 1,
     );
-    List<DateTime> dateTimeList = widget.taskBox.dateTimeList;
-    int tomorrowDateTimeIndex = dateTimeList.indexWhere(
+    List<DateTime> dateTimeList = widget.taskInfo.dateTimeList;
+    int tDtIndex = dateTimeList.indexWhere(
       (dateTime) => dateTimeKey(dateTime) == dateTimeKey(tomorrowDateTime),
     );
 
-    if (selectedMark == mark.T) {
-      tomorrowDateTimeIndex == -1
+    if (selectedMark == 'T') {
+      tDtIndex == -1
           ? dateTimeList.add(tomorrowDateTime)
-          : dateTimeList.removeAt(tomorrowDateTimeIndex);
-
-      await widget.taskBox.save();
-    } else if (currentMark == mark.T && selectedMark != mark.T) {
-      dateTimeList.removeAt(tomorrowDateTimeIndex);
+          : dateTimeList.removeAt(tDtIndex);
+    } else if (currentMark == 'T' && selectedMark != 'T') {
+      dateTimeList.removeAt(tDtIndex);
     }
+
+    taskMethod.updateTask(
+      gid: groupId,
+      tid: taskId,
+      taskInfo: widget.taskInfo,
+    );
 
     navigatorPop(context);
   }
 
   onEditingComplete() async {
-    String taskId = widget.taskBox.id;
-    Map<String, dynamic> taskMark =
-        TaskMarkClass(id: taskId, memo: memoController.text).toMap();
-
     if (memoController.text == '') {
       showDialog(
         context: context,
@@ -150,34 +129,39 @@ class _MarkPopupState extends State<MarkPopup> {
         ),
       );
     } else {
-      if (widget.recordBox == null) {
-        recordRepository.updateRecord(
-          key: dateTimeKey(widget.selectedDateTime),
-          record: RecordBox(
-            createDateTime: widget.selectedDateTime,
-            taskMarkList: [taskMark],
-          ),
-        );
-      } else if (widget.recordBox!.taskMarkList == null) {
-        widget.recordBox!.taskMarkList = [taskMark];
+      String groupId = widget.groupInfo.gid;
+      String taskId = widget.taskInfo.tid;
+      DateTime selectedDateTime = widget.selectedDateTime;
+      RecordInfoClass? recordInfo = getRecordInfo(
+        recordList: widget.taskInfo.recordList,
+        targetDateTime: selectedDateTime,
+      );
+
+      Map<String, dynamic> newRecord = {
+        'dateTimeKey': dateTimeKey(selectedDateTime),
+        'mark': currentMark != '' ? currentMark : null,
+        "memo": memoController.text != '' ? memoController.text : null,
+      };
+
+      if (recordInfo == null) {
+        widget.taskInfo.recordList.add(newRecord);
       } else {
-        int idx = widget.recordBox!.taskMarkList!.indexWhere(
-          (taksMark) => taksMark['id'] == taskId,
+        int index = getRecordIndex(
+          recordList: widget.taskInfo.recordList,
+          targetDateTime: selectedDateTime,
         );
 
-        if (currentMark != '') {
-          taskMark['mark'] = currentMark;
-        }
-
-        idx == -1
-            ? widget.recordBox!.taskMarkList!.add(taskMark)
-            : widget.recordBox!.taskMarkList![idx] = taskMark;
+        widget.taskInfo.recordList[index] = newRecord;
       }
 
-      setState(() => isShowInput = false);
+      taskMethod.updateTask(
+        gid: groupId,
+        tid: taskId,
+        taskInfo: widget.taskInfo,
+      );
     }
 
-    await widget.recordBox?.save();
+    setState(() => isShowInput = false);
   }
 
   wText(bool isLight, String text, Function()? onTap) {
@@ -187,8 +171,8 @@ class _MarkPopupState extends State<MarkPopup> {
         padding: const EdgeInsets.symmetric(horizontal: 2.5),
         child: CommonText(
           text: text,
-          color: Colors.grey,
-          fontSize: 11,
+          color: grey.original,
+          fontSize: 12,
           isBold: !isLight,
           isNotTr: text == '|',
         ),
@@ -204,37 +188,39 @@ class _MarkPopupState extends State<MarkPopup> {
   }
 
   onRemoveMemo() async {
-    String taskId = widget.taskBox.id;
-    int idx = widget.recordBox!.taskMarkList!.indexWhere(
-      (element) => element['id'] == taskId,
+    String groupId = widget.groupInfo.gid;
+    String taskId = widget.taskInfo.tid;
+
+    DateTime selectedDateTime = widget.selectedDateTime;
+
+    int index = getRecordIndex(
+      recordList: widget.taskInfo.recordList,
+      targetDateTime: selectedDateTime,
     );
 
-    widget.recordBox!.taskMarkList![idx]['memo'] = null;
-    memoController.text = '';
-    await widget.recordBox!.save();
+    widget.taskInfo.recordList[index]['memo'] = null;
 
-    isShowInput = true;
-    isAutoFocus = false;
+    await taskMethod.updateTask(
+      gid: groupId,
+      tid: taskId,
+      taskInfo: widget.taskInfo,
+    );
 
-    if (isEmptyRecord(widget.recordBox)) {
-      await recordRepository.recordBox
-          .delete(dateTimeKey(widget.selectedDateTime));
-    }
-
-    setState(() {});
-  }
-
-  onChanged(_) {
-    //
+    setState(() {
+      memoController.text = '';
+      isShowInput = true;
+      isAutoFocus = false;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     bool isLight = context.watch<ThemeProvider>().isLight;
-    Color cursorColor =
-        isLight ? getColorClass(widget.taskBox.colorName).s300 : darkTextColor;
+    String colorName = widget.groupInfo.colorName;
+    ColorClass color = getColorClass(colorName);
+    Color cursorColor = isLight ? color.s300 : darkTextColor;
     bool isSelection =
-        widget.taskBox.dateTimeType == taskDateTimeType.selection;
+        widget.taskInfo.dateTimeType == taskDateTimeType.selection;
     List<Map<String, dynamic>> markList =
         isSelection ? selectionMarkList : weekMonthMarkList;
 
@@ -251,7 +237,7 @@ class _MarkPopupState extends State<MarkPopup> {
                         isSelected: info['mark'] == currentMark,
                         mark: info['mark'],
                         name: info['name'],
-                        colorName: widget.groupBox.colorName,
+                        colorName: colorName,
                         onTap: onMark,
                       ))
                   .toList(),
@@ -278,7 +264,7 @@ class _MarkPopupState extends State<MarkPopup> {
                           vertical: 8,
                         ),
                         textInputAction: TextInputAction.done,
-                        onChanged: onChanged,
+                        onChanged: (_) => {},
                         onEditingComplete: onEditingComplete,
                       ),
                     )

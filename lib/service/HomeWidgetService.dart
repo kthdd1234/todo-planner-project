@@ -55,14 +55,14 @@ class HomeWidgetService {
         taskTitleBgColor.blue,
       ],
     );
-    List<TaskBox> taskList = getTaskList(
-      groupId: '',
-      locale: locale,
-      taskList: TaskRepository().taskList,
-      targetDateTime: now,
-    );
+    // List<TaskBox> taskList = getTaskList(
+    //   groupId: '',
+    //   locale: locale,
+    //   taskList: TaskRepository().taskList,
+    //   targetDateTime: now,
+    // );
 
-    List<WidgetItemClass> taskInfoList = taskList.map((task) {
+    List<WidgetItemClass> taskInfoList = [].map((task) {
       ColorClass color = getColorClass(task.colorName);
       Color barColor = isWidgetLight ? color.s100 : color.s400;
       Color lineColor = isWidgetLight ? color.s300 : color.s200;
@@ -71,9 +71,8 @@ class HomeWidgetService {
 
       String id = task.id;
       String name = task.name;
-      String mark =
-          getTaskInfo(key: 'mark', recordBox: recordBox, taskId: task.id) ??
-              'E';
+      // String mark = getRecordInfo(key: 'mark', taskId: task.id) ?? 'E';
+      String mark = 'E';
       List<int> barRGB = [barColor.red, barColor.green, barColor.blue];
       List<int> lineRGB = [lineColor.red, lineColor.green, lineColor.blue];
       List<int> markRGB = [markColor.red, markColor.green, markColor.blue];

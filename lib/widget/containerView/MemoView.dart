@@ -5,7 +5,6 @@ import 'package:project/common/CommonNull.dart';
 import 'package:project/common/CommonSpace.dart';
 import 'package:project/common/CommonText.dart';
 import 'package:project/model/record_box/record_box.dart';
-import 'package:project/model/user_box/user_box.dart';
 import 'package:project/page/ImageSlidePage.dart';
 import 'package:project/page/MemoSettingPage.dart';
 import 'package:project/provider/themeProvider.dart';
@@ -17,8 +16,8 @@ import 'package:project/widget/modalSheet/ImageSelectionModalSheet.dart';
 import 'package:project/widget/modalSheet/MemoModalSheet.dart';
 import 'package:provider/provider.dart';
 
-class MemoContainer extends StatefulWidget {
-  MemoContainer({
+class MemoView extends StatefulWidget {
+  MemoView({
     super.key,
     required this.recordBox,
     required this.selectedDateTime,
@@ -28,12 +27,10 @@ class MemoContainer extends StatefulWidget {
   DateTime selectedDateTime;
 
   @override
-  State<MemoContainer> createState() => _MemoContainerState();
+  State<MemoView> createState() => _MemoViewState();
 }
 
-class _MemoContainerState extends State<MemoContainer> {
-  UserBox user = userRepository.user;
-
+class _MemoViewState extends State<MemoView> {
   onMemoText() {
     showModalBottomSheet(
       context: context,

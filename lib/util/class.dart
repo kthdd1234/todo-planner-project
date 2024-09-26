@@ -180,18 +180,13 @@ class TaskItemClass {
 }
 
 class TaskMarkClass {
-  TaskMarkClass({
-    required this.id,
-    this.mark,
-    this.memo,
-  });
+  TaskMarkClass({required this.dateTime, this.mark, this.memo});
 
-  String id;
+  int dateTime;
   String? memo, mark;
 
-  Map<String, dynamic> toMap() {
-    return {'id': id, 'mark': mark, 'memo': memo};
-  }
+  Map<String, dynamic> toMap() =>
+      {'dateTime': dateTime, 'mark': mark, 'memo': memo};
 }
 
 class SettingItemClass {
@@ -367,6 +362,7 @@ class UserInfoClass {
     required this.background,
     required this.theme,
     required this.widgetTheme,
+    required this.groupOrderList,
     this.passwords,
     this.email,
     this.displayName,
@@ -375,15 +371,17 @@ class UserInfoClass {
 
   String uid, loginType, fontFamily, background, theme, widgetTheme;
   DateTime createDateTime;
+  List<String> groupOrderList;
   String? email, displayName, imgUrl, passwords;
 
   UserInfoClass.fromJson(Map<String, dynamic> json)
       : uid = json['uid'] as String,
         loginType = json['loginType'] as String,
-        createDateTime = json['createDateTime'] as DateTime,
+        createDateTime = timestampToDateTime(json['createDateTime']),
         fontFamily = json['fontFamily'] as String,
         background = json['background'] as String,
         theme = json['theme'] as String,
+        groupOrderList = dynamicToGroupOrderList(json['groupOrderList']),
         widgetTheme = json['widgetTheme'] as String,
         passwords = json['passwords'] as String?,
         email = json['email'] as String?,
@@ -397,6 +395,7 @@ class UserInfoClass {
         'fontFamily': fontFamily,
         'background': background,
         'theme': theme,
+        'groupOrderList': groupOrderList,
         'widgetTheme': widgetTheme,
         'passwords': passwords,
         'email': email,
@@ -412,19 +411,21 @@ class GroupInfoClass {
     required this.colorName,
     required this.createDateTime,
     required this.isOpen,
+    required this.taskOrderList,
   });
 
   String gid, name, colorName;
   DateTime createDateTime;
   bool isOpen;
+  List<Map<String, dynamic>> taskOrderList;
 
   GroupInfoClass.fromJson(Map<String, dynamic> json)
       : gid = json['gid'] as String,
         name = json['name'] as String,
         colorName = json['colorName'] as String,
-        createDateTime =
-            timestampToDateTime(json['createDateTime']) as DateTime,
-        isOpen = json['isOpen'] as bool;
+        createDateTime = timestampToDateTime(json['createDateTime']),
+        isOpen = json['isOpen'] as bool,
+        taskOrderList = dynamicToTaskOrderList(json['taskOrderList']);
 
   Map<String, dynamic> toJson() => {
         'gid': gid,
@@ -432,6 +433,7 @@ class GroupInfoClass {
         'colorName': colorName,
         'createDateTime': createDateTime,
         'isOpen': isOpen,
+        'taskOrderList': taskOrderList,
       };
 }
 
@@ -442,18 +444,21 @@ class TaskInfoClass {
     required this.name,
     required this.dateTimeType,
     required this.dateTimeList,
+    required this.recordList,
   });
 
   DateTime createDateTime;
   String tid, name, dateTimeType;
   List<DateTime> dateTimeList;
+  List<Map<String, dynamic>> recordList;
 
   TaskInfoClass.fromJson(Map<String, dynamic> json)
-      : createDateTime = json['createDateTime'] as DateTime,
+      : createDateTime = timestampToDateTime(json['createDateTime']),
         tid = json['tid'] as String,
         name = json['name'] as String,
         dateTimeType = json['dateTimeType'] as String,
-        dateTimeList = json['dateTimeList'] as List<DateTime>;
+        dateTimeList = timestampToDateTimeList(json['dateTimeList']),
+        recordList = dynamicToRecordList(json['recordList']);
 
   Map<String, dynamic> toJson() => {
         'createDateTime': createDateTime,
@@ -461,35 +466,21 @@ class TaskInfoClass {
         'name': name,
         'dateTimeType': dateTimeType,
         'dateTimeList': dateTimeList,
+        'recordList': recordList,
       };
 }
 
 class RecordInfoClass {
-  RecordInfoClass({
-    required this.createDateTime,
-    required this.rid,
-    this.memo,
-    this.imageUrlList,
-    this.mark,
-  });
+  RecordInfoClass({required this.dateTimeKey, this.memo, this.mark});
 
-  DateTime createDateTime;
-  String rid;
+  int dateTimeKey;
   String? memo, mark;
-  List<String>? imageUrlList;
 
   RecordInfoClass.fromJson(Map<String, dynamic> json)
-      : createDateTime = json['createDateTime'] as DateTime,
-        rid = json['tid'] as String,
+      : dateTimeKey = json['dateTimeKey'] as int,
         memo = json['memo'] as String?,
-        imageUrlList = json['imageUrlList'] as List<String>?,
         mark = json['mark'] as String?;
 
-  Map<String, dynamic> toJson() => {
-        'createDateTime': createDateTime,
-        'rid': rid,
-        'memo': memo,
-        'imageUrlList': imageUrlList,
-        'mark': mark,
-      };
+  Map<String, dynamic> toJson() =>
+      {'dateTimeKey': dateTimeKey, 'memo': memo, 'mark': mark};
 }

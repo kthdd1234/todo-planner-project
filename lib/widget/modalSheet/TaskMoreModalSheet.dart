@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:project/common/CommonContainer.dart';
@@ -6,9 +8,7 @@ import 'package:project/common/CommonNull.dart';
 import 'package:project/common/CommonSpace.dart';
 import 'package:project/common/CommonTag.dart';
 import 'package:project/common/CommonText.dart';
-import 'package:project/model/group_box/group_box.dart';
-import 'package:project/model/record_box/record_box.dart';
-import 'package:project/model/task_box/task_box.dart';
+import 'package:project/main.dart';
 import 'package:project/provider/themeProvider.dart';
 import 'package:project/util/class.dart';
 import 'package:project/util/constants.dart';
@@ -24,17 +24,13 @@ import 'package:table_calendar/table_calendar.dart';
 class TaskMoreModalSheet extends StatefulWidget {
   TaskMoreModalSheet({
     super.key,
-    required this.recordBox,
-    required this.groupBox,
-    required this.taskBox,
-    required this.taskItem,
+    required this.groupInfo,
+    required this.taskInfo,
     required this.selectedDateTime,
   });
 
-  RecordBox? recordBox;
-  GroupBox groupBox;
-  TaskBox taskBox;
-  TaskItemClass taskItem;
+  GroupInfoClass groupInfo;
+  TaskInfoClass taskInfo;
   DateTime selectedDateTime;
 
   @override
@@ -49,19 +45,16 @@ class _TaskMoreModalSheetState extends State<TaskMoreModalSheet> {
   ) {
     int idx = isContainIdxDateTime(
       locale: locale,
-      selectionList: widget.taskBox.dateTimeList,
+      selectionList: widget.taskInfo.dateTimeList,
       targetDateTime: dateTime,
-      dateTimeType: widget.taskBox.dateTimeType,
+      dateTimeType: widget.taskInfo.dateTimeType,
     );
-
-    ColorClass color = getColorClass(widget.groupBox.colorName);
-    int key = dateTimeKey(dateTime);
-    RecordBox? recordBox = recordRepository.recordBox.get(key);
-    String? mark = getTaskInfo(
-      key: 'mark',
-      recordBox: recordBox,
-      taskId: widget.taskBox.id,
-    );
+    String colorName = widget.groupInfo.colorName;
+    ColorClass color = getColorClass(colorName);
+    String? mark = getRecordInfo(
+      recordList: widget.taskInfo.recordList,
+      targetDateTime: dateTime,
+    )?.mark;
 
     if (idx != -1) {
       return Column(
@@ -92,17 +85,21 @@ class _TaskMoreModalSheetState extends State<TaskMoreModalSheet> {
       isScrollControlled: true,
       context: context,
       builder: (context) => TaskSettingModalSheet(
-        initTask: widget.taskItem.task,
-        taskBox: widget.taskBox,
+        groupInfo: widget.groupInfo,
+        taskInfo: widget.taskInfo,
       ),
     );
   }
 
   onDateTime(TaskDateTimeInfoClass taskDateTimeInfo) async {
-    widget.taskBox.dateTimeType = taskDateTimeInfo.type;
-    widget.taskBox.dateTimeList = taskDateTimeInfo.dateTimeList;
+    widget.taskInfo.dateTimeType = taskDateTimeInfo.type;
+    widget.taskInfo.dateTimeList = taskDateTimeInfo.dateTimeList;
 
-    await widget.taskBox.save();
+    await taskMethod.updateTask(
+      gid: widget.groupInfo.gid,
+      tid: widget.taskInfo.tid,
+      taskInfo: widget.taskInfo,
+    );
 
     navigatorPop(context);
     setState(() {});
@@ -110,12 +107,13 @@ class _TaskMoreModalSheetState extends State<TaskMoreModalSheet> {
 
   onRepeat() {
     DateTime now = DateTime.now();
-    ColorClass color = getColorClass(widget.groupBox.colorName);
+    String colorName = widget.groupInfo.colorName;
+    ColorClass color = getColorClass(colorName);
 
     // 날짜
     TaskDateTimeInfoClass taskDateTimeInfo = TaskDateTimeInfoClass(
-      type: widget.taskBox.dateTimeType,
-      dateTimeList: widget.taskBox.dateTimeList,
+      type: widget.taskInfo.dateTimeType,
+      dateTimeList: widget.taskInfo.dateTimeList,
     );
 
     showModalBottomSheet(
@@ -154,24 +152,13 @@ class _TaskMoreModalSheetState extends State<TaskMoreModalSheet> {
   }
 
   onRemove() async {
-    String groupId = widget.groupBox.id;
-    String taskId = widget.taskBox.id;
+    await taskMethod.deleteTask(
+      gid: widget.groupInfo.gid,
+      tid: widget.taskInfo.tid,
+      groupInfo: widget.groupInfo,
+      dateTime: widget.selectedDateTime,
+    );
 
-    recordRepository.recordList.forEach((record) async {
-      int index = record.recordOrderList
-              ?.indexWhere((recordOrder) => recordOrder['id'] == groupId) ??
-          -1;
-
-      if (index != -1) {
-        record.recordOrderList![index]['list'].remove(taskId);
-        await record.save();
-      }
-    });
-
-    widget.recordBox?.taskMarkList
-        ?.removeWhere((taskMark) => taskMark['id'] == taskId);
-
-    await taskRepository.taskBox.delete(taskId);
     navigatorPop(context);
   }
 
@@ -220,13 +207,14 @@ class _TaskMoreModalSheetState extends State<TaskMoreModalSheet> {
                 : Colors.white;
 
     return Padding(
-      padding: const EdgeInsets.only(top: 22),
+      padding: const EdgeInsets.only(top: 21),
       child: Column(
         children: [
           CommonText(
             text: '${dateTime.day}',
             color: color,
             isNotTr: true,
+            fontSize: 15,
           )
         ],
       ),
@@ -239,17 +227,17 @@ class _TaskMoreModalSheetState extends State<TaskMoreModalSheet> {
     String locale = context.locale.toString();
     String title = yMFormatter(locale: locale, dateTime: DateTime.now());
     DateTime focusedDay =
-        widget.taskBox.dateTimeType != taskDateTimeType.everyMonth
-            ? widget.taskBox.dateTimeList[0]
+        widget.taskInfo.dateTimeType != taskDateTimeType.everyMonth
+            ? widget.taskInfo.dateTimeList[0]
             : DateTime(
                 widget.selectedDateTime.year,
                 widget.selectedDateTime.month,
-                widget.taskBox.dateTimeList[0].day,
+                widget.taskInfo.dateTimeList[0].day,
               );
-    ColorClass color = getColorClass(widget.groupBox.colorName);
+    ColorClass color = getColorClass(widget.groupInfo.colorName);
 
     return CommonModalSheet(
-      title: widget.taskItem.name,
+      title: widget.taskInfo.name,
       isNotTr: true,
       height: 680,
       child: Column(
@@ -266,7 +254,7 @@ class _TaskMoreModalSheetState extends State<TaskMoreModalSheet> {
                     children: [
                       CommonText(text: title, fontSize: 16, isNotTr: true),
                       CommonTag(
-                        text: taskDateTimeLabel[widget.taskBox.dateTimeType]!,
+                        text: taskDateTimeLabel[widget.taskInfo.dateTimeType]!,
                         isBold: true,
                         textColor: Colors.white,
                         bgColor: color.s200,

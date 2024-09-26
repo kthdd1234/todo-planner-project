@@ -60,29 +60,25 @@ class _TaskCalendarViewState extends State<TaskCalendarView> {
     List<ColorClass?> colorList = [];
     int recordKey = dateTimeKey(dateTime);
     RecordBox? recordBox = recordRepository.recordBox.get(recordKey);
-    List<GroupBox> groupList = getGroupOrderList(groupRepository.groupList);
+    List<GroupBox> groupList = [];
 
     for (var group in groupList) {
-      List<TaskBox> taskList = getTaskList(
-        groupId: group.id,
-        locale: locale,
-        taskList: taskRepository.taskList,
-        targetDateTime: dateTime,
-      );
+      // List<TaskBox> taskList = getTaskList(
+      //   groupId: group.id,
+      //   locale: locale,
+      //   taskList: taskRepository.taskList,
+      //   targetDateTime: dateTime,
+      // );
 
-      List<String?> markList = taskList
-          .map((task) => getTaskInfo(
-                key: 'mark',
-                recordBox: recordBox,
-                taskId: task.id,
-              ))
-          .toList();
+      // List<String?> markList = []
+      //     .map((task) => getRecordInfo(key: 'mark', taskId: task.id))
+      //     .toList();
 
-      List<String> filterMarkList = markList.whereType<String>().toList();
+      // List<String> filterMarkList = markList.whereType<String>().toList();
 
-      if (colorList.length != 9 && filterMarkList.isNotEmpty) {
-        colorList.add(getColorClass(group.colorName));
-      }
+      // if (colorList.length != 9 && filterMarkList.isNotEmpty) {
+      //   colorList.add(getColorClass(group.colorName));
+      // }
     }
 
     while (colorList.length < 9) {
@@ -115,41 +111,6 @@ class _TaskCalendarViewState extends State<TaskCalendarView> {
           wRow(colorList.sublist(6, 9)),
         ],
       ),
-    );
-  }
-
-  Widget? dowBuilder(bool isLight, DateTime dateTime) {
-    String locale = context.locale.toString();
-    Color color = dateTime.weekday == 6
-        ? blue.original
-        : dateTime.weekday == 7
-            ? red.original
-            : isLight
-                ? textColor
-                : Colors.white;
-
-    return CommonText(
-      text: eFormatter(locale: locale, dateTime: dateTime),
-      color: color,
-      fontSize: 13,
-      isBold: !isLight,
-    );
-  }
-
-  Widget? defaultBuilder(bool isLight, DateTime dateTime) {
-    Color color = dateTime.weekday == 6
-        ? blue.original
-        : dateTime.weekday == 7
-            ? red.original
-            : isLight
-                ? textColor
-                : Colors.white;
-
-    return Column(
-      children: [
-        CommonSpace(height: 13.5),
-        CommonText(text: '${dateTime.day}', color: color, isBold: !isLight),
-      ],
     );
   }
 
