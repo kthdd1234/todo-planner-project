@@ -1,58 +1,80 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:project/common/CommonNull.dart';
-import 'package:project/main.dart';
-import 'package:project/model/record_box/record_box.dart';
-import 'package:project/provider/UserInfoProvider.dart';
 import 'package:project/provider/selectedDateTimeProvider.dart';
+import 'package:project/provider/titleDateTimeProvider.dart';
 import 'package:project/util/class.dart';
 import 'package:project/util/final.dart';
-import 'package:project/util/func.dart';
+import 'package:project/widget/appBar/TaskAppBar.dart';
 import 'package:project/widget/containerView/GroupView.dart';
 import 'package:project/widget/containerView/MemoView.dart';
-import 'package:project/widget/containerView/taskCalendarView.dart';
+import 'package:project/widget/containerView/TaskCalendarView.dart';
 import 'package:provider/provider.dart';
 import 'package:table_calendar/table_calendar.dart';
 
-class MainView extends StatelessWidget {
-  MainView({super.key, required this.calendarFormat});
+class MainView extends StatefulWidget {
+  MainView({super.key, required this.groupInfoList});
 
-  CalendarFormat calendarFormat;
+  List<GroupInfoClass> groupInfoList;
+
+  @override
+  State<MainView> createState() => _MainViewState();
+}
+
+class _MainViewState extends State<MainView> {
+  CalendarFormat calendarFormat = CalendarFormat.week;
 
   @override
   Widget build(BuildContext context) {
     DateTime selectedDateTime =
         context.watch<SelectedDateTimeProvider>().seletedDateTime;
-    int recordKey = dateTimeKey(selectedDateTime);
-    RecordBox? recordBox = recordRepository.recordBox.get(recordKey);
 
-    UserInfoClass userInfo = context.watch<UserInfoProvider>().userInfo;
-    List<String> groupOrderList = userInfo.groupOrderList;
+    onHorizontalDragEnd(DragEndDetails dragEndDetails) {
+      double? primaryVelocity = dragEndDetails.primaryVelocity;
 
-    return Expanded(
-      child: ListView(
+      if (primaryVelocity == null) {
+        return;
+      } else if (primaryVelocity > 0) {
+        selectedDateTime = selectedDateTime.subtract(const Duration(days: 1));
+      } else if (primaryVelocity < 0) {
+        selectedDateTime = selectedDateTime.add(const Duration(days: 1));
+      }
+
+      context
+          .read<SelectedDateTimeProvider>()
+          .changeSelectedDateTime(dateTime: selectedDateTime);
+      context
+          .read<TitleDateTimeProvider>()
+          .changeTitleDateTime(dateTime: selectedDateTime);
+    }
+
+    onCalendarFormat() {
+      setState(() => calendarFormat = nextCalendarFormats[calendarFormat]!);
+    }
+
+    return GestureDetector(
+      onHorizontalDragEnd: onHorizontalDragEnd,
+      child: Column(
         children: [
-          TaskCalendarView(calendarFormat: calendarFormat),
-          MemoView(
-            recordBox: recordBox,
-            selectedDateTime: selectedDateTime,
+          TaskAppBar(
+            calendarFormat: calendarFormat,
+            onCalendarFormat: onCalendarFormat,
           ),
-          StreamBuilder<QuerySnapshot>(
-            stream: groupMethod.stream(),
-            builder: (context, snapshot) {
-              if (!snapshot.hasData) return const CommonNull();
-
-              List<GroupInfoClass> groupInfoList =
-                  groupMethod.getGroupInfoList(snapshot: snapshot);
-              groupInfoList =
-                  getGroupInfoOrderList(groupOrderList, groupInfoList);
-
-              return Column(
-                children: groupInfoList
-                    .map((groupInfo) => GroupView(groupInfo: groupInfo))
-                    .toList(),
-              );
-            },
+          Expanded(
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  TaskCalendarView(
+                    groupInfoList: widget.groupInfoList,
+                    calendarFormat: calendarFormat,
+                  ),
+                  MemoView(),
+                  Column(
+                    children: widget.groupInfoList
+                        .map((groupInfo) => GroupView(groupInfo: groupInfo))
+                        .toList(),
+                  )
+                ],
+              ),
+            ),
           ),
         ],
       ),

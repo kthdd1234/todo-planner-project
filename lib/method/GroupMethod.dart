@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:project/main.dart';
@@ -49,6 +51,17 @@ class GroupMethod {
         .collection(groupsCollection)
         .doc(gid)
         .update(groupInfo.toJson());
+
+    return true;
+  }
+
+  Future<bool> removeGroup({required String gid}) async {
+    await firestore
+        .collection(usersCollection)
+        .doc(uid)
+        .collection(groupsCollection)
+        .doc(gid)
+        .delete();
 
     return true;
   }

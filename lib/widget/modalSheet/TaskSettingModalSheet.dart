@@ -46,13 +46,10 @@ class _TaskSettingModalSheetState extends State<TaskSettingModalSheet> {
         ),
       );
     } else {
-      widget.taskInfo.name = controller.text;
+      String groupId = widget.groupInfo.gid;
 
-      taskMethod.updateTask(
-        gid: widget.groupInfo.gid,
-        tid: widget.taskInfo.tid,
-        taskInfo: widget.taskInfo,
-      );
+      widget.taskInfo.name = controller.text;
+      groupMethod.updateGroup(gid: groupId, groupInfo: widget.groupInfo);
     }
 
     navigatorPop(context);

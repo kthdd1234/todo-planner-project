@@ -1,10 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:project/common/CommonBackground.dart';
+import 'package:project/common/CommonNull.dart';
 import 'package:project/common/CommonScaffold.dart';
 import 'package:project/main.dart';
 import 'package:project/model/user_box/user_box.dart';
 import 'package:project/provider/PremiumProvider.dart';
+import 'package:project/provider/UserInfoProvider.dart';
 import 'package:project/provider/themeProvider.dart';
 import 'package:project/util/class.dart';
 import 'package:project/util/final.dart';
@@ -46,7 +48,7 @@ class _GroupPageState extends State<GroupPage> {
     setState(() => isEdit = !isEdit);
   }
 
-  onRemove(GroupInfoClass groupInfo) {
+  onRemove(GroupInfoClass groupInfo, UserInfoClass userInfo) {
     if (groupRepository.groupList.length == 1) {
       showDialog(
         context: context,
@@ -66,71 +68,34 @@ class _GroupPageState extends State<GroupPage> {
           isCancel: true,
           height: 155,
           onTap: () async {
-            // UserBox user = userRepository.user;
-            // String groupId = groupBox.id;
-            // List<String> taskRemoveIdList = taskRepository.taskList
-            //     .where((task) => task.id == groupBox.id)
-            //     .map((task) => task.id)
-            //     .toList();
+            userInfo.groupOrderList.remove(groupInfo.gid);
 
-            // // group 제거
-            // groupRepository.deleteGroup(groupId);
+            await userMethod.updateUser(userInfo: userInfo);
+            await groupMethod.removeGroup(gid: groupInfo.gid);
 
-            // // group 순서 id 제거
-            // user.groupOrderList?.remove(groupId);
-
-            // // task 삭제
-            // for (var task in taskRepository.taskList) {
-            //   if (task.id == groupId) task.delete();
-            // }
-
-            // // mark 기록 제거
-            // for (var record in recordRepository.recordList) {
-            //   record.taskMarkList = record.taskMarkList
-            //       ?.where(
-            //         (taskMark) => !taskRemoveIdList.contains(taskMark['id']),
-            //       )
-            //       .toList();
-
-            //   record.taskOrderList;
-            // }
-
-            // // record order 그룹 & 할 일 삭제
-            // recordRepository.recordList.forEach((record) async {
-            //   int index = record.recordOrderList?.indexWhere(
-            //           (recordOrder) => recordOrder['id'] == groupId) ??
-            //       -1;
-
-            //   if (index != -1) {
-            //     record.recordOrderList!.removeAt(index);
-            //     await record.save();
-            //   }
-            // });
-
-            // await user.save();
-            // navigatorPop(context);
+            navigatorPop(context);
           },
         ),
       );
     }
   }
 
-  onReorder(int oldIndex, int newIndex) async {
-    UserBox? user = userRepository.user;
-    List<String> groupOrderList = user.groupOrderList ?? [];
+  onReorder(int oldIndex, int newIndex, UserInfoClass userInfo) async {
+    List<String> groupOrderList = userInfo.groupOrderList;
 
     if (oldIndex < newIndex) newIndex -= 1;
 
     String orderId = groupOrderList.removeAt(oldIndex);
     groupOrderList.insert(newIndex, orderId);
 
-    await user.save();
+    await userMethod.updateUser(userInfo: userInfo);
   }
 
   @override
   Widget build(BuildContext context) {
     bool isPremium = context.watch<PremiumProvider>().isPremium;
     bool isLight = context.watch<ThemeProvider>().isLight;
+    UserInfoClass userInfo = context.watch<UserInfoProvider>().userInfo;
 
     return CommonBackground(
       child: CommonScaffold(
@@ -140,15 +105,19 @@ class _GroupPageState extends State<GroupPage> {
         body: StreamBuilder<QuerySnapshot>(
           stream: groupMethod.stream(),
           builder: (context, snapshot) {
-            if (!snapshot.hasData) return CircularProgressIndicator();
+            if (!snapshot.hasData) return const CommonNull();
 
             List<GroupInfoClass> groupInfoList =
                 groupMethod.getGroupInfoList(snapshot: snapshot);
 
+            groupInfoList =
+                getGroupInfoOrderList(userInfo.groupOrderList, groupInfoList);
+
             return ReorderableListView.builder(
               physics: const ClampingScrollPhysics(),
               itemCount: groupInfoList.length,
-              onReorder: onReorder,
+              onReorder: (oldIndex, newIndex) =>
+                  onReorder(oldIndex, newIndex, userInfo),
               itemBuilder: (context, index) {
                 return Padding(
                   key: Key(groupInfoList[index].gid),
@@ -160,7 +129,7 @@ class _GroupPageState extends State<GroupPage> {
                     groupInfo: groupInfoList[index],
                     isEdit: isEdit,
                     onItem: onItem,
-                    onRemove: onRemove,
+                    onRemove: (groupInfo) => onRemove(groupInfo, userInfo),
                   ),
                 );
               },

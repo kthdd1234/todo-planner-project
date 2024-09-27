@@ -14,6 +14,7 @@ class CommonScaffold extends StatelessWidget {
     this.floatingActionButton,
     this.resizeToAvoidBottomInset,
     this.backgroundColor,
+    this.padding,
   });
 
   Widget? bottomNavigationBar;
@@ -22,6 +23,7 @@ class CommonScaffold extends StatelessWidget {
   bool? resizeToAvoidBottomInset;
   Widget? floatingActionButton;
   Color? backgroundColor;
+  EdgeInsets? padding;
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +37,7 @@ class CommonScaffold extends StatelessWidget {
               foregroundColor: isLight ? Colors.black : darkTextColor,
               title: CommonText(
                 text: appBarInfo!.title,
-                fontSize: 18,
+                fontSize: appBarInfo!.fontSize ?? 18,
                 isBold: !isLight,
               ),
               centerTitle: appBarInfo!.isCenter,
@@ -46,7 +48,7 @@ class CommonScaffold extends StatelessWidget {
           : null,
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.all(10),
+          padding: padding ?? const EdgeInsets.all(10),
           child: body,
         ),
       ),

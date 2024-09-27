@@ -8,11 +8,15 @@ class AppBarInfoClass {
     required this.title,
     this.isCenter,
     this.actions,
+    this.fontSize,
+    this.isNotTr,
+    this.isBold,
   });
 
   String title;
-  bool? isCenter;
+  bool? isCenter, isNotTr, isBold;
   List<Widget>? actions;
+  double? fontSize;
 }
 
 class BottomNavigationBarClass {
@@ -381,7 +385,7 @@ class UserInfoClass {
         fontFamily = json['fontFamily'] as String,
         background = json['background'] as String,
         theme = json['theme'] as String,
-        groupOrderList = dynamicToGroupOrderList(json['groupOrderList']),
+        groupOrderList = dynamicToIdList(json['groupOrderList']),
         widgetTheme = json['widgetTheme'] as String,
         passwords = json['passwords'] as String?,
         email = json['email'] as String?,
@@ -412,12 +416,14 @@ class GroupInfoClass {
     required this.createDateTime,
     required this.isOpen,
     required this.taskOrderList,
+    required this.taskInfoList,
   });
 
   String gid, name, colorName;
   DateTime createDateTime;
   bool isOpen;
-  List<Map<String, dynamic>> taskOrderList;
+  List<TaskOrderClass> taskOrderList;
+  List<TaskInfoClass> taskInfoList;
 
   GroupInfoClass.fromJson(Map<String, dynamic> json)
       : gid = json['gid'] as String,
@@ -425,7 +431,8 @@ class GroupInfoClass {
         colorName = json['colorName'] as String,
         createDateTime = timestampToDateTime(json['createDateTime']),
         isOpen = json['isOpen'] as bool,
-        taskOrderList = dynamicToTaskOrderList(json['taskOrderList']);
+        taskOrderList = taskOrderFromJson(json['taskOrderList']),
+        taskInfoList = taskInfoFromJson(json['taskInfoList']);
 
   Map<String, dynamic> toJson() => {
         'gid': gid,
@@ -433,7 +440,8 @@ class GroupInfoClass {
         'colorName': colorName,
         'createDateTime': createDateTime,
         'isOpen': isOpen,
-        'taskOrderList': taskOrderList,
+        'taskOrderList': taskOrderToJson(taskOrderList),
+        'taskInfoList': taskInfoToJson(taskInfoList)
       };
 }
 
@@ -444,13 +452,13 @@ class TaskInfoClass {
     required this.name,
     required this.dateTimeType,
     required this.dateTimeList,
-    required this.recordList,
+    required this.recordInfoList,
   });
 
   DateTime createDateTime;
   String tid, name, dateTimeType;
   List<DateTime> dateTimeList;
-  List<Map<String, dynamic>> recordList;
+  List<RecordInfoClass> recordInfoList;
 
   TaskInfoClass.fromJson(Map<String, dynamic> json)
       : createDateTime = timestampToDateTime(json['createDateTime']),
@@ -458,7 +466,7 @@ class TaskInfoClass {
         name = json['name'] as String,
         dateTimeType = json['dateTimeType'] as String,
         dateTimeList = timestampToDateTimeList(json['dateTimeList']),
-        recordList = dynamicToRecordList(json['recordList']);
+        recordInfoList = recordFromJson(json['recordInfoList']);
 
   Map<String, dynamic> toJson() => {
         'createDateTime': createDateTime,
@@ -466,7 +474,23 @@ class TaskInfoClass {
         'name': name,
         'dateTimeType': dateTimeType,
         'dateTimeList': dateTimeList,
-        'recordList': recordList,
+        'recordInfoList': recordToJson(recordInfoList),
+      };
+}
+
+class TaskOrderClass {
+  TaskOrderClass({required this.dateTimeKey, required this.list});
+
+  int dateTimeKey;
+  List<String> list;
+
+  TaskOrderClass.fromJson(Map<String, dynamic> json)
+      : dateTimeKey = json['dateTimeKey'],
+        list = json['list'];
+
+  Map<String, dynamic> toJson() => {
+        'dateTimeKey': dateTimeKey,
+        'list': list,
       };
 }
 

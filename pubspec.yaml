@@ -202,6 +202,10 @@ flutter:
     - assets/svg/apple-logo.svg
     - assets/svg/google-logo.svg
     - assets/svg/kakao-logo.svg
+    - assets/svg/align-left.svg
+    - assets/svg/align-center.svg
+    - assets/svg/align-right.svg
+    - assets/svg/clock.svg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

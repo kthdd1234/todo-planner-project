@@ -87,7 +87,7 @@ class _TaskViewState extends State<TaskView> {
     String colorName = widget.groupInfo.colorName;
     ColorClass color = getColorClass(colorName);
     RecordInfoClass? recordInfo = getRecordInfo(
-      recordList: widget.taskInfo.recordList,
+      recordInfoList: widget.taskInfo.recordInfoList,
       targetDateTime: widget.selectedDateTime,
     );
 

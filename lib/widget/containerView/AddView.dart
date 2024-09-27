@@ -40,20 +40,24 @@ class _AddViewState extends State<AddView> {
       FocusScope.of(context).unfocus();
 
       if (controller.text != '') {
+        String groupId = widget.groupInfo.gid;
         String newTid = uuid();
         DateTime now = DateTime.now();
 
-        await taskMethod.addTask(
-          gid: widget.groupInfo.gid,
-          tid: newTid,
-          taskInfo: TaskInfoClass(
+        widget.groupInfo.taskInfoList.add(
+          TaskInfoClass(
             createDateTime: now,
             tid: newTid,
             name: controller.text,
             dateTimeType: taskDateTimeType.selection,
             dateTimeList: [selectedDateTime],
-            recordList: [],
+            recordInfoList: [],
           ),
+        );
+
+        await groupMethod.updateGroup(
+          gid: groupId,
+          groupInfo: widget.groupInfo,
         );
 
         setState(() => controller.text = '');

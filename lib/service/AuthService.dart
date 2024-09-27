@@ -42,6 +42,7 @@ class AuthService {
       createDateTime: createDateTime,
       isOpen: true,
       taskOrderList: [],
+      taskInfoList: [],
     );
 
     try {

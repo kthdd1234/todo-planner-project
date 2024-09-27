@@ -52,7 +52,7 @@ class _TaskMoreModalSheetState extends State<TaskMoreModalSheet> {
     String colorName = widget.groupInfo.colorName;
     ColorClass color = getColorClass(colorName);
     String? mark = getRecordInfo(
-      recordList: widget.taskInfo.recordList,
+      recordInfoList: widget.taskInfo.recordInfoList,
       targetDateTime: dateTime,
     )?.mark;
 
@@ -92,14 +92,18 @@ class _TaskMoreModalSheetState extends State<TaskMoreModalSheet> {
   }
 
   onDateTime(TaskDateTimeInfoClass taskDateTimeInfo) async {
+    String groupId = widget.groupInfo.gid;
+
     widget.taskInfo.dateTimeType = taskDateTimeInfo.type;
     widget.taskInfo.dateTimeList = taskDateTimeInfo.dateTimeList;
 
-    await taskMethod.updateTask(
-      gid: widget.groupInfo.gid,
-      tid: widget.taskInfo.tid,
-      taskInfo: widget.taskInfo,
-    );
+    await groupMethod.updateGroup(gid: groupId, groupInfo: widget.groupInfo);
+
+    // await taskMethod.updateTask(
+    //   gid: widget.groupInfo.gid,
+    //   tid: widget.taskInfo.tid,
+    //   taskInfo: widget.taskInfo,
+    // );
 
     navigatorPop(context);
     setState(() {});
@@ -152,12 +156,18 @@ class _TaskMoreModalSheetState extends State<TaskMoreModalSheet> {
   }
 
   onRemove() async {
-    await taskMethod.deleteTask(
-      gid: widget.groupInfo.gid,
-      tid: widget.taskInfo.tid,
-      groupInfo: widget.groupInfo,
-      dateTime: widget.selectedDateTime,
-    );
+    String groupId = widget.groupInfo.gid;
+
+    /// task order id 삭제
+    widget.groupInfo.taskOrderList.forEach((taskOrder) {
+      taskOrder.list.removeWhere((taskId) => taskId == widget.taskInfo.tid);
+    });
+
+    // task 삭제
+    widget.groupInfo.taskInfoList
+        .removeWhere((taskInfo) => taskInfo.tid == widget.taskInfo.tid);
+
+    await groupMethod.updateGroup(gid: groupId, groupInfo: widget.groupInfo);
 
     navigatorPop(context);
   }

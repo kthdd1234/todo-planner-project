@@ -5,6 +5,7 @@ import 'package:project/common/CommonNull.dart';
 import 'package:project/page/ImageSlidePage.dart';
 import 'package:project/page/MemoSettingPage.dart';
 import 'package:project/util/func.dart';
+import 'package:project/widget/memo/MemoImage.dart';
 
 class SearchImage extends StatelessWidget {
   SearchImage({super.key, required this.uint8ListList});
@@ -28,8 +29,8 @@ class SearchImage extends StatelessWidget {
     return uint8ListList != null && isSearchCategory('image')
         ? Padding(
             padding: const EdgeInsets.only(top: 10),
-            child: ImageContainer(
-                uint8ListList: uint8ListList ?? [], onImage: onImage),
+            child:
+                MemoImage(uint8ListList: uint8ListList ?? [], onImage: onImage),
           )
         : const CommonNull();
   }

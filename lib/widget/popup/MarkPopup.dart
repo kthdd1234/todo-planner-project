@@ -16,6 +16,7 @@ import 'package:project/util/class.dart';
 import 'package:project/util/constants.dart';
 import 'package:project/util/final.dart';
 import 'package:project/util/func.dart';
+import 'package:project/widget/memo/MemoField.dart';
 import 'package:project/widget/popup/AlertPopup.dart';
 import 'package:provider/provider.dart';
 
@@ -44,15 +45,13 @@ class _MarkPopupState extends State<MarkPopup> {
   @override
   void initState() {
     RecordInfoClass? recordInfo = getRecordInfo(
-      recordList: widget.taskInfo.recordList,
+      recordInfoList: widget.taskInfo.recordInfoList,
       targetDateTime: widget.selectedDateTime,
     );
 
     if (recordInfo != null) {
       currentMark = recordInfo.mark ?? '';
       memoController.text = recordInfo.memo ?? '';
-
-      log('initState, recordInfo.memo => ${recordInfo.memo}');
 
       if (recordInfo.memo != null) isShowInput = false;
     }
@@ -66,27 +65,27 @@ class _MarkPopupState extends State<MarkPopup> {
 
     DateTime selectedDateTime = widget.selectedDateTime;
 
-    Map<String, dynamic> newRecord = {
-      'dateTimeKey': dateTimeKey(selectedDateTime),
-      'mark': currentMark != selectedMark ? selectedMark : null,
-      "memo": memoController.text != '' ? memoController.text : null,
-    };
+    RecordInfoClass newRecordInfo = RecordInfoClass(
+      dateTimeKey: dateTimeKey(selectedDateTime),
+      mark: currentMark != selectedMark ? selectedMark : null,
+      memo: memoController.text != '' ? memoController.text : null,
+    );
 
     RecordInfoClass? recordInfo = getRecordInfo(
-      recordList: widget.taskInfo.recordList,
+      recordInfoList: widget.taskInfo.recordInfoList,
       targetDateTime: selectedDateTime,
     );
 
     // 기록 리스트에 추가
     if (recordInfo == null) {
-      widget.taskInfo.recordList.add(newRecord);
+      widget.taskInfo.recordInfoList.add(newRecordInfo);
     } else {
       int index = getRecordIndex(
-        recordList: widget.taskInfo.recordList,
+        recordInfoList: widget.taskInfo.recordInfoList,
         targetDateTime: selectedDateTime,
       );
 
-      widget.taskInfo.recordList[index] = newRecord;
+      widget.taskInfo.recordInfoList[index] = newRecordInfo;
     }
 
     // 내일 할래요
@@ -108,12 +107,7 @@ class _MarkPopupState extends State<MarkPopup> {
       dateTimeList.removeAt(tDtIndex);
     }
 
-    taskMethod.updateTask(
-      gid: groupId,
-      tid: taskId,
-      taskInfo: widget.taskInfo,
-    );
-
+    await groupMethod.updateGroup(gid: groupId, groupInfo: widget.groupInfo);
     navigatorPop(context);
   }
 
@@ -132,33 +126,30 @@ class _MarkPopupState extends State<MarkPopup> {
       String groupId = widget.groupInfo.gid;
       String taskId = widget.taskInfo.tid;
       DateTime selectedDateTime = widget.selectedDateTime;
+
+      RecordInfoClass newRecordInfo = RecordInfoClass(
+        dateTimeKey: dateTimeKey(selectedDateTime),
+        mark: currentMark != '' ? currentMark : null,
+        memo: memoController.text != '' ? memoController.text : null,
+      );
+
       RecordInfoClass? recordInfo = getRecordInfo(
-        recordList: widget.taskInfo.recordList,
+        recordInfoList: widget.taskInfo.recordInfoList,
         targetDateTime: selectedDateTime,
       );
 
-      Map<String, dynamic> newRecord = {
-        'dateTimeKey': dateTimeKey(selectedDateTime),
-        'mark': currentMark != '' ? currentMark : null,
-        "memo": memoController.text != '' ? memoController.text : null,
-      };
-
       if (recordInfo == null) {
-        widget.taskInfo.recordList.add(newRecord);
+        widget.taskInfo.recordInfoList.add(newRecordInfo);
       } else {
         int index = getRecordIndex(
-          recordList: widget.taskInfo.recordList,
+          recordInfoList: widget.taskInfo.recordInfoList,
           targetDateTime: selectedDateTime,
         );
 
-        widget.taskInfo.recordList[index] = newRecord;
+        widget.taskInfo.recordInfoList[index] = newRecordInfo;
       }
 
-      taskMethod.updateTask(
-        gid: groupId,
-        tid: taskId,
-        taskInfo: widget.taskInfo,
-      );
+      await groupMethod.updateGroup(gid: groupId, groupInfo: widget.groupInfo);
     }
 
     setState(() => isShowInput = false);
@@ -189,22 +180,15 @@ class _MarkPopupState extends State<MarkPopup> {
 
   onRemoveMemo() async {
     String groupId = widget.groupInfo.gid;
-    String taskId = widget.taskInfo.tid;
-
     DateTime selectedDateTime = widget.selectedDateTime;
 
     int index = getRecordIndex(
-      recordList: widget.taskInfo.recordList,
+      recordInfoList: widget.taskInfo.recordInfoList,
       targetDateTime: selectedDateTime,
     );
 
-    widget.taskInfo.recordList[index]['memo'] = null;
-
-    await taskMethod.updateTask(
-      gid: groupId,
-      tid: taskId,
-      taskInfo: widget.taskInfo,
-    );
+    widget.taskInfo.recordInfoList[index].memo = null;
+    await groupMethod.updateGroup(gid: groupId, groupInfo: widget.groupInfo);
 
     setState(() {
       memoController.text = '';

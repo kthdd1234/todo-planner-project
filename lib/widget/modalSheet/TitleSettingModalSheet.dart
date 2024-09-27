@@ -5,6 +5,7 @@ import 'package:project/common/CommonModalSheet.dart';
 import 'package:project/common/CommonOutlineInputField.dart';
 import 'package:project/common/CommonSpace.dart';
 import 'package:project/main.dart';
+import 'package:project/provider/UserInfoProvider.dart';
 import 'package:project/provider/themeProvider.dart';
 import 'package:project/util/class.dart';
 import 'package:project/util/func.dart';
@@ -38,7 +39,7 @@ class _TitleSettingModalSheetState extends State<TitleSettingModalSheet> {
     setState(() => selectedColorName = colorName);
   }
 
-  onEditingComplete() async {
+  onEditingComplete(UserInfoClass userInfo) async {
     DateTime now = DateTime.now();
 
     if (widget.groupInfo == null) {
@@ -53,8 +54,12 @@ class _TitleSettingModalSheetState extends State<TitleSettingModalSheet> {
           createDateTime: now,
           isOpen: true,
           taskOrderList: [],
+          taskInfoList: [],
         ),
       );
+
+      userInfo.groupOrderList.add(newGid);
+      await userMethod.updateUser(userInfo: userInfo);
     } else {
       GroupInfoClass groupInfo = widget.groupInfo!;
 
@@ -70,6 +75,7 @@ class _TitleSettingModalSheetState extends State<TitleSettingModalSheet> {
   @override
   Widget build(BuildContext context) {
     bool isLight = context.watch<ThemeProvider>().isLight;
+    UserInfoClass userInfo = context.watch<UserInfoProvider>().userInfo;
 
     return Padding(
       padding: EdgeInsets.only(
@@ -102,8 +108,8 @@ class _TitleSettingModalSheetState extends State<TitleSettingModalSheet> {
                 selectedColor: isLight
                     ? getColorClass(selectedColorName).s200
                     : getColorClass(selectedColorName).s300,
-                onSuffixIcon: onEditingComplete,
-                onEditingComplete: onEditingComplete,
+                onSuffixIcon: () => onEditingComplete(userInfo),
+                onEditingComplete: () => onEditingComplete(userInfo),
                 onChanged: (_) => setState(() {}),
               )
             ],

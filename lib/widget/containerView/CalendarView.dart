@@ -96,7 +96,7 @@ class _CalendarViewState extends State<CalendarView> {
     Color? highlighterColor(TaskBox taskBox) {
       ColorClass color = getColorClass(taskBox.colorName);
       String? mark =
-          getRecordInfo(recordList: [], targetDateTime: dateTime)?.mark;
+          getRecordInfo(recordInfoList: [], targetDateTime: dateTime)?.mark;
 
       return mark != null && mark != 'E'
           ? isLight

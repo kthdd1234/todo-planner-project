@@ -31,9 +31,7 @@ class GroupItemButton extends StatelessWidget {
     bool isLight = context.watch<ThemeProvider>().isLight;
     String colorName = groupInfo.colorName;
     ColorClass color = getColorClass(colorName);
-    // int count = taskRepository.taskList
-    //     .where((task) => task.groupId == groupBox.id)
-    //     .length;
+    int count = groupInfo.taskInfoList.length;
 
     return Row(
       children: [
@@ -57,7 +55,7 @@ class GroupItemButton extends StatelessWidget {
                   ),
                   CommonSpace(width: 30),
                   CommonSvgText(
-                    text: '?',
+                    text: '$count',
                     fontSize: 14,
                     textColor: isLight ? grey.original : Colors.white,
                     svgColor: isLight ? grey.original : Colors.white,

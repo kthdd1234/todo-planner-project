@@ -100,19 +100,6 @@ ColorClass getColorClass(String? name) {
   return colorList.firstWhere((info) => info.colorName == name);
 }
 
-// String? getRecordInfo({required String key, required String taskId}) {
-//   return null;
-// int? idx = recordBox?.taskMarkList?.indexWhere(
-//   (element) => element['id'] == taskId,
-// );
-
-// if (idx == null || idx == -1) {
-//   return null;
-// }
-
-// return recordBox!.taskMarkList![idx][key];
-// }
-
 List<TaskInfoClass> getTaskList({
   required String groupId,
   required String locale,
@@ -513,45 +500,65 @@ List<String> dynamicToIdList(List<dynamic> dynamicList) {
   return dynamicList.map((id) => id.toString()).toList();
 }
 
-List<Map<String, dynamic>> dynamicToTaskOrderList(List<dynamic> dynamicList) {
-  return dynamicList
-      .map((info) => {
-            'dateTimeKey': info['dateTimeKey'],
-            'list': dynamicToIdList(info['list'])
-          })
+List<TaskInfoClass> taskInfoFromJson(List<dynamic> list) {
+  return list
+      .map(
+        (info) => TaskInfoClass(
+          createDateTime: timestampToDateTime(info['createDateTime']),
+          tid: info['tid'],
+          name: info['name'],
+          dateTimeType: info['dateTimeType'],
+          dateTimeList: timestampToDateTimeList(info['dateTimeList']),
+          recordInfoList: recordFromJson(info['recordInfoList']),
+        ),
+      )
       .toList();
 }
 
-List<String> dynamicToGroupOrderList(List<dynamic> dynamicList) {
-  return dynamicList.map((id) => id.toString()).toList();
+List<Map<String, dynamic>> taskInfoToJson(List<TaskInfoClass> list) {
+  return list.map((info) => info.toJson()).toList();
 }
 
-List<Map<String, dynamic>> dynamicToRecordList(List<dynamic> dynamicList) {
-  return dynamicList
-      .map((info) => {
-            'dateTimeKey': info['dateTimeKey'],
-            'mark': info['mark'],
-            'memo': info['memo'],
-          })
+List<TaskOrderClass> taskOrderFromJson(List<dynamic> list) {
+  return list
+      .map(
+        (info) => TaskOrderClass(
+          dateTimeKey: info['dateTimeKey'],
+          list: dynamicToIdList(info['list']),
+        ),
+      )
       .toList();
+}
+
+List<Map<String, dynamic>> taskOrderToJson(List<TaskOrderClass> list) {
+  return list.map((info) => info.toJson()).toList();
+}
+
+List<RecordInfoClass> recordFromJson(List<dynamic> list) {
+  return list.map((info) => RecordInfoClass.fromJson(info)).toList();
+}
+
+List<Map<String, dynamic>> recordToJson(List<RecordInfoClass> list) {
+  return list.map((info) => info.toJson()).toList();
 }
 
 int getRecordIndex({
-  required List<Map<String, dynamic>> recordList,
+  required List<RecordInfoClass> recordInfoList,
   required DateTime targetDateTime,
 }) {
-  return recordList.indexWhere(
-    (record) => record['dateTimeKey'] == dateTimeKey(targetDateTime),
+  return recordInfoList.indexWhere(
+    (recordInfo) => recordInfo.dateTimeKey == dateTimeKey(targetDateTime),
   );
 }
 
 RecordInfoClass? getRecordInfo({
-  required List<Map<String, dynamic>> recordList,
+  required List<RecordInfoClass> recordInfoList,
   required DateTime targetDateTime,
 }) {
   int index = getRecordIndex(
-    recordList: recordList,
+    recordInfoList: recordInfoList,
     targetDateTime: targetDateTime,
   );
-  return index != -1 ? RecordInfoClass.fromJson(recordList[index]) : null;
+
+  return index != -1 ? recordInfoList[index] : null;
 }

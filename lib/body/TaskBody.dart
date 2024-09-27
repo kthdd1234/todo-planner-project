@@ -1,62 +1,38 @@
 // ignore_for_file: prefer_const_constructors
+import 'dart:developer';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:project/provider/titleDateTimeProvider.dart';
-import 'package:project/provider/selectedDateTimeProvider.dart';
-import 'package:project/util/final.dart';
-import 'package:project/widget/appBar/TaskAppBar.dart';
+import 'package:project/common/CommonNull.dart';
+import 'package:project/main.dart';
+import 'package:project/provider/UserInfoProvider.dart';
+import 'package:project/util/class.dart';
+import 'package:project/util/func.dart';
 import 'package:project/widget/containerView/MainView.dart';
 import 'package:provider/provider.dart';
-import 'package:table_calendar/table_calendar.dart';
 
-class TaskBody extends StatefulWidget {
+class TaskBody extends StatelessWidget {
   const TaskBody({super.key});
 
   @override
-  State<TaskBody> createState() => _TaskBodyState();
-}
-
-class _TaskBodyState extends State<TaskBody> {
-  CalendarFormat calendarFormat = CalendarFormat.week;
-
-  @override
   Widget build(BuildContext context) {
-    DateTime selectedDateTime =
-        context.watch<SelectedDateTimeProvider>().seletedDateTime;
+    UserInfoClass userInfo = context.watch<UserInfoProvider>().userInfo;
 
-    onHorizontalDragEnd(DragEndDetails dragEndDetails) {
-      double? primaryVelocity = dragEndDetails.primaryVelocity;
+    return StreamBuilder<QuerySnapshot>(
+      stream: groupMethod.stream(),
+      builder: (context, snapshot) {
+        if (!snapshot.hasData) return const CommonNull();
 
-      if (primaryVelocity == null) {
-        return;
-      } else if (primaryVelocity > 0) {
-        selectedDateTime = selectedDateTime.subtract(Duration(days: 1));
-      } else if (primaryVelocity < 0) {
-        selectedDateTime = selectedDateTime.add(Duration(days: 1));
-      }
+        List<GroupInfoClass> groupInfoList = groupMethod.getGroupInfoList(
+          snapshot: snapshot,
+        );
+        groupInfoList = getGroupInfoOrderList(
+          userInfo.groupOrderList,
+          groupInfoList,
+        );
 
-      context
-          .read<SelectedDateTimeProvider>()
-          .changeSelectedDateTime(dateTime: selectedDateTime);
-      context
-          .read<TitleDateTimeProvider>()
-          .changeTitleDateTime(dateTime: selectedDateTime);
-    }
-
-    onCalendarFormat() {
-      setState(() => calendarFormat = nextCalendarFormats[calendarFormat]!);
-    }
-
-    return GestureDetector(
-      onHorizontalDragEnd: onHorizontalDragEnd,
-      child: Column(
-        children: [
-          TaskAppBar(
-            calendarFormat: calendarFormat,
-            onCalendarFormat: onCalendarFormat,
-          ),
-          MainView(calendarFormat: calendarFormat)
-        ],
-      ),
+        return MainView(groupInfoList: groupInfoList);
+      },
     );
   }
 }
