@@ -5,6 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -13,7 +14,7 @@ import 'package:home_widget/home_widget.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
 import 'package:project/method/GroupMethod.dart';
-import 'package:project/etc/TaskMethod.dart';
+import 'package:project/method/MemoMethod.dart';
 import 'package:project/method/UserMethod.dart';
 import 'package:project/page/HomePage.dart';
 import 'package:project/page/IntroPage.dart';
@@ -38,6 +39,9 @@ FirebaseAuth auth = FirebaseAuth.instance;
 
 UserMethod userMethod = UserMethod();
 GroupMethod groupMethod = GroupMethod();
+MemoMethod memoMethod = MemoMethod();
+
+Reference storageRef = FirebaseStorage.instance.ref();
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

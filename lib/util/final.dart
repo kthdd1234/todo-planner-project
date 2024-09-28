@@ -470,3 +470,15 @@ final initUserInfo = UserInfoClass(
   widgetTheme: '',
   groupOrderList: [],
 );
+
+Map<TextAlign, TextAlign> nextTextAlign = {
+  TextAlign.left: TextAlign.center,
+  TextAlign.center: TextAlign.right,
+  TextAlign.right: TextAlign.left
+};
+
+Map<TextAlign, String> textAlignName = {
+  TextAlign.left: 'left',
+  TextAlign.center: 'center',
+  TextAlign.right: 'right'
+};

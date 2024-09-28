@@ -1,19 +1,21 @@
+import 'dart:developer';
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:project/common/CommonContainer.dart';
+import 'package:project/common/CommonImage.dart';
 import 'package:project/common/CommonNull.dart';
 import 'package:project/common/CommonSpace.dart';
 import 'package:project/common/CommonText.dart';
-import 'package:project/page/ImageSlidePage.dart';
+import 'package:project/main.dart';
 import 'package:project/page/MemoSettingPage.dart';
+import 'package:project/provider/selectedDateTimeProvider.dart';
 import 'package:project/provider/themeProvider.dart';
+import 'package:project/util/class.dart';
 import 'package:project/util/constants.dart';
 import 'package:project/util/final.dart';
 import 'package:project/util/func.dart';
 import 'package:project/widget/border/HorizentalBorder.dart';
 import 'package:project/widget/memo/MemoBackground.dart';
-import 'package:project/widget/memo/MemoImage.dart';
-import 'package:project/widget/modalSheet/ImageSelectionModalSheet.dart';
 import 'package:project/widget/modalSheet/MemoModalSheet.dart';
 import 'package:provider/provider.dart';
 
@@ -25,89 +27,115 @@ class MemoView extends StatefulWidget {
 }
 
 class _MemoViewState extends State<MemoView> {
-  onMemoText() {
-    showModalBottomSheet(
-      context: context,
-      builder: (context) => MemoModalSheet(
-        onEdit: () {
-          navigatorPop(context);
+  List<MemoInfoClass> memoInfoList = [];
+  MemoInfoClass? memoInfo;
+  Uint8List? uint8List;
 
-          // Navigator.push(
-          //   context,
-          //   MaterialPageRoute<void>(
-          //     builder: (BuildContext context) => MemoSettingPage(
-          //       recordBox: widget.recordBox,
-          //       initDateTime: widget.selectedDateTime,
-          //     ),
-          //   ),
-          // );
-        },
-        onRemove: () async {
-          // widget.recordBox?.memo = null;
-          // await widget.recordBox?.save();
-
-          // if (isEmptyRecord(widget.recordBox)) {
-          //   await recordRepository.recordBox
-          //       .delete(dateTimeKey(widget.selectedDateTime));
-          // }
-
-          navigatorPop(context);
-        },
-      ),
+  getMemoInfo(DateTime selectedDateTime, List<MemoInfoClass> list) {
+    int index = list.indexWhere(
+      (memoInfo) => memoInfo.dateTimeKey == dateTimeKey(selectedDateTime),
     );
+
+    memoInfo = index != -1 ? list[index] : null;
+
+    if (memoInfo?.imgUrl != null) {
+      getImg(memoInfo!.imgUrl!).then(
+          (uint8ListResult) => setState(() => uint8List = uint8ListResult));
+    }
   }
 
-  onImage(Uint8List uint8List) {
-    // List<Uint8List>? imageList = widget.recordBox?.imageList;
+  memoSnapshotsListener() {
+    List<MemoInfoClass> newMemoInfoList = [];
 
-    // if (imageList != null) {
-    //   showModalBottomSheet(
-    //     isScrollControlled: true,
-    //     context: context,
-    //     builder: (context) => ImageSelectionModalSheet(
-    //       uint8List: uint8List,
-    //       onSlide: () {
-    //         navigatorPop(context);
-    //         Navigator.push(
-    //           context,
-    //           MaterialPageRoute<void>(
-    //             builder: (BuildContext context) => ImageSlidePage(
-    //               curIndex: imageList.indexOf(uint8List),
-    //               uint8ListList: imageList,
-    //             ),
-    //           ),
-    //         );
-    //       },
-    //       onRemove: () async {
-    //         imageList.removeWhere((uint8List_) => uint8List_ == uint8List);
+    memoMethod.memoSnapshots.listen(
+      (event) {
+        WidgetsBinding.instance.addPostFrameCallback(
+          (_) {
+            for (final doc in event.docs) {
+              MemoInfoClass memoInfo = MemoInfoClass.fromJson(
+                doc.data() as Map<String, dynamic>,
+              );
 
-    //         if (imageList.isEmpty) {
-    //           widget.recordBox?.imageList = null;
-    //         }
+              newMemoInfoList.add(memoInfo);
+            }
+          },
+        );
+      },
+    ).onError((err) => log('$err'));
 
-    //         await widget.recordBox?.save();
-    //         navigatorPop(context);
-    //       },
-    //     ),
-    //   );
-    // }
+    setState(() => memoInfoList = newMemoInfoList);
+    return newMemoInfoList;
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    List<MemoInfoClass> newMemoInfoList = memoSnapshotsListener();
+    getMemoInfo(DateTime.now(), newMemoInfoList);
+  }
+
+  @override
+  void didChangeDependencies() {
+    DateTime selectedDateTime =
+        context.watch<SelectedDateTimeProvider>().seletedDateTime;
+
+    getMemoInfo(selectedDateTime, memoInfoList);
+    super.didChangeDependencies();
   }
 
   @override
   Widget build(BuildContext context) {
+    DateTime selectedDateTime =
+        context.watch<SelectedDateTimeProvider>().seletedDateTime;
+
     bool isLight = context.watch<ThemeProvider>().isLight;
-    // bool isText = widget.recordBox?.memo != null;
-    // bool isImageList = widget.recordBox?.imageList != null;
-    // bool isMemo = widget.recordBox != null && (isText || isImageList);
+
     Color containerColor = isLight ? memoBgColor : darkContainerColor;
     Color borderColor = isLight ? orange.s50 : Colors.white10;
 
-    bool isText = false;
-    bool isImageList = false;
-    bool isMemo = false;
+    onMemo() {
+      showModalBottomSheet(
+        context: context,
+        builder: (context) => MemoModalSheet(
+          selectedDateTime: selectedDateTime,
+          onEdit: () {
+            navigatorPop(context);
+            movePage(
+              context: context,
+              page: MemoSettingPage(
+                initDateTime: selectedDateTime,
+                memoInfo: memoInfo,
+              ),
+            );
+          },
+          onRemove: () async {
+            String mid = dateTimeKey(selectedDateTime).toString();
 
-    return isMemo
+            if (memoInfo?.imgUrl != null) {
+              await storageRef.child(memoInfo!.imgUrl!).delete();
+            }
+
+            await memoMethod.removeMemo(mid: mid);
+
+            setState(() {
+              memoInfoList.removeWhere(
+                (memoInfo) =>
+                    memoInfo.dateTimeKey == dateTimeKey(selectedDateTime),
+              );
+              memoInfo = null;
+              uint8List = null;
+            });
+
+            navigatorPop(context);
+          },
+        ),
+      );
+    }
+
+    return memoInfo != null
         ? CommonContainer(
+            onTap: onMemo,
             radius: 0,
             color: containerColor,
             innerPadding: const EdgeInsets.all(0),
@@ -115,9 +143,7 @@ class _MemoViewState extends State<MemoView> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                HorizentalBorder(
-                  colorName: '주황색',
-                ),
+                HorizentalBorder(colorName: '주황색'),
                 CustomPaint(
                   painter: MemoBackground(isLight: isLight, color: orange.s50),
                   child: Padding(
@@ -128,24 +154,23 @@ class _MemoViewState extends State<MemoView> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        isText
-                            ? GestureDetector(
-                                onTap: onMemoText,
-                                child: SizedBox(
-                                  width: MediaQuery.of(context).size.width,
-                                  child: CommonText(
-                                    text: '',
-                                    textAlign: TextAlign.start,
-                                    isBold: !isLight,
-                                    isNotTr: true,
-                                  ),
+                        memoInfo?.imgUrl != null
+                            ? MemoImg(uint8List: uint8List, onTap: onMemo)
+                            : const CommonNull(),
+                        memoInfo?.imgUrl != null && memoInfo?.text != null
+                            ? CommonSpace(height: 10)
+                            : const CommonNull(),
+                        memoInfo?.text != null
+                            ? SizedBox(
+                                width: MediaQuery.of(context).size.width,
+                                child: CommonText(
+                                  text: memoInfo!.text!,
+                                  textAlign: TextAlign.start,
+                                  isBold: !isLight,
+                                  isNotTr: true,
                                 ),
                               )
-                            : const CommonNull(),
-                        CommonSpace(height: isText && isImageList ? 10 : 0),
-                        isImageList
-                            ? MemoImage(uint8ListList: [], onImage: onImage)
-                            : const CommonNull(),
+                            : const CommonNull()
                       ],
                     ),
                   ),
@@ -155,5 +180,34 @@ class _MemoViewState extends State<MemoView> {
             ),
           )
         : const CommonNull();
+  }
+}
+
+class MemoImg extends StatelessWidget {
+  MemoImg({super.key, this.uint8List, required this.onTap});
+
+  Uint8List? uint8List;
+  Function() onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    if (uint8List == null) {
+      return SizedBox(
+        height: 300,
+        child: Center(
+          child: CommonText(
+            text: '이미지 로드 중...',
+            fontSize: 12,
+            color: grey.original,
+          ),
+        ),
+      );
+    }
+
+    return CommonImage(
+      uint8List: uint8List!,
+      height: 300,
+      onTap: (_) => onTap(),
+    );
   }
 }

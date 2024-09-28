@@ -1,6 +1,7 @@
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
+import 'package:project/util/final.dart';
 import 'package:project/util/func.dart';
 
 class AppBarInfoClass {
@@ -507,4 +508,30 @@ class RecordInfoClass {
 
   Map<String, dynamic> toJson() =>
       {'dateTimeKey': dateTimeKey, 'memo': memo, 'mark': mark};
+}
+
+class MemoInfoClass {
+  MemoInfoClass({
+    required this.dateTimeKey,
+    this.imgUrl,
+    this.text,
+    this.textAlign,
+  });
+
+  int dateTimeKey;
+  String? imgUrl, text;
+  TextAlign? textAlign;
+
+  MemoInfoClass.fromJson(Map<String, dynamic> json)
+      : dateTimeKey = json['dateTimeKey'] as int,
+        imgUrl = json['imgUrl'] as String,
+        text = json['text'] as String?,
+        textAlign = stringToTextAlign(json['textAlign']);
+
+  Map<String, dynamic> toJson() => {
+        'dateTimeKey': dateTimeKey,
+        'text': text,
+        'imgUrl': imgUrl,
+        'textAlign': textAlignToString(textAlign)
+      };
 }

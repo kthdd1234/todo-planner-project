@@ -4,15 +4,15 @@ import 'dart:developer';
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:project/common/CommonText.dart';
-import 'package:project/model/group_box/group_box.dart';
+import 'package:project/main.dart';
 import 'package:project/model/record_box/record_box.dart';
-import 'package:project/model/task_box/task_box.dart';
 import 'package:project/model/user_box/user_box.dart';
 import 'package:project/util/class.dart';
 import 'package:project/util/constants.dart';
@@ -90,6 +90,10 @@ String eFormatter({required String locale, required DateTime dateTime}) {
 
 String eeeeFormatter({required String locale, required DateTime dateTime}) {
   return DateFormat.EEEE(locale).format(dateTime);
+}
+
+String hmFormatter({required String locale, required DateTime dateTime}) {
+  return DateFormat.jm(locale).format(dateTime);
 }
 
 ColorClass getColorClass(String? name) {
@@ -561,4 +565,36 @@ RecordInfoClass? getRecordInfo({
   );
 
   return index != -1 ? recordInfoList[index] : null;
+}
+
+String? textAlignToString(TextAlign? textAlign) {
+  Map<TextAlign, String> textAlignToString = {
+    TextAlign.left: TextAlign.left.toString(),
+    TextAlign.center: TextAlign.center.toString(),
+    TextAlign.right: TextAlign.right.toString(),
+  };
+
+  return textAlign != null ? textAlignToString[textAlign] : null;
+}
+
+TextAlign? stringToTextAlign(String? textAlign) {
+  Map<String, TextAlign> stringToTextAlign = {
+    TextAlign.left.toString(): TextAlign.left,
+    TextAlign.center.toString(): TextAlign.center,
+    TextAlign.right.toString(): TextAlign.right,
+  };
+
+  return textAlign != null ? stringToTextAlign[textAlign] : null;
+}
+
+Future<Uint8List?> getImg(String imgUrl) async {
+  try {
+    Reference imgRef = storageRef.child(imgUrl);
+    Uint8List? uint8ListResult = await imgRef.getData();
+
+    return uint8ListResult;
+  } catch (e) {
+    log('$e');
+    return null;
+  }
 }

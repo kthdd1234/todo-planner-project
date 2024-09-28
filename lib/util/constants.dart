@@ -143,8 +143,5 @@ String usersCollection = 'users';
 /// groupsCollection
 String groupsCollection = 'groups';
 
-/// tasksCollection
-String tasksCollection = 'tasks';
-
-/// recordsCollection
-String recordsCollection = 'records';
+/// memosCollection
+String memosCollection = 'memos';

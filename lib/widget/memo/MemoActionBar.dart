@@ -9,6 +9,7 @@ import 'package:project/widget/memo/MemoBackground.dart';
 class MemoActionBar extends StatelessWidget {
   MemoActionBar({
     super.key,
+    required this.textAlign,
     required this.containerColor,
     required this.isLight,
     required this.onImage,
@@ -17,6 +18,7 @@ class MemoActionBar extends StatelessWidget {
     required this.onSave,
   });
 
+  TextAlign textAlign;
   Color containerColor;
   bool isLight;
   Function() onImage, onAlign, onClock, onSave;
@@ -53,7 +55,11 @@ class MemoActionBar extends StatelessWidget {
             children: [
               action(name: 'gallery', width: 20, onTap: onImage),
               CommonSpace(width: 3),
-              action(name: 'align-left', width: 24, onTap: onAlign),
+              action(
+                name: 'align-${textAlignName[textAlign]}',
+                width: 24,
+                onTap: onAlign,
+              ),
               action(name: 'clock', width: 21, onTap: onClock),
               const Spacer(),
               action(name: 'mark-O', width: 18, onTap: onSave),

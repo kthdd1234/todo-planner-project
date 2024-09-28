@@ -1,10 +1,16 @@
 // ignore_for_file: use_build_context_synchronously
 
+import 'dart:developer';
 import 'dart:typed_data';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:project/common/CommonBackground.dart';
 import 'package:project/common/CommonContainer.dart';
+import 'package:project/common/CommonImage.dart';
+import 'package:project/common/CommonNull.dart';
+import 'package:project/main.dart';
+import 'package:project/page/ImageSlidePage.dart';
 import 'package:project/provider/themeProvider.dart';
 import 'package:project/util/constants.dart';
 import 'package:project/widget/border/HorizentalBorder.dart';
@@ -22,42 +28,45 @@ import 'package:project/widget/modalSheet/ImageSelectionModalSheet.dart';
 import 'package:provider/provider.dart';
 
 class MemoSettingPage extends StatefulWidget {
-  MemoSettingPage({super.key, required this.initDateTime});
+  MemoSettingPage({
+    super.key,
+    required this.initDateTime,
+    this.memoInfo,
+  });
 
   DateTime initDateTime;
+  MemoInfoClass? memoInfo;
 
   @override
   State<MemoSettingPage> createState() => _MemoSettingPageState();
 }
 
 class _MemoSettingPageState extends State<MemoSettingPage> {
-  List<Uint8List> uint8ListList = [];
+  Uint8List? uint8List;
   TextEditingController memoContoller = TextEditingController();
   TextAlign textAlign = TextAlign.left;
 
   @override
   void initState() {
-    // RecordBox? recordBox = widget.recordBox;
-    // String? memo = recordBox?.memo ?? '';
-    // List<Uint8List>? imageList = recordBox?.imageList ?? [];
-
-    // memoContoller.text = memo;
-    // uint8ListList = imageList;
-
     super.initState();
+
+    if (widget.memoInfo != null) {
+      memoContoller.text = widget.memoInfo!.text ?? '';
+      textAlign = widget.memoInfo!.textAlign ?? TextAlign.left;
+
+      if (widget.memoInfo!.imgUrl != null) {
+        getImg(widget.memoInfo!.imgUrl!).then(
+            (uint8ListResult) => setState(() => uint8List = uint8ListResult));
+      }
+    }
   }
 
   onImage() {
     showModalBottomSheet(
       context: context,
       builder: (context) => ImageAddModalSheet(
-        uint8ListList: uint8ListList,
-        onCamera: (Uint8List uint8List) {
-          setState(() => uint8ListList.add(uint8List));
-          navigatorPop(context);
-        },
-        onGallery: (List<Uint8List> uint8ListList_) {
-          setState(() => uint8ListList = [...uint8ListList_]);
+        onResult: (Uint8List uint8ListResult) {
+          setState(() => uint8List = uint8ListResult);
           navigatorPop(context);
         },
       ),
@@ -65,47 +74,61 @@ class _MemoSettingPageState extends State<MemoSettingPage> {
   }
 
   onAlign() {
-    //
+    setState(() => textAlign = nextTextAlign[textAlign]!);
   }
 
   onClock() {
-    //
+    String locale = context.locale.toString();
+    DateTime now = DateTime.now();
+    String time = hmFormatter(locale: locale, dateTime: now);
+
+    setState(() => memoContoller.text = '${memoContoller.text}$time');
   }
 
-  onSelectionImage(Uint8List uint8List) {
+  onSelectionImage(Uint8List selectionUint8List) {
     showModalBottomSheet(
       isScrollControlled: true,
       context: context,
       builder: (context) => ImageSelectionModalSheet(
-        uint8List: uint8List,
+        uint8List: selectionUint8List,
         onSlide: () {
           navigatorPop(context);
-          // Navigator.push(
-          //   context,
-          //   MaterialPageRoute<void>(
-          //     builder: (BuildContext context) => ImageSlidePage(
-          //       curIndex: uint8ListList.indexOf(uint8List),
-          //       uint8ListList: uint8ListList,
-          //     ),
-          //   ),
-          // );
+          movePage(
+            context: context,
+            page: ImageSlidePage(
+              uint8ListList: [selectionUint8List],
+              curIndex: 0,
+            ),
+          );
         },
         onRemove: () async {
-          // setState(() {
-          //   uint8ListList.removeWhere((uint8List_) => uint8List_ == uint8List);
-          //   if (uint8ListList.isEmpty) widget.recordBox?.imageList = null;
-
-          //   widget.recordBox?.save();
-          // });
-
+          setState(() => uint8List = null);
           navigatorPop(context);
         },
       ),
     );
   }
 
+  Future<String?> onImgUrl(String? mid) async {
+    String uid = auth.currentUser!.uid;
+
+    if (uint8List != null) {
+      try {
+        String path = '$uid/$mid/img.jpg';
+        TaskSnapshot result = await storageRef.child(path).putData(uint8List!);
+
+        return result.state == TaskState.success ? path : null;
+      } catch (e) {
+        log('$e');
+        return null;
+      }
+    }
+
+    return null;
+  }
+
   onSave() async {
-    bool isEmpty = uint8ListList.isEmpty && memoContoller.text == '';
+    bool isEmpty = uint8List == null && memoContoller.text == '';
 
     if (isEmpty) {
       showDialog(
@@ -118,24 +141,31 @@ class _MemoSettingPageState extends State<MemoSettingPage> {
         ),
       );
     } else {
-      String? memo = memoContoller.text != '' ? memoContoller.text : null;
-      // List<Uint8List>? imageList =
-      //     uint8ListList.isNotEmpty ? uint8ListList : null;
-      // if (widget.recordBox == null) {
-      //   recordRepository.updateRecord(
-      //     key: dateTimeKey(widget.initDateTime),
-      //     record: RecordBox(
-      //       createDateTime: widget.initDateTime,
-      //       memo: memo,
-      //       imageList: imageList,
-      //     ),
-      //   );
-      // } else {
-      //   widget.recordBox!.memo = memo;
-      //   widget.recordBox!.imageList = imageList;
+      String mid = dateTimeKey(widget.initDateTime).toString();
+      String? text = memoContoller.text != '' ? memoContoller.text : null;
+      String? imgUrl = await onImgUrl(mid);
 
-      //   await widget.recordBox!.save();
-      // }
+      if (widget.memoInfo == null) {
+        await memoMethod.addMemo(
+          mid: mid,
+          memoInfo: MemoInfoClass(
+            dateTimeKey: dateTimeKey(widget.initDateTime),
+            imgUrl: imgUrl,
+            text: text,
+            textAlign: textAlign,
+          ),
+        );
+      } else {
+        if (widget.memoInfo!.imgUrl != null && uint8List == null) {
+          storageRef.child(widget.memoInfo!.imgUrl!);
+        }
+
+        widget.memoInfo!.text = text;
+        widget.memoInfo!.imgUrl = imgUrl;
+        widget.memoInfo!.textAlign = textAlign;
+
+        await memoMethod.updateMemo(mid: mid, memoInfo: widget.memoInfo!);
+      }
 
       navigatorPop(context);
     }
@@ -159,6 +189,7 @@ class _MemoSettingPageState extends State<MemoSettingPage> {
         ),
         body: Column(
           children: [
+            HorizentalBorder(colorName: '주황색'),
             Expanded(
               child: CommonContainer(
                 innerPadding: const EdgeInsets.all(0),
@@ -180,13 +211,23 @@ class _MemoSettingPageState extends State<MemoSettingPage> {
                             ),
                             child: ListView(
                               children: [
-                                MemoImage(
-                                  uint8ListList: uint8ListList,
-                                  onImage: onSelectionImage,
-                                ),
+                                uint8List != null
+                                    ? Padding(
+                                        padding: const EdgeInsets.only(
+                                          bottom: 10,
+                                        ),
+                                        child: CommonImage(
+                                          uint8List: uint8List!,
+                                          height: 250,
+                                          onTap: onSelectionImage,
+                                        ),
+                                      )
+                                    : const CommonNull(),
                                 MemoField(
                                   controller: memoContoller,
                                   cursorColor: cursorColor,
+                                  textAlign: textAlign,
+                                  fontSize: 14,
                                   onChanged: (_) {},
                                 ),
                               ],
@@ -195,19 +236,20 @@ class _MemoSettingPageState extends State<MemoSettingPage> {
                         ),
                       ),
                     ),
-                    HorizentalBorder(colorName: '주황색'),
                   ],
                 ),
               ),
             ),
             MemoActionBar(
               containerColor: containerColor,
+              textAlign: textAlign,
               isLight: isLight,
               onImage: onImage,
               onAlign: onAlign,
               onClock: onClock,
               onSave: onSave,
-            )
+            ),
+            HorizentalBorder(colorName: '주황색'),
           ],
         ),
       ),

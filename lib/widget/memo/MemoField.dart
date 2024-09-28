@@ -19,6 +19,7 @@ class MemoField extends StatelessWidget {
     this.textInputAction,
     this.hintText,
     this.contentPadding,
+    this.textAlign,
   });
 
   String? hintText;
@@ -28,6 +29,7 @@ class MemoField extends StatelessWidget {
   TextInputAction? textInputAction;
   EdgeInsets? contentPadding;
   Color? cursorColor;
+  TextAlign? textAlign;
   Function(String) onChanged;
   Function()? onEditingComplete;
 
@@ -42,6 +44,7 @@ class MemoField extends StatelessWidget {
       minLines: null,
       cursorColor: cursorColor,
       textInputAction: textInputAction ?? TextInputAction.newline,
+      textAlign: textAlign ?? TextAlign.left,
       style: TextStyle(
         fontSize: fontSize,
         color: isLight ? Colors.black : darkTextColor,
