@@ -26,12 +26,16 @@ class CalendarView extends StatefulWidget {
   CalendarView({
     super.key,
     required this.selectedSegment,
-    required this.selectedGroupId,
+    required this.groupInfoList,
+    required this.memoInfoList,
+    required this.selectedGroupInfoIndex,
     this.todayColor,
   });
 
   SegmentedTypeEnum selectedSegment;
-  String selectedGroupId;
+  List<GroupInfoClass> groupInfoList;
+  List<MemoInfoClass> memoInfoList;
+  int selectedGroupInfoIndex;
   Color? todayColor;
 
   @override
@@ -52,9 +56,9 @@ class _CalendarViewState extends State<CalendarView> {
   }
 
   Widget? todayBuilder(bool isLight, DateTime dateTime) {
-    GroupBox? selectedGroup =
-        groupRepository.groupBox.get(widget.selectedGroupId);
-    Color todayColor = getColorClass(selectedGroup?.colorName ?? '남색').s200;
+    GroupInfoClass groupInfo =
+        widget.groupInfoList[widget.selectedGroupInfoIndex];
+    Color color = getColorClass(groupInfo.colorName).s200;
 
     return Column(
       children: [
@@ -66,7 +70,7 @@ class _CalendarViewState extends State<CalendarView> {
               width: 27.5,
               height: 27.5,
               decoration: BoxDecoration(
-                color: isLight ? todayColor : calendarSelectedDateTimeBgColor,
+                color: isLight ? color : calendarSelectedDateTimeBgColor,
                 borderRadius: BorderRadius.circular(100),
               ),
             ),
@@ -84,42 +88,46 @@ class _CalendarViewState extends State<CalendarView> {
 
   Widget? barBuilder(bool isLight, DateTime dateTime) {
     String locale = context.locale.toString();
-    // int recordKey = dateTimeKey(dateTime);
-    // RecordBox? recordBox = recordRepository.recordBox.get(recordKey);
-    // List<TaskBox> taskList = getTaskList(
-    //   groupId: widget.selectedGroupId,
-    //   locale: locale,
-    //   taskList: taskRepository.taskList,
-    //   targetDateTime: dateTime,
-    // );
 
-    Color? highlighterColor(TaskBox taskBox) {
-      ColorClass color = getColorClass(taskBox.colorName);
-      String? mark =
-          getRecordInfo(recordInfoList: [], targetDateTime: dateTime)?.mark;
+    GroupInfoClass groupInfo =
+        widget.groupInfoList[widget.selectedGroupInfoIndex];
+    ColorClass color = getColorClass(groupInfo.colorName);
+    List<TaskInfoClass> taskInfoList = getTaskInfoList(
+      locale: locale,
+      groupInfo: groupInfo,
+      targetDateTime: dateTime,
+    );
 
-      return mark != null && mark != 'E'
+    Color? highlighterColor(TaskInfoClass taskInfo) {
+      RecordInfoClass? recordInfo = getRecordInfo(
+        recordInfoList: taskInfo.recordInfoList,
+        targetDateTime: dateTime,
+      );
+
+      bool isHighlighter = recordInfo?.mark != null && recordInfo?.mark != 'E';
+
+      return isHighlighter
           ? isLight
               ? color.s50
               : color.original
           : null;
     }
 
-    return [].isNotEmpty
+    return taskInfoList.isNotEmpty
         ? Padding(
             padding: const EdgeInsets.only(top: 40, right: 5, left: 5),
             child: Container(
               alignment: Alignment.topCenter,
               child: SingleChildScrollView(
                 child: Column(
-                  children: []
+                  children: taskInfoList
                       .map(
-                        (task) => IntrinsicHeight(
+                        (taskInfo) => IntrinsicHeight(
                           child: Padding(
                             padding: const EdgeInsets.only(bottom: 3),
                             child: Container(
                               decoration: BoxDecoration(
-                                color: highlighterColor(task),
+                                color: highlighterColor(taskInfo),
                                 borderRadius: BorderRadius.circular(3),
                               ),
                               child: Row(
@@ -129,14 +137,12 @@ class _CalendarViewState extends State<CalendarView> {
                                     child: VerticalBorder(
                                       width: 2,
                                       right: 3,
-                                      color: isLight
-                                          ? getColorClass(task.colorName).s200
-                                          : getColorClass(task.colorName).s300,
+                                      color: isLight ? color.s200 : color.s300,
                                     ),
                                   ),
                                   Flexible(
                                     child: CommonText(
-                                      text: task.name,
+                                      text: taskInfo.name,
                                       overflow: TextOverflow.clip,
                                       isBold: !isLight,
                                       fontSize: 9,
@@ -160,9 +166,9 @@ class _CalendarViewState extends State<CalendarView> {
   }
 
   Widget? memoBuilder(bool isLight, DateTime dateTime) {
-    int recordKey = dateTimeKey(dateTime);
-    RecordBox? recordBox = recordRepository.recordBox.get(recordKey);
-    List<Uint8List>? imageList = recordBox?.imageList ?? [];
+    // int recordKey = dateTimeKey(dateTime);
+    // RecordBox? recordBox = recordRepository.recordBox.get(recordKey);
+    // List<Uint8List>? imageList = recordBox?.imageList ?? [];
 
     if (imageList.isNotEmpty) {
       return Padding(

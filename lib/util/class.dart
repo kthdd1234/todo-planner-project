@@ -513,23 +513,26 @@ class RecordInfoClass {
 class MemoInfoClass {
   MemoInfoClass({
     required this.dateTimeKey,
+    this.path,
     this.imgUrl,
     this.text,
     this.textAlign,
   });
 
   int dateTimeKey;
-  String? imgUrl, text;
+  String? path, imgUrl, text;
   TextAlign? textAlign;
 
   MemoInfoClass.fromJson(Map<String, dynamic> json)
       : dateTimeKey = json['dateTimeKey'] as int,
-        imgUrl = json['imgUrl'] as String,
+        path = json['path'] as String?,
+        imgUrl = json['imgUrl'] as String?,
         text = json['text'] as String?,
         textAlign = stringToTextAlign(json['textAlign']);
 
   Map<String, dynamic> toJson() => {
         'dateTimeKey': dateTimeKey,
+        'path': path,
         'text': text,
         'imgUrl': imgUrl,
         'textAlign': textAlignToString(textAlign)

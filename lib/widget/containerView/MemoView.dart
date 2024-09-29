@@ -1,13 +1,12 @@
-import 'dart:developer';
-import 'dart:typed_data';
 import 'package:flutter/material.dart';
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:project/common/CommonContainer.dart';
-import 'package:project/common/CommonImage.dart';
 import 'package:project/common/CommonNull.dart';
 import 'package:project/common/CommonSpace.dart';
 import 'package:project/common/CommonText.dart';
 import 'package:project/main.dart';
 import 'package:project/page/MemoSettingPage.dart';
+import 'package:project/provider/MemoInfoListProvider.dart';
 import 'package:project/provider/selectedDateTimeProvider.dart';
 import 'package:project/provider/themeProvider.dart';
 import 'package:project/util/class.dart';
@@ -16,83 +15,33 @@ import 'package:project/util/final.dart';
 import 'package:project/util/func.dart';
 import 'package:project/widget/border/HorizentalBorder.dart';
 import 'package:project/widget/memo/MemoBackground.dart';
+import 'package:project/widget/memo/MemoImage.dart';
 import 'package:project/widget/modalSheet/MemoModalSheet.dart';
 import 'package:provider/provider.dart';
 
 class MemoView extends StatefulWidget {
-  MemoView({super.key});
+  MemoView({super.key, required this.memoInfoList});
+
+  List<MemoInfoClass> memoInfoList;
 
   @override
   State<MemoView> createState() => _MemoViewState();
 }
 
 class _MemoViewState extends State<MemoView> {
-  List<MemoInfoClass> memoInfoList = [];
-  MemoInfoClass? memoInfo;
-  Uint8List? uint8List;
-
-  getMemoInfo(DateTime selectedDateTime, List<MemoInfoClass> list) {
-    int index = list.indexWhere(
-      (memoInfo) => memoInfo.dateTimeKey == dateTimeKey(selectedDateTime),
-    );
-
-    memoInfo = index != -1 ? list[index] : null;
-
-    if (memoInfo?.imgUrl != null) {
-      getImg(memoInfo!.imgUrl!).then(
-          (uint8ListResult) => setState(() => uint8List = uint8ListResult));
-    }
-  }
-
-  memoSnapshotsListener() {
-    List<MemoInfoClass> newMemoInfoList = [];
-
-    memoMethod.memoSnapshots.listen(
-      (event) {
-        WidgetsBinding.instance.addPostFrameCallback(
-          (_) {
-            for (final doc in event.docs) {
-              MemoInfoClass memoInfo = MemoInfoClass.fromJson(
-                doc.data() as Map<String, dynamic>,
-              );
-
-              newMemoInfoList.add(memoInfo);
-            }
-          },
-        );
-      },
-    ).onError((err) => log('$err'));
-
-    setState(() => memoInfoList = newMemoInfoList);
-    return newMemoInfoList;
-  }
-
-  @override
-  void initState() {
-    super.initState();
-
-    List<MemoInfoClass> newMemoInfoList = memoSnapshotsListener();
-    getMemoInfo(DateTime.now(), newMemoInfoList);
-  }
-
-  @override
-  void didChangeDependencies() {
-    DateTime selectedDateTime =
-        context.watch<SelectedDateTimeProvider>().seletedDateTime;
-
-    getMemoInfo(selectedDateTime, memoInfoList);
-    super.didChangeDependencies();
-  }
-
   @override
   Widget build(BuildContext context) {
+    bool isLight = context.watch<ThemeProvider>().isLight;
     DateTime selectedDateTime =
         context.watch<SelectedDateTimeProvider>().seletedDateTime;
-
-    bool isLight = context.watch<ThemeProvider>().isLight;
 
     Color containerColor = isLight ? memoBgColor : darkContainerColor;
     Color borderColor = isLight ? orange.s50 : Colors.white10;
+
+    int index = widget.memoInfoList.indexWhere(
+      (memoInfo) => memoInfo.dateTimeKey == dateTimeKey(selectedDateTime),
+    );
+    MemoInfoClass? memoInfo = index != -1 ? widget.memoInfoList[index] : null;
 
     onMemo() {
       showModalBottomSheet(
@@ -113,18 +62,18 @@ class _MemoViewState extends State<MemoView> {
             String mid = dateTimeKey(selectedDateTime).toString();
 
             if (memoInfo?.imgUrl != null) {
+              await DefaultCacheManager().removeFile(memoInfo!.imgUrl!);
               await storageRef.child(memoInfo!.imgUrl!).delete();
             }
 
             await memoMethod.removeMemo(mid: mid);
 
             setState(() {
-              memoInfoList.removeWhere(
+              widget.memoInfoList.removeWhere(
                 (memoInfo) =>
                     memoInfo.dateTimeKey == dateTimeKey(selectedDateTime),
               );
               memoInfo = null;
-              uint8List = null;
             });
 
             navigatorPop(context);
@@ -155,7 +104,10 @@ class _MemoViewState extends State<MemoView> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         memoInfo?.imgUrl != null
-                            ? MemoImg(uint8List: uint8List, onTap: onMemo)
+                            ? MemoImage(
+                                imageUrl: memoInfo?.imgUrl,
+                                onTap: onMemo,
+                              )
                             : const CommonNull(),
                         memoInfo?.imgUrl != null && memoInfo?.text != null
                             ? CommonSpace(height: 10)
@@ -165,7 +117,8 @@ class _MemoViewState extends State<MemoView> {
                                 width: MediaQuery.of(context).size.width,
                                 child: CommonText(
                                   text: memoInfo!.text!,
-                                  textAlign: TextAlign.start,
+                                  textAlign:
+                                      memoInfo?.textAlign ?? TextAlign.left,
                                   isBold: !isLight,
                                   isNotTr: true,
                                 ),
@@ -180,34 +133,5 @@ class _MemoViewState extends State<MemoView> {
             ),
           )
         : const CommonNull();
-  }
-}
-
-class MemoImg extends StatelessWidget {
-  MemoImg({super.key, this.uint8List, required this.onTap});
-
-  Uint8List? uint8List;
-  Function() onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    if (uint8List == null) {
-      return SizedBox(
-        height: 300,
-        child: Center(
-          child: CommonText(
-            text: '이미지 로드 중...',
-            fontSize: 12,
-            color: grey.original,
-          ),
-        ),
-      );
-    }
-
-    return CommonImage(
-      uint8List: uint8List!,
-      height: 300,
-      onTap: (_) => onTap(),
-    );
   }
 }

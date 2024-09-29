@@ -18,6 +18,8 @@ import 'package:project/method/MemoMethod.dart';
 import 'package:project/method/UserMethod.dart';
 import 'package:project/page/HomePage.dart';
 import 'package:project/page/IntroPage.dart';
+import 'package:project/provider/GroupInfoListProvider.dart';
+import 'package:project/provider/MemoInfoListProvider.dart';
 import 'package:project/provider/PremiumProvider.dart';
 import 'package:project/provider/ReloadProvider.dart';
 import 'package:project/provider/UserInfoProvider.dart';
@@ -71,6 +73,8 @@ void main() async {
         ChangeNotifierProvider(create: (context) => ThemeProvider()),
         ChangeNotifierProvider(create: (context) => ReloadProvider()),
         ChangeNotifierProvider(create: (context) => UserInfoProvider()),
+        ChangeNotifierProvider(create: (context) => GroupInfoListProvider()),
+        ChangeNotifierProvider(create: (context) => MemoInfoListProvider()),
       ],
       child: EasyLocalization(
         supportedLocales: const [Locale('ko'), Locale('en'), Locale('ja')],

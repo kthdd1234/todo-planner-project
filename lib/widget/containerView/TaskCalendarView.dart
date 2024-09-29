@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:project/common/CommonCalendar.dart';
-import 'package:project/model/user_box/user_box.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:project/common/CommonCircle.dart';
 import 'package:project/common/CommonSpace.dart';
 import 'package:project/provider/selectedDateTimeProvider.dart';
 import 'package:project/provider/titleDateTimeProvider.dart';
 import 'package:project/util/class.dart';
-import 'package:project/util/final.dart';
 import 'package:project/util/func.dart';
 import 'package:provider/provider.dart';
 import 'package:table_calendar/table_calendar.dart';
@@ -17,10 +15,12 @@ class TaskCalendarView extends StatefulWidget {
     super.key,
     required this.groupInfoList,
     required this.calendarFormat,
+    required this.onFormatChanged,
   });
 
   List<GroupInfoClass> groupInfoList;
   CalendarFormat calendarFormat;
+  Function() onFormatChanged;
 
   @override
   State<TaskCalendarView> createState() => _TaskCalendarViewState();
@@ -39,36 +39,35 @@ class _TaskCalendarViewState extends State<TaskCalendarView> {
         .changeTitleDateTime(dateTime: dateTime);
   }
 
-  onFormatChanged(CalendarFormat calendarFormat) async {
-    String month = CalendarFormat.month.toString();
-    String twoWeeks = CalendarFormat.twoWeeks.toString();
-    String week = CalendarFormat.week.toString();
-    String nextFormat = {
-      month: week,
-      twoWeeks: month,
-      week: month,
-    }[calendarFormat.toString()]!;
+  // onFormatChanged(CalendarFormat calendarFormat) async {
 
-    UserBox? user = userRepository.user;
-    user.calendarFormat = nextFormat;
+  // String month = CalendarFormat.month.toString();
+  // String twoWeeks = CalendarFormat.twoWeeks.toString();
+  // String week = CalendarFormat.week.toString();
+  // String nextFormat = {
+  //   month: week,
+  //   twoWeeks: month,
+  //   week: month,
+  // }[calendarFormat.toString()]!;
 
-    await user.save();
-  }
+  // UserBox? user = userRepository.user;
+  // user.calendarFormat = nextFormat;
+
+  // await user.save();
+  // }
 
   Widget? stickerBuilder(bool isLight, DateTime dateTime) {
     String locale = context.locale.toString();
     List<ColorClass?> colorList = [];
 
     for (var groupInfo in widget.groupInfoList) {
-      List<TaskInfoClass> taskList = getTaskList(
-        groupId: groupInfo.gid,
+      List<TaskInfoClass> taskInfoList = getTaskInfoList(
         locale: locale,
-        taskInfoList: groupInfo.taskInfoList,
+        groupInfo: groupInfo,
         targetDateTime: dateTime,
-        taskOrderList: [],
       );
 
-      bool isRecord = taskList.any((taskInfo) {
+      bool isRecord = taskInfoList.any((taskInfo) {
         return taskInfo.recordInfoList.any((record) =>
             (record.dateTimeKey == dateTimeKey(dateTime)) &&
             (record.mark != null));
@@ -124,7 +123,7 @@ class _TaskCalendarViewState extends State<TaskCalendarView> {
       markerBuilder: stickerBuilder,
       onPageChanged: onPageChanged,
       onDaySelected: onDaySelected,
-      onFormatChanged: onFormatChanged,
+      onFormatChanged: (_) => widget.onFormatChanged(),
     );
   }
 }

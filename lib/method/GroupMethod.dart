@@ -10,6 +10,16 @@ class GroupMethod {
   String uid = auth.currentUser!.uid;
 
   Stream<QuerySnapshot> stream() {
+    log('GroupMethod stream');
+
+    return firestore
+        .collection(usersCollection)
+        .doc(uid)
+        .collection(groupsCollection)
+        .snapshots();
+  }
+
+  Stream<QuerySnapshot> get groupSnapshots {
     return firestore
         .collection(usersCollection)
         .doc(uid)

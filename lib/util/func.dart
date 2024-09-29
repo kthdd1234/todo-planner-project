@@ -8,6 +8,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:project/common/CommonText.dart';
@@ -104,14 +105,12 @@ ColorClass getColorClass(String? name) {
   return colorList.firstWhere((info) => info.colorName == name);
 }
 
-List<TaskInfoClass> getTaskList({
-  required String groupId,
+List<TaskInfoClass> getTaskInfoList({
   required String locale,
-  required List<TaskInfoClass> taskInfoList,
+  required GroupInfoClass groupInfo,
   required DateTime targetDateTime,
-  required List<String>? taskOrderList,
 }) {
-  List<TaskInfoClass> taskFilterList = taskInfoList.where((task) {
+  List<TaskInfoClass> taskFilterList = groupInfo.taskInfoList.where((task) {
     List<DateTime> dateTimeList = task.dateTimeList;
 
     if (task.dateTimeType == taskDateTimeType.selection) {
@@ -132,17 +131,22 @@ List<TaskInfoClass> getTaskList({
     }
   }).toList();
 
-  if (taskOrderList != null) {
-    taskFilterList.sort((taskA, taskB) {
-      int indexA = taskOrderList.indexOf(taskA.tid);
-      int indexB = taskOrderList.indexOf(taskB.tid);
+  List<TaskOrderClass> taskOrderList = groupInfo.taskOrderList;
 
-      indexA = indexA == -1 ? 999999 : indexA;
-      indexB = indexB == -1 ? 999999 : indexB;
+  int index = taskOrderList.indexWhere(
+    (taskOrder) => taskOrder.dateTimeKey == dateTimeKey(targetDateTime),
+  );
+  List<String> taskOrderIdList = index != -1 ? taskOrderList[index].list : [];
 
-      return indexA.compareTo(indexB);
-    });
-  }
+  taskFilterList.sort((taskA, taskB) {
+    int indexA = taskOrderIdList.indexOf(taskA.tid);
+    int indexB = taskOrderIdList.indexOf(taskB.tid);
+
+    indexA = indexA == -1 ? 999999 : indexA;
+    indexB = indexB == -1 ? 999999 : indexB;
+
+    return indexA.compareTo(indexB);
+  });
 
   return taskFilterList;
 }
@@ -587,14 +591,27 @@ TextAlign? stringToTextAlign(String? textAlign) {
   return textAlign != null ? stringToTextAlign[textAlign] : null;
 }
 
-Future<Uint8List?> getImg(String imgUrl) async {
+Future<String?> getDownloadUrl(String imgUrl) async {
   try {
     Reference imgRef = storageRef.child(imgUrl);
-    Uint8List? uint8ListResult = await imgRef.getData();
-
-    return uint8ListResult;
+    return await imgRef.getDownloadURL();
   } catch (e) {
     log('$e');
     return null;
   }
+}
+
+Future<Uint8List> getCacheData(String url) async {
+  File file = await DefaultCacheManager().getSingleFile(url);
+  return file.readAsBytes();
+}
+
+String getImagePath(String mid) {
+  String uid = auth.currentUser!.uid;
+  return '$uid/$mid/img.jpg';
+}
+
+Future<void> removeImage({required String imgUrl, required String path}) async {
+  await DefaultCacheManager().removeFile(imgUrl);
+  await storageRef.child(path).delete();
 }

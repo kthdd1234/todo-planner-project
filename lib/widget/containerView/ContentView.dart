@@ -54,19 +54,10 @@ class ContentView extends StatelessWidget {
     String locale = context.locale.toString();
     DateTime selectedDateTime =
         context.watch<SelectedDateTimeProvider>().seletedDateTime;
-    int index = groupInfo.taskOrderList.indexWhere(
-      (taskOrder) => taskOrder.dateTimeKey == dateTimeKey(selectedDateTime),
-    );
-
-    List<String>? taskOrderList =
-        index != -1 ? groupInfo.taskOrderList[index].list : null;
-
-    List<TaskInfoClass> taskInfoList = getTaskList(
+    List<TaskInfoClass> taskInfoList = getTaskInfoList(
       locale: locale,
-      groupId: groupInfo.gid,
-      taskInfoList: groupInfo.taskInfoList,
+      groupInfo: groupInfo,
       targetDateTime: selectedDateTime,
-      taskOrderList: taskOrderList,
     );
 
     return ReorderableListView.builder(

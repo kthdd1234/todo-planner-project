@@ -17,7 +17,6 @@ import 'package:project/widget/border/HorizentalBorder.dart';
 import 'package:project/widget/memo/MemoActionBar.dart';
 import 'package:project/widget/memo/MemoBackground.dart';
 import 'package:project/widget/memo/MemoField.dart';
-import 'package:project/widget/memo/MemoImage.dart';
 import 'package:project/widget/popup/AlertPopup.dart';
 import 'package:project/common/CommonScaffold.dart';
 import 'package:project/util/class.dart';
@@ -45,6 +44,7 @@ class _MemoSettingPageState extends State<MemoSettingPage> {
   Uint8List? uint8List;
   TextEditingController memoContoller = TextEditingController();
   TextAlign textAlign = TextAlign.left;
+  bool isLoading = false;
 
   @override
   void initState() {
@@ -55,7 +55,7 @@ class _MemoSettingPageState extends State<MemoSettingPage> {
       textAlign = widget.memoInfo!.textAlign ?? TextAlign.left;
 
       if (widget.memoInfo!.imgUrl != null) {
-        getImg(widget.memoInfo!.imgUrl!).then(
+        getCacheData(widget.memoInfo!.imgUrl!).then(
             (uint8ListResult) => setState(() => uint8List = uint8ListResult));
       }
     }
@@ -109,19 +109,20 @@ class _MemoSettingPageState extends State<MemoSettingPage> {
     );
   }
 
-  Future<String?> onImgUrl(String? mid) async {
-    String uid = auth.currentUser!.uid;
+  onLoading(bool newValue) {
+    setState(() => isLoading = newValue);
+  }
 
+  onImgUrl(String mid) async {
     if (uint8List != null) {
-      try {
-        String path = '$uid/$mid/img.jpg';
-        TaskSnapshot result = await storageRef.child(path).putData(uint8List!);
+      String path = getImagePath(mid);
+      TaskSnapshot result = await storageRef.child(path).putData(uint8List!);
+      String? imgUrl = await getDownloadUrl(path);
 
-        return result.state == TaskState.success ? path : null;
-      } catch (e) {
-        log('$e');
-        return null;
-      }
+      bool isSuccess = result.state == TaskState.success;
+      bool isImgUrl = imgUrl != null;
+
+      return isSuccess && isImgUrl ? imgUrl : null;
     }
 
     return null;
@@ -141,33 +142,50 @@ class _MemoSettingPageState extends State<MemoSettingPage> {
         ),
       );
     } else {
-      String mid = dateTimeKey(widget.initDateTime).toString();
-      String? text = memoContoller.text != '' ? memoContoller.text : null;
-      String? imgUrl = await onImgUrl(mid);
+      try {
+        onLoading(true);
 
-      if (widget.memoInfo == null) {
-        await memoMethod.addMemo(
-          mid: mid,
-          memoInfo: MemoInfoClass(
-            dateTimeKey: dateTimeKey(widget.initDateTime),
-            imgUrl: imgUrl,
-            text: text,
-            textAlign: textAlign,
-          ),
-        );
-      } else {
-        if (widget.memoInfo!.imgUrl != null && uint8List == null) {
-          storageRef.child(widget.memoInfo!.imgUrl!);
+        String mid = dateTimeKey(widget.initDateTime).toString();
+        String? text = memoContoller.text != '' ? memoContoller.text : null;
+        String? path = uint8List != null ? getImagePath(mid) : null;
+        String? imgUrl = await onImgUrl(mid);
+
+        if (widget.memoInfo == null) {
+          await memoMethod.addMemo(
+            mid: mid,
+            memoInfo: MemoInfoClass(
+              dateTimeKey: dateTimeKey(widget.initDateTime),
+              path: path,
+              imgUrl: imgUrl,
+              text: text,
+              textAlign: textAlign,
+            ),
+          );
+        } else {
+          bool isUrl =
+              widget.memoInfo!.imgUrl != null && widget.memoInfo!.path != null;
+
+          if (isUrl && uint8List == null) {
+            await removeImage(
+              imgUrl: widget.memoInfo!.imgUrl!,
+              path: widget.memoInfo!.path!,
+            );
+          }
+
+          widget.memoInfo!.text = text;
+          widget.memoInfo!.path = path;
+          widget.memoInfo!.imgUrl = imgUrl;
+          widget.memoInfo!.textAlign = textAlign;
+
+          await memoMethod.updateMemo(mid: mid, memoInfo: widget.memoInfo!);
+
+          onLoading(false);
         }
-
-        widget.memoInfo!.text = text;
-        widget.memoInfo!.imgUrl = imgUrl;
-        widget.memoInfo!.textAlign = textAlign;
-
-        await memoMethod.updateMemo(mid: mid, memoInfo: widget.memoInfo!);
+      } catch (e) {
+        log('errorCode =>> $e');
+      } finally {
+        navigatorPop(context);
       }
-
-      navigatorPop(context);
     }
   }
 
@@ -244,6 +262,7 @@ class _MemoSettingPageState extends State<MemoSettingPage> {
               containerColor: containerColor,
               textAlign: textAlign,
               isLight: isLight,
+              isLoading: isLoading,
               onImage: onImage,
               onAlign: onAlign,
               onClock: onClock,

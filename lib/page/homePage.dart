@@ -8,6 +8,8 @@ import 'package:project/body/TaskBody.dart';
 import 'package:project/common/CommonBackground.dart';
 import 'package:project/common/CommonScaffold.dart';
 import 'package:project/main.dart';
+import 'package:project/provider/GroupInfoListProvider.dart';
+import 'package:project/provider/MemoInfoListProvider.dart';
 import 'package:project/provider/PremiumProvider.dart';
 import 'package:project/provider/UserInfoProvider.dart';
 import 'package:project/provider/titleDateTimeProvider.dart';
@@ -57,10 +59,58 @@ class _HomePageState extends State<HomePage> {
     ).onError((err) => log('$err'));
   }
 
+  initializeGroupInfoList() {
+    groupMethod.groupSnapshots.listen((event) {
+      WidgetsBinding.instance.addPostFrameCallback(
+        (_) {
+          List<GroupInfoClass> groupInfoList = [];
+
+          for (final doc in event.docs) {
+            GroupInfoClass groupInfo = GroupInfoClass.fromJson(
+              doc.data() as Map<String, dynamic>,
+            );
+
+            groupInfoList.add(groupInfo);
+          }
+
+          context
+              .read<GroupInfoListProvider>()
+              .changeGroupInfoList(newGroupInfoList: groupInfoList);
+        },
+      );
+    }).onError((err) => log('$err'));
+  }
+
+  initializeMemoInfoList() {
+    memoMethod.memoSnapshots.listen(
+      (event) {
+        WidgetsBinding.instance.addPostFrameCallback(
+          (_) {
+            List<MemoInfoClass> memoInfoList = [];
+
+            for (final doc in event.docs) {
+              MemoInfoClass memoInfo = MemoInfoClass.fromJson(
+                doc.data() as Map<String, dynamic>,
+              );
+
+              memoInfoList.add(memoInfo);
+            }
+
+            context
+                .read<MemoInfoListProvider>()
+                .changeMemoInfoList(newMemoInfoList: memoInfoList);
+          },
+        );
+      },
+    ).onError((err) => log('$err'));
+  }
+
   @override
   void initState() {
     initializePremium();
     initializeUserInfo();
+    initializeGroupInfoList();
+    initializeMemoInfoList();
 
     super.initState();
   }
@@ -107,36 +157,3 @@ class _HomePageState extends State<HomePage> {
     );
   }
 }
-
-  // initializeHiveDB() async {
-  //   UserBox? user = userRepository.user;
-  //   List<GroupBox> groupList = groupRepository.groupList;
-  //   String groupId = uuid();
-
-  //   if (groupList.isEmpty) {
-  //     groupRepository.addGroup(
-  //       GroupBox(
-  //         createDateTime: DateTime.now(),
-  //         id: groupId,
-  //         name: getGroupName(widget.locale),
-  //         colorName: '남색',
-  //         isOpen: true,
-  //       ),
-  //     );
-  //   }
-
-  //   if (mounted) {
-  //     user.theme ??= 'light';
-  //     user.widgetTheme ??= 'light';
-  //     user.filterIdList ??= filterIdList;
-  //     user.background ??= '0';
-  //     user.appStartIndex ??= 0;
-  //     user.groupOrderList ??= [groupId];
-
-  //     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-  //       context.read<ThemeProvider>().setThemeValue(user.theme!);
-  //     });
-  //   }
-
-  //   await user.save();
-  // }

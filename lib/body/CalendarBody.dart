@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:multi_value_listenable_builder/multi_value_listenable_builder.dart';
+import 'package:project/provider/GroupInfoListProvider.dart';
+import 'package:project/provider/MemoInfoListProvider.dart';
+import 'package:project/provider/UserInfoProvider.dart';
 import 'package:project/provider/selectedDateTimeProvider.dart';
 import 'package:project/provider/titleDateTimeProvider.dart';
+import 'package:project/util/class.dart';
 import 'package:project/util/enum.dart';
 import 'package:project/util/final.dart';
 import 'package:project/util/func.dart';
@@ -21,13 +25,7 @@ class CalendarBody extends StatefulWidget {
 
 class _CalendarBodyState extends State<CalendarBody> {
   SegmentedTypeEnum selectedSegment = SegmentedTypeEnum.todo;
-  String selectedGroupId = '';
-
-  @override
-  void initState() {
-    selectedGroupId = groupRepository.groupList[0].id;
-    super.initState();
-  }
+  int selectedGroupInfoIndex = 0;
 
   onCalendar(DateTime dateTime) {
     showDialog(
@@ -53,12 +51,23 @@ class _CalendarBodyState extends State<CalendarBody> {
     setState(() => selectedSegment = segment);
   }
 
-  onSelectedGroupId(String id) {
-    setState(() => selectedGroupId = id);
+  onSelectedGroupInfoIndex(int index) {
+    setState(() => selectedGroupInfoIndex = index);
   }
 
   @override
   Widget build(BuildContext context) {
+    UserInfoClass userInfo = context.watch<UserInfoProvider>().userInfo;
+    DateTime selectedDateTime =
+        context.watch<SelectedDateTimeProvider>().seletedDateTime;
+    List<GroupInfoClass> groupInfoList =
+        context.watch<GroupInfoListProvider>().groupInfoList;
+    List<MemoInfoClass> memoInfoList =
+        context.watch<MemoInfoListProvider>().memoInfoList;
+
+    groupInfoList =
+        getGroupInfoOrderList(userInfo.groupOrderList, groupInfoList);
+
     return MultiValueListenableBuilder(
       valueListenables: valueListenables,
       builder: (context, values, child) {
@@ -71,11 +80,15 @@ class _CalendarBodyState extends State<CalendarBody> {
             ),
             CalendarView(
               selectedSegment: selectedSegment,
-              selectedGroupId: selectedGroupId,
+              groupInfoList: groupInfoList,
+              memoInfoList: memoInfoList,
+              selectedGroupInfoIndex: selectedGroupInfoIndex,
             ),
             CalendarGroupView(
-              selectedGroupId: selectedGroupId,
-              onSelectedGroupId: onSelectedGroupId,
+              selectedSegment: selectedSegment,
+              groupInfoList: groupInfoList,
+              selectedGroupInfoIndex: selectedGroupInfoIndex,
+              onSelectedGroupInfoIndex: onSelectedGroupInfoIndex,
             ),
           ],
         );

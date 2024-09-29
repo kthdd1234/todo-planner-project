@@ -5,6 +5,7 @@ import 'package:project/util/final.dart';
 import 'package:project/util/func.dart';
 import 'package:project/widget/containerView/MemoView.dart';
 import 'package:project/widget/memo/MemoBackground.dart';
+import 'package:project/widget/memo/MemoLoading.dart';
 
 class MemoActionBar extends StatelessWidget {
   MemoActionBar({
@@ -12,6 +13,7 @@ class MemoActionBar extends StatelessWidget {
     required this.textAlign,
     required this.containerColor,
     required this.isLight,
+    required this.isLoading,
     required this.onImage,
     required this.onAlign,
     required this.onClock,
@@ -20,7 +22,7 @@ class MemoActionBar extends StatelessWidget {
 
   TextAlign textAlign;
   Color containerColor;
-  bool isLight;
+  bool isLight, isLoading;
   Function() onImage, onAlign, onClock, onSave;
 
   action({
@@ -62,7 +64,9 @@ class MemoActionBar extends StatelessWidget {
               ),
               action(name: 'clock', width: 21, onTap: onClock),
               const Spacer(),
-              action(name: 'mark-O', width: 18, onTap: onSave),
+              isLoading
+                  ? const MemoLoading()
+                  : action(name: 'mark-O', width: 18, onTap: onSave),
             ],
           ),
         ),
