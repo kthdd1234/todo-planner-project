@@ -25,6 +25,7 @@ import 'package:project/util/func.dart';
 import 'package:project/widget/modalSheet/ImageAddModalSheet.dart';
 import 'package:project/widget/modalSheet/ImageSelectionModalSheet.dart';
 import 'package:provider/provider.dart';
+import 'package:project/page/HomePage.dart';
 
 class MemoSettingPage extends StatefulWidget {
   MemoSettingPage({

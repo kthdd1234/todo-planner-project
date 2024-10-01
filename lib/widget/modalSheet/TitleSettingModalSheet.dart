@@ -4,7 +4,7 @@ import 'package:project/common/CommonModalItem.dart';
 import 'package:project/common/CommonModalSheet.dart';
 import 'package:project/common/CommonOutlineInputField.dart';
 import 'package:project/common/CommonSpace.dart';
-import 'package:project/main.dart';
+import 'package:project/page/HomePage.dart';
 import 'package:project/provider/UserInfoProvider.dart';
 import 'package:project/provider/themeProvider.dart';
 import 'package:project/util/class.dart';

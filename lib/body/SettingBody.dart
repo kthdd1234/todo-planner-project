@@ -1,22 +1,20 @@
-import 'dart:developer';
-
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'dart:io';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:in_app_review/in_app_review.dart';
-import 'package:project/common/CommonModalSheet.dart';
 import 'package:project/common/CommonNull.dart';
 import 'package:project/common/CommonSpace.dart';
 import 'package:project/common/CommonSvgText.dart';
 import 'package:project/common/CommonText.dart';
-import 'package:project/model/user_box/user_box.dart';
 import 'package:project/page/FontPage.dart';
+import 'package:project/page/HomePage.dart';
 import 'package:project/page/PremiumPage.dart';
 import 'package:project/page/BackgroundPage.dart';
+import 'package:project/page/ProfilePage.dart';
 import 'package:project/provider/PremiumProvider.dart';
 import 'package:project/provider/ReloadProvider.dart';
-import 'package:project/provider/bottomTabIndexProvider.dart';
+import 'package:project/provider/UserInfoProvider.dart';
 import 'package:project/provider/themeProvider.dart';
 import 'package:project/util/class.dart';
 import 'package:project/util/constants.dart';
@@ -24,9 +22,6 @@ import 'package:project/util/enum.dart';
 import 'package:project/util/final.dart';
 import 'package:project/util/func.dart';
 import 'package:project/widget/appBar/SettingAppBar.dart';
-import 'package:project/widget/button/ImageButton.dart';
-import 'package:project/widget/button/ModalButton.dart';
-import 'package:project/widget/modalSheet/AppStartIndexModalSheet.dart';
 import 'package:project/widget/modalSheet/LanguageModalSheet.dart';
 import 'package:project/widget/modalSheet/ThemeModalSheet.dart';
 import 'package:provider/provider.dart';
@@ -38,21 +33,17 @@ class SettingBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    bool isLight = context.watch<ThemeProvider>().isLight;
-
-    return SingleChildScrollView(
+    return const SingleChildScrollView(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-        children: [const SettingAppBar(), ContentView(isLight: isLight)],
+        children: [SettingAppBar(), ContentView()],
       ),
     );
   }
 }
 
 class ContentView extends StatefulWidget {
-  ContentView({super.key, required this.isLight});
-
-  bool isLight;
+  const ContentView({super.key});
 
   @override
   State<ContentView> createState() => _ContentViewState();
@@ -79,21 +70,6 @@ class _ContentViewState extends State<ContentView> {
 
   onPremium() {
     movePage(context: context, page: const PremiumPage());
-  }
-
-  onTheme(String theme) {
-    showModalBottomSheet(
-      context: context,
-      builder: (context) => ThemeModalSheet(title: '화면 테마', theme: theme),
-    );
-  }
-
-  onWidgetTheme(String widgetTheme) async {
-    await showModalBottomSheet(
-      context: context,
-      builder: (context) => ThemeModalSheet(title: '위젯 테마', theme: widgetTheme),
-    );
-    setState(() {});
   }
 
   onPrivate() async {
@@ -145,61 +121,8 @@ class _ContentViewState extends State<ContentView> {
     await canLaunchUrl(url) ? await launchUrl(url) : print('err');
   }
 
-  onValue(String text, bool? isNotTr) {
-    return CommonSvgText(
-      text: text,
-      fontSize: 13,
-      textColor: widget.isLight ? textColor : Colors.white,
-      svgColor: widget.isLight ? textColor : Colors.white,
-      svgName: 'dir-right',
-      svgWidth: 6,
-      svgLeft: 6,
-      isNotTr: isNotTr,
-      svgDirection: SvgDirectionEnum.right,
-    );
-  }
-
-  onMarkIcon() {
-    List<String> markList = ['E2', 'O', 'X', 'M', 'T'];
-
-    return Row(
-      children: [
-        Row(
-          children: markList
-              .map((state) => Padding(
-                    padding: const EdgeInsets.only(right: 6),
-                    child: svgAsset(
-                      name: 'mark-$state',
-                      width: 11,
-                      color: widget.isLight ? textColor : Colors.white,
-                    ),
-                  ))
-              .toList(),
-        ),
-        svgAsset(
-          name: 'dir-right',
-          width: 6,
-          color: widget.isLight ? textColor : Colors.white,
-        ),
-      ],
-    );
-  }
-
   onBackground() {
     movePage(context: context, page: const BackgroundPage());
-  }
-
-  onFont() {
-    movePage(context: context, page: const FontPage());
-  }
-
-  onAppStart(int appStartIndex) async {
-    await showModalBottomSheet(
-      context: context,
-      builder: (context) =>
-          AppStartIndexModalSheet(appStartIndex: appStartIndex),
-    );
-    setState(() {});
   }
 
   onLanguage() async {
@@ -207,58 +130,107 @@ class _ContentViewState extends State<ContentView> {
       context: context,
       builder: (context) => const LanguageModalSheet(),
     );
+
     setState(() {});
   }
 
   @override
   Widget build(BuildContext context) {
+    bool isLight = context.read<ThemeProvider>().isLight;
     String locale = context.locale.toString();
 
-    UserBox? user = userRepository.user;
-    String widgetTheme = user.widgetTheme ?? 'light';
-    String background = user.background ?? '1';
-    String fontFamily = user.fontFamily ?? initFontFamily;
-    int appStartIndex = user.appStartIndex ?? 0;
-
+    UserInfoClass userInfo = context.watch<UserInfoProvider>().userInfo;
     bool isPremium = context.watch<PremiumProvider>().isPremium;
-    String theme = context.watch<ThemeProvider>().theme;
-    int seletedIdx = context.watch<BottomTabIndexProvider>().seletedIdx;
-    bool isLight = context.watch<ThemeProvider>().isLight;
+
+    String loginType = userInfo.loginType;
+    String screenTheme = userInfo.theme;
+    String widgetTheme = userInfo.widgetTheme;
+    String background = userInfo.background;
+    String fontFamily = userInfo.fontFamily;
+
+    context.watch<ReloadProvider>().isReload;
+
+    onScreenTheme() {
+      showModalBottomSheet(
+        context: context,
+        builder: (context) => ThemeModalSheet(
+          title: '화면 테마',
+          theme: screenTheme,
+          onTap: (selectedTheme) async {
+            userInfo.theme = selectedTheme;
+
+            context.read<ThemeProvider>().setThemeValue(selectedTheme);
+            await userMethod.updateUser(userInfo: userInfo);
+
+            navigatorPop(context);
+          },
+        ),
+      );
+    }
+
+    onWidgetTheme() async {
+      await showModalBottomSheet(
+        context: context,
+        builder: (context) => ThemeModalSheet(
+          title: '위젯 테마',
+          theme: widgetTheme,
+          onTap: (selectedTheme) async {
+            userInfo.widgetTheme = selectedTheme;
+            await userMethod.updateUser(userInfo: userInfo);
+
+            navigatorPop(context);
+          },
+        ),
+      );
+      setState(() {});
+    }
+
+    onFont() {
+      movePage(context: context, page: FontPage(fontFamily: fontFamily));
+    }
+
+    onUser() {
+      movePage(context: context, page: ProfilePage());
+    }
+
+    onValue(String text, bool? isNotTr) {
+      return CommonSvgText(
+        text: text,
+        fontSize: 13,
+        textColor: isLight ? textColor : Colors.white,
+        svgColor: isLight ? textColor : Colors.white,
+        svgName: 'dir-right',
+        svgWidth: 6,
+        svgLeft: 6,
+        isNotTr: isNotTr,
+        svgDirection: SvgDirectionEnum.right,
+      );
+    }
 
     List<SettingItemClass> settingItemList = [
+      SettingItemClass(
+        name: '프로필',
+        svg: 'user',
+        value: onValue('${authButtonInfo[loginType]!['name']}', null),
+        onTap: onUser,
+      ),
       SettingItemClass(
         name: '프리미엄',
         svg: 'crown',
         onTap: onPremium,
-        value: isPremium
-            ? CommonSvgText(
-                text: '구매 완료',
-                textColor: widget.isLight ? textColor : darkTextColor,
-                fontSize: 14,
-                isBold: !widget.isLight,
-                svgName: 'premium-badge',
-                svgWidth: 16,
-                svgDirection: SvgDirectionEnum.left,
-              )
-            : ImageButton(
-                path: 't-4',
-                text: 'Upgrade',
-                padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 7),
-                fontSize: 12,
-                onTap: onPremium,
-              ),
+        value: onValue(isPremium ? '구매 완료' : '미구매', null),
       ),
       SettingItemClass(
         name: '화면 테마',
         svg: 'mode',
-        value: onValue(widget.isLight ? '밝은 테마' : '어두운 테마', null),
-        onTap: () => onTheme(theme),
+        value: onValue(screenTheme == 'light' ? '밝은 테마' : '어두운 테마', null),
+        onTap: onScreenTheme,
       ),
       SettingItemClass(
         name: '위젯 테마',
         svg: 'widget',
         value: onValue(widgetTheme == 'light' ? '밝은 테마' : '어두운 테마', null),
-        onTap: () => onWidgetTheme(widgetTheme),
+        onTap: onWidgetTheme,
       ),
       SettingItemClass(
         name: '글씨체',
@@ -285,16 +257,6 @@ class _ContentViewState extends State<ContentView> {
         onTap: onBackground,
       ),
       SettingItemClass(
-        name: '앱 시작 화면',
-        svg: 'app-start',
-        value: onValue(
-            getBnClassList(isLight, seletedIdx)
-                .firstWhere((bn) => bn.index == appStartIndex)
-                .name,
-            null),
-        onTap: () => onAppStart(appStartIndex),
-      ),
-      SettingItemClass(
         name: '앱 공유',
         svg: 'share',
         onTap: onShare,
@@ -315,8 +277,8 @@ class _ContentViewState extends State<ContentView> {
         onTap: onVersion,
         value: CommonText(
           text: '$appVerstion ($appBuildNumber)',
-          color: widget.isLight ? grey.original : darkTextColor,
-          isBold: !widget.isLight,
+          color: isLight ? grey.original : darkTextColor,
+          isBold: !isLight,
           isNotTr: true,
         ),
       ),
@@ -334,8 +296,7 @@ class _ContentViewState extends State<ContentView> {
                       children: [
                         Container(
                           decoration: BoxDecoration(
-                            color:
-                                widget.isLight ? Colors.white : darkSvgBgColor,
+                            color: isLight ? Colors.white : darkSvgBgColor,
                             borderRadius: const BorderRadius.all(
                               Radius.circular(5),
                             ),
@@ -347,7 +308,7 @@ class _ContentViewState extends State<ContentView> {
                         CommonText(
                           text: item.name,
                           isBold: true,
-                          color: widget.isLight ? textColor : darkTextColor,
+                          color: isLight ? textColor : darkTextColor,
                         ),
                         const Spacer(),
                         item.value != null ? item.value! : const CommonNull()

@@ -145,3 +145,9 @@ String groupsCollection = 'groups';
 
 /// memosCollection
 String memosCollection = 'memos';
+
+/// kakaoTextColor
+Color kakaoTextColor = const Color(0xff3C1D1E);
+
+/// kakaoBgColor
+Color kakaoBgColor = const Color(0xffFAE100);

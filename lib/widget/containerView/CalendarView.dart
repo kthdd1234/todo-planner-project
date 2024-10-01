@@ -2,15 +2,12 @@ import 'dart:typed_data';
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:project/common/CommonCachedNetworkImage.dart';
 import 'package:project/common/CommonCalendar.dart';
-import 'package:project/common/CommonImage.dart';
 import 'package:project/common/CommonMask.dart';
 import 'package:project/common/CommonNull.dart';
 import 'package:project/common/CommonSpace.dart';
 import 'package:project/common/CommonText.dart';
-import 'package:project/model/group_box/group_box.dart';
-import 'package:project/model/record_box/record_box.dart';
-import 'package:project/model/task_box/task_box.dart';
 import 'package:project/provider/titleDateTimeProvider.dart';
 import 'package:project/provider/selectedDateTimeProvider.dart';
 import 'package:project/util/class.dart';
@@ -19,6 +16,7 @@ import 'package:project/util/enum.dart';
 import 'package:project/util/final.dart';
 import 'package:project/util/func.dart';
 import 'package:project/widget/border/VerticalBorder.dart';
+import 'package:project/widget/memo/MemoImage.dart';
 import 'package:provider/provider.dart';
 import 'package:table_calendar/table_calendar.dart';
 
@@ -58,7 +56,16 @@ class _CalendarViewState extends State<CalendarView> {
   Widget? todayBuilder(bool isLight, DateTime dateTime) {
     GroupInfoClass groupInfo =
         widget.groupInfoList[widget.selectedGroupInfoIndex];
-    Color color = getColorClass(groupInfo.colorName).s200;
+    Color todoBgColor = isLight
+        ? getColorClass(groupInfo.colorName).s200
+        : calendarSelectedDateTimeBgColor;
+    Color todoTextColor =
+        isLight ? Colors.white : calendarSelectedDateTimeTextColor;
+
+    Color memoBgColor = isLight ? orange.s50 : orange.s100;
+    Color memoTextColor = isLight ? orange.original : orange.s400;
+
+    bool isTodo = widget.selectedSegment == SegmentedTypeEnum.todo;
 
     return Column(
       children: [
@@ -70,14 +77,14 @@ class _CalendarViewState extends State<CalendarView> {
               width: 27.5,
               height: 27.5,
               decoration: BoxDecoration(
-                color: isLight ? color : calendarSelectedDateTimeBgColor,
+                color: isTodo ? todoBgColor : memoBgColor,
                 borderRadius: BorderRadius.circular(100),
               ),
             ),
             CommonText(
               text: '${dateTime.day}',
-              color: isLight ? Colors.white : calendarSelectedDateTimeTextColor,
-              isBold: isLight,
+              color: isTodo ? todoTextColor : memoTextColor,
+              isBold: isTodo ? isLight : false,
               isNotTr: true,
             )
           ],
@@ -166,47 +173,52 @@ class _CalendarViewState extends State<CalendarView> {
   }
 
   Widget? memoBuilder(bool isLight, DateTime dateTime) {
-    // int recordKey = dateTimeKey(dateTime);
-    // RecordBox? recordBox = recordRepository.recordBox.get(recordKey);
-    // List<Uint8List>? imageList = recordBox?.imageList ?? [];
+    int index = widget.memoInfoList.indexWhere(
+      (memoInfo) => memoInfo.dateTimeKey == dateTimeKey(dateTime),
+    );
+    MemoInfoClass? memoInfo = index != -1 ? widget.memoInfoList[index] : null;
 
-    if (imageList.isNotEmpty) {
-      return Padding(
-        padding: const EdgeInsets.only(top: 30),
-        child: Stack(
-          alignment: AlignmentDirectional.bottomEnd,
-          children: [
-            Center(
-              child: CommonImage(
-                uint8List: imageList[0],
-                radious: 3,
-                width: 35,
-                height: 50,
-                onTap: (_) {},
-              ),
-            ),
-            Center(child: CommonMask(width: 35, height: 50, opacity: 0.2)),
-            CommonText(text: '')
-            // Center(
-            //   child: Container(
-            //     padding: const EdgeInsets.all(3),
-            //     decoration: BoxDecoration(
-            //       borderRadius: BorderRadius.circular(100),
-            //     ),
-            //     child: CommonText(
-            //       text: '${dateTime.day}',
-            //       isNotTr: true,
-            //       color: Colors.white,
-            //       isBold: true,
-            //     ),
-            //   ),
-            // ),
-          ],
-        ),
-      );
-    }
-
-    return const CommonNull();
+    return Column(
+      children: [
+        memoInfo?.imgUrl != null
+            ? Padding(
+                padding: const EdgeInsets.only(top: 40, bottom: 3),
+                child: Center(
+                  child: CommonCachedNetworkImage(
+                    cacheKey: memoInfo!.imgUrl!,
+                    imageUrl: memoInfo.imgUrl!,
+                    fontSize: 0,
+                    radious: 3,
+                    width: 40,
+                    height: 50,
+                    onTap: () {},
+                  ),
+                ),
+              )
+            : const CommonNull(),
+        CommonSpace(height: memoInfo?.imgUrl == null ? 40 : 0),
+        memoInfo?.text != null
+            ? Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 5),
+                child: Container(
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                    color: orange.s50,
+                    borderRadius: BorderRadius.circular(3),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 2),
+                    child: svgAsset(
+                      name: 'mark-O',
+                      width: 8,
+                      color: orange.original,
+                    ),
+                  ),
+                ),
+              )
+            : const CommonNull()
+      ],
+    );
   }
 
   @override

@@ -1,4 +1,5 @@
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:project/repositories/group_repository.dart';
@@ -6,6 +7,7 @@ import 'package:project/repositories/record_repository.dart';
 import 'package:project/repositories/task_repository.dart';
 import 'package:project/repositories/user_repository.dart';
 import 'package:project/util/class.dart';
+import 'package:project/util/constants.dart';
 import 'package:project/util/enum.dart';
 import 'package:project/util/func.dart';
 import 'package:table_calendar/table_calendar.dart';
@@ -84,8 +86,8 @@ final indigo = ColorClass(
   s50: Colors.indigo.shade50, // 232, 234, 246
   s100: Colors.indigo.shade100, // 197, 202, 233
   s200: Colors.indigo.shade200, // 159, 168, 218
-  s300: Colors.indigo.shade300, // 255, 121, 134, 203
-  s400: Colors.indigo.shade400,
+  s300: Colors.indigo.shade300, // 121, 134, 203
+  s400: Colors.indigo.shade400, // 92, 107, 192
 );
 
 final green = ColorClass(
@@ -407,7 +409,7 @@ final daysInfo = {
 final backroundClassList = [
   [
     BackgroundClass(path: '0', name: 'Defalut'),
-    BackgroundClass(path: '0', name: 'Defalut'),
+    BackgroundClass(path: '05', name: 'Paper Texture'),
   ],
   [
     BackgroundClass(path: '1', name: 'Cloudy Apple'),
@@ -464,8 +466,8 @@ final initUserInfo = UserInfoClass(
   uid: '',
   loginType: '',
   createDateTime: DateTime.now(),
-  fontFamily: '',
-  background: '',
+  fontFamily: initFontFamily,
+  background: '0',
   theme: '',
   widgetTheme: '',
   groupOrderList: [],
@@ -481,4 +483,25 @@ Map<TextAlign, String> textAlignName = {
   TextAlign.left: 'left',
   TextAlign.center: 'center',
   TextAlign.right: 'right'
+};
+
+Map<String, Map<String, dynamic>> authButtonInfo = {
+  'kakao': {
+    'svg': 'kakao-logo',
+    'name': '카카오 계정',
+    'textColor': kakaoTextColor,
+    'bgColor': kakaoBgColor,
+  },
+  'google': {
+    'svg': 'google-logo',
+    'name': '구글 계정',
+    'textColor': darkButtonColor,
+    'bgColor': Colors.white,
+  },
+  'apple': {
+    'svg': 'apple-logo',
+    'name': '애플 계정',
+    'textColor': Colors.white,
+    'bgColor': darkButtonColor,
+  },
 };

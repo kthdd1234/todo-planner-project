@@ -2,10 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:project/common/CommonCalendar.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:project/common/CommonCircle.dart';
+import 'package:project/common/CommonNull.dart';
 import 'package:project/common/CommonSpace.dart';
+import 'package:project/common/CommonText.dart';
 import 'package:project/provider/selectedDateTimeProvider.dart';
 import 'package:project/provider/titleDateTimeProvider.dart';
 import 'package:project/util/class.dart';
+import 'package:project/util/final.dart';
 import 'package:project/util/func.dart';
 import 'package:provider/provider.dart';
 import 'package:table_calendar/table_calendar.dart';
@@ -14,11 +17,13 @@ class TaskCalendarView extends StatefulWidget {
   TaskCalendarView({
     super.key,
     required this.groupInfoList,
+    required this.memoInfoList,
     required this.calendarFormat,
     required this.onFormatChanged,
   });
 
   List<GroupInfoClass> groupInfoList;
+  List<MemoInfoClass> memoInfoList;
   CalendarFormat calendarFormat;
   Function() onFormatChanged;
 
@@ -38,23 +43,6 @@ class _TaskCalendarViewState extends State<TaskCalendarView> {
         .read<TitleDateTimeProvider>()
         .changeTitleDateTime(dateTime: dateTime);
   }
-
-  // onFormatChanged(CalendarFormat calendarFormat) async {
-
-  // String month = CalendarFormat.month.toString();
-  // String twoWeeks = CalendarFormat.twoWeeks.toString();
-  // String week = CalendarFormat.week.toString();
-  // String nextFormat = {
-  //   month: week,
-  //   twoWeeks: month,
-  //   week: month,
-  // }[calendarFormat.toString()]!;
-
-  // UserBox? user = userRepository.user;
-  // user.calendarFormat = nextFormat;
-
-  // await user.save();
-  // }
 
   Widget? stickerBuilder(bool isLight, DateTime dateTime) {
     String locale = context.locale.toString();
@@ -78,7 +66,7 @@ class _TaskCalendarViewState extends State<TaskCalendarView> {
       }
     }
 
-    while (colorList.length < 9) {
+    while (colorList.length < 6) {
       colorList.add(null);
     }
 
@@ -97,17 +85,37 @@ class _TaskCalendarViewState extends State<TaskCalendarView> {
       );
     }
 
-    return Padding(
-      padding: const EdgeInsets.only(top: 40),
-      child: ListView(
-        children: [
-          wRow(colorList.sublist(0, 3)),
-          CommonSpace(height: 2),
-          wRow(colorList.sublist(3, 6)),
-          CommonSpace(height: 2),
-          wRow(colorList.sublist(6, 9)),
-        ],
-      ),
+    int index = widget.memoInfoList.indexWhere(
+      (memoInfo) => memoInfo.dateTimeKey == dateTimeKey(dateTime),
+    );
+    MemoInfoClass? memoInfo = index != -1 ? widget.memoInfoList[index] : null;
+    bool isMemo = (memoInfo?.imgUrl != null) || (memoInfo?.text != null);
+
+    return Column(
+      children: [
+        isMemo
+            ? Padding(
+                padding: const EdgeInsets.only(top: 8),
+                child: Container(
+                  width: 25,
+                  height: 5,
+                  padding: EdgeInsets.symmetric(horizontal: 3),
+                  decoration: BoxDecoration(
+                    color: orange.s50,
+                    borderRadius: BorderRadius.circular(3),
+                  ),
+                ),
+              )
+            : const CommonNull(),
+        Spacer(),
+        Column(
+          children: [
+            wRow(colorList.sublist(0, 3)),
+            CommonSpace(height: 2),
+            wRow(colorList.sublist(3, 6)),
+          ],
+        ),
+      ],
     );
   }
 

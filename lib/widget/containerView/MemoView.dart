@@ -6,7 +6,7 @@ import 'package:project/common/CommonSpace.dart';
 import 'package:project/common/CommonText.dart';
 import 'package:project/main.dart';
 import 'package:project/page/MemoSettingPage.dart';
-import 'package:project/provider/MemoInfoListProvider.dart';
+import 'package:project/page/HomePage.dart';
 import 'package:project/provider/selectedDateTimeProvider.dart';
 import 'package:project/provider/themeProvider.dart';
 import 'package:project/util/class.dart';

@@ -4,7 +4,7 @@ import 'package:project/util/class.dart';
 import 'package:project/util/constants.dart';
 
 class MemoMethod {
-  String uid = auth.currentUser!.uid;
+  String get uid => auth.currentUser!.uid;
 
   Stream<QuerySnapshot> get memoSnapshots {
     return firestore
@@ -49,6 +49,14 @@ class MemoMethod {
         .collection(memosCollection)
         .doc(mid)
         .delete();
+
+    return true;
+  }
+
+  Future<bool> removeAllMemo({required List<String> memoIdList}) async {
+    for (final memoId in memoIdList) {
+      await removeMemo(mid: memoId);
+    }
 
     return true;
   }

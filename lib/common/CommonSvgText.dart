@@ -68,12 +68,6 @@ class CommonSvgText extends StatelessWidget {
               ))
             : const CommonNull();
 
-    return GestureDetector(
-      onTap: onTap,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: children,
-      ),
-    );
+    return GestureDetector(onTap: onTap, child: Row(children: children));
   }
 }

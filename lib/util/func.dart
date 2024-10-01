@@ -5,6 +5,7 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -614,4 +615,20 @@ String getImagePath(String mid) {
 Future<void> removeImage({required String imgUrl, required String path}) async {
   await DefaultCacheManager().removeFile(imgUrl);
   await storageRef.child(path).delete();
+}
+
+navigatorRemoveUntil({
+  required BuildContext context,
+  required Widget page,
+}) async {
+  FadePageRoute fadePageRoute = FadePageRoute(page: page);
+  Navigator.pushAndRemoveUntil(context, fadePageRoute, (_) => false);
+}
+
+themeData(String fontFamily) {
+  return ThemeData(
+    useMaterial3: true,
+    fontFamily: fontFamily,
+    cupertinoOverrideTheme: const CupertinoThemeData(applyThemeToAll: true),
+  );
 }

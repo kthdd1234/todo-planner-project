@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:project/provider/UserInfoProvider.dart';
 import 'package:project/provider/themeProvider.dart';
+import 'package:project/util/class.dart';
 import 'package:project/util/constants.dart';
 import 'package:project/util/final.dart';
 import 'package:provider/provider.dart';
@@ -22,8 +24,9 @@ class CommonBackground extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    UserInfoClass userInfo = context.watch<UserInfoProvider>().userInfo;
     bool isLight = context.watch<ThemeProvider>().isLight;
-    // String path = background ?? userRepository.user.background ?? '2';
+    String path = background ?? userInfo.background;
 
     return Container(
       height: height ?? MediaQuery.of(context).size.height,
@@ -33,7 +36,7 @@ class CommonBackground extends StatelessWidget {
             BorderRadius.circular(isRadius == true ? 10.0 : 0.0),
         image: isLight
             ? DecorationImage(
-                image: AssetImage('assets/image/b-0.png'),
+                image: AssetImage('assets/image/b-$path.png'),
                 fit: BoxFit.cover,
               )
             : null,

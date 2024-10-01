@@ -1,6 +1,8 @@
 import 'dart:typed_data';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:project/util/constants.dart';
 import 'package:project/util/final.dart';
 import 'package:project/util/func.dart';
 
@@ -537,4 +539,18 @@ class MemoInfoClass {
         'imgUrl': imgUrl,
         'textAlign': textAlignToString(textAlign)
       };
+}
+
+class ThemeDataClass {
+  String fontFamily = initFontFamily;
+
+  get theme => ThemeData(
+        useMaterial3: true,
+        fontFamily: fontFamily,
+        cupertinoOverrideTheme: const CupertinoThemeData(applyThemeToAll: true),
+      );
+
+  setFontFamily(String newFontFamily) {
+    fontFamily = newFontFamily;
+  }
 }

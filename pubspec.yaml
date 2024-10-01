@@ -172,6 +172,7 @@ flutter:
     - assets/image/b-3.png
     - assets/image/b-4.png
     - assets/image/b-5.png
+    - assets/image/b-05.png
     - assets/image/b-6.png
     - assets/image/t-1.png
     - assets/image/t-2.png
@@ -209,6 +210,7 @@ flutter:
     - assets/svg/align-center.svg
     - assets/svg/align-right.svg
     - assets/svg/clock.svg
+    - assets/svg/user.svg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

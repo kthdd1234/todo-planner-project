@@ -1,11 +1,15 @@
 // ignore_for_file: use_build_context_synchronously
 
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:project/common/CommonBackground.dart';
 import 'package:project/common/CommonButton.dart';
 import 'package:project/common/CommonScaffold.dart';
 import 'package:project/common/CommonSpace.dart';
 import 'package:project/common/CommonText.dart';
+import 'package:project/main.dart';
+import 'package:project/page/HomePage.dart';
 import 'package:project/service/AuthService.dart';
 import 'package:project/util/class.dart';
 import 'package:project/util/constants.dart';
@@ -52,8 +56,8 @@ class _IntroPageState extends State<IntroPage> {
               svg: 'kakao-logo',
               outerPadding: const EdgeInsets.symmetric(horizontal: 10),
               text: 'kakao로 로그인',
-              textColor: const Color(0xff3C1D1E),
-              buttonColor: const Color(0xffFAE100),
+              textColor: kakaoTextColor,
+              buttonColor: kakaoBgColor,
               verticalPadding: 15,
               borderRadius: 7,
               onTap: onkakaoLogin,
@@ -61,7 +65,6 @@ class _IntroPageState extends State<IntroPage> {
             CommonSpace(height: 10),
             CommonButton(
               svg: 'google-logo',
-              isOutlined: true,
               outerPadding: const EdgeInsets.symmetric(horizontal: 10),
               text: 'Google로 로그인',
               textColor: darkButtonColor,
@@ -87,45 +90,3 @@ class _IntroPageState extends State<IntroPage> {
     );
   }
 }
-
-  // onStart() async {
-  //   String locale = context.locale.toString();
-
-  //   DateTime now = DateTime.now();
-  //   String userId = uuid();
-  //   String groupId = uuid();
-  //   String fontFamily = 'IM_Hyemin';
-  //   String calendarFormat = CalendarFormat.week.toString();
-
-  //   groupRepository.updateGroup(
-  //     key: groupId,
-  //     group: GroupBox(
-  //       createDateTime: now,
-  //       id: groupId,
-  //       name: getGroupName(locale),
-  //       colorName: '남색',
-  //       isOpen: true,
-  //     ),
-  //   );
-
-  //   userRepository.updateUser(
-  //     UserBox(
-  //       id: userId,
-  //       createDateTime: now,
-  //       calendarFormat: calendarFormat,
-  //       language: locale,
-  //       fontFamily: fontFamily,
-  //       taskTitleInfo: {},
-  //       memoTitleInfo: {},
-  //       theme: 'light',
-  //       filterIdList: filterIdList,
-  //       groupOrderList: [groupId],
-  //     ),
-  //   );
-
-  //   await Navigator.pushNamedAndRemoveUntil(
-  //     context,
-  //     'home-page',
-  //     (_) => false,
-  //   );
-  // }

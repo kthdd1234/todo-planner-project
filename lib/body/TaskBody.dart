@@ -75,6 +75,7 @@ class _TaskBodyState extends State<TaskBody> {
                 children: [
                   TaskCalendarView(
                     groupInfoList: groupInfoList,
+                    memoInfoList: memoInfoList,
                     calendarFormat: calendarFormat,
                     onFormatChanged: onCalendarFormat,
                   ),

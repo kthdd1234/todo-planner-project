@@ -21,11 +21,13 @@ class CommonCalendar extends StatefulWidget {
     required this.onPageChanged,
     required this.onDaySelected,
     required this.onFormatChanged,
+    this.rowHeight,
   });
 
   DateTime selectedDateTime;
   CalendarFormat calendarFormat;
   bool shouldFillViewport;
+  double? rowHeight;
   Function(bool, DateTime) markerBuilder;
   Function(bool, DateTime)? todayBuilder;
   Function(DateTime) onPageChanged, onDaySelected;
@@ -85,9 +87,10 @@ class _CommonCalendarState extends State<CommonCalendar> {
     tableCalendar() {
       return TableCalendar(
         locale: locale,
+        rowHeight: widget.rowHeight ?? 52,
         shouldFillViewport: widget.shouldFillViewport,
         calendarStyle: CalendarStyle(
-          cellMargin: const EdgeInsets.all(13),
+          cellMargin: const EdgeInsets.all(14),
           cellAlignment: widget.shouldFillViewport
               ? Alignment.topCenter
               : Alignment.center,

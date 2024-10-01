@@ -28,6 +28,7 @@ import 'package:project/provider/selectedDateTimeProvider.dart';
 import 'package:project/provider/themeProvider.dart';
 import 'package:project/provider/titleDateTimeProvider.dart';
 import 'package:project/repositories/init_hive.dart';
+import 'package:project/util/class.dart';
 import 'package:project/util/constants.dart';
 import 'package:provider/provider.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
@@ -38,10 +39,6 @@ PurchasesConfiguration _configuration =
     PurchasesConfiguration(Platform.isIOS ? appleApiKey : googleApiKey);
 FirebaseFirestore firestore = FirebaseFirestore.instance;
 FirebaseAuth auth = FirebaseAuth.instance;
-
-UserMethod userMethod = UserMethod();
-GroupMethod groupMethod = GroupMethod();
-MemoMethod memoMethod = MemoMethod();
 
 Reference storageRef = FirebaseStorage.instance.ref();
 
@@ -94,17 +91,21 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
-  // Box<UserBox>? userBox;
   bool isLogin = false;
 
   onLogin() {
-    auth.authStateChanges().listen((user) {
-      if (user != null && mounted) setState(() => isLogin = true);
-      // log('${auth.currentUser}');
+    auth.authStateChanges().listen((user) async {
+      bool isUser = (user != null) && (await userMethod.isUser);
+
+      // log('isUser => $isUser');
+
+      if (isUser && mounted) {
+        setState(() => isLogin = true);
+      }
     });
   }
 
-  appTrackingTransparency() async {
+  onATT() async {
     try {
       TrackingStatus status =
           await AppTrackingTransparency.trackingAuthorizationStatus;
@@ -117,7 +118,27 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
     }
   }
 
-  launchedFromHomeWidget(Uri? uri) async {
+  onUserInfo() {
+    userMethod.userSnapshots.listen(
+      (event) {
+        WidgetsBinding.instance.addPostFrameCallback(
+          (_) {
+            Map<String, dynamic>? json = event.data();
+
+            if (json != null) {
+              UserInfoClass userInfo = UserInfoClass.fromJson(json);
+
+              context
+                  .read<UserInfoProvider>()
+                  .changeUserInfo(newuUserInfo: userInfo);
+            }
+          },
+        );
+      },
+    ).onError((err) => log('$err'));
+  }
+
+  onWidget(Uri? uri) async {
     DateTime now = DateTime.now();
 
     if (uri != null) {
@@ -128,22 +149,9 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
     }
   }
 
-  initializeBottomNavition() {
-    // UserBox? user = userBox?.get('userProfile');
-
-    // WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-    //   context
-    //       .read<BottomTabIndexProvider>()
-    //       .changeSeletedIdx(newIndex: user?.appStartIndex ?? 0);
-    // });
-  }
-
   @override
   void initState() {
-    // userBox = Hive.box('userBox');
-
-    initializeBottomNavition();
-    appTrackingTransparency();
+    onATT();
     onLogin();
 
     WidgetsBinding.instance.addObserver(this);
@@ -166,8 +174,8 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
   void didChangeDependencies() {
     super.didChangeDependencies();
 
-    HomeWidget.initiallyLaunchedFromHomeWidget().then(launchedFromHomeWidget);
-    HomeWidget.widgetClicked.listen(launchedFromHomeWidget);
+    HomeWidget.initiallyLaunchedFromHomeWidget().then(onWidget);
+    HomeWidget.widgetClicked.listen(onWidget);
   }
 
   @override
@@ -178,26 +186,25 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
 
   @override
   Widget build(BuildContext context) {
-    String locale = context.locale.toString();
+    UserInfoClass userInfo = context.watch<UserInfoProvider>().userInfo;
     context.watch<ReloadProvider>().isReload;
+
+    ThemeData themeData = ThemeData(
+      useMaterial3: true,
+      fontFamily: userInfo.fontFamily,
+      cupertinoOverrideTheme: const CupertinoThemeData(applyThemeToAll: true),
+    );
 
     return MaterialApp(
       title: 'Todo Tracker',
-      theme: ThemeData(
-        useMaterial3: true,
-        fontFamily: initFontFamily,
-        cupertinoOverrideTheme: const CupertinoThemeData(applyThemeToAll: true),
-      ),
+      theme: themeData,
       localizationsDelegates: context.localizationDelegates,
       supportedLocales: context.supportedLocales,
       locale: context.locale,
       debugShowCheckedModeBanner: false,
-      home: isLogin ? HomePage(locale: locale) : const IntroPage(),
+      home: isLogin
+          ? HomePage(locale: context.locale.toString())
+          : const IntroPage(),
     );
   }
 }
-
-
-    // bool isUser = UserRepository().isUser;
-    // UserBox? user = userBox?.get('userProfile');
-    // String? fontFamily = user?.fontFamily ?? initFontFamily;

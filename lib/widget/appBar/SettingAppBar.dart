@@ -14,7 +14,7 @@ class SettingAppBar extends StatelessWidget {
 
     return Padding(
       padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
-      child: CommonText(text: '더보기', fontSize: 18, isBold: !isLight),
+      child: CommonText(text: '설정', fontSize: 18, isBold: !isLight),
     );
   }
 }

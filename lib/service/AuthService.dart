@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
@@ -17,40 +18,46 @@ class AuthService {
     userDetails,
     String loginType,
   ) async {
-    String locale = context.locale.toString();
-    DateTime createDateTime = DateTime.now();
-    FadePageRoute fadePageRoute = FadePageRoute(page: HomePage(locale: locale));
-    String uid = userDetails.uid;
-    String gid = uuid();
-    UserInfoClass userInfo = UserInfoClass(
-      uid: uid,
-      loginType: loginType,
-      createDateTime: createDateTime,
-      email: userDetails.email,
-      displayName: userDetails.displayName,
-      imgUrl: userDetails.photoURL,
-      groupOrderList: [gid],
-      fontFamily: initFontFamily,
-      background: '0',
-      theme: 'light',
-      widgetTheme: 'light',
-    );
-    GroupInfoClass groupInfo = GroupInfoClass(
-      gid: gid,
-      name: getGroupName(locale),
-      colorName: '남색',
-      createDateTime: createDateTime,
-      isOpen: true,
-      taskOrderList: [],
-      taskInfoList: [],
-    );
-
     try {
-      await userMethod.addUser(userInfo: userInfo);
-      await groupMethod.addGroup(gid: gid, groupInfo: groupInfo);
-      await Navigator.pushAndRemoveUntil(context, fadePageRoute, (_) => false);
-    } catch (err) {
-      log('$err');
+      String locale = context.locale.toString();
+      DateTime createDateTime = DateTime.now();
+      String uid = userDetails.uid;
+      bool isUser = await userMethod.isUser;
+
+      log('userDetails.uid ${userDetails.uid}');
+
+      if (isUser == false) {
+        String gid = uuid();
+        UserInfoClass userInfo = UserInfoClass(
+          uid: uid,
+          loginType: loginType,
+          createDateTime: createDateTime,
+          email: userDetails.email,
+          displayName: userDetails.displayName,
+          imgUrl: userDetails.photoURL,
+          groupOrderList: [gid],
+          fontFamily: initFontFamily,
+          background: '0',
+          theme: 'light',
+          widgetTheme: 'light',
+        );
+        GroupInfoClass groupInfo = GroupInfoClass(
+          gid: gid,
+          name: getGroupName(locale),
+          colorName: '남색',
+          createDateTime: createDateTime,
+          isOpen: true,
+          taskOrderList: [],
+          taskInfoList: [],
+        );
+
+        await userMethod.addUser(userInfo: userInfo);
+        await groupMethod.addGroup(gid: gid, groupInfo: groupInfo);
+      }
+
+      navigatorRemoveUntil(context: context, page: HomePage(locale: locale));
+    } catch (e) {
+      log('$e');
     }
   }
 
@@ -81,6 +88,7 @@ class AuthService {
   signInWithApple(BuildContext context) async {
     try {
       AppleAuthProvider appleProvider = AppleAuthProvider();
+
       UserCredential result =
           await FirebaseAuth.instance.signInWithProvider(appleProvider);
       final userDetails = result.user;

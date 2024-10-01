@@ -1,7 +1,4 @@
 // ignore_for_file: use_build_context_synchronously
-
-import 'dart:developer';
-
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:project/common/CommonContainer.dart';
@@ -9,8 +6,7 @@ import 'package:project/common/CommonDivider.dart';
 import 'package:project/common/CommonPopup.dart';
 import 'package:project/common/CommonSpace.dart';
 import 'package:project/common/CommonText.dart';
-import 'package:project/main.dart';
-import 'package:project/page/MemoSettingPage.dart';
+import 'package:project/page/HomePage.dart';
 import 'package:project/provider/themeProvider.dart';
 import 'package:project/util/class.dart';
 import 'package:project/util/constants.dart';

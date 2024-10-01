@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:multi_value_listenable_builder/multi_value_listenable_builder.dart';
 import 'package:project/common/CommonBackground.dart';
 import 'package:project/common/CommonContainer.dart';
 import 'package:project/common/CommonNull.dart';
 import 'package:project/common/CommonScaffold.dart';
 import 'package:project/common/CommonSpace.dart';
 import 'package:project/common/CommonText.dart';
-import 'package:project/model/user_box/user_box.dart';
+import 'package:project/page/HomePage.dart';
 import 'package:project/page/PremiumPage.dart';
 import 'package:project/provider/PremiumProvider.dart';
 import 'package:project/provider/ReloadProvider.dart';
+import 'package:project/provider/UserInfoProvider.dart';
 import 'package:project/util/class.dart';
 import 'package:project/util/constants.dart';
 import 'package:project/util/final.dart';
@@ -22,39 +22,34 @@ class BackgroundPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MultiValueListenableBuilder(
-      valueListenables: valueListenables,
-      builder: (context, values, child) {
-        return CommonBackground(
-          child: CommonScaffold(
-            appBarInfo: AppBarInfoClass(title: '앱 배경'),
-            body: CommonContainer(
-              child: SingleChildScrollView(
-                child: Column(
-                  children: backroundClassList
-                      .map(
-                        (backgroundList) => Padding(
-                          padding: const EdgeInsets.only(bottom: 15),
-                          child: Row(children: [
-                            BackgroundItem(
-                              path: backgroundList[0].path,
-                              name: backgroundList[0].name,
-                            ),
-                            CommonSpace(width: 20),
-                            BackgroundItem(
-                              path: backgroundList[1].path,
-                              name: backgroundList[1].name,
-                            )
-                          ]),
+    return CommonBackground(
+      child: CommonScaffold(
+        appBarInfo: AppBarInfoClass(title: '앱 배경'),
+        body: CommonContainer(
+          child: SingleChildScrollView(
+            child: Column(
+              children: backroundClassList
+                  .map(
+                    (backgroundList) => Padding(
+                      padding: const EdgeInsets.only(bottom: 15),
+                      child: Row(children: [
+                        BackgroundItem(
+                          path: backgroundList[0].path,
+                          name: backgroundList[0].name,
                         ),
-                      )
-                      .toList(),
-                ),
-              ),
+                        CommonSpace(width: 20),
+                        BackgroundItem(
+                          path: backgroundList[1].path,
+                          name: backgroundList[1].name,
+                        )
+                      ]),
+                    ),
+                  )
+                  .toList(),
             ),
           ),
-        );
-      },
+        ),
+      ),
     );
   }
 }
@@ -73,19 +68,17 @@ class BackgroundItem extends StatefulWidget {
 }
 
 class _BackgroundItemState extends State<BackgroundItem> {
-  UserBox user = userRepository.user;
-
   @override
   Widget build(BuildContext context) {
-    String theme = user.background ?? '1';
+    UserInfoClass userInfo = context.watch<UserInfoProvider>().userInfo;
     bool isPremium = context.watch<PremiumProvider>().isPremium;
     bool isReload = context.watch<ReloadProvider>().isReload;
 
-    onBackground(String path) async {
+    onBackground(String background) async {
       if (isPremium) {
-        user.background = path;
-        await user.save();
+        userInfo.background = background;
 
+        await userMethod.updateUser(userInfo: userInfo);
         context.read<ReloadProvider>().setReload(!isReload);
       } else {
         showDialog(
@@ -116,7 +109,7 @@ class _BackgroundItemState extends State<BackgroundItem> {
                     height: 200,
                   ),
                 ),
-                widget.path == theme
+                widget.path == userInfo.background
                     ? Stack(
                         alignment: Alignment.center,
                         children: [

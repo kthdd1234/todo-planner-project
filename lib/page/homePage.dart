@@ -7,7 +7,9 @@ import 'package:project/body/SettingBody.dart';
 import 'package:project/body/TaskBody.dart';
 import 'package:project/common/CommonBackground.dart';
 import 'package:project/common/CommonScaffold.dart';
-import 'package:project/main.dart';
+import 'package:project/method/GroupMethod.dart';
+import 'package:project/method/MemoMethod.dart';
+import 'package:project/method/UserMethod.dart';
 import 'package:project/provider/GroupInfoListProvider.dart';
 import 'package:project/provider/MemoInfoListProvider.dart';
 import 'package:project/provider/PremiumProvider.dart';
@@ -21,6 +23,10 @@ import 'package:project/util/final.dart';
 import 'package:project/util/func.dart';
 import 'package:provider/provider.dart';
 
+UserMethod userMethod = UserMethod();
+GroupMethod groupMethod = GroupMethod();
+MemoMethod memoMethod = MemoMethod();
+
 class HomePage extends StatefulWidget {
   HomePage({super.key, required this.locale});
 
@@ -31,11 +37,21 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  initializeBottomTab() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) {
+        context.read<BottomTabIndexProvider>().changeSeletedIdx(newIndex: 0);
+      }
+    });
+  }
+
   initializePremium() async {
     bool isPremium = await isPurchasePremium();
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      context.read<PremiumProvider>().setPremiumValue(isPremium);
+      if (mounted) {
+        context.read<PremiumProvider>().setPremiumValue(isPremium);
+      }
     });
   }
 
@@ -49,9 +65,11 @@ class _HomePageState extends State<HomePage> {
             if (json != null) {
               UserInfoClass userInfo = UserInfoClass.fromJson(json);
 
-              context
-                  .read<UserInfoProvider>()
-                  .changeUserInfo(newuUserInfo: userInfo);
+              if (mounted) {
+                context
+                    .read<UserInfoProvider>()
+                    .changeUserInfo(newuUserInfo: userInfo);
+              }
             }
           },
         );
@@ -72,10 +90,11 @@ class _HomePageState extends State<HomePage> {
 
             groupInfoList.add(groupInfo);
           }
-
-          context
-              .read<GroupInfoListProvider>()
-              .changeGroupInfoList(newGroupInfoList: groupInfoList);
+          if (mounted) {
+            context
+                .read<GroupInfoListProvider>()
+                .changeGroupInfoList(newGroupInfoList: groupInfoList);
+          }
         },
       );
     }).onError((err) => log('$err'));
@@ -95,10 +114,11 @@ class _HomePageState extends State<HomePage> {
 
               memoInfoList.add(memoInfo);
             }
-
-            context
-                .read<MemoInfoListProvider>()
-                .changeMemoInfoList(newMemoInfoList: memoInfoList);
+            if (mounted) {
+              context
+                  .read<MemoInfoListProvider>()
+                  .changeMemoInfoList(newMemoInfoList: memoInfoList);
+            }
           },
         );
       },
@@ -107,6 +127,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   void initState() {
+    initializeBottomTab();
     initializePremium();
     initializeUserInfo();
     initializeGroupInfoList();

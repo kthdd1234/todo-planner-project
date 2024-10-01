@@ -187,7 +187,3 @@ class _PremiumPageState extends State<PremiumPage> {
     );
   }
 }
-
-// 평생 무료
-// 광고 제거
-// 사진 추가

@@ -7,11 +7,9 @@ import 'package:project/util/class.dart';
 import 'package:project/util/constants.dart';
 
 class GroupMethod {
-  String uid = auth.currentUser!.uid;
+  String get uid => auth.currentUser!.uid;
 
   Stream<QuerySnapshot> stream() {
-    log('GroupMethod stream');
-
     return firestore
         .collection(usersCollection)
         .doc(uid)
@@ -72,6 +70,14 @@ class GroupMethod {
         .collection(groupsCollection)
         .doc(gid)
         .delete();
+
+    return true;
+  }
+
+  Future<bool> removeAllGroup({required List<String> groupIdList}) async {
+    for (final groupId in groupIdList) {
+      await removeGroup(gid: groupId);
+    }
 
     return true;
   }
