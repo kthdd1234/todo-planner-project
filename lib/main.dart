@@ -13,9 +13,6 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:home_widget/home_widget.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
-import 'package:project/method/GroupMethod.dart';
-import 'package:project/method/MemoMethod.dart';
-import 'package:project/method/UserMethod.dart';
 import 'package:project/page/HomePage.dart';
 import 'package:project/page/IntroPage.dart';
 import 'package:project/provider/GroupInfoListProvider.dart';
@@ -28,6 +25,7 @@ import 'package:project/provider/selectedDateTimeProvider.dart';
 import 'package:project/provider/themeProvider.dart';
 import 'package:project/provider/titleDateTimeProvider.dart';
 import 'package:project/repositories/init_hive.dart';
+import 'package:project/service/HomeWidgetService.dart';
 import 'package:project/util/class.dart';
 import 'package:project/util/constants.dart';
 import 'package:provider/provider.dart';
@@ -97,8 +95,6 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
     auth.authStateChanges().listen((user) async {
       bool isUser = (user != null) && (await userMethod.isUser);
 
-      // log('isUser => $isUser');
-
       if (isUser && mounted) {
         setState(() => isLogin = true);
       }
@@ -160,14 +156,17 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) async {
-    // UserBox? user = userBox?.get('userProfile');
-    // String locale = context.locale.toString();
-    // bool isBackground = state == AppLifecycleState.paused ||
-    //     state == AppLifecycleState.detached;
+    String locale = context.locale.toString();
+    bool isBackground = state == AppLifecycleState.paused ||
+        state == AppLifecycleState.detached;
 
-    // if (isBackground && user != null) {
-    //   await HomeWidgetService().updateTodoRoutin(locale);
-    // }
+    if (isBackground && isLogin) {
+      await HomeWidgetService().updateAllTodoList(
+        locale: locale,
+        userInfo: UserInfoProvider().userInfo,
+        groupInfoList: GroupInfoListProvider().groupInfoList,
+      );
+    }
   }
 
   @override

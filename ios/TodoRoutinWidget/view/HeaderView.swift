@@ -9,15 +9,7 @@ struct HeaderView: View {
     
     var body: some View {
         HStack(alignment: .bottom) {
-            TextView(text: header.title,
-                     fontFamily: fontFamily,
-                     fontSize: 13,
-                     isBold: widgetTheme == "dark",
-                     textColor: color(rgb: header.textRGB),
-                     lineThroughColor: nil)
-            .padding(EdgeInsets(top: 5, leading: 7, bottom: 5, trailing: 7))
-            .background(color(rgb: header.bgRGB))
-            .cornerRadius(5)
+            TagView(widgetFamily: widgetFamily, fontFamily: fontFamily, header: header, widgetTheme: widgetTheme)
             Spacer()
             if(isWidgetML(widgetFamily: widgetFamily)) {
                 TextView(text: header.today,

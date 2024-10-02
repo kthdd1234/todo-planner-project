@@ -47,17 +47,14 @@ struct TodoRoutinWidgetEntryView : View {
     init(entry: Provider.Entry) {
         self.entry = entry
         self.headerState = entry.header != "" ? loadJson(json: entry.header) : 
-        HeaderModel(title: "할 일, 루틴 리스트", today: "날짜 없음", textRGB: [63, 81, 181], bgRGB: [232, 234, 246])
+        HeaderModel(title: "오늘의 할 일 0", today: "날짜 없음", textRGB: [0, 0, 0], bgRGB: [255, 255, 255])
         self.itemListState = entry.taskList != "" ? loadJson(json: entry.taskList) : []
         
         cutomFont(fontFamily: "IM_Hyemin")
     }
 
     var body: some View {
-        VStack {
-            HeaderView(widgetFamily: eWidgetFamily, fontFamily: entry.fontFamily, header: headerState, widgetTheme: entry.widgetTheme)
-            ListView(widgetFamily: eWidgetFamily,emptyText: entry.emptyText != "" ? entry.emptyText : "추가된 할 일이 없어요." , fontFamily: entry.fontFamily, itemList: itemListState, widgetTheme: entry.widgetTheme)
-        }
+        PhoneView(widgetFamily: eWidgetFamily, headerState: headerState, fontFamily: entry.fontFamily, emptyText: entry.emptyText, widgetTheme: entry.widgetTheme, itemList: itemListState)
         .widgetURL(URL(string: "todoRoutin://message?message=task&homeWidget"))
         .containerBackground(for: .widget) {
             bgColor(theme: entry.widgetTheme)
