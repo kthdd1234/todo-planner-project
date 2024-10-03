@@ -464,21 +464,30 @@ getGroupInfoOrderList(
   return groupInfoList;
 }
 
-onSegmentedWidget({
-  required String title,
-  required SegmentedTypeEnum type,
-  required SegmentedTypeEnum selected,
-  Map<String, String>? nameArgs,
-}) {
-  return CommonText(
-    text: title,
-    fontSize: 12,
-    nameArgs: nameArgs,
-    color: selected == type ? Colors.black : grey.original,
-  );
-}
+categorySegmented(SegmentedTypeEnum segmented, bool isLight) {
+  onSegmentedWidget({
+    required String title,
+    required SegmentedTypeEnum type,
+    required SegmentedTypeEnum selected,
+    Map<String, String>? nameArgs,
+  }) {
+    Color color = isLight
+        ? selected == type
+            ? Colors.black
+            : grey.original
+        : selected == type
+            ? Colors.white
+            : grey.original;
 
-categorySegmented(SegmentedTypeEnum segmented) {
+    return CommonText(
+      text: title,
+      fontSize: 12,
+      nameArgs: nameArgs,
+      color: color,
+      isBold: !isLight,
+    );
+  }
+
   Map<SegmentedTypeEnum, Widget> segmentedData = {
     SegmentedTypeEnum.todo: onSegmentedWidget(
       title: '할 일',

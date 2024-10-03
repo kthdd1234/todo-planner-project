@@ -71,7 +71,7 @@ dependencies:
   firebase_core: ^3.4.0
   google_sign_in: ^6.2.1
   firebase_auth: ^5.2.0
-  cloud_firestore: ^5.4.2
+  cloud_firestore: ^5.4.0
   kakao_flutter_sdk_user: ^1.9.6
   firebase_storage: ^12.3.2
   cached_network_image: ^3.4.1
@@ -224,6 +224,11 @@ flutter:
   # list giving the asset and other descriptors for the font. For
   # example:
   fonts:
+    - family: Omyu
+      fonts:
+        - asset: assets/font/Omyu.ttf
+          weight: 400
+
     - family: OpenSans
       fonts:
         - asset: assets/font/OpenSans.ttf

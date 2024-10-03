@@ -22,7 +22,7 @@ const tableHighlightColor = Color.fromARGB(255, 248, 248, 255);
 const memoBgColor = Color.fromARGB(255, 255, 251, 243);
 
 /// buttonColor
-final buttonColor = const Color(0xff3182F7);
+const buttonColor = Color(0xff3182F7);
 
 /// initFontFamily
 const initFontFamily = 'IM_Hyemin';

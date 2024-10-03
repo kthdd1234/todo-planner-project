@@ -11,16 +11,14 @@ struct HeaderView: View {
         HStack(alignment: .bottom) {
             TagView(widgetFamily: widgetFamily, fontFamily: fontFamily, header: header, widgetTheme: widgetTheme)
             Spacer()
-            if(isWidgetML(widgetFamily: widgetFamily)) {
+            if(isWidgetMLE(widgetFamily: widgetFamily)) {
                 TextView(text: header.today,
                          fontFamily: fontFamily,
                          fontSize: 11,
                          isBold: true,
-                         textColor: widgetTheme == "dark"  ? .white : .gray,
-                         lineThroughColor: nil)
+                         textColor: widgetTheme == "dark"  ? .white : .gray)
             }
-            
         }
-        .padding(EdgeInsets(top: 5, leading: 0, bottom: 7, trailing: 0))
+        .padding(EdgeInsets(top: 2.5, leading: 0, bottom: 2.5, trailing: 0))
     }
 }

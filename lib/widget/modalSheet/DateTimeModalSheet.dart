@@ -200,6 +200,7 @@ class _DateTimeModalSheetState extends State<DateTimeModalSheet> {
 
     Widget child = {
       taskDateTimeType.selection: SelectionDay(
+        selectedType: selectedType,
         focusedDay: focusedDay,
         isMultiSelection: isMultiSelection,
         selectionDays: selectionDays,
@@ -224,7 +225,7 @@ class _DateTimeModalSheetState extends State<DateTimeModalSheet> {
     double height = {
       taskDateTimeType.selection: 636.0,
       taskDateTimeType.everyWeek: 330.0,
-      taskDateTimeType.everyMonth: 560.0,
+      taskDateTimeType.everyMonth: isTablet ? 550.0 : 560.0,
     }[selectedType]!;
 
     return CommonModalSheet(
@@ -317,6 +318,7 @@ class SelectionDay extends StatefulWidget {
       required this.focusedDay,
       required this.isMultiSelection,
       required this.selectionDays,
+      required this.selectedType,
       required this.onSelectionDay,
       required this.onChangeMultiSelection});
 
@@ -324,6 +326,7 @@ class SelectionDay extends StatefulWidget {
   DateTime focusedDay;
   bool isMultiSelection;
   List<DateTime> selectionDays;
+  String selectedType;
   Function(DateTime) onSelectionDay;
   Function(bool) onChangeMultiSelection;
 
@@ -341,6 +344,7 @@ class _SelectionDayState extends State<SelectionDay> {
           locale: locale,
           selectionList: widget.selectionDays,
           targetDateTime: dateTime,
+          dateTimeType: widget.selectedType,
         ) !=
         -1) {
       return CalendarMarker(
@@ -495,10 +499,11 @@ class MonthDay extends StatelessWidget {
           CommonSpace(height: 5),
           GridView(
             shrinkWrap: true,
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 7,
               crossAxisSpacing: 7,
               mainAxisSpacing: 7,
+              mainAxisExtent: isTablet ? 40 : null,
             ),
             children: monthDays
                 .map((monthDay) => CommonButton(

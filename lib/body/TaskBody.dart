@@ -66,6 +66,7 @@ class _TaskBodyState extends State<TaskBody> {
       child: Column(
         children: [
           TaskAppBar(
+            memoInfoList: memoInfoList,
             calendarFormat: calendarFormat,
             onCalendarFormat: onCalendarFormat,
           ),

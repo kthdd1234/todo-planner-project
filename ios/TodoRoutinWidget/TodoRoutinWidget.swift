@@ -54,7 +54,13 @@ struct TodoRoutinWidgetEntryView : View {
     }
 
     var body: some View {
-        PhoneView(widgetFamily: eWidgetFamily, headerState: headerState, fontFamily: entry.fontFamily, emptyText: entry.emptyText, widgetTheme: entry.widgetTheme, itemList: itemListState)
+        VStack {
+            if eWidgetFamily == .systemExtraLarge {
+                PadView(widgetFamily: eWidgetFamily, fontFamily: entry.fontFamily, header: headerState, widgetTheme: entry.widgetTheme,  emptyText: entry.emptyText,itemList: itemListState)
+            } else {
+                PhoneView(widgetFamily: eWidgetFamily, headerState: headerState, fontFamily: entry.fontFamily, emptyText: entry.emptyText, widgetTheme: entry.widgetTheme, itemList: itemListState)
+            }
+        }
         .widgetURL(URL(string: "todoRoutin://message?message=task&homeWidget"))
         .containerBackground(for: .widget) {
             bgColor(theme: entry.widgetTheme)
@@ -79,3 +85,24 @@ struct TodoRoutinWidget: Widget {
 } timeline: {
     TodoRoutinEntry(date: .now, header: "", taskList: "", fontFamily: "", emptyText: "", widgetTheme: "")
 }
+
+
+
+
+//        HeaderView(widgetFamily: eWidgetFamily, fontFamily:entry.fontFamily, header: headerState, widgetTheme: entry.widgetTheme)
+//        Color.clear
+//            .overlay(
+//                        LazyVStack {
+//                            TextView(text: "1", fontFamily: "IM_Hyemin", fontSize: 14, isBold: false, textColor: .red)
+//                            TextView(text: "2", fontFamily: "IM_Hyemin", fontSize: 14, isBold: false, textColor: .red)
+//                            TextView(text: "3", fontFamily: "IM_Hyemin", fontSize: 14, isBold: false, textColor: .red)
+//                            TextView(text: "4", fontFamily: "IM_Hyemin", fontSize: 14, isBold: false, textColor: .red)
+//                            TextView(text: "5", fontFamily: "IM_Hyemin", fontSize: 14, isBold: false, textColor: .red)
+//                            TextView(text: "6", fontFamily: "IM_Hyemin", fontSize: 14, isBold: false, textColor: .red)
+//                            TextView(text: "7", fontFamily: "IM_Hyemin", fontSize: 14, isBold: false, textColor: .red)
+//                            TextView(text: "8", fontFamily: "IM_Hyemin", fontSize: 14, isBold: false, textColor: .red)
+//                            TextView(text: "9", fontFamily: "IM_Hyemin", fontSize: 14, isBold: false, textColor: .red)
+//                            TextView(text: "10", fontFamily: "IM_Hyemin", fontSize: 14, isBold: false, textColor: .red)
+//                            TextView(text: "11", fontFamily: "IM_Hyemin", fontSize: 14, isBold: false, textColor: .red)
+//                        },
+//                        alignment: .top)

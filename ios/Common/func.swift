@@ -24,8 +24,8 @@ func isWidgetSM(widgetFamily: WidgetFamily) -> Bool {
     return false
 }
 
-func isWidgetML(widgetFamily: WidgetFamily) -> Bool {
-    if(widgetFamily == .systemMedium || widgetFamily == .systemLarge){
+func isWidgetMLE(widgetFamily: WidgetFamily) -> Bool {
+    if(widgetFamily == .systemMedium || widgetFamily == .systemLarge || widgetFamily == .systemExtraLarge){
         return true
     }
     
@@ -45,10 +45,8 @@ func prefixList(widgetFamily: WidgetFamily, list: [ItemModel]) -> [ItemModel] {
         return Array(list.prefix(3))
     }
     
-    return Array(list.prefix(10))
+    return Array(list.prefix(9))
 }
-
-
 
 func bgColor(theme: String?) -> Color? {
     return theme == "dark" ? widgetDarkColor : Color.white

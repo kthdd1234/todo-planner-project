@@ -42,16 +42,14 @@ class CalendarGroupView extends StatelessWidget {
                   itemBuilder: (context, index) {
                     GroupInfoClass group = groupInfoList[index];
                     ColorClass color = getColorClass(group.colorName);
+                    bool isSelected = selectedGroupInfoIndex == index;
 
-                    Color selectedTextColor =
-                        isLight ? Colors.white : color.s200;
-                    Color selectedBgColor =
-                        isLight ? color.s200 : darkButtonColor;
-
-                    Color notSelectedTextColor =
-                        isLight ? grey.original : Colors.white;
-                    Color notSelectedBgColor =
-                        isLight ? Colors.white : darkButtonColor;
+                    Color textColor = isLight
+                        ? (isSelected ? Colors.white : grey.original)
+                        : (isSelected ? Colors.white : grey.s400);
+                    Color bgColor = isLight
+                        ? (isSelected ? color.s200 : Colors.white)
+                        : (isSelected ? color.s400 : darkButtonColor);
 
                     return Padding(
                       padding: const EdgeInsets.only(right: 7),
@@ -60,12 +58,14 @@ class CalendarGroupView extends StatelessWidget {
                           text: group.name,
                           fontSize: 14,
                           isBold: selectedGroupInfoIndex == index,
-                          textColor: selectedGroupInfoIndex == index
-                              ? selectedTextColor
-                              : notSelectedTextColor,
-                          bgColor: selectedGroupInfoIndex == index
-                              ? selectedBgColor
-                              : notSelectedBgColor,
+                          textColor: textColor,
+                          // selectedGroupInfoIndex == index
+                          //     ? selectedTextColor
+                          //     : notSelectedTextColor,
+                          bgColor: bgColor,
+                          // selectedGroupInfoIndex == index
+                          //     ? selectedBgColor
+                          //     : notSelectedBgColor,
                           onTap: () => onSelectedGroupInfoIndex(index),
                         ),
                       ),

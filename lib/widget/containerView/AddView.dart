@@ -72,10 +72,18 @@ class _AddViewState extends State<AddView> {
                 controller: controller,
                 autofocus: true,
                 cursorColor: color.s400,
-                style: const TextStyle(fontSize: 14),
+                style: TextStyle(
+                  fontSize: 15,
+                  color: isLight ? Colors.black : Colors.white,
+                  fontWeight: isLight ? FontWeight.normal : FontWeight.bold,
+                ),
                 decoration: InputDecoration(
                   hintText: '할 일을 입력해주세요.',
-                  hintStyle: TextStyle(fontSize: 14, color: grey.s400),
+                  hintStyle: TextStyle(
+                    fontSize: 15,
+                    color: grey.s400,
+                    fontWeight: isLight ? FontWeight.normal : FontWeight.bold,
+                  ),
                   contentPadding: const EdgeInsets.all(0),
                   border: const OutlineInputBorder(
                     borderSide: BorderSide(width: 0, style: BorderStyle.none),
@@ -94,13 +102,17 @@ class _AddViewState extends State<AddView> {
                     children: [
                       CommonText(
                         text: '+ 할 일 추가',
-                        color: isLight ? color.original : grey.s300,
+                        color: isLight ? color.original : Colors.white,
+                        fontSize: 15,
                       ),
                       const Spacer(),
                       Padding(
                         padding: const EdgeInsets.only(right: 3),
                         child: svgAsset(
-                            name: 'mark-d', width: 20, color: color.s100),
+                          name: 'mark-d',
+                          width: 20,
+                          color: isLight ? color.s100 : color.s200,
+                        ),
                       ),
                     ],
                   ),

@@ -38,6 +38,8 @@
 		D3959EF62CACD61D0048D1F2 /* TitleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3959EF42CACD6160048D1F2 /* TitleView.swift */; };
 		D3959EF82CACD9010048D1F2 /* TagView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3959EF72CACD8F10048D1F2 /* TagView.swift */; };
 		D3959EF92CACD9010048D1F2 /* TagView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3959EF72CACD8F10048D1F2 /* TagView.swift */; };
+		D3AC4A4C2CAE7AF5008CEDAE /* EmptyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3AC4A4B2CAE7AED008CEDAE /* EmptyView.swift */; };
+		D3AC4A4D2CAE7AF5008CEDAE /* EmptyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3AC4A4B2CAE7AED008CEDAE /* EmptyView.swift */; };
 		D3B48CF72C2817A800441F60 /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D3B48CF62C2817A800441F60 /* WidgetKit.framework */; };
 		D3B48CF92C2817A800441F60 /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D3B48CF82C2817A800441F60 /* SwiftUI.framework */; };
 		D3B48CFC2C2817A800441F60 /* TodoRoutinWidgetBundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3B48CFB2C2817A800441F60 /* TodoRoutinWidgetBundle.swift */; };
@@ -121,6 +123,7 @@
 		D3959EEE2CACD3A80048D1F2 /* PadView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PadView.swift; sourceTree = "<group>"; };
 		D3959EF42CACD6160048D1F2 /* TitleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TitleView.swift; sourceTree = "<group>"; };
 		D3959EF72CACD8F10048D1F2 /* TagView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagView.swift; sourceTree = "<group>"; };
+		D3AC4A4B2CAE7AED008CEDAE /* EmptyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmptyView.swift; sourceTree = "<group>"; };
 		D3B48CF52C2817A800441F60 /* TodoRoutinWidgetExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = TodoRoutinWidgetExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		D3B48CF62C2817A800441F60 /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
 		D3B48CF82C2817A800441F60 /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
@@ -256,6 +259,7 @@
 		D3058C6C2C296FB3009DEFB3 /* view */ = {
 			isa = PBXGroup;
 			children = (
+				D3AC4A4B2CAE7AED008CEDAE /* EmptyView.swift */,
 				D3959EF72CACD8F10048D1F2 /* TagView.swift */,
 				D3959EF42CACD6160048D1F2 /* TitleView.swift */,
 				D3959EEE2CACD3A80048D1F2 /* PadView.swift */,
@@ -311,7 +315,6 @@
 				D3B48D052C2817AB00441F60 /* Embed Foundation Extensions */,
 				9705A1C41CF9048500538489 /* Embed Frameworks */,
 				3B06AD1E1E4923F5004D2608 /* Thin Binary */,
-				02CB037A989AC33D075B4299 /* [CP] Embed Pods Frameworks */,
 				F041C551FF84BAE7D6D43A4E /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
@@ -420,23 +423,6 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		02CB037A989AC33D075B4299 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Runner/Pods-Runner-frameworks-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Runner/Pods-Runner-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Runner/Pods-Runner-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
 		3B06AD1E1E4923F5004D2608 /* Thin Binary */ = {
 			isa = PBXShellScriptBuildPhase;
 			alwaysOutOfDate = 1;
@@ -523,6 +509,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D3959EF92CACD9010048D1F2 /* TagView.swift in Sources */,
+				D3AC4A4C2CAE7AF5008CEDAE /* EmptyView.swift in Sources */,
 				D3058C672C29226F009DEFB3 /* func.swift in Sources */,
 				D3058C6A2C2924DC009DEFB3 /* model.swift in Sources */,
 				D3058C642C2915D0009DEFB3 /* view.swift in Sources */,
@@ -542,6 +529,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D3959EF82CACD9010048D1F2 /* TagView.swift in Sources */,
+				D3AC4A4D2CAE7AF5008CEDAE /* EmptyView.swift in Sources */,
 				D3058C682C29226F009DEFB3 /* func.swift in Sources */,
 				D3058C6B2C2924DC009DEFB3 /* model.swift in Sources */,
 				D3058C652C2915D0009DEFB3 /* view.swift in Sources */,

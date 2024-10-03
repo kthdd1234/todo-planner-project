@@ -34,7 +34,11 @@ class MemoActionBar extends StatelessWidget {
       onTap: onTap,
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 5),
-        child: svgAsset(name: name, width: width, color: darkButtonColor),
+        child: svgAsset(
+          name: name,
+          width: width,
+          color: isLight ? darkButtonColor : Colors.white,
+        ),
       ),
     );
   }

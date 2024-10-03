@@ -2,8 +2,6 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:project/common/CommonSegmented.dart';
 import 'package:project/common/CommonText.dart';
-import 'package:project/model/record_box/record_box.dart';
-import 'package:project/provider/selectedDateTimeProvider.dart';
 import 'package:project/provider/themeProvider.dart';
 import 'package:project/provider/titleDateTimeProvider.dart';
 import 'package:project/util/constants.dart';
@@ -28,13 +26,6 @@ class CalendarAppBar extends StatelessWidget {
   Widget build(BuildContext context) {
     String locale = context.locale.toString();
     bool isLight = context.watch<ThemeProvider>().isLight;
-
-    DateTime selectedDateTime =
-        context.watch<SelectedDateTimeProvider>().seletedDateTime;
-
-    int recordKey = dateTimeKey(selectedDateTime);
-    RecordBox? recordBox = recordRepository.recordBox.get(recordKey);
-
     DateTime titleDateTime =
         context.watch<TitleDateTimeProvider>().titleDateTime;
 
@@ -55,7 +46,7 @@ class CalendarAppBar extends StatelessWidget {
             width: locale == 'en' ? 150 : 100,
             child: CommonSegmented(
               selectedSegment: selectedSegment,
-              children: categorySegmented(selectedSegment),
+              children: categorySegmented(selectedSegment, isLight),
               onSegmentedChanged: onSegmentedChanged,
             ),
           )

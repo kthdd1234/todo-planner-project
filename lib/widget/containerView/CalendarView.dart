@@ -62,8 +62,8 @@ class _CalendarViewState extends State<CalendarView> {
     Color todoTextColor =
         isLight ? Colors.white : calendarSelectedDateTimeTextColor;
 
-    Color memoBgColor = isLight ? orange.s50 : orange.s100;
-    Color memoTextColor = isLight ? orange.original : orange.s400;
+    Color memoBgColor = isLight ? orange.s50 : orange.s300;
+    Color memoTextColor = isLight ? orange.original : Colors.white;
 
     bool isTodo = widget.selectedSegment == SegmentedTypeEnum.todo;
 
@@ -182,15 +182,20 @@ class _CalendarViewState extends State<CalendarView> {
       children: [
         memoInfo?.imgUrl != null
             ? Padding(
-                padding: const EdgeInsets.only(top: 40, bottom: 3),
+                padding: const EdgeInsets.only(
+                  top: 40,
+                  bottom: 3,
+                  left: 5,
+                  right: 5,
+                ),
                 child: Center(
                   child: CommonCachedNetworkImage(
                     cacheKey: memoInfo!.imgUrl!,
                     imageUrl: memoInfo.imgUrl!,
                     fontSize: 0,
                     radious: 3,
-                    width: 40,
-                    height: 50,
+                    width: double.infinity,
+                    height: isTablet ? 100 : 50,
                     onTap: () {},
                   ),
                 ),
@@ -203,15 +208,15 @@ class _CalendarViewState extends State<CalendarView> {
                 child: Container(
                   width: double.infinity,
                   decoration: BoxDecoration(
-                    color: orange.s50,
+                    color: isLight ? orange.s50 : orange.s300,
                     borderRadius: BorderRadius.circular(3),
                   ),
                   child: Padding(
                     padding: const EdgeInsets.symmetric(vertical: 2),
                     child: svgAsset(
-                      name: 'mark-O',
-                      width: 8,
-                      color: orange.original,
+                      name: 'pencil',
+                      width: isTablet ? 12 : 8,
+                      color: isLight ? orange.original : orange.s50,
                     ),
                   ),
                 ),

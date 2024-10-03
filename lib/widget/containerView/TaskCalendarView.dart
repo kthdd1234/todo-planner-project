@@ -8,6 +8,7 @@ import 'package:project/common/CommonText.dart';
 import 'package:project/provider/selectedDateTimeProvider.dart';
 import 'package:project/provider/titleDateTimeProvider.dart';
 import 'package:project/util/class.dart';
+import 'package:project/util/constants.dart';
 import 'package:project/util/final.dart';
 import 'package:project/util/func.dart';
 import 'package:provider/provider.dart';
@@ -92,22 +93,19 @@ class _TaskCalendarViewState extends State<TaskCalendarView> {
     bool isMemo = (memoInfo?.imgUrl != null) || (memoInfo?.text != null);
 
     return Column(
+      mainAxisAlignment: MainAxisAlignment.end,
       children: [
         isMemo
-            ? Padding(
-                padding: const EdgeInsets.only(top: 8),
-                child: Container(
-                  width: 25,
-                  height: 5,
-                  padding: EdgeInsets.symmetric(horizontal: 3),
-                  decoration: BoxDecoration(
-                    color: orange.s50,
-                    borderRadius: BorderRadius.circular(3),
-                  ),
+            ? Container(
+                width: 21,
+                height: 3,
+                decoration: BoxDecoration(
+                  color: isLight ? orange.s100 : orange.s300,
+                  borderRadius: BorderRadius.circular(3),
                 ),
               )
             : const CommonNull(),
-        Spacer(),
+        CommonSpace(height: 3),
         Column(
           children: [
             wRow(colorList.sublist(0, 3)),

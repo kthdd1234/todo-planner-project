@@ -1,9 +1,11 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:home_widget/home_widget.dart';
 import 'package:project/util/class.dart';
 import 'package:project/util/constants.dart';
+import 'package:project/util/final.dart';
 import 'package:project/util/func.dart';
 
 class HomeWidgetService {
@@ -24,6 +26,8 @@ class HomeWidgetService {
     required List<GroupInfoClass> groupInfoList,
   }) {
     DateTime now = DateTime.now();
+
+    String fontFamily = userInfo.fontFamily;
     String widgetTheme = userInfo.widgetTheme;
     bool isWidgetLight = widgetTheme == 'light';
 
@@ -73,10 +77,10 @@ class HomeWidgetService {
       }
     }
 
-    Color taskTitleTextColor = isWidgetLight ? Colors.black : Colors.white;
-    Color taskTitleBgColor = isWidgetLight ? Colors.white : darkButtonColor;
+    Color taskTitleTextColor = isWidgetLight ? buttonColor : Colors.white;
+    Color taskTitleBgColor = isWidgetLight ? selectedColor : darkButtonColor;
     WidgetHeaderClass header = WidgetHeaderClass(
-      '오늘의 할 일 ${0}'.tr(),
+      '오늘의 할 일 ${taskList.length}'.tr(),
       mdeFormatter(locale: locale, dateTime: now),
       [
         taskTitleTextColor.red,
@@ -91,7 +95,7 @@ class HomeWidgetService {
     );
 
     Map<String, String> entry = {
-      "fontFamily": 'IM_Hyemin',
+      "fontFamily": fontFamily,
       "emptyText": "추가된 할 일이 없어요",
       "header": jsonEncode(header),
       "taskList": jsonEncode(taskList),

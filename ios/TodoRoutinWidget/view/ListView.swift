@@ -10,12 +10,10 @@ struct ListView: View {
     
     var body: some View {
         if itemList.isEmpty {
-                Spacer()
-            TextView(text: emptyText, fontFamily: fontFamily, fontSize: 14, isBold: false, textColor: widgetTheme == "dark" ? .white : .gray, lineThroughColor: nil)
-                Spacer()
+            EmptyView(widgetFamily: widgetFamily, emptyText: emptyText, fontFamily: fontFamily, widgetTheme: widgetTheme)
         } else {
             ForEach(prefixList(widgetFamily: widgetFamily, list: itemList)) { item in
-                ItemView(fontFamily: fontFamily, widgetTheme: widgetTheme, item: item).padding(.bottom, 5)
+                ItemView(fontFamily: fontFamily, widgetTheme: widgetTheme, item: item).padding(.vertical, 2.5)
             }
             Spacer()
         }
@@ -33,8 +31,9 @@ struct ItemView: View {
                 .fill(color(rgb: item.barRGB)!)
                 .frame(width: 5, height: 16)
                 .cornerRadius(2)
-            TextView(text: item.name, fontFamily: fontFamily, fontSize: 14, isBold: widgetTheme == "dark", textColor: widgetTheme == "dark" ? .white : .black, lineThroughColor: item.mark != "E" ? color(rgb: item.lineRGB) : nil)
-                .padding(item.highlightRGB != nil ? EdgeInsets(top: 2, leading: 3, bottom: 2, trailing: 3) : EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
+            TextView(text: item.name, fontFamily: fontFamily, fontSize: 14, isBold: widgetTheme == "dark", textColor: widgetTheme == "dark" ? .white : .black)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .padding(.horizontal, item.highlightRGB != nil ? 3 : 0)
                 .background(color(rgb: item.highlightRGB))
                 .cornerRadius(5)
             Spacer()
@@ -44,6 +43,7 @@ struct ItemView: View {
                 .aspectRatio(contentMode: .fit)
                 .foregroundColor(color(rgb: item.lineRGB))
                 .frame(width: 15, height: 15)
+                .padding(.leading, 5)
         }
     }
 }

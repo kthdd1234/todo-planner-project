@@ -38,6 +38,9 @@ class TaskMoreModalSheet extends StatefulWidget {
 }
 
 class _TaskMoreModalSheetState extends State<TaskMoreModalSheet> {
+  DateTime titleDateTime = DateTime.now();
+  DateTime focusedDay = DateTime.now();
+
   Widget? markerBuilder(
     String locale,
     DateTime dateTime,
@@ -98,12 +101,6 @@ class _TaskMoreModalSheetState extends State<TaskMoreModalSheet> {
     widget.taskInfo.dateTimeList = taskDateTimeInfo.dateTimeList;
 
     await groupMethod.updateGroup(gid: groupId, groupInfo: widget.groupInfo);
-
-    // await taskMethod.updateTask(
-    //   gid: widget.groupInfo.gid,
-    //   tid: widget.taskInfo.tid,
-    //   taskInfo: widget.taskInfo,
-    // );
 
     navigatorPop(context);
     setState(() {});
@@ -231,19 +228,27 @@ class _TaskMoreModalSheetState extends State<TaskMoreModalSheet> {
     );
   }
 
+  onPageChanged(DateTime dateTime) {
+    setState(() => titleDateTime = dateTime);
+  }
+
+  @override
+  void initState() {
+    titleDateTime = widget.selectedDateTime;
+    // titleDateTime = widget.taskInfo.dateTimeType != taskDateTimeType.everyMonth
+    //     ? widget.taskInfo.dateTimeList[0]
+    //     : DateTime(
+    //         widget.selectedDateTime.year,
+    //         widget.selectedDateTime.month,
+    //         widget.taskInfo.dateTimeList[0].day,
+    //       );
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     bool isLight = context.watch<ThemeProvider>().isLight;
     String locale = context.locale.toString();
-    String title = yMFormatter(locale: locale, dateTime: DateTime.now());
-    DateTime focusedDay =
-        widget.taskInfo.dateTimeType != taskDateTimeType.everyMonth
-            ? widget.taskInfo.dateTimeList[0]
-            : DateTime(
-                widget.selectedDateTime.year,
-                widget.selectedDateTime.month,
-                widget.taskInfo.dateTimeList[0].day,
-              );
     ColorClass color = getColorClass(widget.groupInfo.colorName);
 
     return CommonModalSheet(
@@ -262,12 +267,18 @@ class _TaskMoreModalSheetState extends State<TaskMoreModalSheet> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      CommonText(text: title, fontSize: 16, isNotTr: true),
+                      CommonText(
+                        text: yMFormatter(
+                            locale: locale, dateTime: titleDateTime),
+                        fontSize: 16,
+                        isNotTr: true,
+                        isBold: !isLight,
+                      ),
                       CommonTag(
                         text: taskDateTimeLabel[widget.taskInfo.dateTimeType]!,
                         isBold: true,
                         textColor: Colors.white,
-                        bgColor: color.s200,
+                        bgColor: isLight ? color.s200 : color.s300,
                         fontSize: 11,
                         onTap: () {},
                       )
@@ -279,7 +290,7 @@ class _TaskMoreModalSheetState extends State<TaskMoreModalSheet> {
                   locale: locale,
                   rowHeight: 64,
                   headerVisible: false,
-                  focusedDay: focusedDay,
+                  focusedDay: titleDateTime,
                   firstDay: DateTime(2000, 1, 1),
                   lastDay: DateTime(3000, 1, 1),
                   calendarStyle:
@@ -296,6 +307,7 @@ class _TaskMoreModalSheetState extends State<TaskMoreModalSheet> {
                     todayBuilder: (cx, dateTime, __) =>
                         todayBuilder(isLight, dateTime),
                   ),
+                  onPageChanged: onPageChanged,
                 ),
               ],
             ),

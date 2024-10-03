@@ -12,8 +12,7 @@ struct TagView: View {
                  fontFamily: fontFamily,
                  fontSize: 13,
                  isBold: widgetTheme == "dark",
-                 textColor: color(rgb: header.textRGB),
-                 lineThroughColor: nil)
+                 textColor: color(rgb: header.textRGB))
         .padding(EdgeInsets(top: 5, leading: 7, bottom: 5, trailing: 7))
         .background(color(rgb: header.bgRGB))
         .cornerRadius(5)

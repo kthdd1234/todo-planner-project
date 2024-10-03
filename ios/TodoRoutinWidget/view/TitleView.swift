@@ -4,15 +4,14 @@ import SwiftUI
 struct TitleView: View {
     let widgetFamily: WidgetFamily
     let fontFamily: String
+    let header: HeaderModel
     let widgetTheme: String
-    let count: Int
     
     var body: some View {
-        TextView(text: "오늘의 할 일 \(count)",
+        TextView(text: header.title,
                      fontFamily: fontFamily,
                      fontSize: 15,
                      isBold: true,
-                     textColor: widgetTheme == "dark" ? .white : .black,
-                     lineThroughColor: nil)
+                     textColor: widgetTheme == "dark" ? .white : .black)
     }
 }

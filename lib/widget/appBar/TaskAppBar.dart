@@ -8,6 +8,7 @@ import 'package:project/page/PremiumPage.dart';
 import 'package:project/provider/selectedDateTimeProvider.dart';
 import 'package:project/provider/themeProvider.dart';
 import 'package:project/provider/titleDateTimeProvider.dart';
+import 'package:project/util/class.dart';
 import 'package:project/util/constants.dart';
 import 'package:project/util/enum.dart';
 import 'package:project/util/final.dart';
@@ -18,10 +19,12 @@ import 'package:table_calendar/table_calendar.dart';
 class TaskAppBar extends StatefulWidget {
   TaskAppBar({
     super.key,
+    required this.memoInfoList,
     required this.calendarFormat,
     required this.onCalendarFormat,
   });
 
+  List<MemoInfoClass> memoInfoList;
   CalendarFormat calendarFormat;
   Function() onCalendarFormat;
 
@@ -48,17 +51,23 @@ class _TaskAppBarState extends State<TaskAppBar> {
   Widget build(BuildContext context) {
     String locale = context.locale.toString();
     bool isLight = context.watch<ThemeProvider>().isLight;
-
     DateTime selectedDateTime =
         context.watch<SelectedDateTimeProvider>().seletedDateTime;
-
     DateTime titleDateTime =
         context.watch<TitleDateTimeProvider>().titleDateTime;
+
+    int index = widget.memoInfoList.indexWhere(
+      (memoInfo) => memoInfo.dateTimeKey == dateTimeKey(selectedDateTime),
+    );
+    MemoInfoClass? memoInfo = index != -1 ? widget.memoInfoList[index] : null;
 
     onMemo() {
       movePage(
         context: context,
-        page: MemoSettingPage(initDateTime: selectedDateTime),
+        page: MemoSettingPage(
+          initDateTime: selectedDateTime,
+          memoInfo: memoInfo,
+        ),
       );
     }
 
@@ -83,7 +92,7 @@ class _TaskAppBarState extends State<TaskAppBar> {
             child: svgAsset(
               name: 'memo-light',
               width: 21,
-              color: grey.original,
+              color: isLight ? grey.original : Colors.white,
             ),
           ),
           CommonSpace(width: 12.5),
@@ -92,7 +101,7 @@ class _TaskAppBarState extends State<TaskAppBar> {
             child: svgAsset(
               name: 'group-light',
               width: 23,
-              color: grey.original,
+              color: isLight ? grey.original : Colors.white,
             ),
           ),
         ],

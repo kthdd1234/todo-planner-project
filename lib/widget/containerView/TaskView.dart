@@ -120,6 +120,7 @@ class _TaskViewState extends State<TaskView> {
                           CommonText(
                             text: widget.taskInfo.name,
                             textAlign: TextAlign.start,
+                            fontSize: 15,
                             isBold: !isLight,
                             isNotTr: true,
                           ),
@@ -128,8 +129,8 @@ class _TaskViewState extends State<TaskView> {
                                   padding: const EdgeInsets.only(top: 2),
                                   child: CommonText(
                                     text: recordInfo!.memo!,
-                                    color: grey.original,
-                                    fontSize: 12,
+                                    color: isLight ? grey.original : grey.s400,
+                                    fontSize: 13,
                                     overflow: TextOverflow.ellipsis,
                                     textAlign: TextAlign.start,
                                     isBold: !isLight,

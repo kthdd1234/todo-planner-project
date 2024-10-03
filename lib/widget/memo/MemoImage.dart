@@ -17,6 +17,7 @@ class MemoImage extends StatelessWidget {
     return CommonCachedNetworkImage(
       cacheKey: imageUrl!,
       imageUrl: imageUrl!,
+      width: double.infinity,
       height: 300,
       onTap: onTap,
     );

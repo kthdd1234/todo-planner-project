@@ -27,7 +27,7 @@ class CommonImage extends StatelessWidget {
         child: Image.memory(
           uint8List,
           fit: BoxFit.cover,
-          width: width ?? double.maxFinite,
+          width: width,
           height: height,
           cacheHeight: height.cacheSize(context),
           frameBuilder: (context, child, frame, wasSynchronouslyLoaded) {

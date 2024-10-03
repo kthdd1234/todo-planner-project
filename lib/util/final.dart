@@ -431,6 +431,10 @@ List<Map<String, String>> fontFamilyList = [
     "name": "IM 혜민",
   },
   {
+    "fontFamily": "Omyu",
+    "name": "오뮤 다예쁨체",
+  },
+  {
     "fontFamily": "OpenSans",
     "name": "OpenSans",
   },
@@ -505,3 +509,10 @@ Map<String, Map<String, dynamic>> authButtonInfo = {
     'bgColor': darkButtonColor,
   },
 };
+
+bool get isTablet {
+  final firstView = WidgetsBinding.instance.platformDispatcher.views.first;
+  final logicalShortestSide =
+      firstView.physicalSize.shortestSide / firstView.devicePixelRatio;
+  return logicalShortestSide > 600;
+}

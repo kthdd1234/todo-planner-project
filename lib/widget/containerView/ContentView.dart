@@ -25,11 +25,6 @@ class ContentView extends StatelessWidget {
 
     String id = taskInfoIdList.removeAt(oldIndex);
     taskInfoIdList.insert(newIndex, id);
-
-    // Map<String, dynamic> newTaskOrder = {
-    //   'dateTimeKey': dateTimeKey(selectedDateTime),
-    //   'list': taskInfoIdList
-    // };
     TaskOrderClass newTaskOrder = TaskOrderClass(
       dateTimeKey: dateTimeKey(selectedDateTime),
       list: taskInfoIdList,

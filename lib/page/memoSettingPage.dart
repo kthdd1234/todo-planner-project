@@ -237,7 +237,7 @@ class _MemoSettingPageState extends State<MemoSettingPage> {
                                         ),
                                         child: CommonImage(
                                           uint8List: uint8List!,
-                                          height: 250,
+                                          height: 300,
                                           onTap: onSelectionImage,
                                         ),
                                       )

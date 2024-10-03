@@ -58,8 +58,6 @@ class _CalendarBodyState extends State<CalendarBody> {
   @override
   Widget build(BuildContext context) {
     UserInfoClass userInfo = context.watch<UserInfoProvider>().userInfo;
-    DateTime selectedDateTime =
-        context.watch<SelectedDateTimeProvider>().seletedDateTime;
     List<GroupInfoClass> groupInfoList =
         context.watch<GroupInfoListProvider>().groupInfoList;
     List<MemoInfoClass> memoInfoList =

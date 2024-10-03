@@ -161,10 +161,16 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
         state == AppLifecycleState.detached;
 
     if (isBackground && isLogin) {
+      UserInfoClass userInfo =
+          Provider.of<UserInfoProvider>(context, listen: false).getUserInfo;
+      List<GroupInfoClass> groupInfoList =
+          Provider.of<GroupInfoListProvider>(context, listen: false)
+              .getGroupInfoList;
+
       await HomeWidgetService().updateAllTodoList(
         locale: locale,
-        userInfo: UserInfoProvider().userInfo,
-        groupInfoList: GroupInfoListProvider().groupInfoList,
+        userInfo: userInfo,
+        groupInfoList: groupInfoList,
       );
     }
   }
