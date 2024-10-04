@@ -44,7 +44,7 @@ class _TaskAppBarState extends State<TaskAppBar> {
   }
 
   onGroup() {
-    movePage(context: context, page: const GroupPage());
+    movePage(context: context, page: GroupPage());
   }
 
   @override
@@ -66,6 +66,7 @@ class _TaskAppBarState extends State<TaskAppBar> {
         context: context,
         page: MemoSettingPage(
           initDateTime: selectedDateTime,
+          memoInfoList: widget.memoInfoList,
           memoInfo: memoInfo,
         ),
       );

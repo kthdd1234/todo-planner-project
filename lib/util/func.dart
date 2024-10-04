@@ -357,25 +357,6 @@ DateTime weeklyEndDateTime(DateTime dateTime) {
   ));
 }
 
-// List<String?> getRecordValueList({
-//   required String key,
-//   required DateTime dateTime,
-//   required String taskId,
-//   required List<Map<String, dynamic>> recordInfoList,
-// }) {
-//   return List.generate(7, (index) {
-//     Duration duration = Duration(days: index);
-//     DateTime resultDateTime = dateTime.add(duration);
-//     String? value;
-
-//     recordInfoList.forEach((info) {
-//       if (info['id'] == taskId) value = info[key];
-//     });
-
-//     return value;
-//   });
-// }
-
 List<String?> getMarkList({
   required List<RecordInfoClass> recordInfoList,
   required DateTime dateTime,
@@ -656,4 +637,87 @@ themeData(String fontFamily) {
     fontFamily: fontFamily,
     cupertinoOverrideTheme: const CupertinoThemeData(applyThemeToAll: true),
   );
+}
+
+List<BNClass> getBnClassList(bool isLight, int seletedIdx) {
+  svg(int idx, String name) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 5),
+      child: svgAsset(
+        name: name,
+        width: idx == 2 ? 21 : 23,
+        color: idx == seletedIdx
+            ? null
+            : isLight
+                ? grey.original
+                : grey.original,
+      ),
+    );
+  }
+
+  List<BNClass> bnClassList = [
+    BNClass(
+      index: 0,
+      name: '홈',
+      icon: svg(
+        0,
+        seletedIdx == 0
+            ? 'bnb-home-filled-${isLight ? 'light' : 'dark'}'
+            : 'bnb-home',
+      ),
+      svgName: seletedIdx == 0 ? 'bnb-home-filled-light' : 'bnb-home',
+    ),
+    BNClass(
+      index: 1,
+      name: '캘린더',
+      icon: svg(
+        1,
+        seletedIdx == 1
+            ? 'bnb-calendar-filled-${isLight ? 'light' : 'dark'}'
+            : 'bnb-calendar',
+      ),
+      svgName: 'bnb-calendar',
+    ),
+    BNClass(
+      index: 2,
+      name: '기록표',
+      icon: svg(
+        2,
+        seletedIdx == 2
+            ? 'bnb-tracker-filled-${isLight ? 'light' : 'dark'}'
+            : 'bnb-tracker',
+      ),
+      svgName: 'bnb-tracker',
+    ),
+    BNClass(
+      index: 3,
+      name: '설정',
+      icon: svg(
+        3,
+        seletedIdx == 3
+            ? 'bnb-setting-filled-${isLight ? 'light' : 'dark'}'
+            : 'bnb-setting',
+      ),
+      svgName: 'bnb-setting',
+    )
+  ];
+
+  return bnClassList;
+}
+
+List<BottomNavigationBarItem> getBnbiList(bool isLight, int seletedIdx) {
+  List<BottomNavigationBarItem> bnbList = getBnClassList(
+    isLight,
+    seletedIdx,
+  )
+      .map(
+        (bn) => BottomNavigationBarItem(label: bn.name.tr(), icon: bn.icon),
+      )
+      .toList();
+
+  return bnbList;
+}
+
+String getBnName(int appStartIndex) {
+  return ['홈', '캘린더', '기록표'][appStartIndex];
 }

@@ -5,6 +5,7 @@ import 'package:project/common/CommonModalSheet.dart';
 import 'package:project/common/CommonOutlineInputField.dart';
 import 'package:project/common/CommonSpace.dart';
 import 'package:project/page/HomePage.dart';
+import 'package:project/provider/PremiumProvider.dart';
 import 'package:project/provider/UserInfoProvider.dart';
 import 'package:project/provider/themeProvider.dart';
 import 'package:project/util/class.dart';
@@ -39,43 +40,44 @@ class _TitleSettingModalSheetState extends State<TitleSettingModalSheet> {
     setState(() => selectedColorName = colorName);
   }
 
-  onEditingComplete(UserInfoClass userInfo) async {
-    DateTime now = DateTime.now();
-
-    if (widget.groupInfo == null) {
-      String newGid = uuid();
-
-      await groupMethod.addGroup(
-        gid: newGid,
-        groupInfo: GroupInfoClass(
-          gid: newGid,
-          name: controller.text,
-          colorName: selectedColorName,
-          createDateTime: now,
-          isOpen: true,
-          taskOrderList: [],
-          taskInfoList: [],
-        ),
-      );
-
-      userInfo.groupOrderList.add(newGid);
-      await userMethod.updateUser(userInfo: userInfo);
-    } else {
-      GroupInfoClass groupInfo = widget.groupInfo!;
-
-      groupInfo.name = controller.text;
-      groupInfo.colorName = selectedColorName;
-
-      await groupMethod.updateGroup(gid: groupInfo.gid, groupInfo: groupInfo);
-    }
-
-    navigatorPop(context);
-  }
-
   @override
   Widget build(BuildContext context) {
     bool isLight = context.watch<ThemeProvider>().isLight;
     UserInfoClass userInfo = context.watch<UserInfoProvider>().userInfo;
+    bool isPremium = context.watch<PremiumProvider>().isPremium;
+
+    onEditingComplete() async {
+      DateTime now = DateTime.now();
+
+      if (widget.groupInfo == null) {
+        String newGid = uuid();
+
+        await groupMethod.addGroup(
+          gid: newGid,
+          groupInfo: GroupInfoClass(
+            gid: newGid,
+            name: controller.text,
+            colorName: selectedColorName,
+            createDateTime: now,
+            isOpen: true,
+            taskOrderList: [],
+            taskInfoList: [],
+          ),
+        );
+
+        userInfo.groupOrderList.add(newGid);
+        await userMethod.updateUser(userInfo: userInfo);
+      } else {
+        GroupInfoClass groupInfo = widget.groupInfo!;
+
+        groupInfo.name = controller.text;
+        groupInfo.colorName = selectedColorName;
+
+        await groupMethod.updateGroup(gid: groupInfo.gid, groupInfo: groupInfo);
+      }
+
+      navigatorPop(context);
+    }
 
     return Padding(
       padding: EdgeInsets.only(
@@ -108,8 +110,8 @@ class _TitleSettingModalSheetState extends State<TitleSettingModalSheet> {
                 selectedColor: isLight
                     ? getColorClass(selectedColorName).s200
                     : getColorClass(selectedColorName).s300,
-                onSuffixIcon: () => onEditingComplete(userInfo),
-                onEditingComplete: () => onEditingComplete(userInfo),
+                onSuffixIcon: onEditingComplete,
+                onEditingComplete: onEditingComplete,
                 onChanged: (_) => setState(() {}),
               )
             ],

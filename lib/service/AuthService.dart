@@ -32,6 +32,7 @@ class AuthService {
           uid: uid,
           loginType: loginType,
           createDateTime: createDateTime,
+          appStartIndex: 0,
           email: userDetails.email,
           displayName: userDetails.displayName,
           imgUrl: userDetails.photoURL,

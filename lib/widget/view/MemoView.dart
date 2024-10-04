@@ -54,6 +54,7 @@ class _MemoViewState extends State<MemoView> {
               context: context,
               page: MemoSettingPage(
                 initDateTime: selectedDateTime,
+                memoInfoList: widget.memoInfoList,
                 memoInfo: memoInfo,
               ),
             );

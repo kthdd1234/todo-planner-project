@@ -11,6 +11,8 @@ import 'package:project/common/CommonImage.dart';
 import 'package:project/common/CommonNull.dart';
 import 'package:project/main.dart';
 import 'package:project/page/ImageSlidePage.dart';
+import 'package:project/page/PremiumPage.dart';
+import 'package:project/provider/PremiumProvider.dart';
 import 'package:project/provider/themeProvider.dart';
 import 'package:project/util/constants.dart';
 import 'package:project/widget/border/HorizentalBorder.dart';
@@ -31,11 +33,13 @@ class MemoSettingPage extends StatefulWidget {
   MemoSettingPage({
     super.key,
     required this.initDateTime,
+    required this.memoInfoList,
     this.memoInfo,
   });
 
-  DateTime initDateTime;
+  List<MemoInfoClass> memoInfoList;
   MemoInfoClass? memoInfo;
+  DateTime initDateTime;
 
   @override
   State<MemoSettingPage> createState() => _MemoSettingPageState();
@@ -129,7 +133,7 @@ class _MemoSettingPageState extends State<MemoSettingPage> {
     return null;
   }
 
-  onSave() async {
+  onSave({required bool isPremium}) async {
     bool isEmpty = uint8List == null && memoContoller.text == '';
 
     if (isEmpty) {
@@ -142,6 +146,10 @@ class _MemoSettingPageState extends State<MemoSettingPage> {
           onTap: () => navigatorPop(context),
         ),
       );
+    } else if (isPremium == false &&
+        widget.memoInfoList.length > 2 &&
+        widget.memoInfo == null) {
+      movePage(context: context, page: const PremiumPage());
     } else {
       try {
         onLoading(true);
@@ -193,9 +201,9 @@ class _MemoSettingPageState extends State<MemoSettingPage> {
   @override
   Widget build(BuildContext context) {
     String locale = context.locale.toString();
+    bool isPremium = context.watch<PremiumProvider>().isPremium;
     bool isLight = context.watch<ThemeProvider>().isLight;
     Color containerColor = isLight ? memoBgColor : darkContainerColor;
-    Color borderColor = isLight ? orange.s50 : Colors.white10;
     Color cursorColor = isLight ? orange.s300 : darkTextColor;
 
     return CommonBackground(
@@ -267,7 +275,7 @@ class _MemoSettingPageState extends State<MemoSettingPage> {
               onImage: onImage,
               onAlign: onAlign,
               onClock: onClock,
-              onSave: onSave,
+              onSave: () => onSave(isPremium: isPremium),
             ),
             HorizentalBorder(colorName: '주황색'),
           ],

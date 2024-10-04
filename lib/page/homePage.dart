@@ -69,6 +69,9 @@ class _HomePageState extends State<HomePage> {
               if (mounted) {
                 context.read<ThemeProvider>().setThemeValue(userInfo.theme);
                 context
+                    .read<BottomTabIndexProvider>()
+                    .changeSeletedIdx(newIndex: userInfo.appStartIndex);
+                context
                     .read<UserInfoProvider>()
                     .changeUserInfo(newuUserInfo: userInfo);
               }

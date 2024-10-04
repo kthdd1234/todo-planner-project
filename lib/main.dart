@@ -114,26 +114,6 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
     }
   }
 
-  onUserInfo() {
-    userMethod.userSnapshots.listen(
-      (event) {
-        WidgetsBinding.instance.addPostFrameCallback(
-          (_) {
-            Map<String, dynamic>? json = event.data();
-
-            if (json != null) {
-              UserInfoClass userInfo = UserInfoClass.fromJson(json);
-
-              context
-                  .read<UserInfoProvider>()
-                  .changeUserInfo(newuUserInfo: userInfo);
-            }
-          },
-        );
-      },
-    ).onError((err) => log('$err'));
-  }
-
   onWidget(Uri? uri) async {
     DateTime now = DateTime.now();
 

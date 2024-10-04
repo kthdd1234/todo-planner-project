@@ -139,13 +139,8 @@ flutter:
     - assets/svg/share.svg
     - assets/svg/version.svg
     - assets/svg/private.svg
-    - assets/svg/premium-badge.svg
-    - assets/svg/premium-free.svg
-    - assets/svg/premium-no-ads.svg
-    - assets/svg/premium-photos.svg
     - assets/svg/todo-planner-app-icon.svg
     - assets/svg/inquire.svg
-    - assets/svg/theme.svg
     - assets/svg/light.svg
     - assets/svg/dark.svg
     - assets/svg/dir-down-bold.svg
@@ -155,16 +150,13 @@ flutter:
     - assets/svg/start-week.svg
     - assets/svg/check-icon.svg
     - assets/svg/input.svg
-    - assets/svg/premium-state-icon.svg
     - assets/svg/mark-E2.svg
     - assets/svg/system.svg
     - assets/svg/widget.svg
     - assets/svg/font.svg
     - assets/svg/background.svg
     - assets/svg/lock.svg
-    - assets/svg/app-start.svg
     - assets/svg/hand.svg
-    - assets/svg/premium-photos-four.svg
     - assets/svg/language.svg
     - assets/image/b-0.png
     - assets/image/b-1.png
@@ -212,7 +204,12 @@ flutter:
     - assets/svg/clock.svg
     - assets/svg/user.svg
     - assets/svg/premium-memo.svg
-    - assets/svg/premium-table.svg
+    - assets/svg/premium-group.svg
+    - assets/svg/premium-background.svg
+    - assets/svg/premium-badge.svg
+    - assets/svg/premium-free.svg
+    - assets/svg/premium-no-ads.svg
+    - assets/svg/premium-start.svg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

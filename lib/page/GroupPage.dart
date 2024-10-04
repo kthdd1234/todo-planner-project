@@ -4,11 +4,11 @@ import 'package:project/common/CommonBackground.dart';
 import 'package:project/common/CommonNull.dart';
 import 'package:project/common/CommonScaffold.dart';
 import 'package:project/page/HomePage.dart';
+import 'package:project/page/PremiumPage.dart';
 import 'package:project/provider/PremiumProvider.dart';
 import 'package:project/provider/UserInfoProvider.dart';
 import 'package:project/provider/themeProvider.dart';
 import 'package:project/util/class.dart';
-import 'package:project/util/final.dart';
 import 'package:project/util/func.dart';
 import 'package:project/widget/group/GroupAddButton.dart';
 import 'package:project/widget/group/GroupEditButton.dart';
@@ -35,7 +35,14 @@ class _GroupPageState extends State<GroupPage> {
     );
   }
 
-  onAdd() {
+  onAdd({
+    required bool isPremium,
+    required List<GroupInfoClass> groupInfoList,
+  }) {
+    if (isPremium == false && groupInfoList.length > 1) {
+      return movePage(context: context, page: const PremiumPage());
+    }
+
     showModalBottomSheet(
       isScrollControlled: true,
       context: context,
@@ -47,14 +54,18 @@ class _GroupPageState extends State<GroupPage> {
     setState(() => isEdit = !isEdit);
   }
 
-  onRemove(GroupInfoClass groupInfo, UserInfoClass userInfo) {
-    if (groupRepository.groupList.length == 1) {
+  onRemove({
+    required List<GroupInfoClass> groupInfoList,
+    required GroupInfoClass groupInfo,
+    required UserInfoClass userInfo,
+  }) {
+    if (groupInfoList.length == 1) {
       showDialog(
         context: context,
         builder: (context) => AlertPopup(
           desc: '최소 1개 이상의 그룹이 존재해야 합니다.',
           buttonText: '확인',
-          height: 170,
+          height: 155,
           onTap: () => navigatorPop(context),
         ),
       );
@@ -96,23 +107,39 @@ class _GroupPageState extends State<GroupPage> {
     bool isLight = context.watch<ThemeProvider>().isLight;
     UserInfoClass userInfo = context.watch<UserInfoProvider>().userInfo;
 
-    return CommonBackground(
-      child: CommonScaffold(
-        appBarInfo: AppBarInfoClass(title: '그룹 관리', actions: [
-          GroupEditButton(isEdit: isEdit, isLight: isLight, onEdit: onEdit)
-        ]),
-        body: StreamBuilder<QuerySnapshot>(
-          stream: groupMethod.stream(),
-          builder: (context, snapshot) {
-            if (!snapshot.hasData) return const CommonNull();
+    return StreamBuilder<QuerySnapshot>(
+      stream: groupMethod.stream(),
+      builder: (context, snapshot) {
+        if (!snapshot.hasData) return const CommonNull();
 
-            List<GroupInfoClass> groupInfoList =
-                groupMethod.getGroupInfoList(snapshot: snapshot);
+        List<GroupInfoClass> groupInfoList =
+            groupMethod.getGroupInfoList(snapshot: snapshot);
 
-            groupInfoList =
-                getGroupInfoOrderList(userInfo.groupOrderList, groupInfoList);
+        groupInfoList = getGroupInfoOrderList(
+          userInfo.groupOrderList,
+          groupInfoList,
+        );
 
-            return ReorderableListView.builder(
+        return CommonBackground(
+          child: CommonScaffold(
+            appBarInfo: AppBarInfoClass(
+              title: '그룹 관리',
+              actions: [
+                GroupEditButton(
+                  isEdit: isEdit,
+                  isLight: isLight,
+                  onEdit: onEdit,
+                )
+              ],
+            ),
+            floatingActionButton: GroupAddButton(
+              isLight: isLight,
+              onAdd: () => onAdd(
+                isPremium: isPremium,
+                groupInfoList: groupInfoList,
+              ),
+            ),
+            body: ReorderableListView.builder(
               physics: const ClampingScrollPhysics(),
               itemCount: groupInfoList.length,
               onReorder: (oldIndex, newIndex) =>
@@ -128,15 +155,18 @@ class _GroupPageState extends State<GroupPage> {
                     groupInfo: groupInfoList[index],
                     isEdit: isEdit,
                     onItem: onItem,
-                    onRemove: (groupInfo) => onRemove(groupInfo, userInfo),
+                    onRemove: (groupInfo) => onRemove(
+                      groupInfoList: groupInfoList,
+                      groupInfo: groupInfo,
+                      userInfo: userInfo,
+                    ),
                   ),
                 );
               },
-            );
-          },
-        ),
-        floatingActionButton: GroupAddButton(isLight: isLight, onAdd: onAdd),
-      ),
+            ),
+          ),
+        );
+      },
     );
   }
 }

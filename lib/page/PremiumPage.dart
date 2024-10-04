@@ -94,39 +94,56 @@ class _PremiumPageState extends State<PremiumPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Column(
-                children: premiumBenefitList
-                    .map(
-                      (premiumBenefit) => CommonContainer(
-                        outerPadding: EdgeInsets.only(bottom: 10),
-                        child: Row(
-                          children: [
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
+              Expanded(
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: premiumBenefitList
+                        .map(
+                          (premiumBenefit) => CommonContainer(
+                            outerPadding: EdgeInsets.only(bottom: 10),
+                            child: Row(
                               children: [
-                                CommonText(
-                                  text: premiumBenefit.mainTitle,
-                                  isBold: !isLight,
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    CommonText(
+                                      text: premiumBenefit.mainTitle,
+                                      isBold: !isLight,
+                                    ),
+                                    CommonSpace(height: 5),
+                                    CommonText(
+                                      text: premiumBenefit.subTitle,
+                                      fontSize: 11,
+                                      color: grey.original,
+                                      isBold: !isLight,
+                                    ),
+                                  ],
                                 ),
-                                CommonSpace(height: 5),
-                                CommonText(
-                                  text: premiumBenefit.subTitle,
-                                  fontSize: 11,
-                                  color: grey.original,
-                                  isBold: !isLight,
+                                Spacer(),
+                                svgAsset(
+                                  name: premiumBenefit.svgName,
+                                  width: 50,
                                 ),
                               ],
                             ),
-                            Spacer(),
-                            svgAsset(
-                              name: premiumBenefit.svgName,
-                              width: 50,
-                            ),
-                          ],
-                        ),
-                      ),
-                    )
-                    .toList(),
+                          ),
+                        )
+                        .toList(),
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(bottom: 10),
+                child: Center(
+                  child: CommonText(
+                    text: '구매 내역 복원하기',
+                    color: grey.original,
+                    fontSize: 12,
+                    decoration: TextDecoration.underline,
+                    decorationColor: grey.s400,
+                    onTap: onRestore,
+                  ),
+                ),
               ),
               isPremium
                   ? Padding(
@@ -140,23 +157,22 @@ class _PremiumPageState extends State<PremiumPage> {
                         svgDirection: SvgDirectionEnum.left,
                       ),
                     )
-                  : Row(
-                      children: [
-                        Expanded(
-                          child: ImageButton(
-                            path: 't-4',
-                            text: '구매하기',
-                            nameArgs: {
-                              "price":
-                                  package?.storeProduct.priceString ?? 'None'
-                            },
-                            fontSize: 14,
-                            padding: const EdgeInsets.symmetric(vertical: 15),
-                            onTap: onPurchase,
-                          ),
+                  : Padding(
+                      padding: const EdgeInsets.only(bottom: 5),
+                      child: SizedBox(
+                        width: double.infinity,
+                        child: ImageButton(
+                          path: 't-4',
+                          text: '구매하기',
+                          nameArgs: {
+                            "price": package?.storeProduct.priceString ?? 'None'
+                          },
+                          fontSize: 14,
+                          padding: const EdgeInsets.symmetric(vertical: 15),
+                          onTap: onPurchase,
                         ),
-                      ],
-                    )
+                      ),
+                    ),
             ],
           ),
         ),

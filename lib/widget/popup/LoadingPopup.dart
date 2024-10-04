@@ -19,27 +19,31 @@ class LoadingPopup extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        const CircularProgressIndicator(strokeWidth: 3),
-        CommonSpace(height: 10),
-        CommonText(
-          text: text,
-          fontSize: 11,
-          color: color,
-          nameArgs: nameArgs,
-        ),
-        CommonSpace(height: 3),
-        subText != null
-            ? CommonText(
-                text: subText!,
-                fontSize: 11,
-                color: color,
-                nameArgs: nameArgs,
-              )
-            : const CommonNull(),
-      ],
+    return Material(
+      color: Colors.transparent,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          const CircularProgressIndicator(strokeWidth: 3),
+          CommonSpace(height: 10),
+          CommonText(
+            text: text,
+            fontSize: 11,
+            color: color,
+            nameArgs: nameArgs,
+            isBold: true,
+          ),
+          CommonSpace(height: 3),
+          subText != null
+              ? CommonText(
+                  text: subText!,
+                  fontSize: 11,
+                  color: color,
+                  nameArgs: nameArgs,
+                )
+              : const CommonNull(),
+        ],
+      ),
     );
   }
 }

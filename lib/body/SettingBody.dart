@@ -15,6 +15,7 @@ import 'package:project/page/ProfilePage.dart';
 import 'package:project/provider/PremiumProvider.dart';
 import 'package:project/provider/ReloadProvider.dart';
 import 'package:project/provider/UserInfoProvider.dart';
+import 'package:project/provider/bottomTabIndexProvider.dart';
 import 'package:project/provider/themeProvider.dart';
 import 'package:project/util/class.dart';
 import 'package:project/util/constants.dart';
@@ -22,6 +23,7 @@ import 'package:project/util/enum.dart';
 import 'package:project/util/final.dart';
 import 'package:project/util/func.dart';
 import 'package:project/widget/appBar/SettingAppBar.dart';
+import 'package:project/widget/modalSheet/AppStartIndexModalSheet.dart';
 import 'package:project/widget/modalSheet/LanguageModalSheet.dart';
 import 'package:project/widget/modalSheet/ThemeModalSheet.dart';
 import 'package:provider/provider.dart';
@@ -136,9 +138,10 @@ class _ContentViewState extends State<ContentView> {
 
   @override
   Widget build(BuildContext context) {
-    bool isLight = context.read<ThemeProvider>().isLight;
-    String locale = context.locale.toString();
+    context.watch<ReloadProvider>().isReload;
 
+    String locale = context.locale.toString();
+    bool isLight = context.read<ThemeProvider>().isLight;
     UserInfoClass userInfo = context.watch<UserInfoProvider>().userInfo;
     bool isPremium = context.watch<PremiumProvider>().isPremium;
 
@@ -147,8 +150,7 @@ class _ContentViewState extends State<ContentView> {
     String widgetTheme = userInfo.widgetTheme;
     String background = userInfo.background;
     String fontFamily = userInfo.fontFamily;
-
-    context.watch<ReloadProvider>().isReload;
+    int appStartIndex = userInfo.appStartIndex;
 
     onScreenTheme() {
       showModalBottomSheet(
@@ -207,6 +209,15 @@ class _ContentViewState extends State<ContentView> {
       );
     }
 
+    onStart(bool isPremium) async {
+      isPremium == false
+          ? movePage(context: context, page: const PremiumPage())
+          : await showModalBottomSheet(
+              context: context,
+              builder: (context) => AppStartIndexModalSheet(),
+            );
+    }
+
     List<SettingItemClass> settingItemList = [
       SettingItemClass(
         name: '프로필',
@@ -245,8 +256,14 @@ class _ContentViewState extends State<ContentView> {
         onTap: onLanguage,
       ),
       SettingItemClass(
+        name: '앱 시작 화면',
+        svg: 'premium-start',
+        value: onValue(getBnName(appStartIndex), null),
+        onTap: () => onStart(isPremium),
+      ),
+      SettingItemClass(
         name: '앱 배경',
-        svg: 'theme',
+        svg: 'premium-background',
         value: onValue(
             backroundClassList
                 .expand((list) => list)

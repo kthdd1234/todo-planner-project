@@ -358,7 +358,7 @@ class FadePageRoute extends PageRouteBuilder {
         );
 }
 
-//ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ파이어스토어 데이터 모델링ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ//
+//ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ firestore data modeling ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ//
 
 class UserInfoClass {
   UserInfoClass({
@@ -370,6 +370,7 @@ class UserInfoClass {
     required this.theme,
     required this.widgetTheme,
     required this.groupOrderList,
+    required this.appStartIndex,
     this.passwords,
     this.email,
     this.displayName,
@@ -378,6 +379,7 @@ class UserInfoClass {
 
   String uid, loginType, fontFamily, background, theme, widgetTheme;
   DateTime createDateTime;
+  int appStartIndex;
   List<String> groupOrderList;
   String? email, displayName, imgUrl, passwords;
 
@@ -385,6 +387,7 @@ class UserInfoClass {
       : uid = json['uid'] as String,
         loginType = json['loginType'] as String,
         createDateTime = timestampToDateTime(json['createDateTime']),
+        appStartIndex = json['appStartIndex'] as int,
         fontFamily = json['fontFamily'] as String,
         background = json['background'] as String,
         theme = json['theme'] as String,
@@ -399,6 +402,7 @@ class UserInfoClass {
         'uid': uid,
         'loginType': loginType,
         'createDateTime': createDateTime,
+        'appStartIndex': appStartIndex,
         'fontFamily': fontFamily,
         'background': background,
         'theme': theme,

@@ -12,85 +12,6 @@ import 'package:project/util/enum.dart';
 import 'package:project/util/func.dart';
 import 'package:table_calendar/table_calendar.dart';
 
-List<BNClass> getBnClassList(bool isLight, int seletedIdx) {
-  svg(int idx, String name) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 5),
-      child: svgAsset(
-        name: name,
-        width: idx == 2 ? 21 : 23,
-        color: idx == seletedIdx
-            ? null
-            : isLight
-                ? grey.original
-                : grey.original,
-      ),
-    );
-  }
-
-  List<BNClass> bnClassList = [
-    BNClass(
-      index: 0,
-      name: '홈',
-      icon: svg(
-        0,
-        seletedIdx == 0
-            ? 'bnb-home-filled-${isLight ? 'light' : 'dark'}'
-            : 'bnb-home',
-      ),
-      svgName: seletedIdx == 0 ? 'bnb-home-filled-light' : 'bnb-home',
-    ),
-    BNClass(
-      index: 1,
-      name: '캘린더',
-      icon: svg(
-        1,
-        seletedIdx == 1
-            ? 'bnb-calendar-filled-${isLight ? 'light' : 'dark'}'
-            : 'bnb-calendar',
-      ),
-      svgName: 'bnb-calendar',
-    ),
-    BNClass(
-      index: 2,
-      name: '기록표',
-      icon: svg(
-        2,
-        seletedIdx == 2
-            ? 'bnb-tracker-filled-${isLight ? 'light' : 'dark'}'
-            : 'bnb-tracker',
-      ),
-      svgName: 'bnb-tracker',
-    ),
-    BNClass(
-      index: 3,
-      name: '설정',
-      icon: svg(
-        3,
-        seletedIdx == 3
-            ? 'bnb-setting-filled-${isLight ? 'light' : 'dark'}'
-            : 'bnb-setting',
-      ),
-      svgName: 'bnb-setting',
-    )
-  ];
-
-  return bnClassList;
-}
-
-List<BottomNavigationBarItem> getBnbiList(bool isLight, int seletedIdx) {
-  List<BottomNavigationBarItem> bnbList = getBnClassList(
-    isLight,
-    seletedIdx,
-  )
-      .map(
-        (bn) => BottomNavigationBarItem(label: bn.name.tr(), icon: bn.icon),
-      )
-      .toList();
-
-  return bnbList;
-}
-
 final indigo = ColorClass(
   colorName: '남색',
   original: Colors.indigo, // 63, 81, 181
@@ -355,9 +276,9 @@ final premiumBenefitList = [
     subTitle: '광고없이 쾌적하게 앱을 사용해보세요!',
   ),
   PremiumBenefitClass(
-    svgName: 'premium-table',
-    mainTitle: '주간 기록표를 볼 수 있어요',
-    subTitle: '일주일간 체크 상태를 한눈에 확인!',
+    svgName: 'premium-group',
+    mainTitle: '그룹을 제한없이 추가할 수 있어요',
+    subTitle: '보다 많은 그룹으로 할 일을 분류!',
   ),
   PremiumBenefitClass(
     svgName: 'premium-memo',
@@ -365,9 +286,14 @@ final premiumBenefitList = [
     subTitle: '사진과 함께 꼼꼼히 기록해보세요!',
   ),
   PremiumBenefitClass(
-    svgName: 'theme',
+    svgName: 'premium-background',
     mainTitle: '다양한 배경들을 제공해드려요',
     subTitle: '총 6종의 다채로운 배경들을 이용해보세요!',
+  ),
+  PremiumBenefitClass(
+    svgName: 'premium-start',
+    mainTitle: '앱 시작 시 원하는 화면을 바로 볼 수 있어요',
+    subTitle: '홈, 캘린더, 기록표 화면 중 한 곳 선택!',
   ),
 ];
 
@@ -464,13 +390,14 @@ final languageList = [
 ];
 
 final initUserInfo = UserInfoClass(
-  uid: '',
-  loginType: '',
+  uid: '-',
+  loginType: 'apple',
   createDateTime: DateTime.now(),
+  appStartIndex: 0,
   fontFamily: initFontFamily,
   background: '0',
-  theme: '',
-  widgetTheme: '',
+  theme: 'light',
+  widgetTheme: 'light',
   groupOrderList: [],
 );
 
