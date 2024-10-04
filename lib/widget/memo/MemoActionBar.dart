@@ -3,7 +3,7 @@ import 'package:project/common/CommonSpace.dart';
 import 'package:project/util/constants.dart';
 import 'package:project/util/final.dart';
 import 'package:project/util/func.dart';
-import 'package:project/widget/containerView/MemoView.dart';
+import 'package:project/widget/view/MemoView.dart';
 import 'package:project/widget/memo/MemoBackground.dart';
 import 'package:project/widget/memo/MemoLoading.dart';
 

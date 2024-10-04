@@ -7,6 +7,7 @@ import 'package:project/common/CommonContainer.dart';
 import 'package:project/common/CommonScaffold.dart';
 import 'package:project/common/CommonSpace.dart';
 import 'package:project/common/CommonSvgText.dart';
+import 'package:project/common/CommonTag.dart';
 import 'package:project/common/CommonText.dart';
 import 'package:project/provider/PremiumProvider.dart';
 import 'package:project/provider/themeProvider.dart';
@@ -87,101 +88,77 @@ class _PremiumPageState extends State<PremiumPage> {
 
     return CommonBackground(
       child: CommonScaffold(
-        appBarInfo: AppBarInfoClass(title: '프리미엄'),
-        body: Column(
-          children: [
-            CommonContainer(
-              outerPadding: const EdgeInsets.symmetric(horizontal: 7),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: 15),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        CommonText(
-                          text: '프리미엄 혜택',
-                          isBold: true,
-                          color: isLight ? textColor : darkTextColor,
-                        ),
-                        CommonText(
-                          text: '구매 내역 가져오기',
-                          color: grey.original,
-                          fontSize: 12,
-                          isBold: !isLight,
-                        )
-                      ],
-                    ),
-                  ),
-                  Column(
-                    children: premiumBenefitList
-                        .map(
-                          (premiumBenefit) => Padding(
-                            padding: const EdgeInsets.only(bottom: 20),
-                            child: Row(
+        appBarInfo: AppBarInfoClass(title: '프리미엄 혜택', fontSize: 16),
+        body: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 10),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Column(
+                children: premiumBenefitList
+                    .map(
+                      (premiumBenefit) => CommonContainer(
+                        outerPadding: EdgeInsets.only(bottom: 10),
+                        child: Row(
+                          children: [
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                svgAsset(
-                                  name: premiumBenefit.svgName,
-                                  width: 50,
+                                CommonText(
+                                  text: premiumBenefit.mainTitle,
+                                  isBold: !isLight,
                                 ),
-                                CommonSpace(width: 15),
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    CommonText(
-                                      text: premiumBenefit.mainTitle,
-                                      isBold: !isLight,
-                                    ),
-                                    CommonSpace(height: 5),
-                                    CommonText(
-                                      text: premiumBenefit.subTitle,
-                                      fontSize: 12,
-                                      color: grey.original,
-                                      isBold: !isLight,
-                                    ),
-                                  ],
-                                )
+                                CommonSpace(height: 5),
+                                CommonText(
+                                  text: premiumBenefit.subTitle,
+                                  fontSize: 11,
+                                  color: grey.original,
+                                  isBold: !isLight,
+                                ),
                               ],
                             ),
-                          ),
-                        )
-                        .toList(),
-                  ),
-                  isPremium
-                      ? Padding(
-                          padding: const EdgeInsets.only(bottom: 5),
-                          child: CommonSvgText(
-                            text: '구매가 완료되었어요 :D',
-                            fontSize: 14,
-                            isBold: !isLight,
-                            svgName: 'premium-badge',
-                            svgWidth: 16,
-                            svgDirection: SvgDirectionEnum.left,
-                          ),
-                        )
-                      : Row(
-                          children: [
-                            Expanded(
-                              child: ImageButton(
-                                path: 't-4',
-                                text: '구매하기',
-                                nameArgs: {
-                                  "price": package?.storeProduct.priceString ??
-                                      'None'
-                                },
-                                fontSize: 14,
-                                padding:
-                                    const EdgeInsets.symmetric(vertical: 15),
-                                onTap: onPurchase,
-                              ),
+                            Spacer(),
+                            svgAsset(
+                              name: premiumBenefit.svgName,
+                              width: 50,
                             ),
                           ],
-                        )
-                ],
+                        ),
+                      ),
+                    )
+                    .toList(),
               ),
-            ),
-          ],
+              isPremium
+                  ? Padding(
+                      padding: const EdgeInsets.only(bottom: 5),
+                      child: CommonSvgText(
+                        text: '구매가 완료되었어요 :D',
+                        fontSize: 14,
+                        isBold: !isLight,
+                        svgName: 'premium-badge',
+                        svgWidth: 16,
+                        svgDirection: SvgDirectionEnum.left,
+                      ),
+                    )
+                  : Row(
+                      children: [
+                        Expanded(
+                          child: ImageButton(
+                            path: 't-4',
+                            text: '구매하기',
+                            nameArgs: {
+                              "price":
+                                  package?.storeProduct.priceString ?? 'None'
+                            },
+                            fontSize: 14,
+                            padding: const EdgeInsets.symmetric(vertical: 15),
+                            onTap: onPurchase,
+                          ),
+                        ),
+                      ],
+                    )
+            ],
+          ),
         ),
       ),
     );

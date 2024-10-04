@@ -1,3 +1,118 @@
+import 'package:flutter/material.dart';
+import 'package:project/provider/GroupInfoListProvider.dart';
+import 'package:project/provider/UserInfoProvider.dart';
+import 'package:project/provider/themeProvider.dart';
+import 'package:project/util/class.dart';
+import 'package:project/util/enum.dart';
+import 'package:project/util/func.dart';
+import 'package:project/widget/appBar/TrackerAppBar.dart';
+import 'package:project/widget/tracker/TrackerTable.dart';
+import 'package:project/widget/view/CalendarGroupView.dart';
+import 'package:provider/provider.dart';
+import 'package:syncfusion_flutter_datepicker/datepicker.dart';
+
+class TrackerBody extends StatefulWidget {
+  const TrackerBody({super.key});
+
+  @override
+  State<TrackerBody> createState() => _TrackerBodyState();
+}
+
+class _TrackerBodyState extends State<TrackerBody> {
+  DateTime startDateTime = weeklyStartDateTime(DateTime.now());
+  DateTime endDateTime = weeklyEndDateTime(DateTime.now());
+  int selectedGroupInfoIndex = 0;
+
+  onSelectedGroupInfoIndex(int index) {
+    setState(() => selectedGroupInfoIndex = index);
+  }
+
+  onSelectionChanged(DateRangePickerSelectionChangedArgs args) {
+    DateTime rangeStartDate = args.value.startDate;
+
+    setState(() {
+      startDateTime = weeklyStartDateTime(rangeStartDate);
+      endDateTime = weeklyEndDateTime(rangeStartDate);
+    });
+
+    navigatorPop(context);
+  }
+
+  onLeftWeek() {
+    setState(() {
+      startDateTime = startDateTime.subtract(const Duration(days: 7));
+      endDateTime = endDateTime.subtract(const Duration(days: 7));
+    });
+  }
+
+  onRightWeek() {
+    setState(() {
+      startDateTime = startDateTime.add(const Duration(days: 7));
+      endDateTime = endDateTime.add(const Duration(days: 7));
+    });
+  }
+
+  onThisWeek() {
+    setState(() {
+      startDateTime = weeklyStartDateTime(DateTime.now());
+      endDateTime = weeklyEndDateTime(DateTime.now());
+    });
+  }
+
+  onHorizontalDragEnd(DragEndDetails dragEndDetails) {
+    double? primaryVelocity = dragEndDetails.primaryVelocity;
+
+    if (primaryVelocity == null) {
+      return;
+    } else if (primaryVelocity > 0) {
+      onLeftWeek();
+    } else if (primaryVelocity < 0) {
+      onRightWeek();
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    bool isLight = context.watch<ThemeProvider>().isLight;
+    UserInfoClass userInfo = context.watch<UserInfoProvider>().userInfo;
+    List<GroupInfoClass> groupInfoList =
+        context.watch<GroupInfoListProvider>().groupInfoList;
+
+    groupInfoList = getGroupInfoOrderList(
+      userInfo.groupOrderList,
+      groupInfoList,
+    );
+
+    return GestureDetector(
+      onHorizontalDragEnd: onHorizontalDragEnd,
+      child: Column(
+        children: [
+          TrackerAppBar(
+            startDateTime: startDateTime,
+            endDateTime: endDateTime,
+            onSelectionChanged: onSelectionChanged,
+          ),
+          TrackerTable(
+            isLight: isLight,
+            groupInfoList: groupInfoList,
+            selectedGroupInfoIndex: selectedGroupInfoIndex,
+            startDateTime: startDateTime,
+            endDateTime: endDateTime,
+          ),
+          GroupListView(
+            selectedSegment: SegmentedTypeEnum.todo,
+            groupInfoList: groupInfoList,
+            selectedGroupInfoIndex: selectedGroupInfoIndex,
+            onSelectedGroupInfoIndex: onSelectedGroupInfoIndex,
+          )
+        ],
+      ),
+    );
+  }
+}
+
+
+
 // import 'package:flutter/material.dart';
 // import 'package:project/common/CommonContainer.dart';
 // import 'package:project/provider/selectedDateTimeProvider.dart';

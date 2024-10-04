@@ -14,7 +14,7 @@ import 'package:project/util/constants.dart';
 import 'package:project/util/final.dart';
 import 'package:project/util/func.dart';
 import 'package:project/widget/button/DateTimeButton.dart';
-import 'package:project/widget/calendar/calendarMarker.dart';
+import 'package:project/widget/view/CalendarMarkerView.dart';
 import 'package:provider/provider.dart';
 import 'package:table_calendar/table_calendar.dart';
 
@@ -347,7 +347,7 @@ class _SelectionDayState extends State<SelectionDay> {
           dateTimeType: widget.selectedType,
         ) !=
         -1) {
-      return CalendarMarker(
+      return CalendarMarkerView(
         size: 35,
         day: '${dateTime.day}',
         isLight: isLight,

@@ -15,7 +15,7 @@ import 'package:project/util/constants.dart';
 import 'package:project/util/final.dart';
 import 'package:project/util/func.dart';
 import 'package:project/widget/button/ModalButton.dart';
-import 'package:project/widget/calendar/CalendarMarker.dart';
+import 'package:project/widget/view/CalendarMarkerView.dart';
 import 'package:project/widget/modalSheet/DateTimeModalSheet.dart';
 import 'package:project/widget/modalSheet/TaskSettingModalSheet.dart';
 import 'package:provider/provider.dart';
@@ -64,7 +64,7 @@ class _TaskMoreModalSheetState extends State<TaskMoreModalSheet> {
         children: [
           Padding(
             padding: const EdgeInsets.only(top: 20, bottom: 3),
-            child: CalendarMarker(
+            child: CalendarMarkerView(
               size: 25,
               day: '${dateTime.day}',
               isLight: isLight,

@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:project/body/CalendarBody.dart';
 import 'package:project/body/SettingBody.dart';
 import 'package:project/body/TaskBody.dart';
+import 'package:project/body/TrackerBody.dart';
 import 'package:project/common/CommonBackground.dart';
 import 'package:project/common/CommonScaffold.dart';
 import 'package:project/method/GroupMethod.dart';
@@ -66,6 +67,7 @@ class _HomePageState extends State<HomePage> {
               UserInfoClass userInfo = UserInfoClass.fromJson(json);
 
               if (mounted) {
+                context.read<ThemeProvider>().setThemeValue(userInfo.theme);
                 context
                     .read<UserInfoProvider>()
                     .changeUserInfo(newuUserInfo: userInfo);
@@ -157,6 +159,7 @@ class _HomePageState extends State<HomePage> {
     Widget body = [
       const TaskBody(),
       const CalendarBody(),
+      const TrackerBody(),
       const SettingBody()
     ][seletedIdx];
 

@@ -41,39 +41,35 @@ class HomeWidgetService {
       );
 
       for (final taskInfo in taskInfoList) {
-        bool isToday = dateTimeKey(taskInfo.createDateTime) == dateTimeKey(now);
+        ColorClass color = getColorClass(groupInfo.colorName);
+        Color barColor = isWidgetLight ? color.s100 : color.s400;
+        Color lineColor = isWidgetLight ? color.s300 : color.s200;
+        Color markColor = isWidgetLight ? color.s200 : color.s300;
+        Color highlightColor = isWidgetLight ? color.s50 : color.s400;
 
-        if (isToday) {
-          ColorClass color = getColorClass(groupInfo.colorName);
-          Color barColor = isWidgetLight ? color.s100 : color.s400;
-          Color lineColor = isWidgetLight ? color.s300 : color.s200;
-          Color markColor = isWidgetLight ? color.s200 : color.s300;
-          Color highlightColor = isWidgetLight ? color.s50 : color.s400;
+        String mark = getRecordInfo(
+              recordInfoList: taskInfo.recordInfoList,
+              targetDateTime: now,
+            )?.mark ??
+            'E';
+        List<int> barRGB = [barColor.red, barColor.green, barColor.blue];
+        List<int> lineRGB = [lineColor.red, lineColor.green, lineColor.blue];
+        List<int> markRGB = [markColor.red, markColor.green, markColor.blue];
+        List<int>? highlightRGB = mark != 'E'
+            ? [highlightColor.red, highlightColor.green, highlightColor.blue]
+            : null;
 
-          String mark = getRecordInfo(
-                recordInfoList: taskInfo.recordInfoList,
-                targetDateTime: now,
-              )?.mark ??
-              'E';
-          List<int> barRGB = [barColor.red, barColor.green, barColor.blue];
-          List<int> lineRGB = [lineColor.red, lineColor.green, lineColor.blue];
-          List<int> markRGB = [markColor.red, markColor.green, markColor.blue];
-          List<int>? highlightRGB = mark != 'E'
-              ? [highlightColor.red, highlightColor.green, highlightColor.blue]
-              : null;
+        WidgetItemClass widgetItem = WidgetItemClass(
+          taskInfo.tid,
+          taskInfo.name,
+          mark,
+          barRGB,
+          lineRGB,
+          markRGB,
+          highlightRGB,
+        );
 
-          WidgetItemClass widgetItem = WidgetItemClass(
-            taskInfo.tid,
-            taskInfo.name,
-            mark,
-            barRGB,
-            lineRGB,
-            markRGB,
-            highlightRGB,
-          );
-
-          taskList.add(widgetItem);
-        }
+        taskList.add(widgetItem);
       }
     }
 

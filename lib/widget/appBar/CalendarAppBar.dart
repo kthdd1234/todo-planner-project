@@ -36,8 +36,8 @@ class CalendarAppBar extends StatelessWidget {
           CommonText(
             text: yMFormatter(locale: locale, dateTime: titleDateTime),
             fontSize: 16,
-            isNotTr: true,
             isBold: true,
+            isNotTr: true,
             color: isLight ? darkButtonColor : Colors.white,
             onTap: () => onCalendar(titleDateTime),
           ),

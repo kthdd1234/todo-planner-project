@@ -8,20 +8,26 @@ class CommonSvgTag extends StatelessWidget {
     required this.svgWidth,
     required this.svgColor,
     required this.bgColor,
+    this.padding,
+    this.height,
   });
 
   String svgName;
   double svgWidth;
   Color svgColor, bgColor;
+  EdgeInsets? padding;
+  double? height;
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       child: Container(
-        padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 7),
+        height: height,
+        padding:
+            padding ?? const EdgeInsets.symmetric(vertical: 5, horizontal: 7),
         decoration: BoxDecoration(
           color: bgColor,
-          borderRadius: BorderRadius.circular(5),
+          borderRadius: BorderRadius.circular(100),
         ),
         child: svgAsset(
           name: svgName,

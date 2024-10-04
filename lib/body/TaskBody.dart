@@ -9,9 +9,9 @@ import 'package:project/util/class.dart';
 import 'package:project/util/final.dart';
 import 'package:project/util/func.dart';
 import 'package:project/widget/appBar/TaskAppBar.dart';
-import 'package:project/widget/containerView/GroupView.dart';
-import 'package:project/widget/containerView/MemoView.dart';
-import 'package:project/widget/containerView/TaskCalendarView.dart';
+import 'package:project/widget/view/GroupView.dart';
+import 'package:project/widget/view/MemoView.dart';
+import 'package:project/widget/view/TaskCalendarView.dart';
 import 'package:provider/provider.dart';
 import 'package:table_calendar/table_calendar.dart';
 

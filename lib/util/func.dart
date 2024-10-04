@@ -112,18 +112,19 @@ List<TaskInfoClass> getTaskInfoList({
   required DateTime targetDateTime,
 }) {
   List<TaskInfoClass> taskFilterList = groupInfo.taskInfoList.where((task) {
+    String dateTimeType = task.dateTimeType;
     List<DateTime> dateTimeList = task.dateTimeList;
 
-    if (task.dateTimeType == taskDateTimeType.selection) {
+    if (dateTimeType == taskDateTimeType.selection) {
       return dateTimeList.any(
         (dateTime) => dateTimeKey(dateTime) == dateTimeKey(targetDateTime),
       );
     } else {
       return dateTimeList.any((dateTime) {
-        if (task.dateTimeType == taskDateTimeType.everyWeek) {
+        if (dateTimeType == taskDateTimeType.everyWeek) {
           return eFormatter(locale: locale, dateTime: dateTime) ==
               eFormatter(locale: locale, dateTime: targetDateTime);
-        } else if (task.dateTimeType == taskDateTimeType.everyMonth) {
+        } else if (dateTimeType == taskDateTimeType.everyMonth) {
           return dateTime.day == targetDateTime.day;
         }
 
@@ -356,26 +357,41 @@ DateTime weeklyEndDateTime(DateTime dateTime) {
   ));
 }
 
-List<String?> getRecordValueList({
-  required String key,
+// List<String?> getRecordValueList({
+//   required String key,
+//   required DateTime dateTime,
+//   required String taskId,
+//   required List<Map<String, dynamic>> recordInfoList,
+// }) {
+//   return List.generate(7, (index) {
+//     Duration duration = Duration(days: index);
+//     DateTime resultDateTime = dateTime.add(duration);
+//     String? value;
+
+//     recordInfoList.forEach((info) {
+//       if (info['id'] == taskId) value = info[key];
+//     });
+
+//     return value;
+//   });
+// }
+
+List<String?> getMarkList({
+  required List<RecordInfoClass> recordInfoList,
   required DateTime dateTime,
-  required String taskId,
 }) {
   return List.generate(7, (index) {
     Duration duration = Duration(days: index);
     DateTime resultDateTime = dateTime.add(duration);
-    int recordKey = dateTimeKey(resultDateTime);
-    RecordBox? record = recordRepository.recordBox.get(recordKey);
-    List<Map<String, dynamic>>? taskMarkList = record?.taskMarkList;
-    String? value;
+    String? mark;
 
-    taskMarkList?.forEach((info) {
-      if (info['id'] == taskId) {
-        value = info[key];
+    recordInfoList.forEach((recordInfo) {
+      if (recordInfo.dateTimeKey == dateTimeKey(resultDateTime)) {
+        mark = recordInfo.mark;
       }
     });
 
-    return value;
+    return mark;
   });
 }
 

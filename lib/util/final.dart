@@ -18,7 +18,7 @@ List<BNClass> getBnClassList(bool isLight, int seletedIdx) {
       padding: const EdgeInsets.only(bottom: 5),
       child: svgAsset(
         name: name,
-        width: 23,
+        width: idx == 2 ? 21 : 23,
         color: idx == seletedIdx
             ? null
             : isLight
@@ -53,10 +53,21 @@ List<BNClass> getBnClassList(bool isLight, int seletedIdx) {
     ),
     BNClass(
       index: 2,
-      name: '설정',
+      name: '기록표',
       icon: svg(
         2,
         seletedIdx == 2
+            ? 'bnb-tracker-filled-${isLight ? 'light' : 'dark'}'
+            : 'bnb-tracker',
+      ),
+      svgName: 'bnb-tracker',
+    ),
+    BNClass(
+      index: 3,
+      name: '설정',
+      icon: svg(
+        3,
+        seletedIdx == 3
             ? 'bnb-setting-filled-${isLight ? 'light' : 'dark'}'
             : 'bnb-setting',
       ),
@@ -143,7 +154,7 @@ final blue = ColorClass(
 final brown = ColorClass(
   colorName: '갈색',
   original: Colors.brown,
-  s50: Colors.brown.shade50,
+  s50: Colors.brown.shade50, //
   s100: Colors.brown.shade100,
   s200: Colors.brown.shade200,
   s300: Colors.brown.shade300,
@@ -166,7 +177,7 @@ final purple = ColorClass(
   s50: Colors.purple.shade50,
   s100: Colors.purple.shade100, // 225, 190, 231
   s200: Colors.purple.shade200, // 206, 147, 216
-  s300: Colors.purple.shade300,
+  s300: Colors.purple.shade300, // 186, 104, 200
   s400: Colors.purple.shade400,
 ); //
 
@@ -336,37 +347,27 @@ final premiumBenefitList = [
   PremiumBenefitClass(
     svgName: 'premium-free',
     mainTitle: '평생 무료로 이용 할 수 있어요',
-    subTitle: '커피 한잔의 가격으로 단 한번 결제!',
+    subTitle: '구독없이 깔끔하게 단 한번 결제!',
   ),
-  // PremiumBenefitClass(
-  //   svgName: 'premium-no-ads',
-  //   mainTitle: '모든 화면에서 광고가 나오지 않아요',
-  //   subTitle: '광고없이 쾌적하게 앱을 사용해보세요!',
-  // ),
-  // PremiumBenefitClass(
-  //   svgName: 'premium-photos-four',
-  //   mainTitle: '사진을 최대 6장까지 추가 할 수 있어요',
-  //   subTitle: '보다 많은 메모 사진을 추가해보세요!',
-  // ),
-  // PremiumBenefitClass(
-  //   svgName: 'hand',
-  //   mainTitle: '이모지로 체크 표시 할 수 있어요',
-  //   subTitle: '원하는 이모지로 체크 표시 해보세요!',
-  // ),
   PremiumBenefitClass(
-    svgName: 'font',
-    mainTitle: '글씨체를 변경할 수 있어요',
-    subTitle: '예쁜 글씨체가 준비되어 있어요!',
+    svgName: 'premium-no-ads',
+    mainTitle: '전면 광고가 제거돼요',
+    subTitle: '광고없이 쾌적하게 앱을 사용해보세요!',
+  ),
+  PremiumBenefitClass(
+    svgName: 'premium-table',
+    mainTitle: '주간 기록표를 볼 수 있어요',
+    subTitle: '일주일간 체크 상태를 한눈에 확인!',
+  ),
+  PremiumBenefitClass(
+    svgName: 'premium-memo',
+    mainTitle: '메모를 제한없이 추가할 수 있어요',
+    subTitle: '사진과 함께 꼼꼼히 기록해보세요!',
   ),
   PremiumBenefitClass(
     svgName: 'theme',
     mainTitle: '다양한 배경들을 제공해드려요',
     subTitle: '총 6종의 다채로운 배경들을 이용해보세요!',
-  ),
-  PremiumBenefitClass(
-    svgName: 'app-start',
-    mainTitle: '앱 시작 화면을 설정할 수 있어요',
-    subTitle: '투두, 캘린더, 트래커 화면 중 한 곳 선택!',
   ),
 ];
 
@@ -429,10 +430,6 @@ List<Map<String, String>> fontFamilyList = [
   {
     "fontFamily": "IM_Hyemin",
     "name": "IM 혜민",
-  },
-  {
-    "fontFamily": "Omyu",
-    "name": "오뮤 다예쁨체",
   },
   {
     "fontFamily": "OpenSans",

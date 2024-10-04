@@ -211,6 +211,8 @@ flutter:
     - assets/svg/align-right.svg
     - assets/svg/clock.svg
     - assets/svg/user.svg
+    - assets/svg/premium-memo.svg
+    - assets/svg/premium-table.svg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
@@ -224,11 +226,6 @@ flutter:
   # list giving the asset and other descriptors for the font. For
   # example:
   fonts:
-    - family: Omyu
-      fonts:
-        - asset: assets/font/Omyu.ttf
-          weight: 400
-
     - family: OpenSans
       fonts:
         - asset: assets/font/OpenSans.ttf

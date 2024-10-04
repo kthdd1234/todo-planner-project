@@ -10,8 +10,8 @@ import 'package:project/util/enum.dart';
 import 'package:project/util/final.dart';
 import 'package:project/util/func.dart';
 import 'package:project/widget/appBar/CalendarAppBar.dart';
-import 'package:project/widget/containerView/CalendarGroupView.dart';
-import 'package:project/widget/containerView/CalendarView.dart';
+import 'package:project/widget/view/CalendarGroupView.dart';
+import 'package:project/widget/view/CalendarView.dart';
 import 'package:project/widget/popup/CalendarPopup.dart';
 import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
@@ -82,7 +82,7 @@ class _CalendarBodyState extends State<CalendarBody> {
               memoInfoList: memoInfoList,
               selectedGroupInfoIndex: selectedGroupInfoIndex,
             ),
-            CalendarGroupView(
+            GroupListView(
               selectedSegment: selectedSegment,
               groupInfoList: groupInfoList,
               selectedGroupInfoIndex: selectedGroupInfoIndex,

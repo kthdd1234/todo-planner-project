@@ -9,7 +9,7 @@ import 'package:project/provider/UserInfoProvider.dart';
 import 'package:project/provider/themeProvider.dart';
 import 'package:project/util/class.dart';
 import 'package:project/util/func.dart';
-import 'package:project/widget/listView/ColorListView.dart';
+import 'package:project/widget/view/ColorListView.dart';
 import 'package:provider/provider.dart';
 
 class TitleSettingModalSheet extends StatefulWidget {
