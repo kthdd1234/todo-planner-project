@@ -23,6 +23,7 @@ import 'package:project/util/enum.dart';
 import 'package:project/util/final.dart';
 import 'package:project/util/func.dart';
 import 'package:project/widget/appBar/SettingAppBar.dart';
+import 'package:project/widget/button/ImageButton.dart';
 import 'package:project/widget/modalSheet/AppStartIndexModalSheet.dart';
 import 'package:project/widget/modalSheet/LanguageModalSheet.dart';
 import 'package:project/widget/modalSheet/ThemeModalSheet.dart';
@@ -220,16 +221,24 @@ class _ContentViewState extends State<ContentView> {
 
     List<SettingItemClass> settingItemList = [
       SettingItemClass(
+        name: '프리미엄',
+        svg: 'crown',
+        onTap: onPremium,
+        value: isPremium
+            ? onValue('구매 완료', null)
+            : ImageButton(
+                path: 't-4',
+                text: '광고 제거',
+                padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 7),
+                fontSize: 11,
+                onTap: onPremium,
+              ),
+      ),
+      SettingItemClass(
         name: '프로필',
         svg: 'user',
         value: onValue('${authButtonInfo[loginType]!['name']}', null),
         onTap: onUser,
-      ),
-      SettingItemClass(
-        name: '프리미엄',
-        svg: 'crown',
-        onTap: onPremium,
-        value: onValue(isPremium ? '구매 완료' : '미구매', null),
       ),
       SettingItemClass(
         name: '화면 테마',
@@ -270,7 +279,7 @@ class _ContentViewState extends State<ContentView> {
                 .toList()
                 .firstWhere((item) => item.path == background)
                 .name,
-            null),
+            true),
         onTap: onBackground,
       ),
       SettingItemClass(

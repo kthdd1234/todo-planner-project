@@ -211,7 +211,7 @@ class _MemoSettingPageState extends State<MemoSettingPage> {
         appBarInfo: AppBarInfoClass(
           title: ymdeFormatter(locale: locale, dateTime: widget.initDateTime),
           isBold: !isLight,
-          isNotTr: false,
+          isNotTr: true,
           fontSize: 15,
         ),
         body: Column(

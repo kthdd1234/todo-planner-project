@@ -337,7 +337,7 @@ class _TrackerBodyState extends State<TrackerBody> {
 // //                 )
 // //               : Center(
 // //                   child: CommonText(
-// //                     text: '체크 내역이 없어요\n투두 화면에서 할 일을 체크해보세요',
+// //                     text: '체크 내역이 없어요\n홈 화면에서 할 일을 체크해보세요',
 // //                     color: isLight ? grey.original : darkTextColor,
 // //                   ),
 // //                 ),

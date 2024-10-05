@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:project/main.dart';
 import 'package:project/util/class.dart';
 import 'package:project/util/constants.dart';
+import 'package:project/util/func.dart';
 
 class GroupMethod {
   String get uid => auth.currentUser!.uid;
@@ -26,59 +27,84 @@ class GroupMethod {
   }
 
   List<GroupInfoClass> getGroupInfoList({required AsyncSnapshot snapshot}) {
-    List<GroupInfoClass> groupInfoList = [];
+    try {
+      List<GroupInfoClass> groupInfoList = [];
 
-    for (var doc in snapshot.data.docs) {
-      groupInfoList.add(GroupInfoClass.fromJson(doc.data()));
+      for (var doc in snapshot.data.docs) {
+        groupInfoList.add(GroupInfoClass.fromJson(doc.data()));
+      }
+
+      return groupInfoList;
+    } catch (e) {
+      errorMessage(msg: '알 수 없는 에러가 발생했어요');
+      return [];
     }
-
-    return groupInfoList;
   }
 
   Future<bool> addGroup({
     required String gid,
     required GroupInfoClass groupInfo,
   }) async {
-    await firestore
-        .collection(usersCollection)
-        .doc(uid)
-        .collection(groupsCollection)
-        .doc(gid)
-        .set(groupInfo.toJson());
+    try {
+      await firestore
+          .collection(usersCollection)
+          .doc(uid)
+          .collection(groupsCollection)
+          .doc(gid)
+          .set(groupInfo.toJson());
 
-    return true;
+      return true;
+    } catch (e) {
+      errorMessage(msg: '알 수 없는 에러가 발생했어요');
+      return false;
+    }
   }
 
   Future<bool> updateGroup({
     required String gid,
     required GroupInfoClass groupInfo,
   }) async {
-    await firestore
-        .collection(usersCollection)
-        .doc(uid)
-        .collection(groupsCollection)
-        .doc(gid)
-        .update(groupInfo.toJson());
+    try {
+      await firestore
+          .collection(usersCollection)
+          .doc(uid)
+          .collection(groupsCollection)
+          .doc(gid)
+          .update(groupInfo.toJson());
 
-    return true;
+      return true;
+    } catch (e) {
+      errorMessage(msg: '알 수 없는 에러가 발생했어요');
+      return false;
+    }
   }
 
   Future<bool> removeGroup({required String gid}) async {
-    await firestore
-        .collection(usersCollection)
-        .doc(uid)
-        .collection(groupsCollection)
-        .doc(gid)
-        .delete();
+    try {
+      await firestore
+          .collection(usersCollection)
+          .doc(uid)
+          .collection(groupsCollection)
+          .doc(gid)
+          .delete();
 
-    return true;
+      return true;
+    } catch (e) {
+      errorMessage(msg: '알 수 없는 에러가 발생했어요');
+      return false;
+    }
   }
 
   Future<bool> removeAllGroup({required List<String> groupIdList}) async {
-    for (final groupId in groupIdList) {
-      await removeGroup(gid: groupId);
-    }
+    try {
+      for (final groupId in groupIdList) {
+        await removeGroup(gid: groupId);
+      }
 
-    return true;
+      return true;
+    } catch (e) {
+      errorMessage(msg: '알 수 없는 에러가 발생했어요');
+      return false;
+    }
   }
 }

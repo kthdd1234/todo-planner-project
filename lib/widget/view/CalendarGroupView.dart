@@ -58,13 +58,8 @@ class GroupListView extends StatelessWidget {
                           fontSize: 14,
                           isBold: selectedGroupInfoIndex == index,
                           textColor: textColor,
-                          // selectedGroupInfoIndex == index
-                          //     ? selectedTextColor
-                          //     : notSelectedTextColor,
                           bgColor: bgColor,
-                          // selectedGroupInfoIndex == index
-                          //     ? selectedBgColor
-                          //     : notSelectedBgColor,
+                          isNotTr: true,
                           onTap: () => onSelectedGroupInfoIndex(index),
                         ),
                       ),

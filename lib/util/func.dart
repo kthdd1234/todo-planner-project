@@ -11,6 +11,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:project/common/CommonText.dart';
 import 'package:project/main.dart';
@@ -320,15 +321,15 @@ Future<bool> isPurchaseRestore() async {
   }
 }
 
-//
-bool isSearchCategory(String? id) {
-  if (id == null) return false;
+// //
+// bool isSearchCategory(String? id) {
+//   if (id == null) return false;
 
-  UserBox? user = userRepository.user;
-  List<String> filterList = user.filterIdList ?? [];
+//   UserBox? user = userRepository.user;
+//   List<String> filterList = user.filterIdList ?? [];
 
-  return filterList.contains(id) == true;
-}
+//   return filterList.contains(id) == true;
+// }
 
 bool isEmptyRecord(RecordBox? record) {
   bool isEmptyMark =
@@ -720,4 +721,16 @@ List<BottomNavigationBarItem> getBnbiList(bool isLight, int seletedIdx) {
 
 String getBnName(int appStartIndex) {
   return ['홈', '캘린더', '기록표'][appStartIndex];
+}
+
+errorMessage({required String msg}) {
+  Fluttertoast.showToast(
+    msg: msg.tr(),
+    gravity: ToastGravity.TOP,
+    backgroundColor: darkButtonColor,
+    fontSize: 12,
+    textColor: Colors.white,
+    toastLength: Toast.LENGTH_SHORT,
+    fontAsset: 'assets/font/IM_Hyemin.ttf',
+  );
 }

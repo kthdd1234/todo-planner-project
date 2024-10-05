@@ -66,31 +66,26 @@ class _CalendarBodyState extends State<CalendarBody> {
     groupInfoList =
         getGroupInfoOrderList(userInfo.groupOrderList, groupInfoList);
 
-    return MultiValueListenableBuilder(
-      valueListenables: valueListenables,
-      builder: (context, values, child) {
-        return Column(
-          children: [
-            CalendarAppBar(
-              selectedSegment: selectedSegment,
-              onCalendar: onCalendar,
-              onSegmentedChanged: onSegmentedChanged,
-            ),
-            CalendarView(
-              selectedSegment: selectedSegment,
-              groupInfoList: groupInfoList,
-              memoInfoList: memoInfoList,
-              selectedGroupInfoIndex: selectedGroupInfoIndex,
-            ),
-            GroupListView(
-              selectedSegment: selectedSegment,
-              groupInfoList: groupInfoList,
-              selectedGroupInfoIndex: selectedGroupInfoIndex,
-              onSelectedGroupInfoIndex: onSelectedGroupInfoIndex,
-            ),
-          ],
-        );
-      },
+    return Column(
+      children: [
+        CalendarAppBar(
+          selectedSegment: selectedSegment,
+          onCalendar: onCalendar,
+          onSegmentedChanged: onSegmentedChanged,
+        ),
+        CalendarView(
+          selectedSegment: selectedSegment,
+          groupInfoList: groupInfoList,
+          memoInfoList: memoInfoList,
+          selectedGroupInfoIndex: selectedGroupInfoIndex,
+        ),
+        GroupListView(
+          selectedSegment: selectedSegment,
+          groupInfoList: groupInfoList,
+          selectedGroupInfoIndex: selectedGroupInfoIndex,
+          onSelectedGroupInfoIndex: onSelectedGroupInfoIndex,
+        ),
+      ],
     );
   }
 }

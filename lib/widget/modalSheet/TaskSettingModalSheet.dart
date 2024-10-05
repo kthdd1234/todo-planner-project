@@ -1,7 +1,9 @@
 // ignore_for_file: use_build_context_synchronously
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:project/common/CommonContainer.dart';
 import 'package:project/common/CommonModalSheet.dart';
+import 'package:project/page/FontPage.dart';
 import 'package:project/page/HomePage.dart';
 import 'package:project/provider/themeProvider.dart';
 import 'package:project/util/class.dart';
@@ -73,7 +75,7 @@ class _TaskSettingModalSheetState extends State<TaskSettingModalSheet> {
             cursorColor: isLight ? darkButtonColor : Colors.white,
             style: const TextStyle(fontSize: 14),
             decoration: InputDecoration(
-              hintText: '할 일을 입력해주세요.',
+              hintText: '할 일을 입력해주세요.'.tr(),
               hintStyle: TextStyle(fontSize: 14, color: grey.s400),
               contentPadding: const EdgeInsets.all(0),
               border: const OutlineInputBorder(

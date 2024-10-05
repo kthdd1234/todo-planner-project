@@ -43,7 +43,7 @@ class CalendarAppBar extends StatelessWidget {
           ),
           const Spacer(),
           SizedBox(
-            width: locale == 'en' ? 150 : 100,
+            width: locale == 'ko' ? 100 : 160,
             child: CommonSegmented(
               selectedSegment: selectedSegment,
               children: categorySegmented(selectedSegment, isLight),

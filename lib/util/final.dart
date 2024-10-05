@@ -252,17 +252,17 @@ const nextCalendarFormats = {
   CalendarFormat.month: CalendarFormat.week
 };
 
-UserRepository userRepository = UserRepository();
-RecordRepository recordRepository = RecordRepository();
-TaskRepository taskRepository = TaskRepository();
-GroupRepository groupRepository = GroupRepository();
+// UserRepository userRepository = UserRepository();
+// RecordRepository recordRepository = RecordRepository();
+// TaskRepository taskRepository = TaskRepository();
+// GroupRepository groupRepository = GroupRepository();
 
-final valueListenables = [
-  userRepository.userBox.listenable(),
-  recordRepository.recordBox.listenable(),
-  taskRepository.taskBox.listenable(),
-  groupRepository.groupBox.listenable()
-];
+// final valueListenables = [
+//   userRepository.userBox.listenable(),
+//   recordRepository.recordBox.listenable(),
+//   taskRepository.taskBox.listenable(),
+//   groupRepository.groupBox.listenable()
+// ];
 
 final premiumBenefitList = [
   PremiumBenefitClass(
@@ -288,11 +288,11 @@ final premiumBenefitList = [
   PremiumBenefitClass(
     svgName: 'premium-background',
     mainTitle: '다양한 배경들을 제공해드려요',
-    subTitle: '총 6종의 다채로운 배경들을 이용해보세요!',
+    subTitle: '총 8종의 다채로운 배경들을 이용해보세요!',
   ),
   PremiumBenefitClass(
     svgName: 'premium-start',
-    mainTitle: '앱 시작 시 원하는 화면을 바로 볼 수 있어요',
+    mainTitle: '앱 시작 화면을 설정할 수 있어요',
     subTitle: '홈, 캘린더, 기록표 화면 중 한 곳 선택!',
   ),
 ];

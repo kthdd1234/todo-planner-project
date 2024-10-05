@@ -15,6 +15,7 @@ import 'package:intl/date_symbol_data_local.dart';
 import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
 import 'package:project/page/HomePage.dart';
 import 'package:project/page/IntroPage.dart';
+import 'package:project/page/LoadingPage.dart';
 import 'package:project/provider/GroupInfoListProvider.dart';
 import 'package:project/provider/MemoInfoListProvider.dart';
 import 'package:project/provider/PremiumProvider.dart';
@@ -28,6 +29,7 @@ import 'package:project/repositories/init_hive.dart';
 import 'package:project/service/HomeWidgetService.dart';
 import 'package:project/util/class.dart';
 import 'package:project/util/constants.dart';
+import 'package:project/util/func.dart';
 import 'package:provider/provider.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:purchases_flutter/purchases_flutter.dart';
@@ -89,14 +91,17 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
-  bool isLogin = false;
+  /* start: 로그인 페이지, loading: 로딩 페이지, succeed: 홈 페에지 */
+  String loginStatus = 'loading';
 
   onLogin() {
     auth.authStateChanges().listen((user) async {
-      bool isUser = (user != null) && (await userMethod.isUser);
+      if (mounted) {
+        bool isUser = (user != null) && (await userMethod.isUser);
 
-      if (isUser && mounted) {
-        setState(() => isLogin = true);
+        setState(() {
+          loginStatus = isUser ? 'succeed' : 'start';
+        });
       }
     });
   }
@@ -140,7 +145,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
     bool isBackground = state == AppLifecycleState.paused ||
         state == AppLifecycleState.detached;
 
-    if (isBackground && isLogin) {
+    if (isBackground && loginStatus == 'succeed') {
       UserInfoClass userInfo =
           Provider.of<UserInfoProvider>(context, listen: false).getUserInfo;
       List<GroupInfoClass> groupInfoList =
@@ -180,6 +185,12 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
       cupertinoOverrideTheme: const CupertinoThemeData(applyThemeToAll: true),
     );
 
+    final loginStatusInfo = {
+      'loading': const LoadingPage(),
+      'start': const IntroPage(),
+      'succeed': HomePage(locale: context.locale.toString()),
+    };
+
     return MaterialApp(
       title: 'Todo Tracker',
       theme: themeData,
@@ -187,9 +198,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
       supportedLocales: context.supportedLocales,
       locale: context.locale,
       debugShowCheckedModeBanner: false,
-      home: isLogin
-          ? HomePage(locale: context.locale.toString())
-          : const IntroPage(),
+      home: loginStatusInfo[loginStatus],
     );
   }
 }

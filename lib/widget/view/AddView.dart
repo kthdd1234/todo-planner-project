@@ -1,5 +1,7 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:project/common/CommonText.dart';
+import 'package:project/page/FontPage.dart';
 import 'package:project/page/HomePage.dart';
 import 'package:project/provider/selectedDateTimeProvider.dart';
 import 'package:project/provider/themeProvider.dart';
@@ -78,7 +80,7 @@ class _AddViewState extends State<AddView> {
                   fontWeight: isLight ? FontWeight.normal : FontWeight.bold,
                 ),
                 decoration: InputDecoration(
-                  hintText: '할 일을 입력해주세요.',
+                  hintText: '할 일을 입력해주세요.'.tr(),
                   hintStyle: TextStyle(
                     fontSize: 15,
                     color: grey.s400,

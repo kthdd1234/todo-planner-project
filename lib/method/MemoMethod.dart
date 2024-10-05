@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:project/main.dart';
 import 'package:project/util/class.dart';
 import 'package:project/util/constants.dart';
+import 'package:project/util/func.dart';
 
 class MemoMethod {
   String get uid => auth.currentUser!.uid;
@@ -18,46 +19,66 @@ class MemoMethod {
     required String mid,
     required MemoInfoClass memoInfo,
   }) async {
-    await firestore
-        .collection(usersCollection)
-        .doc(uid)
-        .collection(memosCollection)
-        .doc(mid)
-        .set(memoInfo.toJson());
+    try {
+      await firestore
+          .collection(usersCollection)
+          .doc(uid)
+          .collection(memosCollection)
+          .doc(mid)
+          .set(memoInfo.toJson());
 
-    return true;
+      return true;
+    } catch (e) {
+      errorMessage(msg: '알 수 없는 에러가 발생했어요');
+      return false;
+    }
   }
 
   Future<bool> updateMemo({
     required String mid,
     required MemoInfoClass memoInfo,
   }) async {
-    await firestore
-        .collection(usersCollection)
-        .doc(uid)
-        .collection(memosCollection)
-        .doc(mid)
-        .set(memoInfo.toJson());
+    try {
+      await firestore
+          .collection(usersCollection)
+          .doc(uid)
+          .collection(memosCollection)
+          .doc(mid)
+          .set(memoInfo.toJson());
 
-    return true;
+      return true;
+    } catch (e) {
+      errorMessage(msg: '알 수 없는 에러가 발생했어요');
+      return false;
+    }
   }
 
   Future<bool> removeMemo({required String mid}) async {
-    await firestore
-        .collection(usersCollection)
-        .doc(uid)
-        .collection(memosCollection)
-        .doc(mid)
-        .delete();
+    try {
+      await firestore
+          .collection(usersCollection)
+          .doc(uid)
+          .collection(memosCollection)
+          .doc(mid)
+          .delete();
 
-    return true;
+      return true;
+    } catch (e) {
+      errorMessage(msg: '알 수 없는 에러가 발생했어요');
+      return false;
+    }
   }
 
   Future<bool> removeAllMemo({required List<String> memoIdList}) async {
-    for (final memoId in memoIdList) {
-      await removeMemo(mid: memoId);
-    }
+    try {
+      for (final memoId in memoIdList) {
+        await removeMemo(mid: memoId);
+      }
 
-    return true;
+      return true;
+    } catch (e) {
+      errorMessage(msg: '알 수 없는 에러가 발생했어요');
+      return false;
+    }
   }
 }

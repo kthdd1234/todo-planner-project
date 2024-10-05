@@ -325,7 +325,7 @@ class _TaskMoreModalSheetState extends State<TaskMoreModalSheet> {
               CommonSpace(width: 5),
               ModalButton(
                 svgName: 'bnb-calendar',
-                actionText: '반복 설정',
+                actionText: '날짜 설정',
                 isBold: !isLight,
                 color: isLight ? textColor : darkTextColor,
                 onTap: onRepeat,

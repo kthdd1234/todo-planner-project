@@ -229,7 +229,7 @@ class _DateTimeModalSheetState extends State<DateTimeModalSheet> {
     }[selectedType]!;
 
     return CommonModalSheet(
-      title: '반복 설정',
+      title: '날짜 설정',
       isBack: true,
       height: height,
       child: Column(

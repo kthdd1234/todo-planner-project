@@ -35,7 +35,7 @@ struct ItemView: View {
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .padding(.horizontal, item.highlightRGB != nil ? 3 : 0)
                 .background(color(rgb: item.highlightRGB))
-                .cornerRadius(5)
+                .cornerRadius(2.5)
             Spacer()
             Image("mark-\(item.mark)")
                 .renderingMode(.template)

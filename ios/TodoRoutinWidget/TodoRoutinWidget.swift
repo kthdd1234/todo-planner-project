@@ -50,7 +50,7 @@ struct TodoRoutinWidgetEntryView : View {
         HeaderModel(title: "오늘의 할 일 0", today: "날짜 없음", textRGB: [0, 0, 0], bgRGB: [255, 255, 255])
         self.itemListState = entry.taskList != "" ? loadJson(json: entry.taskList) : []
         
-        cutomFont(fontFamily: "IM_Hyemin")
+        cutomFont(fontFamily: entry.fontFamily)
     }
 
     var body: some View {
@@ -75,7 +75,7 @@ struct TodoRoutinWidget: Widget {
         StaticConfiguration(kind: kind, provider: Provider()) { entry in
             TodoRoutinWidgetEntryView(entry: entry)
         }
-        .configurationDisplayName("할 일, 루틴")
+        .configurationDisplayName("할 일")
         .description("오늘의 할 일을 보여주는 위젯입니다.")
     }
 }
@@ -89,20 +89,3 @@ struct TodoRoutinWidget: Widget {
 
 
 
-//        HeaderView(widgetFamily: eWidgetFamily, fontFamily:entry.fontFamily, header: headerState, widgetTheme: entry.widgetTheme)
-//        Color.clear
-//            .overlay(
-//                        LazyVStack {
-//                            TextView(text: "1", fontFamily: "IM_Hyemin", fontSize: 14, isBold: false, textColor: .red)
-//                            TextView(text: "2", fontFamily: "IM_Hyemin", fontSize: 14, isBold: false, textColor: .red)
-//                            TextView(text: "3", fontFamily: "IM_Hyemin", fontSize: 14, isBold: false, textColor: .red)
-//                            TextView(text: "4", fontFamily: "IM_Hyemin", fontSize: 14, isBold: false, textColor: .red)
-//                            TextView(text: "5", fontFamily: "IM_Hyemin", fontSize: 14, isBold: false, textColor: .red)
-//                            TextView(text: "6", fontFamily: "IM_Hyemin", fontSize: 14, isBold: false, textColor: .red)
-//                            TextView(text: "7", fontFamily: "IM_Hyemin", fontSize: 14, isBold: false, textColor: .red)
-//                            TextView(text: "8", fontFamily: "IM_Hyemin", fontSize: 14, isBold: false, textColor: .red)
-//                            TextView(text: "9", fontFamily: "IM_Hyemin", fontSize: 14, isBold: false, textColor: .red)
-//                            TextView(text: "10", fontFamily: "IM_Hyemin", fontSize: 14, isBold: false, textColor: .red)
-//                            TextView(text: "11", fontFamily: "IM_Hyemin", fontSize: 14, isBold: false, textColor: .red)
-//                        },
-//                        alignment: .top)

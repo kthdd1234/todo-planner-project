@@ -17,10 +17,15 @@ class UserMethod {
   String get uid => auth.currentUser!.uid;
 
   Future<bool> get isUser async {
-    DocumentSnapshot<Map<String, dynamic>> user =
-        await firestore.collection(usersCollection).doc(uid).get();
+    try {
+      DocumentSnapshot<Map<String, dynamic>> user =
+          await firestore.collection(usersCollection).doc(uid).get();
 
-    return user.exists;
+      return user.exists;
+    } catch (e) {
+      errorMessage(msg: '알 수 없는 에러가 발생했어요');
+      return false;
+    }
   }
 
   Stream<DocumentSnapshot<Map<String, dynamic>>> get userSnapshots {
@@ -28,17 +33,30 @@ class UserMethod {
   }
 
   Future<bool> addUser({required UserInfoClass userInfo}) async {
-    await firestore.collection(usersCollection).doc(uid).set(userInfo.toJson());
-    return true;
+    try {
+      await firestore
+          .collection(usersCollection)
+          .doc(uid)
+          .set(userInfo.toJson());
+      return true;
+    } catch (e) {
+      errorMessage(msg: '알 수 없는 에러가 발생했어요');
+      return false;
+    }
   }
 
   Future<bool> updateUser({required UserInfoClass userInfo}) async {
-    await firestore
-        .collection(usersCollection)
-        .doc(uid)
-        .update(userInfo.toJson());
+    try {
+      await firestore
+          .collection(usersCollection)
+          .doc(uid)
+          .update(userInfo.toJson());
 
-    return true;
+      return true;
+    } catch (e) {
+      errorMessage(msg: '알 수 없는 에러가 발생했어요');
+      return false;
+    }
   }
 
   Future<bool> deleteUser(
@@ -47,23 +65,28 @@ class UserMethod {
     List<GroupInfoClass> groupInfoList,
     List<MemoInfoClass> memoInfoList,
   ) async {
-    bool isReauthenticate = await reauthenticateWithProvider(loginType);
+    try {
+      bool isReauthenticate = await reauthenticateWithProvider(loginType);
 
-    if (isReauthenticate) {
-      await firestore.collection(usersCollection).doc(uid).delete();
-      await groupMethod.removeAllGroup(
-        groupIdList: groupInfoList.map((groupInfo) => groupInfo.gid).toList(),
-      );
-      await memoMethod.removeAllMemo(
-        memoIdList: memoInfoList
-            .map((memoInfo) => memoInfo.dateTimeKey.toString())
-            .toList(),
-      );
-      await auth.currentUser!.delete();
-      navigatorRemoveUntil(context: context, page: const IntroPage());
+      if (isReauthenticate) {
+        await firestore.collection(usersCollection).doc(uid).delete();
+        await groupMethod.removeAllGroup(
+          groupIdList: groupInfoList.map((groupInfo) => groupInfo.gid).toList(),
+        );
+        await memoMethod.removeAllMemo(
+          memoIdList: memoInfoList
+              .map((memoInfo) => memoInfo.dateTimeKey.toString())
+              .toList(),
+        );
+        await auth.currentUser!.delete();
+        navigatorRemoveUntil(context: context, page: const IntroPage());
+      }
+
+      return true;
+    } catch (e) {
+      errorMessage(msg: '알 수 없는 에러가 발생했어요');
+      return false;
     }
-
-    return true;
   }
 
   Future<bool> reauthenticateWithProvider(String loginType) async {
@@ -96,6 +119,7 @@ class UserMethod {
 
       return true;
     } catch (e) {
+      errorMessage(msg: '알 수 없는 에러가 발생했어요');
       return false;
     }
   }

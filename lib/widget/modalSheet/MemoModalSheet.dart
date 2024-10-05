@@ -27,6 +27,7 @@ class MemoModalSheet extends StatelessWidget {
 
     return CommonModalSheet(
       title: ymdeFormatter(locale: locale, dateTime: selectedDateTime),
+      isNotTr: true,
       height: 185,
       child: Column(
         children: [

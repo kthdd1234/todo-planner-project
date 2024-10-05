@@ -8,8 +8,6 @@ import 'package:project/common/CommonButton.dart';
 import 'package:project/common/CommonScaffold.dart';
 import 'package:project/common/CommonSpace.dart';
 import 'package:project/common/CommonText.dart';
-import 'package:project/main.dart';
-import 'package:project/page/HomePage.dart';
 import 'package:project/service/AuthService.dart';
 import 'package:project/util/class.dart';
 import 'package:project/util/constants.dart';
@@ -46,8 +44,6 @@ class _IntroPageState extends State<IntroPage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             const Spacer(),
-            // svgAsset(name: 'todo-planner-app-icon', width: 80),
-            // CommonSpace(height: 20),
             CommonText(text: '반가워요! 투두 트래커와 함께'),
             CommonSpace(height: 2),
             CommonText(text: '오늘의 할 일을 실천해봐요 :D'),
@@ -55,7 +51,7 @@ class _IntroPageState extends State<IntroPage> {
             CommonButton(
               svg: 'kakao-logo',
               outerPadding: const EdgeInsets.symmetric(horizontal: 10),
-              text: 'kakao로 로그인',
+              text: 'Kakao로 로그인',
               textColor: kakaoTextColor,
               buttonColor: kakaoBgColor,
               verticalPadding: 15,

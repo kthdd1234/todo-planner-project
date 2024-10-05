@@ -1,7 +1,9 @@
 // ignore_for_file: use_build_context_synchronously
 import 'dart:developer';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:in_app_review/in_app_review.dart';
 import 'package:project/body/CalendarBody.dart';
 import 'package:project/body/SettingBody.dart';
 import 'package:project/body/TaskBody.dart';
@@ -19,6 +21,8 @@ import 'package:project/provider/titleDateTimeProvider.dart';
 import 'package:project/provider/bottomTabIndexProvider.dart';
 import 'package:project/provider/selectedDateTimeProvider.dart';
 import 'package:project/provider/themeProvider.dart';
+import 'package:project/service/AppLifecycleService.dart';
+import 'package:project/service/AppOpenService.dart';
 import 'package:project/util/class.dart';
 import 'package:project/util/final.dart';
 import 'package:project/util/func.dart';
@@ -38,12 +42,14 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  initializeBottomTab() {
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (mounted) {
-        context.read<BottomTabIndexProvider>().changeSeletedIdx(newIndex: 0);
-      }
-    });
+  late AppLifecycleReactor _appLifecycleReactor;
+
+  initialzeAppOpening() {
+    AppOpenAdManager appOpenAdManager = AppOpenAdManager()..loadAd();
+    _appLifecycleReactor = AppLifecycleReactor(
+      appOpenAdManager: appOpenAdManager,
+    );
+    _appLifecycleReactor.listenToAppStateChanges();
   }
 
   initializePremium() async {
@@ -69,11 +75,18 @@ class _HomePageState extends State<HomePage> {
               if (mounted) {
                 context.read<ThemeProvider>().setThemeValue(userInfo.theme);
                 context
-                    .read<BottomTabIndexProvider>()
-                    .changeSeletedIdx(newIndex: userInfo.appStartIndex);
-                context
                     .read<UserInfoProvider>()
                     .changeUserInfo(newuUserInfo: userInfo);
+
+                int seletedIdx =
+                    Provider.of<BottomTabIndexProvider>(context, listen: false)
+                        .seletedIdx;
+
+                if (seletedIdx != 3) {
+                  context
+                      .read<BottomTabIndexProvider>()
+                      .changeSeletedIdx(newIndex: userInfo.appStartIndex);
+                }
               }
             }
           },
@@ -130,13 +143,25 @@ class _HomePageState extends State<HomePage> {
     ).onError((err) => log('$err'));
   }
 
+  initializeInAppReview() async {
+    int day = DateTime.now().day;
+    InAppReview inAppReview = InAppReview.instance;
+    bool isAvailable = await inAppReview.isAvailable();
+    bool isDateTime = day == 1 || day == 14 || day == 28;
+
+    if (isAvailable && isDateTime) {
+      inAppReview.requestReview();
+    }
+  }
+
   @override
   void initState() {
-    initializeBottomTab();
+    initialzeAppOpening();
     initializePremium();
     initializeUserInfo();
     initializeGroupInfoList();
     initializeMemoInfoList();
+    initializeInAppReview();
 
     super.initState();
   }

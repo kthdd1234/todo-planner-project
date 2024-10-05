@@ -39,6 +39,7 @@ class CommonScaffold extends StatelessWidget {
                 text: appBarInfo!.title,
                 fontSize: appBarInfo!.fontSize ?? 18,
                 isBold: !isLight,
+                isNotTr: appBarInfo!.isNotTr,
               ),
               centerTitle: appBarInfo!.isCenter,
               actions: appBarInfo!.actions,

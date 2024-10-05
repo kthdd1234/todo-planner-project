@@ -103,23 +103,29 @@ class _PremiumPageState extends State<PremiumPage> {
                             outerPadding: EdgeInsets.only(bottom: 10),
                             child: Row(
                               children: [
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    CommonText(
-                                      text: premiumBenefit.mainTitle,
-                                      isBold: !isLight,
+                                Expanded(
+                                  child: SingleChildScrollView(
+                                    scrollDirection: Axis.horizontal,
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        CommonText(
+                                          text: premiumBenefit.mainTitle,
+                                          isBold: !isLight,
+                                        ),
+                                        CommonSpace(height: 5),
+                                        CommonText(
+                                          text: premiumBenefit.subTitle,
+                                          fontSize: 11,
+                                          color: grey.original,
+                                          isBold: !isLight,
+                                        ),
+                                      ],
                                     ),
-                                    CommonSpace(height: 5),
-                                    CommonText(
-                                      text: premiumBenefit.subTitle,
-                                      fontSize: 11,
-                                      color: grey.original,
-                                      isBold: !isLight,
-                                    ),
-                                  ],
+                                  ),
                                 ),
-                                Spacer(),
+                                CommonSpace(width: 20),
                                 svgAsset(
                                   name: premiumBenefit.svgName,
                                   width: 50,

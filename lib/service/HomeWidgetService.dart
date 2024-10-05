@@ -90,6 +90,8 @@ class HomeWidgetService {
       ],
     );
 
+    log('$fontFamily');
+
     Map<String, String> entry = {
       "fontFamily": fontFamily,
       "emptyText": "추가된 할 일이 없어요",

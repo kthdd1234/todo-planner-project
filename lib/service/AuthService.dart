@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
 import 'package:project/main.dart';
@@ -11,6 +12,7 @@ import 'package:project/page/HomePage.dart';
 import 'package:project/util/class.dart';
 import 'package:project/util/constants.dart';
 import 'package:project/util/func.dart';
+import 'package:project/widget/popup/LoadingPopup.dart';
 
 class AuthService {
   commonSignIn(
@@ -19,12 +21,18 @@ class AuthService {
     String loginType,
   ) async {
     try {
+      showDialog(
+        context: context,
+        builder: (context) => LoadingPopup(
+          text: '로그인 중...',
+          color: Colors.white,
+        ),
+      );
+
       String locale = context.locale.toString();
       DateTime createDateTime = DateTime.now();
       String uid = userDetails.uid;
       bool isUser = await userMethod.isUser;
-
-      log('userDetails.uid ${userDetails.uid}');
 
       if (isUser == false) {
         String gid = uuid();
@@ -56,8 +64,10 @@ class AuthService {
         await groupMethod.addGroup(gid: gid, groupInfo: groupInfo);
       }
 
+      navigatorPop(context);
       navigatorRemoveUntil(context: context, page: HomePage(locale: locale));
     } catch (e) {
+      navigatorPop(context);
       log('$e');
     }
   }
