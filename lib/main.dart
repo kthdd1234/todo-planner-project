@@ -29,7 +29,6 @@ import 'package:project/repositories/init_hive.dart';
 import 'package:project/service/HomeWidgetService.dart';
 import 'package:project/util/class.dart';
 import 'package:project/util/constants.dart';
-import 'package:project/util/func.dart';
 import 'package:provider/provider.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:purchases_flutter/purchases_flutter.dart';

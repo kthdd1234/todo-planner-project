@@ -33,6 +33,10 @@ class TaskCalendarView extends StatefulWidget {
 class _TaskCalendarViewState extends State<TaskCalendarView> {
   onDaySelected(DateTime dateTime) {
     context
+        .read<TitleDateTimeProvider>()
+        .changeTitleDateTime(dateTime: dateTime);
+
+    context
         .read<SelectedDateTimeProvider>()
         .changeSelectedDateTime(dateTime: dateTime);
   }

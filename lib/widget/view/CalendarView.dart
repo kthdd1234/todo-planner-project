@@ -39,6 +39,9 @@ class CalendarView extends StatefulWidget {
 class _CalendarViewState extends State<CalendarView> {
   onDaySelected(DateTime dateTime) {
     context
+        .read<TitleDateTimeProvider>()
+        .changeTitleDateTime(dateTime: dateTime);
+    context
         .read<SelectedDateTimeProvider>()
         .changeSelectedDateTime(dateTime: dateTime);
   }

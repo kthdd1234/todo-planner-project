@@ -1,5 +1,5 @@
-"CFBundleDisplayName" = "투두 트래커";
-"CFBundleName" = "투두 트래커";
+"CFBundleDisplayName" = "투두 플래너";
+"CFBundleName" = "투두 플래너";
 "NSCameraUsageDescription" = "메모 사진을 촬영하기 위해 카메라 접근 권한이 필요합니다.";
 "NSPhotoLibraryUsageDescription" = "메모 사진을 가져오기 위해 갤러리 접근 권한이 필요합니다.";
 "NSUserTrackingUsageDescription" = "개인에게 최적화된 광고를 제공하기 위해 광고 활동 정보를 수집합니다.";

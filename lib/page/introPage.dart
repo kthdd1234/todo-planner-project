@@ -44,7 +44,7 @@ class _IntroPageState extends State<IntroPage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             const Spacer(),
-            CommonText(text: '반가워요! 투두 트래커와 함께'),
+            CommonText(text: '반가워요! 투두 플래너와 함께'),
             CommonSpace(height: 2),
             CommonText(text: '오늘의 할 일을 실천해봐요 :D'),
             const Spacer(),

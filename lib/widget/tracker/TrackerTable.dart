@@ -74,7 +74,7 @@ class TrackerTable extends StatelessWidget {
                     ),
                   ),
                   columnWidths: const <int, TableColumnWidth>{
-                    0: IntrinsicColumnWidth(),
+                    0: FlexColumnWidth(5.0),
                   },
                   defaultVerticalAlignment: TableCellVerticalAlignment.middle,
                   children: <TableRow>[

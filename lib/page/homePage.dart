@@ -147,7 +147,7 @@ class _HomePageState extends State<HomePage> {
     int day = DateTime.now().day;
     InAppReview inAppReview = InAppReview.instance;
     bool isAvailable = await inAppReview.isAvailable();
-    bool isDateTime = day == 1 || day == 14 || day == 28;
+    bool isDateTime = day == 7 || day == 14 || day == 28;
 
     if (isAvailable && isDateTime) {
       inAppReview.requestReview();
