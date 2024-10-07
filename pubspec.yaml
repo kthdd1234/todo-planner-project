@@ -76,6 +76,7 @@ dependencies:
   firebase_storage: ^12.3.2
   cached_network_image: ^3.4.1
   flutter_cache_manager: ^3.4.1
+  flutter_native_splash: ^2.4.1
 
 dev_dependencies:
   flutter_test:
@@ -210,6 +211,7 @@ flutter:
     - assets/svg/premium-free.svg
     - assets/svg/premium-no-ads.svg
     - assets/svg/premium-start.svg
+    - assets/image/splash.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
@@ -260,3 +262,7 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
+
+flutter_native_splash:
+  color: '#F3F7FE'
+  image: 'assets/image/splash.png'

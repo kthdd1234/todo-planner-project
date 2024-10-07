@@ -19,6 +19,7 @@ class CommonSvgText extends StatelessWidget {
     this.svgColor,
     this.textColor,
     this.onTap,
+    this.isCenter,
   });
 
   String text;
@@ -26,7 +27,7 @@ class CommonSvgText extends StatelessWidget {
   Color? textColor, svgColor;
   double svgWidth, fontSize;
   double? svgLeft, svgRight;
-  bool? isBold, isNotTr;
+  bool? isBold, isNotTr, isCenter;
   SvgDirectionEnum svgDirection;
   Function()? onTap;
 
@@ -68,6 +69,14 @@ class CommonSvgText extends StatelessWidget {
               ))
             : const CommonNull();
 
-    return GestureDetector(onTap: onTap, child: Row(children: children));
+    return GestureDetector(
+      onTap: onTap,
+      child: Row(
+        mainAxisAlignment: isCenter == true
+            ? MainAxisAlignment.center
+            : MainAxisAlignment.start,
+        children: children,
+      ),
+    );
   }
 }

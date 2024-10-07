@@ -92,7 +92,7 @@ class _PremiumPageState extends State<PremiumPage> {
         body: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 10),
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Expanded(
                 child: SingleChildScrollView(
@@ -140,15 +140,13 @@ class _PremiumPageState extends State<PremiumPage> {
               ),
               Padding(
                 padding: const EdgeInsets.only(bottom: 10),
-                child: Center(
-                  child: CommonText(
-                    text: '구매 내역 복원하기',
-                    color: grey.original,
-                    fontSize: 12,
-                    decoration: TextDecoration.underline,
-                    decorationColor: grey.s400,
-                    onTap: onRestore,
-                  ),
+                child: CommonText(
+                  text: '구매 내역 복원하기',
+                  color: grey.original,
+                  fontSize: 12,
+                  decoration: TextDecoration.underline,
+                  decorationColor: grey.s400,
+                  onTap: onRestore,
                 ),
               ),
               isPremium
@@ -161,6 +159,7 @@ class _PremiumPageState extends State<PremiumPage> {
                         svgName: 'premium-badge',
                         svgWidth: 16,
                         svgDirection: SvgDirectionEnum.left,
+                        isCenter: true,
                       ),
                     )
                   : Padding(

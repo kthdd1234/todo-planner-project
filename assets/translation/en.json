@@ -144,5 +144,6 @@
   "정말 회원 탈퇴할까요?": "Would you like to delete your account?",
   "탈퇴하기": "Delete",
   "OpenSans": "OpenSans",
-  "데이터 불러오는 중...": "Calling data..."
+  "데이터 불러오는 중...": "Calling data...",
+  "오늘의 할 일": "Today's to-do {length}"
 }

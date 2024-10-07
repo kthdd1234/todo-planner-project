@@ -254,7 +254,7 @@ class _MemoSettingPageState extends State<MemoSettingPage> {
                                   controller: memoContoller,
                                   cursorColor: cursorColor,
                                   textAlign: textAlign,
-                                  fontSize: 14,
+                                  fontSize: 15,
                                   onChanged: (_) {},
                                 ),
                               ],

@@ -76,7 +76,7 @@ class HomeWidgetService {
     Color taskTitleTextColor = isWidgetLight ? buttonColor : Colors.white;
     Color taskTitleBgColor = isWidgetLight ? selectedColor : darkButtonColor;
     WidgetHeaderClass header = WidgetHeaderClass(
-      '오늘의 할 일 ${taskList.length}'.tr(),
+      '오늘의 할 일'.tr(namedArgs: {'length': '${taskList.length}'}),
       mdeFormatter(locale: locale, dateTime: now),
       [
         taskTitleTextColor.red,
@@ -90,7 +90,7 @@ class HomeWidgetService {
       ],
     );
 
-    log('$fontFamily');
+    log(header.title);
 
     Map<String, String> entry = {
       "fontFamily": fontFamily,
