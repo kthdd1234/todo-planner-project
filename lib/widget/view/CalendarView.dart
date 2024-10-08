@@ -150,6 +150,8 @@ class _CalendarViewState extends State<CalendarView> {
       (memoInfo) => memoInfo.dateTimeKey == dateTimeKey(dateTime),
     );
     MemoInfoClass? memoInfo = index != -1 ? widget.memoInfoList[index] : null;
+    bool isPortrait =
+        MediaQuery.of(context).orientation == Orientation.portrait;
 
     return Column(
       children: [
@@ -168,7 +170,11 @@ class _CalendarViewState extends State<CalendarView> {
                     fontSize: 0,
                     radious: 3,
                     width: double.infinity,
-                    height: isTablet ? 100 : 50,
+                    height: isTablet
+                        ? isPortrait
+                            ? 100
+                            : 55
+                        : 50,
                     onTap: () {},
                   ),
                 ),

@@ -14,6 +14,7 @@ import 'package:project/page/IntroPage.dart';
 import 'package:project/provider/GroupInfoListProvider.dart';
 import 'package:project/provider/MemoInfoListProvider.dart';
 import 'package:project/provider/UserInfoProvider.dart';
+import 'package:project/provider/themeProvider.dart';
 import 'package:project/util/class.dart';
 import 'package:project/page/HomePage.dart';
 import 'package:project/util/enum.dart';
@@ -36,13 +37,14 @@ class _ProfilePageState extends State<ProfilePage> {
     required String title,
     required Color color,
     required Widget child,
+    required bool isBold,
     required Function() onTap,
   }) {
     return CommonContainer(
       onTap: onTap,
       outerPadding: const EdgeInsets.only(bottom: 10),
       child: Row(children: [
-        CommonText(text: title, color: color),
+        CommonText(text: title, color: color, isBold: isBold),
         const Spacer(),
         child
       ]),
@@ -121,6 +123,8 @@ class _ProfilePageState extends State<ProfilePage> {
     String loginText = authButtonInfo[userInfo.loginType]!['name'];
     String svg = authButtonInfo[userInfo.loginType]!['svg'];
 
+    bool isLight = context.watch<ThemeProvider>().isLight;
+
     return CommonBackground(
       child: CommonScaffold(
         appBarInfo: AppBarInfoClass(title: '프로필'),
@@ -131,29 +135,42 @@ class _ProfilePageState extends State<ProfilePage> {
             children: [
               button(
                 title: '로그인 연동',
-                color: Colors.black,
+                color: isLight ? Colors.black : Colors.white,
+                isBold: !isLight,
                 child: CommonSvgText(
                   text: loginText,
                   fontSize: 14,
+                  isBold: !isLight,
                   svgWidth: 12,
+                  textColor: isLight ? Colors.black : Colors.white,
                   svgName: svg,
                   svgDirection: SvgDirectionEnum.left,
-                  svgColor: svg == 'apple-logo' ? Colors.black : null,
+                  svgColor: svg == 'apple-logo' ? Colors.white : null,
                 ),
                 onTap: () {},
               ),
               button(
                 title: '로그아웃',
+                isBold: !isLight,
                 color: red.s400,
-                child: svgAsset(name: 'dir-right', width: 7),
+                child: svgAsset(
+                  name: 'dir-right',
+                  width: 7,
+                  color: red.original,
+                ),
                 onTap: onLogout,
               ),
               isLoading
                   ? loading()
                   : button(
+                      isBold: !isLight,
                       title: '회원 탈퇴',
                       color: red.s400,
-                      child: svgAsset(name: 'dir-right', width: 7),
+                      child: svgAsset(
+                        name: 'dir-right',
+                        width: 7,
+                        color: red.original,
+                      ),
                       onTap: onDeletePopup,
                     ),
             ],
