@@ -31,12 +31,9 @@ class MemoView extends StatefulWidget {
 class _MemoViewState extends State<MemoView> {
   @override
   Widget build(BuildContext context) {
-    bool isLight = context.watch<ThemeProvider>().isLight;
     DateTime selectedDateTime =
         context.watch<SelectedDateTimeProvider>().seletedDateTime;
-
-    Color containerColor = isLight ? memoBgColor : darkContainerColor;
-    Color borderColor = isLight ? orange.s50 : Colors.white10;
+    bool isLight = context.watch<ThemeProvider>().isLight;
 
     int index = widget.memoInfoList.indexWhere(
       (memoInfo) => memoInfo.dateTimeKey == dateTimeKey(selectedDateTime),
@@ -83,56 +80,104 @@ class _MemoViewState extends State<MemoView> {
       );
     }
 
+    onMemoPage() {
+      movePage(
+        context: context,
+        page: MemoSettingPage(
+          initDateTime: selectedDateTime,
+          memoInfoList: widget.memoInfoList,
+          memoInfo: memoInfo,
+        ),
+      );
+    }
+
     return memoInfo != null
-        ? CommonContainer(
+        ? MemoContainer(
             onTap: onMemo,
-            radius: 0,
-            color: containerColor,
-            innerPadding: const EdgeInsets.all(0),
-            outerPadding: const EdgeInsets.fromLTRB(7, 0, 7, 10),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                HorizentalBorder(colorName: '주황색'),
-                CustomPaint(
-                  painter: MemoBackground(isLight: isLight, color: orange.s50),
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                      vertical: 10,
-                      horizontal: 12.5,
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        memoInfo?.imgUrl != null
-                            ? MemoImage(
-                                imageUrl: memoInfo?.imgUrl,
-                                onTap: onMemo,
-                              )
-                            : const CommonNull(),
-                        memoInfo?.imgUrl != null && memoInfo?.text != null
-                            ? CommonSpace(height: 10)
-                            : const CommonNull(),
-                        memoInfo?.text != null
-                            ? SizedBox(
-                                width: MediaQuery.of(context).size.width,
-                                child: CommonText(
-                                  text: memoInfo!.text!,
-                                  textAlign:
-                                      memoInfo?.textAlign ?? TextAlign.left,
-                                  isBold: !isLight,
-                                  isNotTr: true,
-                                ),
-                              )
-                            : const CommonNull()
-                      ],
-                    ),
-                  ),
-                ),
-                HorizentalBorder(colorName: '주황색'),
+                memoInfo?.imgUrl != null
+                    ? MemoImage(
+                        imageUrl: memoInfo?.imgUrl,
+                        onTap: onMemo,
+                      )
+                    : const CommonNull(),
+                memoInfo?.imgUrl != null && memoInfo?.text != null
+                    ? CommonSpace(height: 10)
+                    : const CommonNull(),
+                memoInfo?.text != null
+                    ? SizedBox(
+                        width: MediaQuery.of(context).size.width,
+                        child: CommonText(
+                          text: memoInfo!.text!,
+                          fontSize: 15,
+                          textAlign: memoInfo?.textAlign ?? TextAlign.left,
+                          isBold: !isLight,
+                          isNotTr: true,
+                        ),
+                      )
+                    : const CommonNull()
               ],
             ),
           )
-        : const CommonNull();
+        : isTablet
+            ? MemoContainer(
+                height: 350,
+                onTap: onMemoPage,
+                child: Center(
+                  child: CommonText(
+                    text: '+ 메모 추가하기',
+                    color: grey.original,
+                    fontSize: 15,
+                  ),
+                ),
+              )
+            : const CommonNull();
+  }
+}
+
+class MemoContainer extends StatelessWidget {
+  MemoContainer({
+    super.key,
+    required this.onTap,
+    required this.child,
+    this.height,
+  });
+
+  Widget child;
+  double? height;
+  Function() onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    bool isLight = context.watch<ThemeProvider>().isLight;
+    Color containerColor = isLight ? memoBgColor : darkContainerColor;
+
+    return CommonContainer(
+      height: height,
+      onTap: onTap,
+      radius: 0,
+      color: containerColor,
+      innerPadding: const EdgeInsets.all(0),
+      outerPadding: const EdgeInsets.fromLTRB(7, 0, 7, 10),
+      child: Column(
+        mainAxisAlignment:
+            height != null ? MainAxisAlignment.center : MainAxisAlignment.start,
+        children: [
+          HorizentalBorder(colorName: '주황색'),
+          CustomPaint(
+            painter: MemoBackground(isLight: isLight, color: orange.s50),
+            child: Padding(
+                padding: const EdgeInsets.symmetric(
+                  vertical: 10,
+                  horizontal: 12.5,
+                ),
+                child: child),
+          ),
+          HorizentalBorder(colorName: '주황색'),
+        ],
+      ),
+    );
   }
 }

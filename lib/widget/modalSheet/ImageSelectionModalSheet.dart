@@ -33,6 +33,7 @@ class ImageSelectionModalSheet extends StatelessWidget {
         children: [
           CommonImage(
             uint8List: uint8List,
+            width: double.infinity,
             height: 335,
             onTap: (_) => onSlide(),
           ),

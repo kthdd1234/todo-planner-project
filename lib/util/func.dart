@@ -443,7 +443,7 @@ String getLocaleName(String locale) {
 String getGroupName(String locale) {
   return {
     'ko': '할 일 리스트',
-    'en': 'To Do List',
+    'en': 'Todo List',
     'ja': 'やることリスト',
   }[locale]!;
 }

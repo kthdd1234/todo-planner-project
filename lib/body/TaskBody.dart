@@ -8,10 +8,8 @@ import 'package:project/provider/selectedDateTimeProvider.dart';
 import 'package:project/util/class.dart';
 import 'package:project/util/final.dart';
 import 'package:project/util/func.dart';
-import 'package:project/widget/appBar/TaskAppBar.dart';
-import 'package:project/widget/view/GroupView.dart';
-import 'package:project/widget/view/MemoView.dart';
-import 'package:project/widget/view/TaskCalendarView.dart';
+import 'package:project/widget/device/PhoneDevice.dart';
+import 'package:project/widget/device/TabletDevice.dart';
 import 'package:provider/provider.dart';
 import 'package:table_calendar/table_calendar.dart';
 
@@ -61,54 +59,20 @@ class _TaskBodyState extends State<TaskBody> {
       setState(() => calendarFormat = nextCalendarFormats[calendarFormat]!);
     }
 
-    return GestureDetector(
-      onHorizontalDragEnd: onHorizontalDragEnd,
-      child: Column(
-        children: [
-          TaskAppBar(
-            memoInfoList: memoInfoList,
+    return isTablet
+        ? TabletDevice(
             calendarFormat: calendarFormat,
+            groupInfoList: groupInfoList,
+            memoInfoList: memoInfoList,
+            onHorizontalDragEnd: onHorizontalDragEnd,
             onCalendarFormat: onCalendarFormat,
-          ),
-          Expanded(
-            child: SingleChildScrollView(
-              child: Column(
-                children: [
-                  TaskCalendarView(
-                    groupInfoList: groupInfoList,
-                    memoInfoList: memoInfoList,
-                    calendarFormat: calendarFormat,
-                    onFormatChanged: onCalendarFormat,
-                  ),
-                  MemoView(memoInfoList: memoInfoList),
-                  Column(
-                    children: groupInfoList
-                        .map((groupInfo) => GroupView(groupInfo: groupInfo))
-                        .toList(),
-                  )
-                ],
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-
-    // StreamBuilder<QuerySnapshot>(
-    //   stream: groupMethod.stream(),
-    //   builder: (context, snapshot) {
-    //     if (!snapshot.hasData) return const CommonNull();
-
-    //     List<GroupInfoClass> groupInfoList = groupMethod.getGroupInfoList(
-    //       snapshot: snapshot,
-    //     );
-    //     groupInfoList = getGroupInfoOrderList(
-    //       userInfo.groupOrderList,
-    //       groupInfoList,
-    //     );
-
-    //     return MainView(groupInfoList: groupInfoList);
-    //   },
-    // );
+          )
+        : PhoneDevice(
+            calendarFormat: calendarFormat,
+            groupInfoList: groupInfoList,
+            memoInfoList: memoInfoList,
+            onHorizontalDragEnd: onHorizontalDragEnd,
+            onCalendarFormat: onCalendarFormat,
+          );
   }
 }

@@ -13,6 +13,7 @@ import 'package:project/util/enum.dart';
 import 'package:project/util/final.dart';
 import 'package:project/util/func.dart';
 import 'package:project/widget/border/VerticalBorder.dart';
+import 'package:project/widget/view/CalendarBarView.dart';
 import 'package:provider/provider.dart';
 import 'package:table_calendar/table_calendar.dart';
 
@@ -97,7 +98,9 @@ class _CalendarViewState extends State<CalendarView> {
 
     GroupInfoClass groupInfo =
         widget.groupInfoList[widget.selectedGroupInfoIndex];
-    ColorClass color = getColorClass(groupInfo.colorName);
+
+    String colorName = groupInfo.colorName;
+    ColorClass color = getColorClass(colorName);
     List<TaskInfoClass> taskInfoList = getTaskInfoList(
       locale: locale,
       groupInfo: groupInfo,
@@ -128,39 +131,10 @@ class _CalendarViewState extends State<CalendarView> {
                 child: Column(
                   children: taskInfoList
                       .map(
-                        (taskInfo) => IntrinsicHeight(
-                          child: Padding(
-                            padding: const EdgeInsets.only(bottom: 3),
-                            child: Container(
-                              decoration: BoxDecoration(
-                                color: highlighterColor(taskInfo),
-                                borderRadius: BorderRadius.circular(3),
-                              ),
-                              child: Row(
-                                children: [
-                                  Expanded(
-                                    flex: 0,
-                                    child: VerticalBorder(
-                                      width: 2,
-                                      right: 3,
-                                      color: isLight ? color.s200 : color.s300,
-                                    ),
-                                  ),
-                                  Flexible(
-                                    child: CommonText(
-                                      text: taskInfo.name,
-                                      overflow: TextOverflow.clip,
-                                      isBold: !isLight,
-                                      fontSize: 9,
-                                      softWrap: false,
-                                      textAlign: TextAlign.start,
-                                      isNotTr: true,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
+                        (taskInfo) => CalendarBarView(
+                          highlighterColor: highlighterColor(taskInfo),
+                          color: color,
+                          name: taskInfo.name,
                         ),
                       )
                       .toList(),

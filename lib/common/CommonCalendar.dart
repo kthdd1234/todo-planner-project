@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:project/common/CommonContainer.dart';
@@ -17,17 +19,18 @@ class CommonCalendar extends StatefulWidget {
     required this.calendarFormat,
     required this.shouldFillViewport,
     required this.markerBuilder,
-    this.todayBuilder,
     required this.onPageChanged,
     required this.onDaySelected,
     required this.onFormatChanged,
+    this.todayBuilder,
     this.rowHeight,
+    this.height,
   });
 
   DateTime selectedDateTime;
   CalendarFormat calendarFormat;
   bool shouldFillViewport;
-  double? rowHeight;
+  double? rowHeight, height;
   Function(bool, DateTime) markerBuilder;
   Function(bool, DateTime)? todayBuilder;
   Function(DateTime) onPageChanged, onDaySelected;
@@ -140,9 +143,10 @@ class _CommonCalendarState extends State<CommonCalendar> {
         outerPadding: isLight
             ? const EdgeInsets.symmetric(horizontal: 7)
             : const EdgeInsets.only(bottom: 15),
-        height: widget.shouldFillViewport
-            ? MediaQuery.of(context).size.height / 1.4
-            : null,
+        height: widget.height ??
+            (widget.shouldFillViewport
+                ? MediaQuery.of(context).size.height / (isTablet ? 1.3 : 1.4)
+                : null),
         child: tableCalendar(),
       ),
     );

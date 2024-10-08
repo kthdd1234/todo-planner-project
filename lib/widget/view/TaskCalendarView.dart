@@ -64,7 +64,7 @@ class _TaskCalendarViewState extends State<TaskCalendarView> {
             (record.mark != null));
       });
 
-      if (colorList.length != 9 && isRecord) {
+      if (colorList.length != 6 && isRecord) {
         colorList.add(getColorClass(groupInfo.colorName));
       }
     }
@@ -126,7 +126,7 @@ class _TaskCalendarViewState extends State<TaskCalendarView> {
 
     return CommonCalendar(
       selectedDateTime: selectedDateTime,
-      calendarFormat: widget.calendarFormat,
+      calendarFormat: isTablet ? CalendarFormat.month : widget.calendarFormat,
       shouldFillViewport: false,
       markerBuilder: stickerBuilder,
       onPageChanged: onPageChanged,
