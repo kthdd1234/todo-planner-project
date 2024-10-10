@@ -28,7 +28,7 @@ import 'package:project/widget/modalSheet/AppStartIndexModalSheet.dart';
 import 'package:project/widget/modalSheet/LanguageModalSheet.dart';
 import 'package:project/widget/modalSheet/ThemeModalSheet.dart';
 import 'package:provider/provider.dart';
-import 'package:share_plus/share_plus.dart';
+// import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class SettingBody extends StatelessWidget {
@@ -58,16 +58,16 @@ class _ContentViewState extends State<ContentView> {
 
   @override
   void initState() {
-    getInfo() async {
-      Map<String, dynamic> appInfo = await getAppInfo();
+    // getInfo() async {
+    //   Map<String, dynamic> appInfo = await getAppInfo();
 
-      appVerstion = appInfo['appVerstion'];
-      appBuildNumber = appInfo['appBuildNumber'];
+    //   appVerstion = appInfo['appVerstion'];
+    //   appBuildNumber = appInfo['appBuildNumber'];
 
-      setState(() {});
-    }
+    //   setState(() {});
+    // }
 
-    getInfo();
+    // getInfo();
     super.initState();
   }
 
@@ -98,9 +98,9 @@ class _ContentViewState extends State<ContentView> {
   }
 
   onShare() {
-    Platform.isIOS
-        ? Share.share(APP_STORE_LINK, subject: '투두트래커')
-        : Share.share('', subject: '투두트래커');
+    // Platform.isIOS
+    //     ? Share.share(APP_STORE_LINK, subject: '투두 플래너')
+    //     : Share.share('', subject: '투두 플래너');
   }
 
   onInquire() async {

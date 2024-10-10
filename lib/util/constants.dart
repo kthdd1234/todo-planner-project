@@ -92,7 +92,7 @@ const iOSInterstitialRealId = 'ca-app-pub-6804308271128440/2124434296';
 const appleApiKey = 'appl_pXSYpqBvTJABLdPrTuwNjLMeKTJ';
 
 /// googleApiKey
-const googleApiKey = '';
+const googleApiKey = 'goog_uBTljmsUgDIHMzOHEmzuPnUnzGn';
 
 /// offeringIdentifier
 const offeringIdentifier = 'premium_IOS';

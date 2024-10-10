@@ -1,10 +1,10 @@
 // ignore_for_file: use_build_context_synchronously
-
-import 'dart:developer';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:project/common/CommonBackground.dart';
 import 'package:project/common/CommonButton.dart';
+import 'package:project/common/CommonNull.dart';
 import 'package:project/common/CommonScaffold.dart';
 import 'package:project/common/CommonSpace.dart';
 import 'package:project/common/CommonText.dart';
@@ -39,7 +39,7 @@ class _IntroPageState extends State<IntroPage> {
     return CommonBackground(
       background: '0',
       child: CommonScaffold(
-        appBarInfo: AppBarInfoClass(title: '로그인'),
+        appBarInfo: AppBarInfoClass(title: '로그인', isCenter: true),
         body: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -70,16 +70,18 @@ class _IntroPageState extends State<IntroPage> {
               onTap: onGoogleLogin,
             ),
             CommonSpace(height: 10),
-            CommonButton(
-              svg: 'apple-logo',
-              outerPadding: const EdgeInsets.symmetric(horizontal: 10),
-              text: 'Apple로 로그인',
-              textColor: Colors.white,
-              buttonColor: darkButtonColor,
-              verticalPadding: 15,
-              borderRadius: 7,
-              onTap: onAppleLogin,
-            )
+            Platform.isIOS
+                ? CommonButton(
+                    svg: 'apple-logo',
+                    outerPadding: const EdgeInsets.symmetric(horizontal: 10),
+                    text: 'Apple로 로그인',
+                    textColor: Colors.white,
+                    buttonColor: darkButtonColor,
+                    verticalPadding: 15,
+                    borderRadius: 7,
+                    onTap: onAppleLogin,
+                  )
+                : const CommonNull()
           ],
         ),
       ),

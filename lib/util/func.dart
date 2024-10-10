@@ -12,7 +12,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:package_info_plus/package_info_plus.dart';
+// import 'package:package_info_plus/package_info_plus.dart';
 import 'package:project/common/CommonText.dart';
 import 'package:project/main.dart';
 import 'package:project/model/record_box/record_box.dart';
@@ -231,14 +231,14 @@ String uuid() {
   return DateTime.now().microsecondsSinceEpoch.toString();
 }
 
-Future<Map<String, dynamic>> getAppInfo() async {
-  PackageInfo info = await PackageInfo.fromPlatform();
+// Future<Map<String, dynamic>> getAppInfo() async {
+//   PackageInfo info = await PackageInfo.fromPlatform();
 
-  return {
-    "appVerstion": info.version,
-    'appBuildNumber': info.buildNumber,
-  };
-}
+//   return {
+//     "appVerstion": info.version,
+//     'appBuildNumber': info.buildNumber,
+//   };
+// }
 
 movePage({required BuildContext context, required Widget page}) {
   Navigator.push(
