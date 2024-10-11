@@ -99,15 +99,15 @@ class _ContentViewState extends State<ContentView> {
 
   onShare() {
     Platform.isIOS
-        ? Share.share(APP_STORE_LINK, subject: '투두트래커')
-        : Share.share('', subject: '투두트래커');
+        ? Share.share(APP_STORE_LINK, subject: '투두 플래너')
+        : Share.share('', subject: '투두 플래너');
   }
 
   onInquire() async {
     Uri url = Uri(
       scheme: 'https',
       host: 'open.kakao.com',
-      path: 'o/szS9jCzg',
+      path: 'o/sHj2sRTg',
     );
 
     await canLaunchUrl(url) ? await launchUrl(url) : print('err');
@@ -291,6 +291,11 @@ class _ContentViewState extends State<ContentView> {
         name: '앱 리뷰',
         svg: 'review',
         onTap: onReview,
+      ),
+      SettingItemClass(
+        name: '카카오톡 고객센터 문의',
+        svg: 'inquire',
+        onTap: onInquire,
       ),
       SettingItemClass(
         name: '개인정보처리방침',
