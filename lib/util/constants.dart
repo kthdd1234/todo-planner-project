@@ -105,7 +105,8 @@ const APP_STORE_LINK =
     "https://apps.apple.com/app/%ED%88%AC%EB%91%90-%ED%94%8C%EB%9E%98%EB%84%88-todo-planner/id6504663551";
 
 /// PLAY_STORE_LINK
-const PLAY_STORE_LINK = "";
+const PLAY_STORE_LINK =
+    "https://play.google.com/store/apps/details?id=com.kthdd.todoPlanner";
 
 /// themeBgColor
 const darkBgColor = Color(0xff1C1C1E); // 28, 28, 30

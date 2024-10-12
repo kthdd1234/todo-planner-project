@@ -61,10 +61,16 @@ android {
             signingConfig signingConfigs.debug
         }
     }
+
+    buildFeatures {
+        // compose true
+    }
 }
 
 flutter {
     source '../..'
 }
 
-dependencies {}
+dependencies {
+    implementation 'androidx.glance:glance-appwidget:LATEST-VERSION'
+}
