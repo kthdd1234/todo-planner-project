@@ -107,7 +107,7 @@ class _ContentViewState extends State<ContentView> {
     Uri url = Uri(
       scheme: 'https',
       host: 'open.kakao.com',
-      path: 'o/szS9jCzg',
+      path: 'o/sHj2sRTg',
     );
 
     await canLaunchUrl(url) ? await launchUrl(url) : print('err');
@@ -293,6 +293,11 @@ class _ContentViewState extends State<ContentView> {
         onTap: onReview,
       ),
       SettingItemClass(
+        name: '카카오톡 고객센터 문의',
+        svg: 'inquire',
+        onTap: onInquire,
+      ),
+      SettingItemClass(
         name: '개인정보처리방침',
         svg: 'private',
         onTap: onPrivate,
@@ -302,7 +307,8 @@ class _ContentViewState extends State<ContentView> {
         svg: 'version',
         onTap: onVersion,
         value: CommonText(
-          text: '$appVerstion ($appBuildNumber)',
+          // text: '$appVerstion ($appBuildNumber)',
+          text: '1.0.9 (10)',
           color: isLight ? grey.original : darkTextColor,
           isBold: !isLight,
           isNotTr: true,

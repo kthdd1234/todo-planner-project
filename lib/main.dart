@@ -57,8 +57,6 @@ void main() async {
     javaScriptAppKey: '6c33a55f2e1fc0d920781f3dc1b4a8a4',
   );
 
-  log('안드로이드 카카오 로그인 구현 시 릴리즈 키 해시 등록 필요!!');
-
   runApp(
     MultiProvider(
       providers: [

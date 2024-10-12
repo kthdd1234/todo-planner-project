@@ -12,7 +12,20 @@
           "package_name": "com.kthdd.todoPlanner"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "328765857346-4p4rc68nr4ka8m05r8j00ofkp563vge5.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.kthdd.todoPlanner",
+            "certificate_hash": "0df07ee9fa9786b74508d72a488d4e06f1c26500"
+          }
+        },
+        {
+          "client_id": "328765857346-611e60hhmefc7fd1p217ldiqk99moqso.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyD7n9QDC9jyPOYd8Dbz4pvYCfggfeLuv8Y"
@@ -20,7 +33,19 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "328765857346-611e60hhmefc7fd1p217ldiqk99moqso.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "328765857346-e7hmd5rkmt3kjtunka19ree89pq37jd0.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.kthdd.todoPlanner"
+              }
+            }
+          ]
         }
       }
     }
