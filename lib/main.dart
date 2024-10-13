@@ -10,6 +10,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:home_widget/home_widget.dart';
 // import 'package:home_widget/home_widget.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
@@ -50,7 +51,9 @@ void main() async {
   await initializeDateFormatting();
   await EasyLocalization.ensureInitialized();
   await InitHive().initializeHive();
-  // await HomeWidget.setAppGroupId('group.todo-planner-widget');
+  if (Platform.isIOS) {
+    await HomeWidget.setAppGroupId('group.todo-planner-widget');
+  }
   await dotenv.load(fileName: ".env");
   KakaoSdk.init(
     nativeAppKey: '958cf1ab1b9ab22445351f1b6181c38f',
@@ -142,27 +145,30 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
     bool isBackground = state == AppLifecycleState.paused ||
         state == AppLifecycleState.detached;
 
-    if (isBackground && loginStatus == 'succeed') {
+    if (isBackground && loginStatus == 'succeed' && Platform.isIOS) {
       UserInfoClass userInfo =
           Provider.of<UserInfoProvider>(context, listen: false).getUserInfo;
       List<GroupInfoClass> groupInfoList =
           Provider.of<GroupInfoListProvider>(context, listen: false)
               .getGroupInfoList;
 
-      // await HomeWidgetService().updateAllTodoList(
-      //   locale: locale,
-      //   userInfo: userInfo,
-      //   groupInfoList: groupInfoList,
-      // );
+      await HomeWidgetService().updateAllTodoList(
+        locale: locale,
+        userInfo: userInfo,
+        groupInfoList: groupInfoList,
+      );
     }
   }
 
+// donghyunk252@gmail.com
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
 
-    // HomeWidget.initiallyLaunchedFromHomeWidget().then(onWidget);
-    // HomeWidget.widgetClicked.listen(onWidget);
+    if (Platform.isIOS) {
+      HomeWidget.initiallyLaunchedFromHomeWidget().then(onWidget);
+      HomeWidget.widgetClicked.listen(onWidget);
+    }
   }
 
   @override
