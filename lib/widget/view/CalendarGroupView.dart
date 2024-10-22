@@ -30,7 +30,7 @@ class GroupListView extends StatelessWidget {
 
     return SegmentedTypeEnum.todo == selectedSegment
         ? Padding(
-            padding: const EdgeInsets.only(top: 7),
+            padding: const EdgeInsets.only(bottom: 10),
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 7),
               height: 35,

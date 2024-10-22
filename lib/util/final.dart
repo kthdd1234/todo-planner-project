@@ -272,14 +272,14 @@ final premiumBenefitList = [
   ),
   PremiumBenefitClass(
     svgName: 'premium-no-ads',
-    mainTitle: '전면 광고가 제거돼요',
+    mainTitle: '배너 광고가 제거돼요',
     subTitle: '광고없이 쾌적하게 앱을 사용해보세요!',
   ),
-  PremiumBenefitClass(
-    svgName: 'premium-group',
-    mainTitle: '그룹을 제한없이 추가할 수 있어요',
-    subTitle: '보다 많은 그룹으로 할 일을 분류!',
-  ),
+  // PremiumBenefitClass(
+  //   svgName: 'premium-group',
+  //   mainTitle: '그룹을 제한없이 추가할 수 있어요',
+  //   subTitle: '보다 많은 그룹으로 할 일을 분류!',
+  // ),
   PremiumBenefitClass(
     svgName: 'premium-memo',
     mainTitle: '메모를 제한없이 추가할 수 있어요',

@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:project/common/CommonNull.dart';
 import 'package:project/provider/GroupInfoListProvider.dart';
+import 'package:project/provider/PremiumProvider.dart';
 import 'package:project/provider/UserInfoProvider.dart';
 import 'package:project/provider/themeProvider.dart';
 import 'package:project/util/class.dart';
 import 'package:project/util/enum.dart';
 import 'package:project/util/func.dart';
+import 'package:project/widget/ad/BannerAd.dart';
 import 'package:project/widget/appBar/TrackerAppBar.dart';
 import 'package:project/widget/tracker/TrackerTable.dart';
 import 'package:project/widget/view/CalendarGroupView.dart';
@@ -77,6 +80,7 @@ class _TrackerBodyState extends State<TrackerBody> {
     UserInfoClass userInfo = context.watch<UserInfoProvider>().userInfo;
     List<GroupInfoClass> groupInfoList =
         context.watch<GroupInfoListProvider>().groupInfoList;
+    bool isPremium = context.watch<PremiumProvider>().isPremium;
 
     groupInfoList = getGroupInfoOrderList(
       userInfo.groupOrderList,
@@ -92,6 +96,12 @@ class _TrackerBodyState extends State<TrackerBody> {
             endDateTime: endDateTime,
             onSelectionChanged: onSelectionChanged,
           ),
+          GroupListView(
+            selectedSegment: SegmentedTypeEnum.todo,
+            groupInfoList: groupInfoList,
+            selectedGroupInfoIndex: selectedGroupInfoIndex,
+            onSelectedGroupInfoIndex: onSelectedGroupInfoIndex,
+          ),
           TrackerTable(
             isLight: isLight,
             groupInfoList: groupInfoList,
@@ -99,12 +109,7 @@ class _TrackerBodyState extends State<TrackerBody> {
             startDateTime: startDateTime,
             endDateTime: endDateTime,
           ),
-          GroupListView(
-            selectedSegment: SegmentedTypeEnum.todo,
-            groupInfoList: groupInfoList,
-            selectedGroupInfoIndex: selectedGroupInfoIndex,
-            onSelectedGroupInfoIndex: onSelectedGroupInfoIndex,
-          )
+          !isPremium ? const BannerAdWidget() : const CommonNull(),
         ],
       ),
     );

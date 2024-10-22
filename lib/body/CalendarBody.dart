@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:project/common/CommonNull.dart';
 import 'package:project/provider/GroupInfoListProvider.dart';
 import 'package:project/provider/MemoInfoListProvider.dart';
+import 'package:project/provider/PremiumProvider.dart';
 import 'package:project/provider/UserInfoProvider.dart';
 import 'package:project/provider/selectedDateTimeProvider.dart';
 import 'package:project/provider/titleDateTimeProvider.dart';
 import 'package:project/util/class.dart';
 import 'package:project/util/enum.dart';
 import 'package:project/util/func.dart';
+import 'package:project/widget/ad/BannerAd.dart';
 import 'package:project/widget/appBar/CalendarAppBar.dart';
 import 'package:project/widget/view/CalendarGroupView.dart';
 import 'package:project/widget/view/CalendarView.dart';
@@ -60,6 +63,7 @@ class _CalendarBodyState extends State<CalendarBody> {
         context.watch<GroupInfoListProvider>().groupInfoList;
     List<MemoInfoClass> memoInfoList =
         context.watch<MemoInfoListProvider>().memoInfoList;
+    bool isPremium = context.watch<PremiumProvider>().isPremium;
 
     groupInfoList =
         getGroupInfoOrderList(userInfo.groupOrderList, groupInfoList);
@@ -71,18 +75,19 @@ class _CalendarBodyState extends State<CalendarBody> {
           onCalendar: onCalendar,
           onSegmentedChanged: onSegmentedChanged,
         ),
-        CalendarView(
-          selectedSegment: selectedSegment,
-          groupInfoList: groupInfoList,
-          memoInfoList: memoInfoList,
-          selectedGroupInfoIndex: selectedGroupInfoIndex,
-        ),
         GroupListView(
           selectedSegment: selectedSegment,
           groupInfoList: groupInfoList,
           selectedGroupInfoIndex: selectedGroupInfoIndex,
           onSelectedGroupInfoIndex: onSelectedGroupInfoIndex,
         ),
+        CalendarView(
+          selectedSegment: selectedSegment,
+          groupInfoList: groupInfoList,
+          memoInfoList: memoInfoList,
+          selectedGroupInfoIndex: selectedGroupInfoIndex,
+        ),
+        !isPremium ? const BannerAdWidget() : const CommonNull(),
       ],
     );
   }

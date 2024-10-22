@@ -39,10 +39,6 @@ class _GroupPageState extends State<GroupPage> {
     required bool isPremium,
     required List<GroupInfoClass> groupInfoList,
   }) {
-    if (isPremium == false && groupInfoList.length > 2) {
-      return movePage(context: context, page: const PremiumPage());
-    }
-
     showModalBottomSheet(
       isScrollControlled: true,
       context: context,

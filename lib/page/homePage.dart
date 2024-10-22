@@ -1,7 +1,5 @@
 // ignore_for_file: use_build_context_synchronously
 import 'dart:developer';
-
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:in_app_review/in_app_review.dart';
 import 'package:project/body/CalendarBody.dart';
@@ -21,10 +19,7 @@ import 'package:project/provider/titleDateTimeProvider.dart';
 import 'package:project/provider/bottomTabIndexProvider.dart';
 import 'package:project/provider/selectedDateTimeProvider.dart';
 import 'package:project/provider/themeProvider.dart';
-import 'package:project/service/AppLifecycleService.dart';
-import 'package:project/service/AppOpenService.dart';
 import 'package:project/util/class.dart';
-import 'package:project/util/final.dart';
 import 'package:project/util/func.dart';
 import 'package:provider/provider.dart';
 
@@ -42,15 +37,15 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  late AppLifecycleReactor _appLifecycleReactor;
+  // late AppLifecycleReactor _appLifecycleReactor;
 
-  initialzeAppOpening() {
-    AppOpenAdManager appOpenAdManager = AppOpenAdManager()..loadAd();
-    _appLifecycleReactor = AppLifecycleReactor(
-      appOpenAdManager: appOpenAdManager,
-    );
-    _appLifecycleReactor.listenToAppStateChanges();
-  }
+  // initialzeAppOpening() {
+  //   AppOpenAdManager appOpenAdManager = AppOpenAdManager()..loadAd();
+  //   _appLifecycleReactor = AppLifecycleReactor(
+  //     appOpenAdManager: appOpenAdManager,
+  //   );
+  //   _appLifecycleReactor.listenToAppStateChanges();
+  // }
 
   initializePremium() async {
     bool isPremium = await isPurchasePremium();
@@ -156,7 +151,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   void initState() {
-    initialzeAppOpening();
+    // initialzeAppOpening();
     initializePremium();
     initializeUserInfo();
     initializeGroupInfoList();

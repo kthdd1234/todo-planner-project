@@ -1,6 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:project/common/CommonSegmented.dart';
+import 'package:project/common/CommonSvgText.dart';
 import 'package:project/common/CommonText.dart';
 import 'package:project/provider/themeProvider.dart';
 import 'package:project/provider/titleDateTimeProvider.dart';
@@ -30,15 +31,20 @@ class CalendarAppBar extends StatelessWidget {
         context.watch<TitleDateTimeProvider>().titleDateTime;
 
     return Padding(
-      padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
+      padding: EdgeInsets.fromLTRB(
+          10, 0, 10, selectedSegment == SegmentedTypeEnum.todo ? 5 : 10),
       child: Row(
         children: [
-          CommonText(
+          CommonSvgText(
             text: yMFormatter(locale: locale, dateTime: titleDateTime),
+            textColor: isLight ? darkButtonColor : Colors.white,
+            svgColor: isLight ? darkButtonColor : Colors.white,
             fontSize: 16,
+            svgWidth: 6,
             isBold: true,
             isNotTr: true,
-            color: isLight ? darkButtonColor : Colors.white,
+            svgDirection: SvgDirectionEnum.right,
+            svgName: 'dir-right-s',
             onTap: () => onCalendar(titleDateTime),
           ),
           const Spacer(),

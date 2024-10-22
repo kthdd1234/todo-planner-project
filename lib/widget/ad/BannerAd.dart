@@ -47,7 +47,7 @@ class _BannerAdWidgetState extends State<BannerAdWidget> {
     bool isLight = context.watch<ThemeProvider>().isLight;
 
     return Padding(
-      padding: const EdgeInsets.fromLTRB(7, 0, 7, 7),
+      padding: const EdgeInsets.fromLTRB(7, 5, 7, 0),
       child: SizedBox(
         height: 50,
         child: _isLoaded

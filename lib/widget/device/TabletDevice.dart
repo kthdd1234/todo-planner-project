@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:project/common/CommonNull.dart';
+import 'package:project/provider/PremiumProvider.dart';
 import 'package:project/util/class.dart';
+import 'package:project/widget/ad/BannerAd.dart';
 import 'package:project/widget/appBar/TaskAppBar.dart';
 import 'package:project/widget/view/GroupView.dart';
 import 'package:project/widget/view/MemoView.dart';
 import 'package:project/widget/view/TaskCalendarView.dart';
+import 'package:provider/provider.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 class TabletDevice extends StatelessWidget {
@@ -24,6 +28,8 @@ class TabletDevice extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    bool isPremium = context.watch<PremiumProvider>().isPremium;
+
     return Column(
       children: [
         TaskAppBar(
@@ -62,6 +68,7 @@ class TabletDevice extends StatelessWidget {
             ],
           ),
         ),
+        !isPremium ? const BannerAdWidget() : const CommonNull(),
       ],
     );
   }
