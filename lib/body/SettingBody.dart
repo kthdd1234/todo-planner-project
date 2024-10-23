@@ -15,7 +15,6 @@ import 'package:project/page/ProfilePage.dart';
 import 'package:project/provider/PremiumProvider.dart';
 import 'package:project/provider/ReloadProvider.dart';
 import 'package:project/provider/UserInfoProvider.dart';
-import 'package:project/provider/bottomTabIndexProvider.dart';
 import 'package:project/provider/themeProvider.dart';
 import 'package:project/util/class.dart';
 import 'package:project/util/constants.dart';
